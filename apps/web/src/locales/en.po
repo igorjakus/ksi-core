@@ -31,9 +31,8 @@ msgstr "© KSI {0}"
 msgid "Toggle sidebar"
 msgstr "Toggle sidebar"
 
-#: src/components/Navbar.svelte
-msgid "<0/> KSI"
-msgstr "<0/> KSI"
+#~ msgid "<0/> KSI"
+#~ msgstr "<0/> KSI"
 
 #: src/components/Sidebar.svelte
 msgid "README"
@@ -473,9 +472,8 @@ msgstr "Archaeologists are wondering if ZOSIA {0} even took place. No evidence f
 msgid "We don't have photos from this edition of ZOSIA. If you have any, you can send them to us so we can post them here."
 msgstr "We don't have photos from this edition of ZOSIA. If you have any, you can send them to us so we can post them here."
 
-#: src/components/Navbar.svelte
-msgid "Toggle language"
-msgstr "Toggle language"
+#~ msgid "Toggle language"
+#~ msgstr "Toggle language"
 
 #: src/components/Goal.svelte
 msgid "// Technically"
@@ -512,3 +510,44 @@ msgstr "Alerts"
 #: src/routes/dashboard/alerts/+page.svelte
 msgid "Manage the alert displayed at the top of the page."
 msgstr "Manage the alert displayed at the top of the page."
+
+#~ msgid "<0/> div.flex.w-full. <1/>"
+#~ msgstr "<0/> div.flex.w-full. <1/>"
+
+#~ msgid "test"
+#~ msgstr "test"
+
+#~ msgid "Życie studenckie"
+#~ msgstr "Życie studenckie"
+
+#~ msgid "<0/> div <1>Życie studenckie</1>"
+#~ msgstr "<0/> div <1>Życie studenckie</1>"
+
+#~ msgid "div.absolute.bottom- <0>Panel</0>"
+#~ msgstr "div.absolute.bottom- <0>Panel</0>"
+
+#: src/components/Navbar.svelte
+#: src/components/Navbar.svelte
+msgid "Projects"
+msgstr "Projects"
+
+#~ msgid "div.flex."
+#~ msgstr "div.flex."
+
+#~ msgid "<0>Projects</0> <1/> <2>Projects</2> div.flex."
+#~ msgstr "<0>Projects</0> <1/> <2>Projects</2> div.flex."
+
+#~ msgid "<0>Projects</0> <1/> <2>Projects</2> div.flex"
+#~ msgstr "<0>Projects</0> <1/> <2>Projects</2> div.flex"
+
+#~ msgid "<0>Projects</0> <1/> <2>Projects</2> div.flex.gap-4"
+#~ msgstr "<0>Projects</0> <1/> <2>Projects</2> div.flex.gap-4"
+
+#~ msgid "<0>Projects</0> <1/> <2>Projects</2> div.flex.gap-4.items-center.px-"
+#~ msgstr "<0>Projects</0> <1/> <2>Projects</2> div.flex.gap-4.items-center.px-"
+
+#~ msgid "<0>Projects</0> <1/> <2>Projects</2> div.flex.gap-4.items-center.px-20"
+#~ msgstr "<0>Projects</0> <1/> <2>Projects</2> div.flex.gap-4.items-center.px-20"
+
+#~ msgid "🇺🇸 United States"
+#~ msgstr "🇺🇸 United States"
