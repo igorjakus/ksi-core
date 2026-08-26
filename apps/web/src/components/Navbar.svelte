@@ -1,12 +1,10 @@
 <script lang="ts">
-  import ThemeButton from './ThemeButton.svelte';
-  import { ChevronDown, ChevronUp, LogIn, LogOut, Menu, X } from '@lucide/svelte';
+  import { LogIn, LogOut, Menu, X } from '@lucide/svelte';
   import { sidebarStore } from '$lib/sidebar';
   import { locale, setLocale } from '$lib/locale.svelte';
   import { locales, type Locale } from '../locales/data';
   import { authClient } from '$lib/auth-client';
   import { getUrls } from 'shared';
-  import NavbarAccordion from './NavbarAccordion.svelte';
   import type { User, Session } from '@ksi-core/server/lib/auth.types';
   import { toast } from 'svelte-sonner';
   import { afterNavigate, invalidateAll } from '$app/navigation';
@@ -41,277 +39,30 @@
       .map((char) => String.fromCodePoint(127397 + char.charCodeAt(0)))
       .join('');
   }
-
-  // FAB state: true = user is at the very top (show chevron-down), false = scrolled past navbar (show menu)
-  let preNavbarVisible = $state(false);
-
-  $effect(() => {
-    function updateFabState() {
-      const navbar = document.getElementById('navbar');
-      if (!navbar) return;
-      if (window.innerWidth < 1024) return (preNavbarVisible = false);
-      preNavbarVisible = window.scrollY < navbar.offsetTop;
-    }
-    updateFabState();
-    window.addEventListener('scroll', updateFabState, { passive: true });
-    return () => window.removeEventListener('scroll', updateFabState);
-  });
-
-  afterNavigate(() => {
-    const navbar = document.getElementById('navbar');
-    window.scrollTo({ top: navbar?.offsetTop ?? 0, behavior: 'instant' });
-  });
-
-  function scrollToNavbar() {
-    const navbar = document.getElementById('navbar');
-    window.scrollTo({ top: navbar?.offsetTop ?? 0, behavior: 'smooth' });
-  }
 </script>
 
-{#snippet zosiaEditions()}
-  <div class="flex h-full w-full gap-2 p-2">
-    <a
-      href="/projects/zosia/2026"
-      class="group/year hover:text-base-content bg-base-300 rounded-box flex flex-1 flex-col overflow-hidden p-4 transition-all duration-700 ease-in-out hover:flex-[10] hover:bg-blue-500"
-    >
-      <h3
-        class="text-base-content m-0 text-lg font-bold transition-all duration-700 ease-in-out group-hover/year:text-4xl"
-      >
-        2026
-      </h3>
-
-      <div
-        class="mt-2 w-[300px] opacity-0 transition-opacity duration-700 group-hover/year:opacity-100"
-      >
-        <p class="text-sm">Date: 05.03.2026 - 08.03.2026</p>
-        <p class="text-sm">Number of participants: 274</p>
-      </div>
-    </a>
-
-    <a
-      href="/projects/zosia/2025"
-      class="group/year hover:text-base-content bg-base-300 rounded-box flex flex-1 flex-col overflow-hidden p-4 transition-all duration-700 ease-in-out hover:flex-[10] hover:bg-blue-500"
-    >
-      <h3
-        class="text-base-content m-0 text-lg font-bold transition-all duration-700 ease-in-out group-hover/year:text-4xl"
-      >
-        2025
-      </h3>
-      <div
-        class="mt-2 w-[300px] opacity-0 transition-opacity duration-700 group-hover/year:opacity-100"
-      >
-        <p class="text-sm">Date: 28.02.2025 - 03.03.2025</p>
-        <p class="text-sm">Number of participants: 217</p>
-      </div>
-    </a>
-
-    <a
-      href="/projects/zosia/2024"
-      class="group/year hover:text-base-content bg-base-300 rounded-box flex flex-1 flex-col overflow-hidden p-4 transition-all duration-700 ease-in-out hover:flex-[10] hover:bg-blue-500"
-    >
-      <h3
-        class="text-base-content m-0 text-lg font-bold transition-all duration-700 ease-in-out group-hover/year:text-4xl"
-      >
-        2024
-      </h3>
-      <div
-        class="mt-2 w-[300px] opacity-0 transition-opacity duration-700 group-hover/year:opacity-100"
-      >
-        <p class="text-sm">Date: 22.02.2024 - 25.02.2024</p>
-        <p class="text-sm">Number of participants: 263</p>
-      </div>
-    </a>
+{#if alert}
+  <div class="w-full">
+    <Alert {alert} />
   </div>
-{/snippet}
-
-{#snippet machineLearning()}
-  <div class="flex h-full w-full gap-2 p-2">
-    <a
-      href="/projects/ml/krasnal"
-      class="group/year hover:text-base-content bg-base-300 rounded-box flex flex-1 flex-col overflow-hidden p-4 transition-all duration-700 ease-in-out hover:flex-[10] hover:bg-blue-500"
-    >
-      <h3
-        class="text-base-content m-0 text-lg font-bold transition-all duration-700 ease-in-out group-hover/year:text-4xl"
-      >
-        Krasnal
-      </h3>
-
-      <div
-        class="mt-2 w-[800px] opacity-0 transition-opacity duration-700 group-hover/year:opacity-100"
-      >
-        <p>
-          Krasnal is a chess engine developed in Wrocław, based on the Transformer architecture. It
-          utilizes deep neural networks to learn to play chess intuitively, departing from
-          traditional, heavy calculations and game tree searching.
-        </p>
-      </div>
-    </a>
-
-    <a
-      href="/projects/ml/physarum"
-      class="group/year hover:text-base-content bg-base-300 rounded-box flex flex-1 flex-col overflow-hidden p-4 transition-all duration-700 ease-in-out hover:flex-[10] hover:bg-blue-500"
-    >
-      <h3
-        class="text-base-content m-0 text-lg font-bold transition-all duration-700 ease-in-out group-hover/year:text-4xl"
-      >
-        Physarum
-      </h3>
-      <div
-        class="mt-2 w-[600px] opacity-0 transition-opacity duration-700 group-hover/year:opacity-100"
-      >
-        <p>
-          Can a Slime Mold train Neural Networks? It turns out to be a fascinating subject,
-          intersecting the computational biology and AI.
-        </p>
-      </div>
-    </a>
-  </div>
-{/snippet}
-
-<div class="bg-base-200 w-full not-lg:hidden">
-  <div class="px-4 sm:px-6 lg:px-12">
-    <div class="mx-auto flex w-full flex-col gap-4 py-10 lg:max-w-7xl">
-      <div class="flex items-start justify-between">
-        <h1 class="uppercase">Projects</h1>
-        <div class="flex w-full items-center justify-end gap-8">
-          <div class="dropdown dropdown-bottom">
-            <div
-              tabindex="0"
-              role="button"
-              class="text-muted hover:text-base-content flex cursor-pointer items-center gap-2 text-sm uppercase transition-colors duration-150"
-            >
-              <span class="select-none">{activeLocale.emoji} {activeLocale.formattedLocale}</span>
-              <ChevronDown class="size-4" />
-            </div>
-
-            <ul
-              class="dropdown-content menu bg-base-200 text-base-content right-0 z-99 mt-2 w-60 border p-2 shadow"
-            >
-              {#each availableLocales as loc}
-                <li>
-                  <button
-                    class:active={locale.current === loc.code}
-                    onclick={() => setLocale(loc.code)}
-                    class={[
-                      'items-centers flex gap-2 rounded-none py-2 font-semibold uppercase',
-
-                      locale.current === loc.code
-                        ? 'text-base-content bg-blue-600'
-                        : 'text-muted-100 hover:bg-base-300'
-                    ]}
-                  >
-                    {loc.emoji}
-                    {loc.formattedLocale}
-                  </button>
-                </li>
-              {/each}
-            </ul>
-          </div>
-          <ThemeButton />
-          {#if session && user}
-            <div class="flex gap-4">
-              <a
-                href="/dashboard"
-                class="text-muted hover:text-base-content flex items-center gap-4 text-sm"
-              >
-                {#if user.image}
-                  <img
-                    src={user.image}
-                    class="size-6 rounded-full"
-                    alt={`${user.name}'s profile picture`}
-                  />
-                {/if}
-                {user.name}
-              </a>
-              <button
-                class="btn btn-circle text-error"
-                onclick={async () => {
-                  const r = await authClient.signOut();
-                  if (r.data?.success) {
-                    toast.success('Logged out');
-                    await invalidateAll();
-                  }
-                }}
-              >
-                <LogOut class="size-4 shrink-0" />
-              </button>
-            </div>
-          {:else}
-            <button
-              onclick={() => {
-                authClient.signIn
-                  .social({
-                    provider: 'discord',
-                    callbackURL: getUrls().frontend.landing + '/dashboard'
-                  })
-                  .catch((error) => {
-                    if (error instanceof Error) {
-                      if (/(fetch|network|load failed)/i.test(error.message))
-                        toast.error('Network error when trying to sign in');
-                      else toast.error(`Unknown error occurred (${error.message})`);
-                    } else {
-                      toast.error('Unknown error occurred');
-                    }
-                  });
-              }}
-              class="hover:text-error group text-muted flex cursor-pointer items-center text-left font-mono text-sm uppercase"
-            >
-              <LogIn class="size-4 shrink-0" />
-
-              <div
-                class="max-w-0 overflow-hidden transition-all duration-450 ease-out group-hover:max-w-54"
-              >
-                <div class="pl-3 whitespace-nowrap">Member access</div>
-              </div>
-            </button>
-          {/if}
-        </div>
-      </div>
-
-      <NavbarAccordion title="Zosia" url="/projects/zosia" content={zosiaEditions} />
-      <NavbarAccordion title="Machine Learning" url="/projects/ml" content={machineLearning} />
-      <a href="/projects" class="mt-8 w-max cursor-pointer underline">and more...</a>
-
-      {#if alert}
-        <div class="w-full">
-          <Alert {alert} />
-        </div>
-      {/if}
-    </div>
-  </div>
-</div>
+{/if}
 
 <header
   id="navbar"
-  class="border-b-base-200 bg-base-100/95 sticky top-0 z-40 flex h-18 w-full border-b backdrop-blur-sm lg:px-12"
+  class="border-b-base-200 bg-base-100/95 sticky top-0 z-40 flex h-14 w-full border-b backdrop-blur-sm lg:px-12"
 >
   <div class="mx-auto flex w-full flex-row items-center justify-between lg:max-w-7xl">
-    <!-- Left: mobile toggle + logo + site name -->
     <div class="flex h-full items-center">
-      <!-- Mobile dual-purpose button -->
       <button
         onclick={() => {
-          if (preNavbarVisible) {
-            scrollToNavbar();
-          } else {
-            $sidebarStore = !$sidebarStore;
-          }
+          $sidebarStore = !$sidebarStore;
         }}
         class="btn btn-square btn-ghost border-base-200 h-18 w-18 rounded-none border-y-0 border-r border-l-0 lg:hidden"
-        aria-label={preNavbarVisible ? 'Scroll to content' : 'Toggle sidebar'}
+        aria-label={'Toggle sidebar'}
       >
         <div class="relative size-5">
           <span
-            class="absolute inset-0 flex items-center justify-center transition-all duration-200 {preNavbarVisible
-              ? 'scale-100 opacity-100'
-              : 'scale-75 opacity-0'}"
-          >
-            <ChevronDown class="size-5" />
-          </span>
-          <span
-            class="absolute inset-0 flex items-center justify-center transition-all duration-200 {preNavbarVisible
-              ? 'scale-75 opacity-0'
-              : 'scale-100 opacity-100'}"
+            class="absolute inset-0 flex items-center justify-center transition-all duration-200"
           >
             <Menu class="size-5" />
           </span>
@@ -320,7 +71,7 @@
 
       <a
         href="/"
-        class="hover:bg-base-200/50 lg:border-r-base-200 flex h-full items-center gap-3 border-r border-r-transparent px-4 font-mono opacity-80 transition-colors duration-150 hover:opacity-100 lg:pr-6"
+        class="hover:bg-base-200/50 border-base-200 flex h-full items-center gap-3 border-r border-l px-4 font-mono opacity-80 transition-colors duration-150 not-md:border-r-transparent hover:opacity-100 lg:pr-6"
       >
         <img src="/logo.svg" alt="" class="size-10 min-w-10 shrink-0 dark:invert" />
         <span class="text-lg tracking-tight not-lg:hidden">KSI</span>
@@ -361,77 +112,91 @@
       </nav>
     </div>
 
-    {#if alert}
-      <button
-        onclick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        class={[
-          'mr-3 flex max-w-[50vw] min-w-0 shrink cursor-pointer items-center gap-1.5 overflow-hidden rounded-full border px-3 py-1.5 font-mono text-xs font-medium transition-all duration-200 hover:opacity-80 active:scale-95 sm:max-w-[300px] lg:hidden',
-          alert.color === 'warning' && 'border-warning/50 bg-warning/15 text-warning',
-          alert.color === 'danger' && 'border-error/50 bg-error/15 text-error',
-          alert.color === 'info' && 'border-info/50 bg-info/15 text-info',
-          (!alert.color || alert.color === 'neutral') &&
-            'border-base-content/20 bg-base-300 text-base-content/90'
-        ]}
-        aria-label={`Scroll to top to view alert: ${alert.title}`}
-        title="Scroll up to view alert"
-      >
-        <span class="relative flex size-2 shrink-0">
-          <span
-            class={[
-              'absolute inline-flex h-full w-full animate-ping rounded-full opacity-75',
-              alert.color === 'warning' && 'bg-warning',
-              alert.color === 'danger' && 'bg-error',
-              alert.color === 'info' && 'bg-info',
-              (!alert.color || alert.color === 'neutral') && 'bg-base-content/60'
-            ]}
-          ></span>
-          <span
-            class={[
-              'relative inline-flex size-2 rounded-full',
-              alert.color === 'warning' && 'bg-warning',
-              alert.color === 'danger' && 'bg-error',
-              alert.color === 'info' && 'bg-info',
-              (!alert.color || alert.color === 'neutral') && 'bg-base-content/60'
-            ]}
-          ></span>
-        </span>
-        <span class="truncate font-semibold">{alert.title}</span>
-        <ChevronUp class="size-3.5 shrink-0 opacity-75" />
-      </button>
-    {/if}
+    <div class="flex h-full items-center">
+      <div class="dropdown border-base-200 dropdown-bottom h-full border-x">
+        <div
+          tabindex="0"
+          role="button"
+          class="text-base-content/60 hover:text-base-content border-base-200 hover:bg-base-200/40 flex h-full cursor-pointer items-center border-r px-5 text-sm font-medium transition-colors duration-150"
+        >
+          <span class="select-none">{activeLocale.emoji}</span>
+        </div>
 
-    <button
-      onclick={() => {
-        if (preNavbarVisible) {
-          document.getElementById('main-content')?.scrollIntoView({ behavior: 'smooth' });
-        } else {
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-      }}
-      class="btn btn-ghost border-base-200 relative h-18 w-18 rounded-none border-y-0 border-r-0 border-l not-lg:hidden"
-      aria-label={preNavbarVisible ? 'Scroll to content' : 'Scroll to top'}
-    >
-      <div class="relative size-5">
-        <span
-          class="absolute inset-0 flex items-center justify-center transition-all duration-200 {preNavbarVisible
-            ? 'scale-100 opacity-100'
-            : 'scale-75 opacity-0'}"
+        <ul
+          class="dropdown-content menu bg-base-200 text-base-content border-muted right-0 z-99 mt-2 w-60 border shadow"
         >
-          <ChevronDown class="size-5" />
-        </span>
-        <span
-          class="absolute inset-0 flex items-center justify-center transition-all duration-200 {preNavbarVisible
-            ? 'scale-75 opacity-0'
-            : 'scale-100 opacity-100'}"
-        >
-          <ChevronUp class="size-5" />
-        </span>
+          {#each availableLocales as loc}
+            <li>
+              <button
+                class:active={locale.current === loc.code}
+                onclick={() => setLocale(loc.code)}
+                class={[
+                  'items-centers flex gap-2 rounded-none py-2 font-semibold uppercase',
+
+                  locale.current === loc.code
+                    ? 'text-base-content bg-blue-600'
+                    : 'text-muted-100 hover:bg-base-300'
+                ]}
+              >
+                {loc.emoji}
+                {loc.formattedLocale}
+              </button>
+            </li>
+          {/each}
+        </ul>
       </div>
-      <span
-        class="bg-primary absolute top-3 right-3 size-1.5 rounded-full transition-all duration-300 {preNavbarVisible
-          ? 'scale-0 opacity-0'
-          : 'scale-100 opacity-100'}"
-      ></span>
-    </button>
+      {#if session && user}
+        <div class="border-base-200 flex h-full gap-4 border-r px-2">
+          <a
+            href="/dashboard"
+            class="text-muted hover:text-base-content flex items-center gap-4 text-sm"
+          >
+            {#if user.image}
+              <img
+                src={user.image}
+                class="size-6 rounded-full"
+                alt={`${user.name}'s profile picture`}
+              />
+            {/if}
+            {user.name}
+          </a>
+          <button
+            class="btn btn-square btn-sm btn-outline text-error"
+            onclick={async () => {
+              const r = await authClient.signOut();
+              if (r.data?.success) {
+                toast.success('Logged out');
+                await invalidateAll();
+              }
+            }}
+          >
+            <LogOut class="size-4 shrink-0" />
+          </button>
+        </div>
+      {:else}
+        <button
+          onclick={() => {
+            authClient.signIn
+              .social({
+                provider: 'discord',
+                callbackURL: getUrls().frontend.landing + '/dashboard'
+              })
+              .catch((error) => {
+                if (error instanceof Error) {
+                  if (/(fetch|network|load failed)/i.test(error.message))
+                    toast.error('Network error when trying to sign in');
+                  else toast.error(`Unknown error occurred (${error.message})`);
+                } else {
+                  toast.error('Unknown error occurred');
+                }
+              });
+          }}
+          class="btn btn-primary btn-sm"
+        >
+          <LogIn class="size-4 shrink-0" />
+          Sign in
+        </button>
+      {/if}
+    </div>
   </div>
 </header>
