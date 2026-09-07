@@ -24,7 +24,6 @@
   import SidebarLink from './SidebarLink.svelte';
   import { getUrls } from 'shared';
   import { invalidateAll } from '$app/navigation';
-  import ThemeButton from './ThemeButton.svelte';
   import { locale, setLocale } from '$lib/locale.svelte';
   import { locales } from '../locales/data';
 
@@ -155,10 +154,7 @@
       </ul>
     </div>
 
-    <!-- Theme toggle + login on same row -->
     <div class="flex items-center gap-2">
-      <ThemeButton />
-
       {#if session === null}
         <button
           onclick={() => {

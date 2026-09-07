@@ -1,8 +1,11 @@
 <script lang="ts">
   import {
     ArrowDown,
+    ArrowRight,
     ArrowUpRight,
     Bot,
+    ChevronDown,
+    ChevronUp,
     CodeXml,
     FlaskConical,
     GraduationCap,
@@ -10,177 +13,216 @@
   } from '@lucide/svelte';
 </script>
 
-<div class="text-base-content mx-auto max-w-7xl">
-  <header
-    class="border-base-content/15 grid min-h-[70vh] items-center gap-12 border-b py-12 lg:grid-cols-[1.35fr_0.65fr] lg:py-20"
+<main class="flex w-full flex-col">
+  <section
+    class="bg-base-200 noise noise-lg relative flex min-h-[80vh] w-full justify-between overflow-hidden not-md:flex-col"
   >
-    <div class="max-w-5xl">
-      <div
-        class="text-primary mb-8 flex items-center gap-3 text-xs font-bold tracking-[0.2em] uppercase"
-      >
-        <span class="bg-primary size-2"></span>
-        Student research group · Wrocław
-      </div>
+    <div class="pointer-events-none absolute inset-0 hidden md:block">
+      <div class="border-muted absolute top-0 left-8 h-full border border-dashed"></div>
+      <div class="border-muted absolute top-0 right-8 h-full border border-dashed"></div>
+    </div>
+    <img
+      src="http://localhost:5173/members/0.webp"
+      class="pointer-events-none absolute right-16 bottom-8 hidden w-lg opacity-20 grayscale-50 md:block xl:hidden"
+      alt=""
+    />
 
-      <h1
-        class="mb-0! max-w-4xl text-5xl leading-[0.95]! tracking-[-0.06em] text-balance sm:text-6xl lg:text-7xl"
-      >
-        Hello, world. We're KSI
+    <div class="flex px-6 py-12 md:mx-8 md:px-14 md:py-20 lg:px-16 lg:py-24">
+      <div class="z-1 flex flex-1 flex-col justify-between gap-4">
+        <h1
+          class="3xl:text-9xl mb-20 text-6xl font-extrabold tracking-tight text-balance sm:text-7xl lg:text-8xl"
+        >
+          Hello, World!<br />
+          We're
+          <span class="text-highlight md:ml-8">KSI</span>
+        </h1>
+        <img
+          src="http://localhost:5173/members/0.webp"
+          class="pointer-events-none opacity-80 md:hidden"
+          alt=""
+        />
+        <div class="flex max-w-xl flex-col gap-4">
+          <p class="3xl:text-4xl text-xl md:text-2xl 2xl:text-3xl">
+            A student community exploring computer science through research, education, and events
+            at the University of Wrocław.
+          </p>
+          <div class="flex flex-wrap gap-3">
+            <a href="#projects" class="btn btn-primary btn-clipped gap-2 px-6">
+              See what we do
+              <ArrowDown class="size-3 -translate-y-px" />
+            </a>
+            <a href="#about" class="btn btn-soft btn-clipped border-0 px-6">
+              About KSI <ArrowRight class="size-3 -translate-y-px " /></a
+            >
+          </div>
+        </div>
+      </div>
+      <div class="z-1 hidden flex-1 flex-col opacity-80 xl:flex">
+        <img
+          src="/members/0.webp"
+          class="skew h-full object-cover grayscale-80 transition-all hover:grayscale-0"
+          alt=""
+        />
+      </div>
+    </div>
+  </section>
+  <hr class="border-muted border-px mt-0 mb-1" />
+  <hr class="border-muted/80 border-px my-0.5" />
+  <hr class="border-muted/60 border-px my-0.5" />
+  <hr class="border-muted/40 border-px my-0.5" />
+  <hr class="border-muted/20 border-px my-0.5" />
+  <section class="noise dark text-base-100 relative flex flex-col items-center">
+    <div
+      class="bg-primary noise text-base-content relative flex h-full w-full flex-col items-center py-10 lg:py-14 xl:py-20"
+    >
+      <div class="text-secondary pointer-events-none absolute inset-0 hidden md:block">
+        <div class="border-muted/50 absolute top-0 left-8 h-full border"></div>
+        <div class="border-muted/50 border-px absolute top-0 right-8 h-full border"></div>
+        <div class="bg-base-content/25 absolute top-0 left-0 h-full w-8"></div>
+        <div class="bg-base-content/25 absolute top-0 right-0 h-full w-8"></div>
+      </div>
+      <h1 class="3xl:text-7xl text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">
+        Not just code
       </h1>
-
-      <p class="text-base-content/70 mt-8 max-w-2xl text-lg leading-relaxed md:text-xl">
-        We are the Computer Science Students’ Association at the University of Wrocław — a community
-        for learning, building, and exploring what technology can do.
-      </p>
-
-      <div class="mt-10 flex flex-wrap gap-3">
-        <a href="#projects" class="btn btn-primary gap-2 px-6">
-          Explore our work
-          <ArrowDown class="size-4" />
-        </a>
-        <a href="#about" class="btn btn-ghost border-base-content/20 border px-6">
-          Meet the association
-        </a>
-      </div>
-    </div>
-
-    <div class="border-base-content/20 bg-base-200/40 hidden border lg:block" aria-hidden="true">
-      <div
-        class="border-base-content/15 text-base-content/50 flex items-center justify-between border-b px-4 py-3 text-xs"
+      <p
+        class="3xl:text-3xl max-w-md text-center text-lg md:text-xl lg:max-w-lg 2xl:max-w-xl 2xl:text-2xl"
       >
-        <div class="flex gap-1.5">
-          <span class="bg-primary size-2"></span>
-          <span class="bg-secondary size-2"></span>
-          <span class="bg-accent size-2"></span>
-        </div>
-        ksi@uwr:~
+        From a kid's first line of code to a published paper — here's where our time actually goes.
+      </p>
+    </div>
+
+    <div class="bg-neutral noise relative flex h-full w-full flex-col py-10 lg:py-14 xl:py-20">
+      <div class="text-secondary pointer-events-none absolute inset-0 hidden md:block">
+        <div class="border-muted/50 absolute top-0 left-8 h-full border"></div>
+        <div class="border-muted/50 border-px absolute top-0 right-8 h-full border"></div>
+        <div class="bg-base-content/25 absolute top-0 left-0 h-full w-8"></div>
+        <div class="bg-base-content/25 absolute top-0 right-0 h-full w-8"></div>
       </div>
-      <div class="space-y-6 p-6 text-sm">
-        <p><span class="text-primary">$</span> whoami</p>
-        <div class="border-base-content/15 grid grid-cols-[auto_1fr] gap-x-5 gap-y-3 border-l pl-5">
-          <span class="text-base-content/40">group</span><span>KSI UWr</span>
-          <span class="text-base-content/40">focus</span><span>computer science</span>
-          <span class="text-base-content/40">status</span>
-          <span class="flex items-center gap-2"
-            ><i class="bg-accent size-1.5"></i>always learning</span
-          >
-          <span class="text-base-content/40">location</span><span>room 24</span>
+
+      <p class="text-secondary mb-4 self-center font-mono text-sm font-light">( socially )</p>
+      <div class="flex flex-col items-center gap-16 px-4 md:px-16">
+        <h1>Connecting the community</h1>
+        <div
+          class="mt-4 mb-16 grid max-w-lg grid-cols-1 items-center justify-between gap-8 self-center px-4 py-4 md:grid-cols-3 md:gap-8 md:px-8 lg:max-w-4xl"
+        >
+          <div class="flex h-full flex-col items-center gap-4">
+            <h1 class="text-primary my-0">500+</h1>
+            <h3 class="text-center text-balance">Children taught programming</h3>
+          </div>
+          <div class="flex h-full flex-col items-center gap-4">
+            <h1 class="text-primary my-0">25+</h1>
+            <h3 class="text-center text-balance">Conferences organized</h3>
+          </div>
+          <div class="flex h-full flex-col items-center gap-4">
+            <h1 class="text-primary my-0">20+</h1>
+            <h3 class="text-center text-balance">On-site lectures hosted</h3>
+          </div>
         </div>
-        <p class="text-base-content/60">
-          <span class="text-primary">$</span> build --together<span class="animate-pulse">_</span>
-        </p>
+        <div class="space-y-32">
+          <div class="grid w-full grid-cols-1 items-center gap-16 md:grid-cols-2 md:gap-8 lg:px-32">
+            <div class="text-md basis-2 space-y-4">
+              <h2>ZOSIA</h2>
+              <p>
+                Our experienced team has been organizing the well-recognized conference in the
+                mountainous regions of Lower Silesia in southwestern Poland.
+              </p>
+              <b>The name</b>
+              <p>
+                It's an acronym for <i>Winter Camp of Computer Science Students</i> written in polish.
+              </p>
+              <b>Not just a conference – a camp</b>
+              <div class="relative h-max">
+                <div class="space-y-4 mask-b-from-0">
+                  <p>
+                    While our speakers give various talks, sharing their knowledge, scientific
+                    research, hobbies and so on, we love to spend some time together in the free
+                    time.
+                  </p>
+                  <p>
+                    We pick the location for the camp diligently, to provide many attractions such
+                    as billiard table, a swimming pool, air hockey and more! We no-risk guarantee
+                    that you'll have fun here!
+                  </p>
+                </div>
+                <div
+                  class="absolute bottom-0 z-1 flex w-full translate-y-8 flex-col items-center self-center"
+                >
+                  <p>Interested?</p>
+                  <a class="underline" href="/projects/zosia">read more here</a>
+                </div>
+              </div>
+            </div>
+            <img
+              class="border-secondary/20 basis-1 rounded-md border-4"
+              src="https://pub-4e8af66414434008bafa6614f6af4b22.r2.dev/zosia-2026/01.webp"
+              alt="Group of around 20 conference attendees on a mountain viewpoint."
+            />
+          </div>
+          <div class="grid w-full grid-cols-1 items-center gap-16 md:grid-cols-2 md:gap-8 lg:px-32">
+            <img
+              class="border-secondary/20 basis-1 rounded-md border-4"
+              src="https://pub-4e8af66414434008bafa6614f6af4b22.r2.dev/project-hoc-past/8.webp"
+              alt="Lecture room full of primary school students attending Python lecture."
+            />
+            <div class="text-md basis-2 space-y-4">
+              <h2>Hour of Code</h2>
+              <p>
+                Multiple brilliant volunteers, one goal – share the passion for Computer Science
+                with the youngest.
+              </p>
+              <b>Initiative</b>
+              <p>
+                Hour of Code is a global movement focused on bringing Computer Science and coding to
+                students, in a fun activities held within one hour.
+              </p>
+              <b>Minds</b>
+              <div class="relative h-max">
+                <div class="space-y-4 mask-b-from-0">
+                  <p>
+                    We are fortunate to have talented people, including high school educators, past
+                    olympiad laureates and algorithm tutors spend their precious time to brainstorm,
+                    debug and perfectionize simple coding problems that will serve high educational
+                    value while kept engaging and funny to the youth.
+                  </p>
+                  <p>
+                    Real computer science students volunteer to provide feedback and help whenever
+                    problems get too tricky.
+                  </p>
+                </div>
+                <div
+                  class="absolute bottom-0 z-1 flex w-full translate-y-8 flex-col items-center self-center"
+                >
+                  <p>Interested?</p>
+                  <a class="underline" href="/projects/zosia">read more here</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </header>
-
-  <main>
-    <section id="about" class="border-base-content/15 scroll-mt-24 border-b py-20 lg:py-28">
-      <div class="grid gap-12 lg:grid-cols-[0.7fr_1.3fr] lg:gap-20">
-        <div>
-          <p class="text-primary mb-4 text-xs font-bold tracking-[0.2em] uppercase">
-            01 / About us
-          </p>
-          <h2 class="mb-0! text-2xl tracking-tight md:text-4xl">
-            A place to turn curiosity into practice
-          </h2>
-        </div>
-
-        <div class="space-y-6">
-          <p class="text-base-content/75 max-w-3xl text-lg leading-relaxed md:text-xl">
-            We are a student research group operating at the Institute of Computer Science. From
-            low-level theory to practical implementations, we create space to exchange knowledge,
-            experiment, and build ambitious things together.
-          </p>
-
-          <div class="border-base-content/15 grid border-t border-l sm:grid-cols-3">
-            <div class="border-base-content/15 border-r border-b p-5">
-              <Share2 class="text-primary mb-8 size-6" />
-              <h3 class="mb-1! text-base">Socially</h3>
-              <p class="text-base-content/55 text-sm leading-relaxed">
-                A community that learns and grows together.
-              </p>
-            </div>
-            <div class="border-base-content/15 border-r border-b p-5">
-              <CodeXml class="text-secondary mb-8 size-6" />
-              <h3 class="mb-1! text-base">Technically</h3>
-              <p class="text-base-content/55 text-sm leading-relaxed">
-                Ideas transformed into working systems.
-              </p>
-            </div>
-            <div class="border-base-content/15 border-r border-b p-5">
-              <FlaskConical class="text-accent mb-8 size-6" />
-              <h3 class="mb-1! text-base">Scientifically</h3>
-              <p class="text-base-content/55 text-sm leading-relaxed">
-                Questions explored with rigor and curiosity.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="projects" class="scroll-mt-24 py-20 lg:py-28">
-      <div class="mb-12 flex flex-col justify-between gap-6 md:flex-row md:items-end">
-        <div>
-          <p class="text-primary mb-4 text-xs font-bold tracking-[0.2em] uppercase">
-            02 / Selected work
-          </p>
-          <h2 class="mb-0! max-w-2xl text-3xl tracking-tight md:text-4xl">
-            Projects built beyond the classroom
-          </h2>
-        </div>
-        <a
-          href="/projects"
-          class="group hover:text-primary flex w-fit items-center gap-2 text-sm font-bold"
-        >
-          View all projects
-          <ArrowUpRight
-            class="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-          />
-        </a>
+    <div
+      class="noise bg-primary-background relative flex h-full w-full flex-col items-center pt-10 lg:pt-14 xl:pt-20"
+    >
+      <div class="text-secondary pointer-events-none absolute inset-0 hidden md:block">
+        <div class="border-muted/50 absolute top-0 left-8 h-full border"></div>
+        <div class="border-muted/50 border-px absolute top-0 right-8 h-full border"></div>
+        <div class="bg-base-content/25 absolute top-0 left-0 h-full w-8"></div>
+        <div class="bg-base-content/25 absolute top-0 right-0 h-full w-8"></div>
       </div>
 
-      <div class="bg-base-content/15 border-base-content/15 grid gap-px border lg:grid-cols-2">
-        <a
-          href="/projects/hoc"
-          class="group bg-base-100 hover:bg-primary/8 flex min-h-80 flex-col p-6 transition-colors md:p-8"
-        >
-          <div class="flex items-start justify-between">
-            <span class="text-base-content/40 text-xs">PROJECT / 01</span>
-            <ArrowUpRight
-              class="group-hover:text-primary size-5 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1"
-            />
-          </div>
-          <div class="my-auto py-12">
-            <GraduationCap class="text-primary mb-5 size-10" strokeWidth={1.5} />
-            <h3 class="text-3xl tracking-tight md:text-4xl">Hour of Code</h3>
-          </div>
-          <p class="text-base-content/60 max-w-md leading-relaxed">
-            Programming classes that give primary school students their first tools to create with
-            code.
-          </p>
-        </a>
-
-        <a
-          href="/projects/ml/krasnal"
-          class="group bg-base-100 hover:bg-secondary/8 flex min-h-80 flex-col p-6 transition-colors md:p-8"
-        >
-          <div class="flex items-start justify-between">
-            <span class="text-base-content/40 text-xs">PROJECT / 02</span>
-            <ArrowUpRight
-              class="group-hover:text-secondary size-5 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1"
-            />
-          </div>
-          <div class="my-auto py-12">
-            <Bot class="text-secondary mb-5 size-10" strokeWidth={1.5} />
-            <h3 class="text-3xl tracking-tight md:text-4xl">Krasnal</h3>
-          </div>
-          <p class="text-base-content/60 max-w-md leading-relaxed">
-            A chess engine that uses the Transformer architecture to learn a more intuitive way to
-            play.
-          </p>
-        </a>
+      <p class="text-secondary mb-4 self-center font-mono text-sm font-light">( technically )</p>
+      <div class="flex flex-col gap-4 px-4 md:px-16">
+        <h1>Engineering in practice</h1>
       </div>
-    </section>
-  </main>
-</div>
+
+      <div class="relative mt-10 w-full md:px-8 lg:mt-14 xl:mt-20">
+        <hr class="border-secondary border-px absolute top-0 left-0 z-2 my-0 w-full" />
+        <hr class="border-secondary/80 border-px my-1 w-full" />
+        <hr class="border-secondary/60 border-px my-1 w-full" />
+        <hr class="border-secondary/40 border-px my-1 w-full" />
+        <hr class="border-secondary/20 border-px my-1 w-full" />
+      </div>
+    </div>
+  </section>
+</main>

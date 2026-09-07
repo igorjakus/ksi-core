@@ -16,7 +16,6 @@ msgstr "© KSI {0}"
 msgid "Toggle sidebar"
 msgstr "Toggle sidebar"
 
-#: src/components/Navbar.svelte
 #: src/components/Sidebar.svelte
 #: src/components/Wrapper.svelte
 msgid "Home"
@@ -30,7 +29,6 @@ msgstr "Toggle theme"
 #: src/components/Footer.svelte
 #: src/components/Sidebar.svelte
 #: src/routes/+layout.svelte
-#: src/routes/+page.svelte
 msgid "KSI UWr"
 msgstr "KSI UWr"
 
@@ -173,7 +171,6 @@ msgstr "Team Members"
 msgid "The \"Hour of Code\" classes organized by the Computer Science Students' Club of the University of Wrocław introduce students to the Python programming language. They are intended for primary school students in grades 4-8. The classes consist of two parts:"
 msgstr "The \"Hour of Code\" classes organized by the Computer Science Students' Club of the University of Wrocław introduce students to the Python programming language. They are intended for primary school students in grades 4-8. The classes consist of two parts:"
 
-#: src/components/Navbar.svelte
 #: src/routes/projects/ml/krasnal/+page.svelte
 msgid "Krasnal is a chess engine developed in Wrocław, based on the Transformer architecture. It utilizes deep neural networks to learn to play chess intuitively, departing from traditional, heavy calculations and game tree searching."
 msgstr "Krasnal is a chess engine developed in Wrocław, based on the Transformer architecture. It utilizes deep neural networks to learn to play chess intuitively, departing from traditional, heavy calculations and game tree searching."
@@ -249,21 +246,16 @@ msgid "Alerts"
 msgstr "Alerts"
 
 #: src/components/Footer.svelte
-#: src/components/Navbar.svelte
-#: src/components/Navbar.svelte
 #: src/components/Sidebar.svelte
 msgid "Projects"
 msgstr "Projects"
 
-#: src/components/ThemeButton.svelte
-msgid "Light"
-msgstr "Light"
+#~ msgid "Light"
+#~ msgstr "Light"
 
-#: src/components/ThemeButton.svelte
-msgid "Dark"
-msgstr "Dark"
+#~ msgid "Dark"
+#~ msgstr "Dark"
 
-#: src/components/Navbar.svelte
 #: src/components/Sidebar.svelte
 msgid "Zosia"
 msgstr "Zosia"
@@ -272,34 +264,27 @@ msgstr "Zosia"
 msgid "details"
 msgstr "details"
 
-#: src/components/Navbar.svelte
 #: src/components/Sidebar.svelte
 msgid "Member access"
 msgstr "Member access"
 
-#: src/components/Navbar.svelte
-msgid "Date: 05.03.2026 - 08.03.2026"
-msgstr "Date: 05.03.2026 - 08.03.2026"
+#~ msgid "Date: 05.03.2026 - 08.03.2026"
+#~ msgstr "Date: 05.03.2026 - 08.03.2026"
 
-#: src/components/Navbar.svelte
-msgid "Number of participants: 274"
-msgstr "Number of participants: 274"
+#~ msgid "Number of participants: 274"
+#~ msgstr "Number of participants: 274"
 
-#: src/components/Navbar.svelte
-msgid "Number of participants: 217"
-msgstr "Number of participants: 217"
+#~ msgid "Number of participants: 217"
+#~ msgstr "Number of participants: 217"
 
-#: src/components/Navbar.svelte
-msgid "Date: 28.02.2025 - 03.03.2025"
-msgstr "Date: 28.02.2025 - 03.03.2025"
+#~ msgid "Date: 28.02.2025 - 03.03.2025"
+#~ msgstr "Date: 28.02.2025 - 03.03.2025"
 
-#: src/components/Navbar.svelte
-msgid "Number of participants: 263"
-msgstr "Number of participants: 263"
+#~ msgid "Number of participants: 263"
+#~ msgstr "Number of participants: 263"
 
-#: src/components/Navbar.svelte
-msgid "Date: 22.02.2024 - 25.02.2024"
-msgstr "Date: 22.02.2024 - 25.02.2024"
+#~ msgid "Date: 22.02.2024 - 25.02.2024"
+#~ msgstr "Date: 22.02.2024 - 25.02.2024"
 
 #: src/components/Sidebar.svelte
 #: src/routes/+page.svelte
@@ -307,32 +292,26 @@ msgstr "Date: 22.02.2024 - 25.02.2024"
 msgid "Hour of Code"
 msgstr "Hour of Code"
 
-#: src/components/Navbar.svelte
 #: src/components/Sidebar.svelte
 msgid "Machine Learning"
 msgstr "Machine Learning"
 
-#: src/components/Navbar.svelte
-#: src/routes/+page.svelte
 #: src/routes/projects/+page.svelte
 #: src/routes/projects/ml/+page.svelte
 #: src/routes/projects/ml/krasnal/+page.svelte
 msgid "Krasnal"
 msgstr "Krasnal"
 
-#: src/components/Navbar.svelte
 #: src/routes/projects/+page.svelte
 #: src/routes/projects/ml/+page.svelte
 msgid "Physarum"
 msgstr "Physarum"
 
-#: src/components/Navbar.svelte
-msgid "Can a Slime Mold train Neural Networks? It turns out to be a fascinating subject, intersecting the computational biology and AI."
-msgstr "Can a Slime Mold train Neural Networks? It turns out to be a fascinating subject, intersecting the computational biology and AI."
+#~ msgid "Can a Slime Mold train Neural Networks? It turns out to be a fascinating subject, intersecting the computational biology and AI."
+#~ msgstr "Can a Slime Mold train Neural Networks? It turns out to be a fascinating subject, intersecting the computational biology and AI."
 
-#: src/components/Navbar.svelte
-msgid "and more..."
-msgstr "and more..."
+#~ msgid "and more..."
+#~ msgstr "and more..."
 
 #: src/components/ThemeButton.svelte
 msgid "<0/> Light mode"
@@ -378,130 +357,99 @@ msgstr "Logged out"
 msgid "{0}'s profile picture"
 msgstr "{0}'s profile picture"
 
-#: src/components/Navbar.svelte
-#: src/components/Navbar.svelte
-msgid "Scroll to content"
-msgstr "Scroll to content"
+#~ msgid "Scroll to content"
+#~ msgstr "Scroll to content"
 
-#: src/components/Navbar.svelte
-msgid "Scroll to top"
-msgstr "Scroll to top"
+#~ msgid "Scroll to top"
+#~ msgstr "Scroll to top"
 
 #: src/components/Navbar.svelte
 msgid "KSI"
 msgstr "KSI"
 
-#: src/routes/+page.svelte
-msgid "Explore our work <0/>"
-msgstr "Explore our work <0/>"
+#~ msgid "Explore our work <0/>"
+#~ msgstr "Explore our work <0/>"
 
-#: src/routes/+page.svelte
-msgid "Meet the association"
-msgstr "Meet the association"
+#~ msgid "Meet the association"
+#~ msgstr "Meet the association"
 
-#: src/routes/+page.svelte
-msgid "<0/> Student research group · Wrocław"
-msgstr "<0/> Student research group · Wrocław"
+#~ msgid "<0/> Student research group · Wrocław"
+#~ msgstr "<0/> Student research group · Wrocław"
 
-#: src/routes/+page.svelte
-msgid "We are the Computer Science Students’ Association at the University of Wrocław — a community for learning, building, and exploring what technology can do."
-msgstr "We are the Computer Science Students’ Association at the University of Wrocław — a community for learning, building, and exploring what technology can do."
+#~ msgid "We are the Computer Science Students’ Association at the University of Wrocław — a community for learning, building, and exploring what technology can do."
+#~ msgstr "We are the Computer Science Students’ Association at the University of Wrocław — a community for learning, building, and exploring what technology can do."
 
-#: src/routes/+page.svelte
-msgid "group"
-msgstr "group"
+#~ msgid "group"
+#~ msgstr "group"
 
-#: src/routes/+page.svelte
-msgid "focus"
-msgstr "focus"
+#~ msgid "focus"
+#~ msgstr "focus"
 
-#: src/routes/+page.svelte
-msgid "computer science"
-msgstr "computer science"
+#~ msgid "computer science"
+#~ msgstr "computer science"
 
-#: src/routes/+page.svelte
-msgid "status"
-msgstr "status"
+#~ msgid "status"
+#~ msgstr "status"
 
-#: src/routes/+page.svelte
-msgid "<0/>always learning"
-msgstr "<0/>always learning"
+#~ msgid "<0/>always learning"
+#~ msgstr "<0/>always learning"
 
-#: src/routes/+page.svelte
-msgid "location"
-msgstr "location"
+#~ msgid "location"
+#~ msgstr "location"
 
-#: src/routes/+page.svelte
-msgid "room 24"
-msgstr "room 24"
+#~ msgid "room 24"
+#~ msgstr "room 24"
 
-#: src/routes/+page.svelte
-msgid "<0/> whoami"
-msgstr "<0/> whoami"
+#~ msgid "<0/> whoami"
+#~ msgstr "<0/> whoami"
 
-#: src/routes/+page.svelte
-msgid "<0/> build --together<1/>"
-msgstr "<0/> build --together<1/>"
+#~ msgid "<0/> build --together<1/>"
+#~ msgstr "<0/> build --together<1/>"
 
-#: src/routes/+page.svelte
-msgid "<0/> ksi@uwr:~"
-msgstr "<0/> ksi@uwr:~"
+#~ msgid "<0/> ksi@uwr:~"
+#~ msgstr "<0/> ksi@uwr:~"
 
-#: src/routes/+page.svelte
-msgid "01 / About us"
-msgstr "01 / About us"
+#~ msgid "01 / About us"
+#~ msgstr "01 / About us"
 
-#: src/routes/+page.svelte
-msgid "Socially"
-msgstr "Socially"
+#~ msgid "Socially"
+#~ msgstr "Socially"
 
-#: src/routes/+page.svelte
-msgid "A community that learns and grows together."
-msgstr "A community that learns and grows together."
+#~ msgid "A community that learns and grows together."
+#~ msgstr "A community that learns and grows together."
 
-#: src/routes/+page.svelte
-msgid "Technically"
-msgstr "Technically"
+#~ msgid "Technically"
+#~ msgstr "Technically"
 
-#: src/routes/+page.svelte
-msgid "Ideas transformed into working systems."
-msgstr "Ideas transformed into working systems."
+#~ msgid "Ideas transformed into working systems."
+#~ msgstr "Ideas transformed into working systems."
 
-#: src/routes/+page.svelte
-msgid "Scientifically"
-msgstr "Scientifically"
+#~ msgid "Scientifically"
+#~ msgstr "Scientifically"
 
-#: src/routes/+page.svelte
-msgid "Questions explored with rigor and curiosity."
-msgstr "Questions explored with rigor and curiosity."
+#~ msgid "Questions explored with rigor and curiosity."
+#~ msgstr "Questions explored with rigor and curiosity."
 
-#: src/routes/+page.svelte
-msgid "We are a student research group operating at the Institute of Computer Science. From low-level theory to practical implementations, we create space to exchange knowledge, experiment, and build ambitious things together."
-msgstr "We are a student research group operating at the Institute of Computer Science. From low-level theory to practical implementations, we create space to exchange knowledge, experiment, and build ambitious things together."
+#~ msgid "We are a student research group operating at the Institute of Computer Science. From low-level theory to practical implementations, we create space to exchange knowledge, experiment, and build ambitious things together."
+#~ msgstr "We are a student research group operating at the Institute of Computer Science. From low-level theory to practical implementations, we create space to exchange knowledge, experiment, and build ambitious things together."
 
-#: src/routes/+page.svelte
-msgid "02 / Selected work"
-msgstr "02 / Selected work"
+#~ msgid "02 / Selected work"
+#~ msgstr "02 / Selected work"
 
-#: src/routes/+page.svelte
-msgid "View all projects <0/>"
-msgstr "View all projects <0/>"
+#~ msgid "View all projects <0/>"
+#~ msgstr "View all projects <0/>"
 
-#: src/routes/+page.svelte
-msgid "PROJECT / 01"
-msgstr "PROJECT / 01"
+#~ msgid "PROJECT / 01"
+#~ msgstr "PROJECT / 01"
 
-#: src/routes/+page.svelte
-msgid "Programming classes that give primary school students their first tools to create with code."
-msgstr "Programming classes that give primary school students their first tools to create with code."
+#~ msgid "Programming classes that give primary school students their first tools to create with code."
+#~ msgstr "Programming classes that give primary school students their first tools to create with code."
 
-#: src/routes/+page.svelte
-msgid "PROJECT / 02"
-msgstr "PROJECT / 02"
+#~ msgid "PROJECT / 02"
+#~ msgstr "PROJECT / 02"
 
-#: src/routes/+page.svelte
-msgid "A chess engine that uses the Transformer architecture to learn a more intuitive way to play."
-msgstr "A chess engine that uses the Transformer architecture to learn a more intuitive way to play."
+#~ msgid "A chess engine that uses the Transformer architecture to learn a more intuitive way to play."
+#~ msgstr "A chess engine that uses the Transformer architecture to learn a more intuitive way to play."
 
 #: src/routes/projects/hoc/+page.svelte
 msgid "Education · Python · Grades 4–8"
@@ -1180,6 +1128,7 @@ msgstr "Research into slime-mold behavior and its potential use in computational
 msgid "Since the early 2000s"
 msgstr "Since the early 2000s"
 
+#: src/routes/+page.svelte
 #: src/routes/projects/zosia/+page.svelte
 msgid "ZOSIA"
 msgstr "ZOSIA"
@@ -1395,17 +1344,14 @@ msgstr "Manage public announcements and perform other tasks."
 msgid "cursor-pointer self-end underline"
 msgstr "cursor-pointer self-end underline"
 
-#: src/routes/+page.svelte
-msgid "Projects built beyond the classroom"
-msgstr "Projects built beyond the classroom"
+#~ msgid "Projects built beyond the classroom"
+#~ msgstr "Projects built beyond the classroom"
 
-#: src/routes/+page.svelte
-msgid "A place to turn curiosity into practice"
-msgstr "A place to turn curiosity into practice"
+#~ msgid "A place to turn curiosity into practice"
+#~ msgstr "A place to turn curiosity into practice"
 
-#: src/routes/+page.svelte
-msgid "Hello, world. We're KSI"
-msgstr "Hello, world. We're KSI"
+#~ msgid "Hello, world. We're KSI"
+#~ msgstr "Hello, world. We're KSI"
 
 #. 0: commitHash
 #: src/components/Footer.svelte
@@ -1416,14 +1362,11 @@ msgstr "Commit {0}"
 msgid "We build projects driven by curiosity"
 msgstr "We build projects driven by curiosity"
 
-#. 0: alert.title
-#: src/components/Navbar.svelte
-msgid "Scroll to top to view alert: {0}"
-msgstr "Scroll to top to view alert: {0}"
+#~ msgid "Scroll to top to view alert: {0}"
+#~ msgstr "Scroll to top to view alert: {0}"
 
-#: src/components/Navbar.svelte
-msgid "Scroll up to view alert"
-msgstr "Scroll up to view alert"
+#~ msgid "Scroll up to view alert"
+#~ msgstr "Scroll up to view alert"
 
 #: src/components/Navbar.svelte
 #: src/components/Sidebar.svelte
@@ -1441,3 +1384,925 @@ msgstr "Network error when trying to sign in"
 #: src/components/Sidebar.svelte
 msgid "Unknown error occurred ({0})"
 msgstr "Unknown error occurred ({0})"
+
+#~ msgid "Hello, world. We're <0/>"
+#~ msgstr "Hello, world. We're <0/>"
+
+#~ msgid "Hello, world. We're <0>KSI</0>"
+#~ msgstr "Hello, world. We're <0>KSI</0>"
+
+#~ msgid "Sign in <0/>"
+#~ msgstr "Sign in <0/>"
+
+#: src/components/Navbar.svelte
+msgid "<0/> Sign in"
+msgstr "<0/> Sign in"
+
+#~ msgid "Hello, world. We're <0>ksi</0>"
+#~ msgstr "Hello, world. We're <0>ksi</0>"
+
+#~ msgid "Hello, world. We're <0>ksi <0/></0>"
+#~ msgstr "Hello, world. We're <0>ksi <0/></0>"
+
+#~ msgid "Driven by creativity, we are trying to We are the Computer Science Students’ Association at the University of Wrocław — a community for learning, building, and exploring what technology can do."
+#~ msgstr "Driven by creativity, we are trying to We are the Computer Science Students’ Association at the University of Wrocław — a community for learning, building, and exploring what technology can do."
+
+#~ msgid "Driven by creativity, we are trying to"
+#~ msgstr "Driven by creativity, we are trying to"
+
+#~ msgid "Driven by creativity, we are solving real problems"
+#~ msgstr "Driven by creativity, we are solving real problems"
+
+#~ msgid "<0/>Hello, world. We're <1>ksi</1>"
+#~ msgstr "<0/>Hello, world. We're <1>ksi</1>"
+
+#~ msgid "<0/> We're <1>ksi</1>"
+#~ msgstr "<0/> We're <1>ksi</1>"
+
+#~ msgid "<0>Hello, world.</0> We're <1>ksi</1>"
+#~ msgstr "<0>Hello, world.</0> We're <1>ksi</1>"
+
+#~ msgid "<0>Hello, world.</0> <1/>We're <2>ksi</2>"
+#~ msgstr "<0>Hello, world.</0> <1/>We're <2>ksi</2>"
+
+#~ msgid "Hello, world."
+#~ msgstr "Hello, world."
+
+#~ msgid "We're <0>ksi</0>"
+#~ msgstr "We're <0>ksi</0>"
+
+#~ msgid "Hello, world. We're <0>ksi <0>in other words -</0></0>"
+#~ msgstr "Hello, world. We're <0>ksi <0>in other words -</0></0>"
+
+#~ msgid "Hello, world. We're <0>ksi <0>in other words - a</0></0>"
+#~ msgstr "Hello, world. We're <0>ksi <0>in other words - a</0></0>"
+
+#~ msgid "Hello, world. We're <0>ksi <0>in other words - a <0/></0></0>"
+#~ msgstr "Hello, world. We're <0>ksi <0>in other words - a <0/></0></0>"
+
+#~ msgid "Hello, world. We're <0>ksi <0>in other words - a <0>kool student informatics</0></0></0>"
+#~ msgstr "Hello, world. We're <0>ksi <0>in other words - a <0>kool student informatics</0></0></0>"
+
+#~ msgid "Hello, world.<0/>We're <1>ksi <0>in other words - a <0>kool student informatics</0></0></1>"
+#~ msgstr "Hello, world.<0/>We're <1>ksi <0>in other words - a <0>kool student informatics</0></0></1>"
+
+#~ msgid "Hello, world.<0/>We're <1><0/>ksi <1>in other words - a <0>kool student informatics</0></1></1>"
+#~ msgstr "Hello, world.<0/>We're <1><0/>ksi <1>in other words - a <0>kool student informatics</0></1></1>"
+
+#~ msgid "Hello, world.<0/>We're <1><0>ksi</0>ksi <1>in other words - a <0>kool student informatics</0></1></1>"
+#~ msgstr "Hello, world.<0/>We're <1><0>ksi</0>ksi <1>in other words - a <0>kool student informatics</0></1></1>"
+
+#~ msgid "Hello, world.<0/>We're <1><0>ksi</0> <1>in other words - a <0>kool student informatics</0></1></1>"
+#~ msgstr "Hello, world.<0/>We're <1><0>ksi</0> <1>in other words - a <0>kool student informatics</0></1></1>"
+
+#~ msgid "Hello, world.<0/>We're <1><0>ksi</0> <1>in other words - a <0>kool student informatics club</0></1></1>"
+#~ msgstr "Hello, world.<0/>We're <1><0>ksi</0> <1>in other words - a <0>kool student informatics club</0></1></1>"
+
+#~ msgid "Hello, world.<0/>We're <1><0>ksi</0> <1>↓in other words - a <0>kool student informatics club</0></1></1>"
+#~ msgstr "Hello, world.<0/>We're <1><0>ksi</0> <1>↓in other words - a <0>kool student informatics club</0></1></1>"
+
+#~ msgid "Hello, world.<0/>We're <1><0>ksi</0> <1>↓əə’in other words - a <0>kool student informatics club</0></1></1>"
+#~ msgstr "Hello, world.<0/>We're <1><0>ksi</0> <1>↓əə’in other words - a <0>kool student informatics club</0></1></1>"
+
+#~ msgid "Hello, world.<0/>We're <1><0>ksi</0> <1>←↓→in other words - a <0>kool student informatics club</0></1></1>"
+#~ msgstr "Hello, world.<0/>We're <1><0>ksi</0> <1>←↓→in other words - a <0>kool student informatics club</0></1></1>"
+
+#~ msgid "Hello, world.<0/>We're <1><0>ksi</0> <1>←↓→’in other words - a <0>kool student informatics club</0></1></1>"
+#~ msgstr "Hello, world.<0/>We're <1><0>ksi</0> <1>←↓→’in other words - a <0>kool student informatics club</0></1></1>"
+
+#~ msgid "Hello, world.<0/>We're <1><0>ksi</0> <1><0/> in other words - a <1>kool student informatics club</1></1></1>"
+#~ msgstr "Hello, world.<0/>We're <1><0>ksi</0> <1><0/> in other words - a <1>kool student informatics club</1></1></1>"
+
+#~ msgid "Hello, world.<0/>We're <1><0>ksi</0> <1>kool student informatics club</1></1>"
+#~ msgstr "Hello, world.<0/>We're <1><0>ksi</0> <1>kool student informatics club</1></1>"
+
+#~ msgid "Hello, world.<0/>We're <1><0>ksi</0> <1>^ in other words - a <0>kool student informatics club</0></1></1>"
+#~ msgstr "Hello, world.<0/>We're <1><0>ksi</0> <1>^ in other words - a <0>kool student informatics club</0></1></1>"
+
+#~ msgid "Hello, world.<0/>We're <1><0>ksi</0> <1>^^^ in other words - a <0>kool student informatics club</0></1></1>"
+#~ msgstr "Hello, world.<0/>We're <1><0>ksi</0> <1>^^^ in other words - a <0>kool student informatics club</0></1></1>"
+
+#~ msgid "Hello, world.<0/>We're <1>ksi</1>"
+#~ msgstr "Hello, world.<0/>We're <1>ksi</1>"
+
+#~ msgid "Contact U"
+#~ msgstr "Contact U"
+
+#~ msgid "Contact Us"
+#~ msgstr "Contact Us"
+
+#~ msgid "Explore our projects <0/>"
+#~ msgstr "Explore our projects <0/>"
+
+#~ msgid "Explore our projects"
+#~ msgstr "Explore our projects"
+
+#~ msgid "Hello, world.<0/>We're ksi"
+#~ msgstr "Hello, world.<0/>We're ksi"
+
+#~ msgid "PROJECTS"
+#~ msgstr "PROJECTS"
+
+#~ msgid "Hello, world.<0/>We're <1>KSI</1>"
+#~ msgstr "Hello, world.<0/>We're <1>KSI</1>"
+
+#~ msgid "Hello, world.<0/> <1/>We're <2>KSI</2>"
+#~ msgstr "Hello, world.<0/> <1/>We're <2>KSI</2>"
+
+#~ msgid "Hello, world.<0/> <1/> We're <2>KSI</2>"
+#~ msgstr "Hello, world.<0/> <1/> We're <2>KSI</2>"
+
+#~ msgid "Hello, world.<0/> <1>We're <0>KSI</0></1>"
+#~ msgstr "Hello, world.<0/> <1>We're <0>KSI</0></1>"
+
+#~ msgid "Hello, world.<0/> We're <1>KSI</1>"
+#~ msgstr "Hello, world.<0/> We're <1>KSI</1>"
+
+#~ msgid "From whiteboard algorithms to deployed software—we build it all"
+#~ msgstr "From whiteboard algorithms to deployed software—we build it all"
+
+#~ msgid "From whiteboard algorithms to deployed software—we build it all."
+#~ msgstr "From whiteboard algorithms to deployed software—we build it all."
+
+#~ msgid "<0><0>Hello, world.<0/> We're <1>KSI</1></0> <1><0>From whiteboard algorithms to deployed software—we build it all.</0> <1><0>Explore our projects <0/></0> <1>Contact Us</1></1></1></0> div.h-full.w- <1/>"
+#~ msgstr "<0><0>Hello, world.<0/> We're <1>KSI</1></0> <1><0>From whiteboard algorithms to deployed software—we build it all.</0> <1><0>Explore our projects <0/></0> <1>Contact Us</1></1></1></0> div.h-full.w- <1/>"
+
+#~ msgid "<0><0>Hello, world.<0/> We're <1>KSI</1></0> <1><0>From whiteboard algorithms to deployed software—we build it all.</0> <1><0>Explore our projects <0/></0> <1>Contact Us</1></1></1></0> div.h-full.w-2.bg-muted <1/>"
+#~ msgstr "<0><0>Hello, world.<0/> We're <1>KSI</1></0> <1><0>From whiteboard algorithms to deployed software—we build it all.</0> <1><0>Explore our projects <0/></0> <1>Contact Us</1></1></1></0> div.h-full.w-2.bg-muted <1/>"
+
+#~ msgid "dupa"
+#~ msgstr "dupa"
+
+#~ msgid "div. <0/> <1/> <2/> <3/> <4><0>Hello, world.<0/> We're <1>KSI</1></0> <1><0>From whiteboard algorithms to deployed software—we build it all.</0> <1><0>Explore our projects <0/></0> <1>Contact Us</1></1></1></4> <5/> <6/>"
+#~ msgstr "div. <0/> <1/> <2/> <3/> <4><0>Hello, world.<0/> We're <1>KSI</1></0> <1><0>From whiteboard algorithms to deployed software—we build it all.</0> <1><0>Explore our projects <0/></0> <1>Contact Us</1></1></1></4> <5/> <6/>"
+
+#~ msgid "div.absolute.inset-0.pointer-events-none. <0/> <1/> <2/> <3/> <4><0>Hello, world.<0/> We're <1>KSI</1></0> <1><0>From whiteboard algorithms to deployed software—we build it all.</0> <1><0>Explore our projects <0/></0> <1>Contact Us</1></1></1></4> <5/> <6/>"
+#~ msgstr "div.absolute.inset-0.pointer-events-none. <0/> <1/> <2/> <3/> <4><0>Hello, world.<0/> We're <1>KSI</1></0> <1><0>From whiteboard algorithms to deployed software—we build it all.</0> <1><0>Explore our projects <0/></0> <1>Contact Us</1></1></1></4> <5/> <6/>"
+
+#~ msgid "<0/> class=\"text-muted/50 absolute inset-0 mx-8\" <1/> <2><0>Hello, world.<0/> We're <1>KSI</1></0> <1><0>From whiteboard algorithms to deployed software—we build it all.</0> <1><0>Explore our projects <0/></0> <1>Contact Us</1></1></1></2> <3/>"
+#~ msgstr "<0/> class=\"text-muted/50 absolute inset-0 mx-8\" <1/> <2><0>Hello, world.<0/> We're <1>KSI</1></0> <1><0>From whiteboard algorithms to deployed software—we build it all.</0> <1><0>Explore our projects <0/></0> <1>Contact Us</1></1></1></2> <3/>"
+
+#~ msgid "<0/> background-image: url(\"data:image/svg+xml,<1/>\") <2><0>Hello, world.<0/> We're <1>KSI</1></0> <1><0>From whiteboard algorithms to deployed software—we build it all.</0> <1><0>Explore our projects <0/></0> <1>Contact Us</1></1></1></2> <3/>"
+#~ msgstr "<0/> background-image: url(\"data:image/svg+xml,<1/>\") <2><0>Hello, world.<0/> We're <1>KSI</1></0> <1><0>From whiteboard algorithms to deployed software—we build it all.</0> <1><0>Explore our projects <0/></0> <1>Contact Us</1></1></1></2> <3/>"
+
+#~ msgid "<0/> <1/> div.flex <2/> <3><0>Hello, world.<0/> We're <1>KSI</1></0> <1/> <2><0>From whiteboard algorithms to deployed software—we build it all.</0> <1><0>Explore our projects <0/></0> <1>Contact Us</1></1></2></3> <4/>"
+#~ msgstr "<0/> <1/> div.flex <2/> <3><0>Hello, world.<0/> We're <1>KSI</1></0> <1/> <2><0>From whiteboard algorithms to deployed software—we build it all.</0> <1><0>Explore our projects <0/></0> <1>Contact Us</1></1></2></3> <4/>"
+
+#: src/components/Navbar.svelte
+msgid "Projects <0/>"
+msgstr "Projects <0/>"
+
+#: src/components/Navbar.svelte
+msgid "Groups <0/>"
+msgstr "Groups <0/>"
+
+#~ msgid "test"
+#~ msgstr "test"
+
+#: src/routes/+page.svelte
+msgid "Not just code"
+msgstr "Not just code"
+
+#~ msgid "We"
+#~ msgstr "We"
+
+#~ msgid "We share our love to computer science"
+#~ msgstr "We share our love to computer science"
+
+#~ msgid "We share our love to computer science in different ways"
+#~ msgstr "We share our love to computer science in different ways"
+
+#~ msgid "We share our love to computer science in different ways."
+#~ msgstr "We share our love to computer science in different ways."
+
+#~ msgid "We share our love for computer science in different ways"
+#~ msgstr "We share our love for computer science in different ways"
+
+#~ msgid "TECHNICALLY"
+#~ msgstr "TECHNICALLY"
+
+#~ msgid "[ TECHNICALLY"
+#~ msgstr "[ TECHNICALLY"
+
+#~ msgid "<0>[ TECHNICALLY ]</0> p"
+#~ msgstr "<0>[ TECHNICALLY ]</0> p"
+
+#~ msgid "[ TECHNICALLY ]"
+#~ msgstr "[ TECHNICALLY ]"
+
+#~ msgid "[ SOCIALLY ]"
+#~ msgstr "[ SOCIALLY ]"
+
+#~ msgid "We're helping other fellow students"
+#~ msgstr "We're helping other fellow students"
+
+#~ msgid "We're helping fellow colleagues and"
+#~ msgstr "We're helping fellow colleagues and"
+
+#~ msgid "We're helping fellow students"
+#~ msgstr "We're helping fellow students"
+
+#~ msgid "We're helping fellow students with"
+#~ msgstr "We're helping fellow students with"
+
+#~ msgid "We're helping fellow students with reaching their goals in tech."
+#~ msgstr "We're helping fellow students with reaching their goals in tech."
+
+#~ msgid "We're"
+#~ msgstr "We're"
+
+#~ msgid "You've got an idea? He're w"
+#~ msgstr "You've got an idea? He're w"
+
+#~ msgid "You've got an idea? Here we"
+#~ msgstr "You've got an idea? Here we"
+
+#~ msgid "You've got an idea? Here"
+#~ msgstr "You've got an idea? Here"
+
+#~ msgid "You've got an idea? Here it will get transformed into a"
+#~ msgstr "You've got an idea? Here it will get transformed into a"
+
+#~ msgid "You've got an idea? Here it will get transformed into a working system."
+#~ msgstr "You've got an idea? Here it will get transformed into a working system."
+
+#~ msgid "[ SCIENTIFICALLY ]"
+#~ msgstr "[ SCIENTIFICALLY ]"
+
+#~ msgid "Sometimes"
+#~ msgstr "Sometimes"
+
+#~ msgid "We love to get our hands dirty at the whiteboard"
+#~ msgstr "We love to get our hands dirty at the whiteboard"
+
+#~ msgid "We love to get our hands dirty at the whiteboard,"
+#~ msgstr "We love to get our hands dirty at the whiteboard,"
+
+#~ msgid "We love to get our hands dirty at the whiteboard."
+#~ msgstr "We love to get our hands dirty at the whiteboard."
+
+#~ msgid "Organizing events,"
+#~ msgstr "Organizing events,"
+
+#~ msgid "Organizing events, conferences and lectures"
+#~ msgstr "Organizing events, conferences and lectures"
+
+#~ msgid "Organizing events, conferences and lectures to"
+#~ msgstr "Organizing events, conferences and lectures to"
+
+#~ msgid "Organizing events, conferences and lectures to spread"
+#~ msgstr "Organizing events, conferences and lectures to spread"
+
+#~ msgid "Research that"
+#~ msgstr "Research that"
+
+#~ msgid "Research that dives into"
+#~ msgstr "Research that dives into"
+
+#~ msgid "Unraveling"
+#~ msgstr "Unraveling"
+
+#~ msgid "Unraveling latest secrets of"
+#~ msgstr "Unraveling latest secrets of"
+
+#~ msgid "div.absolute.top-0.left-0 <0/> <1/> <2/> <3/>"
+#~ msgstr "div.absolute.top-0.left-0 <0/> <1/> <2/> <3/>"
+
+#~ msgid "div.absolute.top-0.left-0.w-8. <0/> <1/> <2/> <3/>"
+#~ msgstr "div.absolute.top-0.left-0.w-8. <0/> <1/> <2/> <3/>"
+
+#~ msgid "Hello, World.<0/> We're <1>KSI</1>"
+#~ msgstr "Hello, World.<0/> We're <1>KSI</1>"
+
+#: src/routes/+page.svelte
+msgid "Hello, World!<0/> We're <1>KSI</1>"
+msgstr "Hello, World!<0/> We're <1>KSI</1>"
+
+#: src/routes/+page.svelte
+msgid "A student community exploring computer science through research, education, and events at the University of Wrocław."
+msgstr "A student community exploring computer science through research, education, and events at the University of Wrocław."
+
+#~ msgid "Explore what we do <0/>"
+#~ msgstr "Explore what we do <0/>"
+
+#: src/routes/+page.svelte
+msgid "See what we do <0/>"
+msgstr "See what we do <0/>"
+
+#: src/routes/+page.svelte
+msgid "About KSI <0/>"
+msgstr "About KSI <0/>"
+
+#: src/routes/+page.svelte
+msgid "From a kid's first line of code to a published paper — here's where our time actually goes."
+msgstr "From a kid's first line of code to a published paper — here's where our time actually goes."
+
+#~ msgid "<0/> <1/> div."
+#~ msgstr "<0/> <1/> div."
+
+#~ msgid "<0/> <1/> div.absolute.top-0."
+#~ msgstr "<0/> <1/> div.absolute.top-0."
+
+#~ msgid "<0/> <1/> div. <2><0>Hello, World!<0/> We're <1>KSI</1></0> <1/> <2><0>A student community exploring computer science through research, education, and events at the University of Wrocław.</0> <1><0>See what we do <0/></0> <1>About KSI <0/></1></1></2></2> <3/>"
+#~ msgstr "<0/> <1/> div. <2><0>Hello, World!<0/> We're <1>KSI</1></0> <1/> <2><0>A student community exploring computer science through research, education, and events at the University of Wrocław.</0> <1><0>See what we do <0/></0> <1>About KSI <0/></1></1></2></2> <3/>"
+
+#: src/routes/+page.svelte
+msgid "Connecting the community"
+msgstr "Connecting the community"
+
+#~ msgid "<0/> div. <1>Connecting the community</1> <2/>"
+#~ msgstr "<0/> div. <1>Connecting the community</1> <2/>"
+
+#~ msgid "We are"
+#~ msgstr "We are"
+
+#~ msgid "kids"
+#~ msgstr "kids"
+
+#~ msgid "kids teached"
+#~ msgstr "kids teached"
+
+#~ msgid "teached"
+#~ msgstr "teached"
+
+#~ msgid "teached Python to"
+#~ msgstr "teached Python to"
+
+#~ msgid "children"
+#~ msgstr "children"
+
+#~ msgid "organized"
+#~ msgstr "organized"
+
+#~ msgid "conferences"
+#~ msgstr "conferences"
+
+#~ msgid "teached programming to"
+#~ msgstr "teached programming to"
+
+#~ msgid "handling"
+#~ msgstr "handling"
+
+#~ msgid "hosted"
+#~ msgstr "hosted"
+
+#~ msgid "on-site"
+#~ msgstr "on-site"
+
+#~ msgid "on-site lectures"
+#~ msgstr "on-site lectures"
+
+#~ msgid "SOCIALLY"
+#~ msgstr "SOCIALLY"
+
+#~ msgid "taught programming to"
+#~ msgstr "taught programming to"
+
+#~ msgid "children taught programming"
+#~ msgstr "children taught programming"
+
+#: src/routes/+page.svelte
+msgid "Children taught programming"
+msgstr "Children taught programming"
+
+#: src/routes/+page.svelte
+msgid "Conferences organized"
+msgstr "Conferences organized"
+
+#~ msgid "On-site lectures"
+#~ msgstr "On-site lectures"
+
+#~ msgid "Hosted on-site lectures"
+#~ msgstr "Hosted on-site lectures"
+
+#: src/routes/+page.svelte
+msgid "On-site lectures hosted"
+msgstr "On-site lectures hosted"
+
+#~ msgid "(SOCIALLY)"
+#~ msgstr "(SOCIALLY)"
+
+#~ msgid "(SOCIALLY )"
+#~ msgstr "(SOCIALLY )"
+
+#~ msgid "( SOCIALLY )"
+#~ msgstr "( SOCIALLY )"
+
+#~ msgid "( SCIENTIFICALLY )"
+#~ msgstr "( SCIENTIFICALLY )"
+
+#: src/routes/+page.svelte
+msgid "Engineering in practice"
+msgstr "Engineering in practice"
+
+#: src/routes/+page.svelte
+msgid "( technically )"
+msgstr "( technically )"
+
+#: src/routes/+page.svelte
+msgid "( socially )"
+msgstr "( socially )"
+
+#~ msgid "<0><0/> <1>Not just code</1> <2>From a kid's first line of code to a published paper — here's where our time actually goes.</2></0> <1><0/> <1>( socially )</1> <2><0>Connecting the community</0> <1><0><0/> <1>Children taught programming</1></0> <1><0/> <1>Conferences organized</1></1> <2><0/> <1>On-site lectures hosted</1></2></1></2></1> div.border <2><0/> <1>( technically )</1> <2>Engineering in practice</2> <3/></2>"
+#~ msgstr "<0><0/> <1>Not just code</1> <2>From a kid's first line of code to a published paper — here's where our time actually goes.</2></0> <1><0/> <1>( socially )</1> <2><0>Connecting the community</0> <1><0><0/> <1>Children taught programming</1></0> <1><0/> <1>Conferences organized</1></1> <2><0/> <1>On-site lectures hosted</1></2></1></2></1> div.border <2><0/> <1>( technically )</1> <2>Engineering in practice</2> <3/></2>"
+
+#~ msgid "((( technically )"
+#~ msgstr "((( technically )"
+
+#~ msgid "((( technically )))"
+#~ msgstr "((( technically )))"
+
+#~ msgid "<0/> <1>( technically )</1> div. <2>Engineering in practice</2> <3/>"
+#~ msgstr "<0/> <1>( technically )</1> div. <2>Engineering in practice</2> <3/>"
+
+#~ msgid "Our experienced team has organized"
+#~ msgstr "Our experienced team has organized"
+
+#~ msgid "Our experienced team has organized over"
+#~ msgstr "Our experienced team has organized over"
+
+#~ msgid "Our experienced team has"
+#~ msgstr "Our experienced team has"
+
+#~ msgid "Our experienced team has been organizing the"
+#~ msgstr "Our experienced team has been organizing the"
+
+#~ msgid "Our experienced team has been organizing the well-known in the region"
+#~ msgstr "Our experienced team has been organizing the well-known in the region"
+
+#~ msgid "Our experienced team has been organizing the well-known in the region conference"
+#~ msgstr "Our experienced team has been organizing the well-known in the region conference"
+
+#~ msgid "Our experienced team has been organizing the well-known in the region conference in the mountainous regions of"
+#~ msgstr "Our experienced team has been organizing the well-known in the region conference in the mountainous regions of"
+
+#~ msgid "Our experienced team has been organizing the well-known in the region conference in the mountainous regions of Lesser"
+#~ msgstr "Our experienced team has been organizing the well-known in the region conference in the mountainous regions of Lesser"
+
+#~ msgid "Our experienced team has been organizing the well-known in the region conference in the mountainous regions of Lesser Silesia"
+#~ msgstr "Our experienced team has been organizing the well-known in the region conference in the mountainous regions of Lesser Silesia"
+
+#~ msgid "Our experienced team has been organizing the well-known in the region conference in the mountainous regions of Lower Silesia in"
+#~ msgstr "Our experienced team has been organizing the well-known in the region conference in the mountainous regions of Lower Silesia in"
+
+#~ msgid "Our experienced team has been organizing the well-known in the region conference in the mountainous regions of Lower Silesia in southwestern Poland."
+#~ msgstr "Our experienced team has been organizing the well-known in the region conference in the mountainous regions of Lower Silesia in southwestern Poland."
+
+#~ msgid "Our experienced team has been organizing the well-known in the region conference in the mountainous regions of Lower Silesia in southwestern Poland. We"
+#~ msgstr "Our experienced team has been organizing the well-known in the region conference in the mountainous regions of Lower Silesia in southwestern Poland. We"
+
+#~ msgid "Our experienced team has been organizing the well-known in the region conference in the mountainous regions of Lower Silesia in southwestern Poland. The conference"
+#~ msgstr "Our experienced team has been organizing the well-known in the region conference in the mountainous regions of Lower Silesia in southwestern Poland. The conference"
+
+#~ msgid "Our experienced team has been organizing the well-known in the region conference in the mountainous regions of Lower Silesia in southwestern Poland. The conference called ZOSIA (Zimowy"
+#~ msgstr "Our experienced team has been organizing the well-known in the region conference in the mountainous regions of Lower Silesia in southwestern Poland. The conference called ZOSIA (Zimowy"
+
+#~ msgid "Our experienced team has been organizing the well-known in the region conference in the mountainous regions of Lower Silesia in southwestern Poland. The conference called ZOSIA stands"
+#~ msgstr "Our experienced team has been organizing the well-known in the region conference in the mountainous regions of Lower Silesia in southwestern Poland. The conference called ZOSIA stands"
+
+#~ msgid "Our experienced team has been organizing the well-known in the region conference in the mountainous regions of Lower Silesia in southwestern Poland. The conference called ZOSIA is an acronym for"
+#~ msgstr "Our experienced team has been organizing the well-known in the region conference in the mountainous regions of Lower Silesia in southwestern Poland. The conference called ZOSIA is an acronym for"
+
+#~ msgid "Our experienced team has been organizing the well-known in the region conference in the mountainous regions of Lower Silesia in southwestern Poland. The conference called ZOSIA is an acronym for <0/>"
+#~ msgstr "Our experienced team has been organizing the well-known in the region conference in the mountainous regions of Lower Silesia in southwestern Poland. The conference called ZOSIA is an acronym for <0/>"
+
+#~ msgid "Our experienced team has been organizing the well-known in the region conference in the mountainous regions of Lower Silesia in southwestern Poland. The conference called ZOSIA is an acronym for <0>Winter</0>"
+#~ msgstr "Our experienced team has been organizing the well-known in the region conference in the mountainous regions of Lower Silesia in southwestern Poland. The conference called ZOSIA is an acronym for <0>Winter</0>"
+
+#~ msgid "Our experienced team has been organizing the well-known in the region conference in the mountainous regions of Lower Silesia in southwestern Poland. The conference called ZOSIA is an acronym for <0>Winter Camp of Computer Science Students</0>"
+#~ msgstr "Our experienced team has been organizing the well-known in the region conference in the mountainous regions of Lower Silesia in southwestern Poland. The conference called ZOSIA is an acronym for <0>Winter Camp of Computer Science Students</0>"
+
+#~ msgid "Our experienced team has been organizing the well-known in the region conference in the mountainous regions of Lower Silesia in southwestern Poland. The conference called ZOSIA is an acronym for <0>Winter Camp of Computer Science Students</0>."
+#~ msgstr "Our experienced team has been organizing the well-known in the region conference in the mountainous regions of Lower Silesia in southwestern Poland. The conference called ZOSIA is an acronym for <0>Winter Camp of Computer Science Students</0>."
+
+#~ msgid "Our experienced team has been organizing the well-known in the region conference in the mountainous regions of Lower Silesia in southwestern Poland. The conference that's called ZOSIA is an acronym for <0>Winter Camp of Computer Science Students</0>."
+#~ msgstr "Our experienced team has been organizing the well-known in the region conference in the mountainous regions of Lower Silesia in southwestern Poland. The conference that's called ZOSIA is an acronym for <0>Winter Camp of Computer Science Students</0>."
+
+#~ msgid "Our experienced team has been organizing the well-known in the region conference in the mountainous regions of Lower Silesia in southwestern Poland. The conference which is called ZOSIA is an acronym for <0>Winter Camp of Computer Science Students</0>."
+#~ msgstr "Our experienced team has been organizing the well-known in the region conference in the mountainous regions of Lower Silesia in southwestern Poland. The conference which is called ZOSIA is an acronym for <0>Winter Camp of Computer Science Students</0>."
+
+#~ msgid "Our experienced team has been organizing the well-known in the region conference in the mountainous regions of Lower Silesia in southwestern Poland. The conference which is called ZOSIA, is an acronym for <0>Winter Camp of Computer Science Students</0>."
+#~ msgstr "Our experienced team has been organizing the well-known in the region conference in the mountainous regions of Lower Silesia in southwestern Poland. The conference which is called ZOSIA, is an acronym for <0>Winter Camp of Computer Science Students</0>."
+
+#~ msgid "<0>Connecting the community</0> <1><0><0/> <1>Children taught programming</1></0> <1><0/> <1>Conferences organized</1></1> <2><0/> <1>On-site lectures hosted</1></2></1> div.grid.md:grid-cols-2.grid-cols-1. <2>Our experienced team has been organizing the well-known in the region conference in the mountainous regions of Lower Silesia in southwestern Poland. The conference which is called ZOSIA, is an acronym for <0>Winter Camp of Computer Science Students</0>.</2>"
+#~ msgstr "<0>Connecting the community</0> <1><0><0/> <1>Children taught programming</1></0> <1><0/> <1>Conferences organized</1></1> <2><0/> <1>On-site lectures hosted</1></2></1> div.grid.md:grid-cols-2.grid-cols-1. <2>Our experienced team has been organizing the well-known in the region conference in the mountainous regions of Lower Silesia in southwestern Poland. The conference which is called ZOSIA, is an acronym for <0>Winter Camp of Computer Science Students</0>.</2>"
+
+#~ msgid "<0>Connecting the community</0> <1><0><0/> <1>Children taught programming</1></0> <1><0/> <1>Conferences organized</1></1> <2><0/> <1>On-site lectures hosted</1></2></1> div.grid.md:grid-cols-2.grid-cols-1.w-full <2>Our experienced team has been organizing the well-known in the region conference in the mountainous regions of Lower Silesia in southwestern Poland. The conference which is called ZOSIA, is an acronym for <0>Winter Camp of Computer Science Students</0>.</2>"
+#~ msgstr "<0>Connecting the community</0> <1><0><0/> <1>Children taught programming</1></0> <1><0/> <1>Conferences organized</1></1> <2><0/> <1>On-site lectures hosted</1></2></1> div.grid.md:grid-cols-2.grid-cols-1.w-full <2>Our experienced team has been organizing the well-known in the region conference in the mountainous regions of Lower Silesia in southwestern Poland. The conference which is called ZOSIA, is an acronym for <0>Winter Camp of Computer Science Students</0>.</2>"
+
+#~ msgid "Conference attendees "
+#~ msgstr "Conference attendees "
+
+#~ msgid "Group photo of 20"
+#~ msgstr "Group photo of 20"
+
+#~ msgid "Group photo of around 20 conference attendees "
+#~ msgstr "Group photo of around 20 conference attendees "
+
+#~ msgid "Group photo of around 20 conference attendees on "
+#~ msgstr "Group photo of around 20 conference attendees on "
+
+#~ msgid "Group photo of around 20 conference attendees on a mountain "
+#~ msgstr "Group photo of around 20 conference attendees on a mountain "
+
+#~ msgid "Group photo of around 20 conference attendees on a mountain viewpoint."
+#~ msgstr "Group photo of around 20 conference attendees on a mountain viewpoint."
+
+#~ msgid "Group picutre of around 20 conference attendees on a mountain viewpoint."
+#~ msgstr "Group picutre of around 20 conference attendees on a mountain viewpoint."
+
+#~ msgid "Group picture of around 20 conference attendees on a mountain viewpoint."
+#~ msgstr "Group picture of around 20 conference attendees on a mountain viewpoint."
+
+#: src/routes/+page.svelte
+msgid "Group of around 20 conference attendees on a mountain viewpoint."
+msgstr "Group of around 20 conference attendees on a mountain viewpoint."
+
+#~ msgid "Our experienced team has been organizing the well-rec in the region conference in the mountainous regions of Lower Silesia in southwestern Poland. The conference which is called ZOSIA, is an acronym for <0>Winter Camp of Computer Science Students</0>."
+#~ msgstr "Our experienced team has been organizing the well-rec in the region conference in the mountainous regions of Lower Silesia in southwestern Poland. The conference which is called ZOSIA, is an acronym for <0>Winter Camp of Computer Science Students</0>."
+
+#~ msgid "Our experienced team has been organizing the well-recognized in the region conference in the mountainous regions of Lower Silesia in southwestern Poland. The conference which is called ZOSIA, is an acronym for <0>Winter Camp of Computer Science Students</0>."
+#~ msgstr "Our experienced team has been organizing the well-recognized in the region conference in the mountainous regions of Lower Silesia in southwestern Poland. The conference which is called ZOSIA, is an acronym for <0>Winter Camp of Computer Science Students</0>."
+
+#~ msgid "Our experienced team has been organizing the well-recognized conference in the mountainous regions of Lower Silesia in southwestern Poland. The conference which is called ZOSIA, is an acronym for <0>Winter Camp of Computer Science Students</0>."
+#~ msgstr "Our experienced team has been organizing the well-recognized conference in the mountainous regions of Lower Silesia in southwestern Poland. The conference which is called ZOSIA, is an acronym for <0>Winter Camp of Computer Science Students</0>."
+
+#: src/routes/+page.svelte
+msgid "Our experienced team has been organizing the well-recognized conference in the mountainous regions of Lower Silesia in southwestern Poland."
+msgstr "Our experienced team has been organizing the well-recognized conference in the mountainous regions of Lower Silesia in southwestern Poland."
+
+#~ msgid "The Name"
+#~ msgstr "The Name"
+
+#~ msgid "The conference which is called ZOSIA, is an acronym for <0>Winter Camp of Computer Science Students</0>."
+#~ msgstr "The conference which is called ZOSIA, is an acronym for <0>Winter Camp of Computer Science Students</0>."
+
+#~ msgid "It's an acronym for <0>Winter Camp of Computer Science Students</0>."
+#~ msgstr "It's an acronym for <0>Winter Camp of Computer Science Students</0>."
+
+#~ msgid "It's an acronym for <0>Winter Camp of Computer Science Students</0> written in Polish."
+#~ msgstr "It's an acronym for <0>Winter Camp of Computer Science Students</0> written in Polish."
+
+#: src/routes/+page.svelte
+msgid "It's an acronym for <0>Winter Camp of Computer Science Students</0> written in polish."
+msgstr "It's an acronym for <0>Winter Camp of Computer Science Students</0> written in polish."
+
+#~ msgid "A Camp"
+#~ msgstr "A Camp"
+
+#~ msgid "Not just A Camp"
+#~ msgstr "Not just A Camp"
+
+#~ msgid "Not just a conference – A Camp"
+#~ msgstr "Not just a conference – A Camp"
+
+#~ msgid "Not just a conference – a Camp"
+#~ msgstr "Not just a conference – a Camp"
+
+#: src/routes/+page.svelte
+msgid "Not just a conference – a camp"
+msgstr "Not just a conference – a camp"
+
+#: src/routes/+page.svelte
+msgid "The name"
+msgstr "The name"
+
+#~ msgid "While"
+#~ msgstr "While"
+
+#~ msgid "While we"
+#~ msgstr "While we"
+
+#~ msgid "While our"
+#~ msgstr "While our"
+
+#~ msgid "While our speakers"
+#~ msgstr "While our speakers"
+
+#~ msgid "While our speakers give various talks, sharing their knowledge,"
+#~ msgstr "While our speakers give various talks, sharing their knowledge,"
+
+#~ msgid "While our speakers give various talks, sharing their knowledge, scientific research,"
+#~ msgstr "While our speakers give various talks, sharing their knowledge, scientific research,"
+
+#~ msgid "While our speakers give various talks, sharing their knowledge, scientific research, hobbies and so on,"
+#~ msgstr "While our speakers give various talks, sharing their knowledge, scientific research, hobbies and so on,"
+
+#~ msgid "While our speakers give various talks, sharing their knowledge, scientific research, hobbies and so on, in the freetime"
+#~ msgstr "While our speakers give various talks, sharing their knowledge, scientific research, hobbies and so on, in the freetime"
+
+#~ msgid "While our speakers give various talks, sharing their knowledge, scientific research, hobbies and so on, in the free time"
+#~ msgstr "While our speakers give various talks, sharing their knowledge, scientific research, hobbies and so on, in the free time"
+
+#~ msgid "While our speakers give various talks, sharing their knowledge, scientific research, hobbies and so on, we love to spend the"
+#~ msgstr "While our speakers give various talks, sharing their knowledge, scientific research, hobbies and so on, we love to spend the"
+
+#~ msgid "While our speakers give various talks, sharing their knowledge, scientific research, hobbies and so on, we love to"
+#~ msgstr "While our speakers give various talks, sharing their knowledge, scientific research, hobbies and so on, we love to"
+
+#~ msgid "While our speakers give various talks, sharing their knowledge, scientific research, hobbies and so on, we love to have fun"
+#~ msgstr "While our speakers give various talks, sharing their knowledge, scientific research, hobbies and so on, we love to have fun"
+
+#~ msgid "While our speakers give various talks, sharing their knowledge, scientific research, hobbies and so on, we love to spend some time together"
+#~ msgstr "While our speakers give various talks, sharing their knowledge, scientific research, hobbies and so on, we love to spend some time together"
+
+#: src/routes/+page.svelte
+msgid "While our speakers give various talks, sharing their knowledge, scientific research, hobbies and so on, we love to spend some time together in the free time."
+msgstr "While our speakers give various talks, sharing their knowledge, scientific research, hobbies and so on, we love to spend some time together in the free time."
+
+#~ msgid "Our"
+#~ msgstr "Our"
+
+#~ msgid "The buildings"
+#~ msgstr "The buildings"
+
+#: src/routes/+page.svelte
+#: src/routes/+page.svelte
+msgid "Interested?"
+msgstr "Interested?"
+
+#~ msgid "<0>ZOSIA</0> <1>Our experienced team has been organizing the well-recognized conference in the mountainous regions of Lower Silesia in southwestern Poland.</1> <2>The name</2> <3>It's an acronym for <0>Winter Camp of Computer Science Students</0> written in polish.</3> <4>Not just a conference – a camp</4> <5>While our speakers give various talks, sharing their knowledge, scientific research, hobbies and so on, we love to spend some time together in the free time.</5> p<6/>"
+#~ msgstr "<0>ZOSIA</0> <1>Our experienced team has been organizing the well-recognized conference in the mountainous regions of Lower Silesia in southwestern Poland.</1> <2>The name</2> <3>It's an acronym for <0>Winter Camp of Computer Science Students</0> written in polish.</3> <4>Not just a conference – a camp</4> <5>While our speakers give various talks, sharing their knowledge, scientific research, hobbies and so on, we love to spend some time together in the free time.</5> p<6/>"
+
+#~ msgid "Interested? <0/>"
+#~ msgstr "Interested? <0/>"
+
+#~ msgid "Interested? You can <0/>"
+#~ msgstr "Interested? You can <0/>"
+
+#~ msgid "Interested? You can <0>learn more here</0>"
+#~ msgstr "Interested? You can <0>learn more here</0>"
+
+#~ msgid "Interested? You can <0>read more here</0>"
+#~ msgstr "Interested? You can <0>read more here</0>"
+
+#~ msgid "Interested? You can <0>read more here</0>."
+#~ msgstr "Interested? You can <0>read more here</0>."
+
+#~ msgid "<0>ZOSIA</0> <1>Our experienced team has been organizing the well-recognized conference in the mountainous regions of Lower Silesia in southwestern Poland.</1> <2>The name</2> <3>It's an acronym for <0>Winter Camp of Computer Science Students</0> written in polish.</3> <4>Not just a conference – a camp</4> <5>While our speakers give various talks, sharing their knowledge, scientific research, hobbies and so on, we love to spend some time together in the free time.</5> p <6>Interested? You can <0>read more here</0>.</6>"
+#~ msgstr "<0>ZOSIA</0> <1>Our experienced team has been organizing the well-recognized conference in the mountainous regions of Lower Silesia in southwestern Poland.</1> <2>The name</2> <3>It's an acronym for <0>Winter Camp of Computer Science Students</0> written in polish.</3> <4>Not just a conference – a camp</4> <5>While our speakers give various talks, sharing their knowledge, scientific research, hobbies and so on, we love to spend some time together in the free time.</5> p <6>Interested? You can <0>read more here</0>.</6>"
+
+#~ msgid "The"
+#~ msgstr "The"
+
+#~ msgid "We pic"
+#~ msgstr "We pic"
+
+#~ msgid "We pick the locations"
+#~ msgstr "We pick the locations"
+
+#~ msgid "We pick the location for the camp"
+#~ msgstr "We pick the location for the camp"
+
+#~ msgid "We pick the location for the camp deligitelly"
+#~ msgstr "We pick the location for the camp deligitelly"
+
+#~ msgid "We pick the location for the camp diligently,"
+#~ msgstr "We pick the location for the camp diligently,"
+
+#~ msgid "We pick the location for the camp diligently, to provide the best"
+#~ msgstr "We pick the location for the camp diligently, to provide the best"
+
+#~ msgid "We pick the location for the camp diligently, to provide the best experience"
+#~ msgstr "We pick the location for the camp diligently, to provide the best experience"
+
+#~ msgid "We pick the location for the camp diligently, to cover"
+#~ msgstr "We pick the location for the camp diligently, to cover"
+
+#~ msgid "We pick the location for the camp diligently, to provide many"
+#~ msgstr "We pick the location for the camp diligently, to provide many"
+
+#~ msgid "We pick the location for the camp diligently, to provide many attractions such as"
+#~ msgstr "We pick the location for the camp diligently, to provide many attractions such as"
+
+#~ msgid "We pick the location for the camp diligently, to provide many attractions such as air hockey,"
+#~ msgstr "We pick the location for the camp diligently, to provide many attractions such as air hockey,"
+
+#~ msgid "We pick the location for the camp diligently, to provide many attractions such as ball pool, air hockey,"
+#~ msgstr "We pick the location for the camp diligently, to provide many attractions such as ball pool, air hockey,"
+
+#~ msgid "We pick the location for the camp diligently, to provide many attractions such as billiard table, air hockey,"
+#~ msgstr "We pick the location for the camp diligently, to provide many attractions such as billiard table, air hockey,"
+
+#~ msgid "We pick the location for the camp diligently, to provide many attractions such as billiard table, a swimming pool, air hockey,"
+#~ msgstr "We pick the location for the camp diligently, to provide many attractions such as billiard table, a swimming pool, air hockey,"
+
+#~ msgid "We pick the location for the camp diligently, to provide many attractions such as billiard table, a swimming pool, air hockey and more!"
+#~ msgstr "We pick the location for the camp diligently, to provide many attractions such as billiard table, a swimming pool, air hockey and more!"
+
+#~ msgid "We pick the location for the camp diligently, to provide many attractions such as billiard table, a swimming pool, air hockey and more! We"
+#~ msgstr "We pick the location for the camp diligently, to provide many attractions such as billiard table, a swimming pool, air hockey and more! We"
+
+#~ msgid "We pick the location for the camp diligently, to provide many attractions such as billiard table, a swimming pool, air hockey and more! We guarantee"
+#~ msgstr "We pick the location for the camp diligently, to provide many attractions such as billiard table, a swimming pool, air hockey and more! We guarantee"
+
+#~ msgid "We pick the location for the camp diligently, to provide many attractions such as billiard table, a swimming pool, air hockey and more! We no-risk guarantee"
+#~ msgstr "We pick the location for the camp diligently, to provide many attractions such as billiard table, a swimming pool, air hockey and more! We no-risk guarantee"
+
+#: src/routes/+page.svelte
+msgid "We pick the location for the camp diligently, to provide many attractions such as billiard table, a swimming pool, air hockey and more! We no-risk guarantee that you'll have fun here!"
+msgstr "We pick the location for the camp diligently, to provide many attractions such as billiard table, a swimming pool, air hockey and more! We no-risk guarantee that you'll have fun here!"
+
+#~ msgid "Interested?<0>read more here</0>."
+#~ msgstr "Interested?<0>read more here</0>."
+
+#~ msgid "Interested?."
+#~ msgstr "Interested?."
+
+#: src/routes/+page.svelte
+#: src/routes/+page.svelte
+msgid "read more here"
+msgstr "read more here"
+
+#~ msgid "By"
+#~ msgstr "By"
+
+#~ msgid "Multiple brilliant volunteers, one goal –"
+#~ msgstr "Multiple brilliant volunteers, one goal –"
+
+#~ msgid "Multiple brilliant volunteers, one goal – leave"
+#~ msgstr "Multiple brilliant volunteers, one goal – leave"
+
+#~ msgid "Multiple brilliant volunteers, one goal – share the passion for Computer Science with the"
+#~ msgstr "Multiple brilliant volunteers, one goal – share the passion for Computer Science with the"
+
+#: src/routes/+page.svelte
+msgid "Multiple brilliant volunteers, one goal – share the passion for Computer Science with the youngest."
+msgstr "Multiple brilliant volunteers, one goal – share the passion for Computer Science with the youngest."
+
+#: src/routes/+page.svelte
+msgid "Initiative"
+msgstr "Initiative"
+
+#~ msgid "Hour of Code is a global"
+#~ msgstr "Hour of Code is a global"
+
+#~ msgid "Hour of Code is a globally recognized"
+#~ msgstr "Hour of Code is a globally recognized"
+
+#~ msgid "Hour of Code is a globally known"
+#~ msgstr "Hour of Code is a globally known"
+
+#~ msgid "Hour of Code is a global movem"
+#~ msgstr "Hour of Code is a global movem"
+
+#~ msgid "Hour of Code is a global movement"
+#~ msgstr "Hour of Code is a global movement"
+
+#~ msgid "Hour of Code is a global movement focused on bringing"
+#~ msgstr "Hour of Code is a global movement focused on bringing"
+
+#~ msgid "Hour of Code is a global movement focused on bringing the youth"
+#~ msgstr "Hour of Code is a global movement focused on bringing the youth"
+
+#~ msgid "Hour of Code is a global movement focused on bringing Computer Science and coding to the"
+#~ msgstr "Hour of Code is a global movement focused on bringing Computer Science and coding to the"
+
+#~ msgid "Hour of Code is a global movement focused on bringing Computer Science and coding to"
+#~ msgstr "Hour of Code is a global movement focused on bringing Computer Science and coding to"
+
+#~ msgid "Hour of Code is a global movement focused on bringing Computer Science and coding to students,"
+#~ msgstr "Hour of Code is a global movement focused on bringing Computer Science and coding to students,"
+
+#~ msgid "Hour of Code is a global movement focused on bringing Computer Science and coding to students, in a fun and"
+#~ msgstr "Hour of Code is a global movement focused on bringing Computer Science and coding to students, in a fun and"
+
+#~ msgid "Hour of Code is a global movement focused on bringing Computer Science and coding to students, in a fun"
+#~ msgstr "Hour of Code is a global movement focused on bringing Computer Science and coding to students, in a fun"
+
+#~ msgid "Hour of Code is a global movement focused on bringing Computer Science and coding to students, in a fun activities"
+#~ msgstr "Hour of Code is a global movement focused on bringing Computer Science and coding to students, in a fun activities"
+
+#~ msgid "Hour of Code is a global movement focused on bringing Computer Science and coding to students, in a fun activities within one hour."
+#~ msgstr "Hour of Code is a global movement focused on bringing Computer Science and coding to students, in a fun activities within one hour."
+
+#: src/routes/+page.svelte
+msgid "Hour of Code is a global movement focused on bringing Computer Science and coding to students, in a fun activities held within one hour."
+msgstr "Hour of Code is a global movement focused on bringing Computer Science and coding to students, in a fun activities held within one hour."
+
+#: src/routes/+page.svelte
+msgid "Minds"
+msgstr "Minds"
+
+#~ msgid "We are fortunate to have people dedicated to teaching"
+#~ msgstr "We are fortunate to have people dedicated to teaching"
+
+#~ msgid "We are fortunate to have talented"
+#~ msgstr "We are fortunate to have talented"
+
+#~ msgid "We are fortunate to know talented"
+#~ msgstr "We are fortunate to know talented"
+
+#~ msgid "We are fortunate to have talented people"
+#~ msgstr "We are fortunate to have talented people"
+
+#~ msgid "We are fortunate to have talented people, including"
+#~ msgstr "We are fortunate to have talented people, including"
+
+#~ msgid "We are fortunate to have talented people, including high school"
+#~ msgstr "We are fortunate to have talented people, including high school"
+
+#~ msgid "We are fortunate to have talented people, including high school educators"
+#~ msgstr "We are fortunate to have talented people, including high school educators"
+
+#~ msgid "We are fortunate to have talented people, including high school educators,"
+#~ msgstr "We are fortunate to have talented people, including high school educators,"
+
+#~ msgid "We are fortunate to have talented people, including high school educators, past olympiad"
+#~ msgstr "We are fortunate to have talented people, including high school educators, past olympiad"
+
+#~ msgid "We are fortunate to have talented people, including high school educators, past olympiad laureates,"
+#~ msgstr "We are fortunate to have talented people, including high school educators, past olympiad laureates,"
+
+#~ msgid "We are fortunate to have talented people, including high school educators, past olympiad laureates and"
+#~ msgstr "We are fortunate to have talented people, including high school educators, past olympiad laureates and"
+
+#~ msgid "We are fortunate to have talented people, including high school educators, past olympiad laureates and tutors"
+#~ msgstr "We are fortunate to have talented people, including high school educators, past olympiad laureates and tutors"
+
+#~ msgid "We are fortunate to have talented people, including high school educators, past olympiad laureates and algorithms tutors"
+#~ msgstr "We are fortunate to have talented people, including high school educators, past olympiad laureates and algorithms tutors"
+
+#~ msgid "We are fortunate to have talented people, including high school educators, past olympiad laureates and algorithm tutors"
+#~ msgstr "We are fortunate to have talented people, including high school educators, past olympiad laureates and algorithm tutors"
+
+#~ msgid "We are fortunate to have talented people, including high school educators, past olympiad laureates and algorithm tutors spend their precious time to"
+#~ msgstr "We are fortunate to have talented people, including high school educators, past olympiad laureates and algorithm tutors spend their precious time to"
+
+#~ msgid "We are fortunate to have talented people, including high school educators, past olympiad laureates and algorithm tutors spend their precious time to form"
+#~ msgstr "We are fortunate to have talented people, including high school educators, past olympiad laureates and algorithm tutors spend their precious time to form"
+
+#~ msgid "We are fortunate to have talented people, including high school educators, past olympiad laureates and algorithm tutors spend their precious time to brainstorm, debug and"
+#~ msgstr "We are fortunate to have talented people, including high school educators, past olympiad laureates and algorithm tutors spend their precious time to brainstorm, debug and"
+
+#~ msgid "We are fortunate to have talented people, including high school educators, past olympiad laureates and algorithm tutors spend their precious time to brainstorm, debug and perfectionalize"
+#~ msgstr "We are fortunate to have talented people, including high school educators, past olympiad laureates and algorithm tutors spend their precious time to brainstorm, debug and perfectionalize"
+
+#~ msgid "We are fortunate to have talented people, including high school educators, past olympiad laureates and algorithm tutors spend their precious time to brainstorm, debug and perfectionize"
+#~ msgstr "We are fortunate to have talented people, including high school educators, past olympiad laureates and algorithm tutors spend their precious time to brainstorm, debug and perfectionize"
+
+#~ msgid "We are fortunate to have talented people, including high school educators, past olympiad laureates and algorithm tutors spend their precious time to brainstorm, debug and perfectionize simple coding problems that will be both"
+#~ msgstr "We are fortunate to have talented people, including high school educators, past olympiad laureates and algorithm tutors spend their precious time to brainstorm, debug and perfectionize simple coding problems that will be both"
+
+#~ msgid "We are fortunate to have talented people, including high school educators, past olympiad laureates and algorithm tutors spend their precious time to brainstorm, debug and perfectionize simple coding problems that will be both engaging and funny"
+#~ msgstr "We are fortunate to have talented people, including high school educators, past olympiad laureates and algorithm tutors spend their precious time to brainstorm, debug and perfectionize simple coding problems that will be both engaging and funny"
+
+#~ msgid "We are fortunate to have talented people, including high school educators, past olympiad laureates and algorithm tutors spend their precious time to brainstorm, debug and perfectionize simple coding problems that will serve both engaging and funny"
+#~ msgstr "We are fortunate to have talented people, including high school educators, past olympiad laureates and algorithm tutors spend their precious time to brainstorm, debug and perfectionize simple coding problems that will serve both engaging and funny"
+
+#~ msgid "We are fortunate to have talented people, including high school educators, past olympiad laureates and algorithm tutors spend their precious time to brainstorm, debug and perfectionize simple coding problems that will serve high educational value engaging and funny"
+#~ msgstr "We are fortunate to have talented people, including high school educators, past olympiad laureates and algorithm tutors spend their precious time to brainstorm, debug and perfectionize simple coding problems that will serve high educational value engaging and funny"
+
+#~ msgid "We are fortunate to have talented people, including high school educators, past olympiad laureates and algorithm tutors spend their precious time to brainstorm, debug and perfectionize simple coding problems that will serve high educational value while engaging and funny"
+#~ msgstr "We are fortunate to have talented people, including high school educators, past olympiad laureates and algorithm tutors spend their precious time to brainstorm, debug and perfectionize simple coding problems that will serve high educational value while engaging and funny"
+
+#~ msgid "We are fortunate to have talented people, including high school educators, past olympiad laureates and algorithm tutors spend their precious time to brainstorm, debug and perfectionize simple coding problems that will serve high educational value while kept engaging and funny"
+#~ msgstr "We are fortunate to have talented people, including high school educators, past olympiad laureates and algorithm tutors spend their precious time to brainstorm, debug and perfectionize simple coding problems that will serve high educational value while kept engaging and funny"
+
+#: src/routes/+page.svelte
+msgid "We are fortunate to have talented people, including high school educators, past olympiad laureates and algorithm tutors spend their precious time to brainstorm, debug and perfectionize simple coding problems that will serve high educational value while kept engaging and funny to the youth."
+msgstr "We are fortunate to have talented people, including high school educators, past olympiad laureates and algorithm tutors spend their precious time to brainstorm, debug and perfectionize simple coding problems that will serve high educational value while kept engaging and funny to the youth."
+
+#~ msgid "Real"
+#~ msgstr "Real"
+
+#~ msgid "Real computer science students"
+#~ msgstr "Real computer science students"
+
+#~ msgid "Real computer science students volunteer to"
+#~ msgstr "Real computer science students volunteer to"
+
+#~ msgid "Real computer science students volunteer to provide"
+#~ msgstr "Real computer science students volunteer to provide"
+
+#~ msgid "Real computer science students volunteer to provide feedback and help whenever"
+#~ msgstr "Real computer science students volunteer to provide feedback and help whenever"
+
+#: src/routes/+page.svelte
+msgid "Real computer science students volunteer to provide feedback and help whenever problems get too tricky."
+msgstr "Real computer science students volunteer to provide feedback and help whenever problems get too tricky."
+
+#~ msgid "Lecture room "
+#~ msgstr "Lecture room "
+
+#~ msgid "Lecture room full of "
+#~ msgstr "Lecture room full of "
+
+#~ msgid "Lecture room full of primary school students "
+#~ msgstr "Lecture room full of primary school students "
+
+#~ msgid "Lecture room full of primary school students attending "
+#~ msgstr "Lecture room full of primary school students attending "
+
+#~ msgid "Lecture room full of primary school students attending a lecture "
+#~ msgstr "Lecture room full of primary school students attending a lecture "
+
+#~ msgid "Lecture room full of primary school students introduced to "
+#~ msgstr "Lecture room full of primary school students introduced to "
+
+#~ msgid "Lecture room full of primary school students introduced to Python for the first time."
+#~ msgstr "Lecture room full of primary school students introduced to Python for the first time."
+
+#: src/routes/+page.svelte
+msgid "Lecture room full of primary school students attending Python lecture."
+msgstr "Lecture room full of primary school students attending Python lecture."

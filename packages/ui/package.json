@@ -27,7 +27,8 @@
       "./src/*.ts",
       "./src/*/index.ts"
     ],
-    "./styles.css": "./styles.css"
+    "./styles.css": "./styles.css",
+    "./dark.css": "./dark.css"
   },
   "scripts": {
     "dev": "vite dev",

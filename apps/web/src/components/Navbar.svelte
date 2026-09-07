@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { LogIn, LogOut, Menu, X } from '@lucide/svelte';
+  import { ChevronDown, LogIn, LogOut, Menu, X } from '@lucide/svelte';
   import { sidebarStore } from '$lib/sidebar';
   import { locale, setLocale } from '$lib/locale.svelte';
   import { locales, type Locale } from '../locales/data';
@@ -49,9 +49,9 @@
 
 <header
   id="navbar"
-  class="border-b-base-200 bg-base-100/95 sticky top-0 z-40 flex h-14 w-full border-b backdrop-blur-sm lg:px-12"
+  class="border-muted bg-base-200 fixed top-0 z-40 flex h-14 w-full border-b border-dashed backdrop-blur-sm lg:px-8"
 >
-  <div class="mx-auto flex w-full flex-row items-center justify-between lg:max-w-7xl">
+  <div class="mx-auto flex w-full flex-row items-center justify-between">
     <div class="flex h-full items-center">
       <button
         onclick={() => {
@@ -71,59 +71,61 @@
 
       <a
         href="/"
-        class="hover:bg-base-200/50 border-base-200 flex h-full items-center gap-3 border-r border-l px-4 font-mono opacity-80 transition-colors duration-150 not-md:border-r-transparent hover:opacity-100 lg:pr-6"
+        class="hover:bg-primary hover:text-base-content flex h-full items-center gap-3 px-4 transition-colors duration-150 lg:pr-6"
       >
-        <img src="/logo.svg" alt="" class="size-10 min-w-10 shrink-0 dark:invert" />
-        <span class="text-lg tracking-tight not-lg:hidden">KSI</span>
+        <img src="/logo.svg" alt="" class="size-8 min-w-10 shrink-0" />
+        <span class="font-anybody text-xl tracking-tight not-lg:hidden">KSI</span>
       </a>
-
-      <nav class="flex h-full items-center not-lg:hidden">
-        <a
-          href="/"
-          class="text-base-content/60 hover:text-base-content border-base-200 hover:bg-base-200/40 flex h-full items-center border-r px-5 text-sm font-medium transition-colors duration-150 {$page
-            .url.pathname === '/'
-            ? 'text-base-content bg-base-200/30'
-            : ''}"
-        >
-          Home
-        </a>
-        <a
-          href="/projects"
-          class="text-base-content/60 hover:text-base-content border-base-200 hover:bg-base-200/40 flex h-full items-center border-r px-5 text-sm font-medium transition-colors duration-150 {$page.url.pathname.startsWith(
-            '/projects'
-          ) || $page.url.pathname.startsWith('/zosia')
-            ? 'text-base-content bg-base-200/30'
-            : ''}"
-        >
-          Projects
-        </a>
-        {#if session && user}
-          <a
-            href="/dashboard"
-            class="text-base-content/60 hover:text-base-content border-base-200 hover:bg-base-200/40 flex h-full items-center border-r px-5 text-sm font-medium transition-colors duration-150 {$page.url.pathname.startsWith(
-              '/dashboard'
-            )
-              ? 'text-base-content bg-base-200/30'
-              : ''}"
-          >
-            Dashboard
-          </a>
-        {/if}
-      </nav>
     </div>
+    <nav class="flex h-full items-center gap-4 not-lg:hidden">
+      <a
+        href="/projects"
+        class="text-base-content/80 font-anybody hover:text-base-content border-base-200 hover:bg-primary flex items-center gap-2 px-2 py-1 text-sm transition-colors duration-150 {$page.url.pathname.startsWith(
+          '/projects'
+        )
+          ? 'text-primary-content bg-primary hover:bg-primary/95'
+          : ''}"
+      >
+        Projects
+        <ChevronDown class="size-4 shrink-0 -translate-y-px" />
+      </a>
+      <a
+        href="/groups"
+        class="text-base-content/80 font-anybody hover:text-base-content border-base-200 hover:bg-primary flex items-center gap-2 px-2 py-1 text-sm transition-colors duration-150 {$page.url.pathname.startsWith(
+          '/groups'
+        )
+          ? 'text-primary-content bg-primary hover:bg-primary/95'
+          : ''}"
+      >
+        Groups
+        <ChevronDown class="size-4 shrink-0 -translate-y-px" />
+      </a>
+      {#if session && user}
+        <a
+          href="/dashboard"
+          class="text-base-content font-anybody hover:text-base-content border-base-200 hover:bg-base-200/40 flex h-full items-center border-r px-5 text-sm transition-colors duration-150 {$page.url.pathname.startsWith(
+            '/dashboard'
+          )
+            ? 'text-base-content bg-base-200/30'
+            : ''}"
+        >
+          Dashboard
+        </a>
+      {/if}
+    </nav>
 
-    <div class="flex h-full items-center">
+    <div class="flex h-full items-center gap-2 pr-6">
       <div class="dropdown border-base-200 dropdown-bottom h-full border-x">
         <div
           tabindex="0"
           role="button"
-          class="text-base-content/60 hover:text-base-content border-base-200 hover:bg-base-200/40 flex h-full cursor-pointer items-center border-r px-5 text-sm font-medium transition-colors duration-150"
+          class="text-base-content/60 hover:text-base-content flex h-full cursor-pointer items-center px-5 text-sm font-medium transition-colors duration-150"
         >
           <span class="select-none">{activeLocale.emoji}</span>
         </div>
 
         <ul
-          class="dropdown-content menu bg-base-200 text-base-content border-muted right-0 z-99 mt-2 w-60 border shadow"
+          class="dropdown-content menu bg-base-200 text-base-content border-muted right-0 z-99 w-60 border border-dashed shadow"
         >
           {#each availableLocales as loc}
             <li>
@@ -134,7 +136,7 @@
                   'items-centers flex gap-2 rounded-none py-2 font-semibold uppercase',
 
                   locale.current === loc.code
-                    ? 'text-base-content bg-blue-600'
+                    ? 'text-primary-content bg-primary'
                     : 'text-muted-100 hover:bg-base-300'
                 ]}
               >
@@ -191,9 +193,9 @@
                 }
               });
           }}
-          class="btn btn-primary btn-sm"
+          class="btn btn-primary gap-3"
         >
-          <LogIn class="size-4 shrink-0" />
+          <LogIn class="size-3 shrink-0" />
           Sign in
         </button>
       {/if}
