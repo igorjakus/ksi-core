@@ -1288,17 +1288,14 @@ msgstr "<0/> Wróć na stronę główną"
 msgid "Breadcrumb"
 msgstr "Okruszki nawigacyjne"
 
-#: src/components/Footer.svelte
-msgid "Get in touch"
-msgstr "Skontaktuj się"
+#~ msgid "Get in touch"
+#~ msgstr "Skontaktuj się"
 
-#: src/components/Footer.svelte
-msgid "Have an idea worth exploring?"
-msgstr "Masz pomysł wart realizacji?"
+#~ msgid "Have an idea worth exploring?"
+#~ msgstr "Masz pomysł wart realizacji?"
 
-#: src/components/Footer.svelte
-msgid "<0/> ksi@cs.uni.wroc.pl <1/>"
-msgstr "<0/> ksi@cs.uni.wroc.pl <1/>"
+#~ msgid "<0/> ksi@cs.uni.wroc.pl <1/>"
+#~ msgstr "<0/> ksi@cs.uni.wroc.pl <1/>"
 
 #: src/components/Footer.svelte
 msgid "Computer Science Students’ Association at the University of Wrocław."
@@ -2306,3 +2303,6 @@ msgstr ""
 #: src/routes/+page.svelte
 msgid "Lecture room full of primary school students attending Python lecture."
 msgstr ""
+
+#~ msgid "<0/> div.flex.w-full. <1><0><0/> <1><0/> <1>KSI</1></1></0> <1><0>Projects <0/></0> <1>Groups <0/></1> <2/></1> <2/></1>"
+#~ msgstr ""

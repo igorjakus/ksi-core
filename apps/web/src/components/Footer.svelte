@@ -46,159 +46,143 @@
   ];
 </script>
 
-<footer
-  class="border-base-content/15 bg-base-50 text-base-content w-full border-t px-4 sm:px-6 lg:px-12"
->
-  <div class="mx-auto max-w-7xl">
-    <div class="grid gap-8 py-12 md:grid-cols-[1fr_auto] md:items-end lg:py-16">
-      <div>
-        <p class="text-primary mb-4 text-xs font-bold tracking-[0.2em] uppercase">Get in touch</p>
-        <h2 class="mb-0! max-w-2xl text-3xl tracking-tight md:text-5xl">
-          Have an idea worth exploring?
-        </h2>
+<footer class="bg-base-50 text-base-content relative w-full">
+  <div class="pointer-events-none absolute inset-0 hidden md:block">
+    <div class="border-muted absolute top-0 left-8 h-full border-l border-dashed"></div>
+    <div class="border-muted absolute top-0 right-8 h-full border-l border-dashed"></div>
+  </div>
+  <div class="grid grid-cols-1 md:mx-8 lg:grid-cols-3">
+    <div class="border-muted border-r border-dashed p-4 py-8 md:py-16">
+      <a
+        href="/"
+        class="hover:text-primary font-anybody inline-block text-6xl font-semibold tracking-[-0.04em]"
+      >
+        KSI UWr
+      </a>
+      <p class="text-base-content/60 mt-4 max-w-sm text-sm leading-relaxed">
+        Computer Science Students’ Association at the University of Wrocław.
+      </p>
+      <address class="text-base-content/45 mt-6 text-xs leading-relaxed not-italic">
+        Institute of Computer Science<br />
+        15 Fryderyka Joliot-Curie St.<br />
+        50-383 Wrocław · Room 24
+      </address>
+    </div>
+
+    <nav
+      aria-label="Footer navigation"
+      class="border-muted lg:border-base-content/15 border-t border-dashed px-4 py-8 md:py-16 lg:border-t-0 lg:border-r lg:px-10"
+    >
+      <p class="text-base-content/40 mb-5 text-xs font-bold tracking-[0.18em] uppercase">Explore</p>
+      <ul class="space-y-3 text-sm">
+        <li><a href="/#about" class="hover:text-primary transition-colors">About us</a></li>
+        <li><a href="/projects" class="hover:text-primary transition-colors">Projects</a></li>
+        <li>
+          <a href="mailto:ksi@cs.uni.wroc.pl" class="hover:text-primary transition-colors"
+            >Contact</a
+          >
+        </li>
+      </ul>
+    </nav>
+
+    <div class="border-muted border-t border-dashed px-4 py-8 md:py-16 lg:border-t-0 lg:pl-10">
+      <p class="text-base-content/40 mb-5 text-xs font-bold tracking-[0.18em] uppercase">
+        Find us online
+      </p>
+      <div class="border-base-content/15 grid grid-cols-2 border-t border-l">
+        {#each socialLinks as social (social.label)}
+          <a
+            href={social.href}
+            target="_blank"
+            rel="noreferrer"
+            class="group border-base-content/15 hover:bg-base-200 hover:text-primary flex items-center justify-between gap-3 border-r border-b p-4 text-sm transition-colors"
+          >
+            <span class="flex items-center gap-3">
+              <social.icon class="size-4" />
+              {social.label}
+            </span>
+            <ArrowUpRight
+              class="text-base-content/30 group-hover:text-primary size-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+            />
+          </a>
+        {/each}
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="border-muted text-base-100 bg-base-content flex flex-col items-center gap-3 border-t border-dashed px-4 py-3 text-xs sm:flex-row sm:justify-between md:px-12"
+  >
+    <span>© KSI {new Date().getFullYear()}</span>
+
+    <div class="flex flex-wrap items-center gap-x-6 gap-y-3 not-sm:w-full">
+      <div class="dropdown font-anybody dropdown-top dropdown-end not-sm:w-full">
+        <button
+          type="button"
+          tabindex="0"
+          aria-label="Change language"
+          class="hover:text-primary flex items-center justify-center gap-2 transition-colors not-sm:w-full"
+        >
+          <span aria-hidden="true">{activeLocale.emoji}</span>
+          <span
+            >{activeLocale.formattedLocale.replace(/\b[a-zA-Z]/g, (char) =>
+              char.toUpperCase()
+            )}</span
+          >
+          <ChevronDown class="size-3.5 rotate-180" />
+        </button>
+
+        <ul
+          tabindex="-1"
+          class="dropdown-content menu border-base-content/15 bg-base-100 text-base-content z-50 mb-3 w-56 border p-2 shadow-lg not-sm:w-full"
+        >
+          {#each availableLocales as availableLocale (availableLocale.code)}
+            <li>
+              <button
+                type="button"
+                onclick={() => setLocale(availableLocale.code)}
+                class={[
+                  'flex gap-3 rounded-none py-2',
+                  locale.current === availableLocale.code
+                    ? 'bg-primary text-primary-content'
+                    : 'hover:bg-base-200'
+                ]}
+              >
+                <span aria-hidden="true">{availableLocale.emoji}</span>
+                {availableLocale.formattedLocale.replace(/\b[a-zA-Z]/g, (char) =>
+                  char.toUpperCase()
+                )}
+              </button>
+            </li>
+          {/each}
+        </ul>
       </div>
 
       <a
-        href="mailto:ksi@cs.uni.wroc.pl"
-        class="group border-base-content/30 hover:border-primary hover:text-primary flex w-fit items-center gap-3 border-b pb-2 text-sm font-bold transition-colors"
+        href="https://github.com/ksiuwr/ksi-core"
+        target="_blank"
+        rel="noreferrer"
+        class="group font-anybody hover:text-primary flex w-full items-center justify-center gap-2 transition-colors sm:w-fit"
       >
-        <Mail class="size-4" />
-        ksi@cs.uni.wroc.pl
+        <Github class="size-3.5" />
+        Source code
         <ArrowUpRight
-          class="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+          class="size-3 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
         />
       </a>
-    </div>
 
-    <div class="border-base-content/15 grid border-t lg:grid-cols-[1.2fr_0.8fr_1fr]">
-      <div class="lg:border-base-content/15 py-10 lg:border-r lg:pr-10">
+      {#if commitHash}
         <a
-          href="/"
-          class="hover:text-primary inline-block text-xl font-semibold tracking-[-0.04em]"
-        >
-          KSI UWr
-        </a>
-        <p class="text-base-content/60 mt-4 max-w-sm text-sm leading-relaxed">
-          Computer Science Students’ Association at the University of Wrocław.
-        </p>
-        <address class="text-base-content/45 mt-6 text-xs leading-relaxed not-italic">
-          Institute of Computer Science<br />
-          15 Fryderyka Joliot-Curie St.<br />
-          50-383 Wrocław · Room 24
-        </address>
-      </div>
-
-      <nav
-        aria-label="Footer navigation"
-        class="border-base-content/15 lg:border-base-content/15 border-t py-10 lg:border-t-0 lg:border-r lg:px-10"
-      >
-        <p class="text-base-content/40 mb-5 text-xs font-bold tracking-[0.18em] uppercase">
-          Explore
-        </p>
-        <ul class="space-y-3 text-sm">
-          <li><a href="/#about" class="hover:text-primary transition-colors">About us</a></li>
-          <li><a href="/projects" class="hover:text-primary transition-colors">Projects</a></li>
-          <li>
-            <a href="mailto:ksi@cs.uni.wroc.pl" class="hover:text-primary transition-colors"
-              >Contact</a
-            >
-          </li>
-        </ul>
-      </nav>
-
-      <div class="border-base-content/15 border-t py-10 lg:border-t-0 lg:pl-10">
-        <p class="text-base-content/40 mb-5 text-xs font-bold tracking-[0.18em] uppercase">
-          Find us online
-        </p>
-        <div class="border-base-content/15 grid grid-cols-2 border-t border-l">
-          {#each socialLinks as social (social.label)}
-            <a
-              href={social.href}
-              target="_blank"
-              rel="noreferrer"
-              class="group border-base-content/15 hover:bg-base-200 hover:text-primary flex items-center justify-between gap-3 border-r border-b p-4 text-sm transition-colors"
-            >
-              <span class="flex items-center gap-3">
-                <social.icon class="size-4" />
-                {social.label}
-              </span>
-              <ArrowUpRight
-                class="text-base-content/30 group-hover:text-primary size-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-              />
-            </a>
-          {/each}
-        </div>
-      </div>
-    </div>
-
-    <div
-      class="border-base-content/15 text-base-content/40 flex flex-col items-center gap-3 border-t py-5 text-xs sm:flex-row sm:justify-between"
-    >
-      <span>© KSI {new Date().getFullYear()}</span>
-
-      <div class="flex flex-wrap items-center gap-x-6 gap-y-3 not-sm:w-full">
-        <div class="dropdown dropdown-top dropdown-end not-sm:w-full">
-          <button
-            type="button"
-            tabindex="0"
-            aria-label="Change language"
-            class="hover:text-primary flex items-center justify-center gap-2 uppercase transition-colors not-sm:w-full"
-          >
-            <span aria-hidden="true">{activeLocale.emoji}</span>
-            <span>{activeLocale.formattedLocale}</span>
-            <ChevronDown class="size-3.5 rotate-180" />
-          </button>
-
-          <ul
-            tabindex="-1"
-            class="dropdown-content menu border-base-content/15 bg-base-100 text-base-content z-50 mb-3 w-56 border p-2 shadow-lg not-sm:w-full"
-          >
-            {#each availableLocales as availableLocale (availableLocale.code)}
-              <li>
-                <button
-                  type="button"
-                  onclick={() => setLocale(availableLocale.code)}
-                  class={[
-                    'flex gap-3 rounded-none py-2 uppercase',
-                    locale.current === availableLocale.code
-                      ? 'bg-primary text-primary-content'
-                      : 'hover:bg-base-200'
-                  ]}
-                >
-                  <span aria-hidden="true">{availableLocale.emoji}</span>
-                  {availableLocale.formattedLocale}
-                </button>
-              </li>
-            {/each}
-          </ul>
-        </div>
-
-        <a
-          href="https://github.com/ksiuwr/ksi-core"
+          href="https://github.com/ksiuwr/ksi-core/commit/{commitHash}"
           target="_blank"
           rel="noreferrer"
-          class="group hover:text-primary flex w-full items-center justify-center gap-2 transition-colors sm:w-fit"
+          class="group hover:text-primary flex w-full items-center justify-center gap-1.5 font-mono transition-colors sm:w-fit"
+          title="Commit {commitHash}"
         >
-          <Github class="size-3.5" />
-          Source code
-          <ArrowUpRight
-            class="size-3 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-          />
+          <GitCommitHorizontal class="size-3.5" />
+          <span>{shortCommitHash}</span>
         </a>
-
-        {#if commitHash}
-          <a
-            href="https://github.com/ksiuwr/ksi-core/commit/{commitHash}"
-            target="_blank"
-            rel="noreferrer"
-            class="group hover:text-primary flex w-full items-center justify-center gap-1.5 font-mono transition-colors sm:w-fit"
-            title="Commit {commitHash}"
-          >
-            <GitCommitHorizontal class="size-3.5" />
-            <span>{shortCommitHash}</span>
-          </a>
-        {/if}
-      </div>
+      {/if}
     </div>
   </div>
 </footer>

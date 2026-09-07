@@ -18,8 +18,8 @@
     class="bg-base-200 noise noise-lg relative flex min-h-[80vh] w-full justify-between overflow-hidden not-md:flex-col"
   >
     <div class="pointer-events-none absolute inset-0 hidden md:block">
-      <div class="border-muted absolute top-0 left-8 h-full border border-dashed"></div>
-      <div class="border-muted absolute top-0 right-8 h-full border border-dashed"></div>
+      <div class="border-muted absolute top-0 left-8 h-full border-l border-dashed"></div>
+      <div class="border-muted absolute top-0 right-8 h-full border-l border-dashed"></div>
     </div>
     <img
       src="http://localhost:5173/members/0.webp"
@@ -66,18 +66,18 @@
       </div>
     </div>
   </section>
-  <hr class="border-muted border-px mt-0 mb-1" />
-  <hr class="border-muted/80 border-px my-0.5" />
-  <hr class="border-muted/60 border-px my-0.5" />
-  <hr class="border-muted/40 border-px my-0.5" />
-  <hr class="border-muted/20 border-px my-0.5" />
+  <hr class="border-muted mt-0 mb-1 border-t" />
+  <hr class="border-muted/80 my-0.5 border-t" />
+  <hr class="border-muted/60 my-0.5 border-t" />
+  <hr class="border-muted/40 my-0.5 border-t" />
+  <hr class="border-muted/20 my-0.5 border-t" />
   <section class="noise dark text-base-100 relative flex flex-col items-center">
     <div
       class="bg-primary noise text-base-content relative flex h-full w-full flex-col items-center py-10 lg:py-14 xl:py-20"
     >
       <div class="text-secondary pointer-events-none absolute inset-0 hidden md:block">
-        <div class="border-muted/50 absolute top-0 left-8 h-full border"></div>
-        <div class="border-muted/50 border-px absolute top-0 right-8 h-full border"></div>
+        <div class="border-base-content absolute top-0 left-8 h-full border-l"></div>
+        <div class="border-base-content absolute top-0 right-8 h-full border-l"></div>
         <div class="bg-base-content/25 absolute top-0 left-0 h-full w-8"></div>
         <div class="bg-base-content/25 absolute top-0 right-0 h-full w-8"></div>
       </div>
@@ -93,8 +93,8 @@
 
     <div class="bg-neutral noise relative flex h-full w-full flex-col py-10 lg:py-14 xl:py-20">
       <div class="text-secondary pointer-events-none absolute inset-0 hidden md:block">
-        <div class="border-muted/50 absolute top-0 left-8 h-full border"></div>
-        <div class="border-muted/50 border-px absolute top-0 right-8 h-full border"></div>
+        <div class="border-muted/50 absolute top-0 left-8 h-full border-l"></div>
+        <div class="border-muted/50 absolute top-0 right-8 h-full border-l"></div>
         <div class="bg-base-content/25 absolute top-0 left-0 h-full w-8"></div>
         <div class="bg-base-content/25 absolute top-0 right-0 h-full w-8"></div>
       </div>
@@ -205,8 +205,8 @@
       class="noise bg-primary-background relative flex h-full w-full flex-col items-center pt-10 lg:pt-14 xl:pt-20"
     >
       <div class="text-secondary pointer-events-none absolute inset-0 hidden md:block">
-        <div class="border-muted/50 absolute top-0 left-8 h-full border"></div>
-        <div class="border-muted/50 border-px absolute top-0 right-8 h-full border"></div>
+        <div class="border-muted/50 absolute top-0 left-8 h-full border-l"></div>
+        <div class="border-muted/50 border-px absolute top-0 right-8 h-full border-l"></div>
         <div class="bg-base-content/25 absolute top-0 left-0 h-full w-8"></div>
         <div class="bg-base-content/25 absolute top-0 right-0 h-full w-8"></div>
       </div>
@@ -217,11 +217,11 @@
       </div>
 
       <div class="relative mt-10 w-full md:px-8 lg:mt-14 xl:mt-20">
-        <hr class="border-secondary border-px absolute top-0 left-0 z-2 my-0 w-full" />
-        <hr class="border-secondary/80 border-px my-1 w-full" />
-        <hr class="border-secondary/60 border-px my-1 w-full" />
-        <hr class="border-secondary/40 border-px my-1 w-full" />
-        <hr class="border-secondary/20 border-px my-1 w-full" />
+        <hr class="border-secondary absolute top-0 left-0 z-2 my-0 w-full border-t" />
+        <hr class="border-secondary/80 my-1 w-full border-t" />
+        <hr class="border-secondary/60 my-1 w-full border-t" />
+        <hr class="border-secondary/40 my-1 w-full border-t" />
+        <hr class="border-secondary/20 my-1 w-full border-t" />
       </div>
     </div>
   </section>
