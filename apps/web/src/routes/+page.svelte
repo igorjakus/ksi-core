@@ -1,220 +1,250 @@
 <script lang="ts">
-  import { ArrowDown, ArrowRight, Lightbulb, Microscope, Presentation } from '@lucide/svelte';
-  import GuideFrame from '../components/ui/GuideFrame.svelte';
-  import PageSection from '../components/ui/PageSection.svelte';
-  import FadeDivider from '../components/ui/FadeDivider.svelte';
-  import SectionEyebrow from '../components/ui/SectionEyebrow.svelte';
-  import StatCard from '../components/ui/StatCard.svelte';
-  import StoryBlock from '../components/ui/StoryBlock.svelte';
-  import GithubProjectCard from '../components/ui/GithubProjectCard.svelte';
-  
+  import { ArrowRight, Microscope, Presentation, Lightbulb, ArrowUpRight } from '@lucide/svelte';
   let { data } = $props<{ data: import('./$types').PageData }>();
 </script>
 
-<main class="flex w-full flex-col">
-  <section
-    class="bg-base-200 noise noise-lg relative flex min-h-[80vh] w-full justify-between overflow-hidden not-md:flex-col"
-  >
-    <GuideFrame tone="hero" />
-    <img
-      src="/members/0.webp"
-      class="pointer-events-none absolute right-16 bottom-8 hidden w-lg opacity-20 grayscale-50 md:block xl:hidden"
-      alt=""
-    />
-
-    <div class="page-gutter-hero page-stack-hero flex">
-      <div class="z-1 flex flex-1 flex-col justify-between gap-4">
+<main class="w-full" style="background: var(--paper); min-height: calc(100vh - 56px);">
+  <div style="max-width: 900px; margin: 0 auto; padding: 60px 20px;">
+    <!-- Hero -->
+    <div
+      style="display: flex; gap: 40px; align-items: center; margin-bottom: 80px; flex-wrap: wrap;"
+    >
+      <div style="flex: 1; min-width: 300px;">
         <h1
-          class="3xl:text-9xl mb-20 text-6xl font-extrabold tracking-tight text-balance sm:text-7xl lg:text-8xl"
+          style="font-family: var(--display); font-size: clamp(40px, 8vw, 64px); font-weight: 700; letter-spacing: -0.05em; color: var(--ink); margin-bottom: 20px; line-height: 1.1;"
         >
-          Hello, World!<br />
-          We're
-          <span class="text-highlight md:ml-8">KSI</span>
+          Hello, World!<br />We're KSI.
         </h1>
-        <img src="/members/0.webp" class="pointer-events-none opacity-80 md:hidden" alt="" />
-        <div class="flex max-w-xl flex-col gap-4">
-          <p class="3xl:text-4xl text-xl md:text-2xl 2xl:text-3xl">
-            A student community exploring computer science through research, education, and events
-            at the University of Wrocław.
-          </p>
-          <div class="flex flex-wrap gap-3">
-            <a href="#projects" class="group btn btn-primary gap-2 px-6">
-              See what we do
-              <ArrowDown
-                class="size-3 -translate-y-px transition-transform group-hover:translate-y-0.5"
-              />
-            </a>
-            <a href="#about" class="group btn btn-soft border-0 px-6">
-              About KSI <ArrowRight
-                class="size-3 -translate-y-px transition-transform group-hover:translate-x-0.5"
-              /></a
-            >
-          </div>
+        <p
+          style="font-size: 18px; color: var(--muted); max-width: 600px; line-height: 1.6; margin-bottom: 32px;"
+        >
+          A student community exploring computer science through research, education, and events at
+          the University of Wrocław.
+        </p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+          <a href="#projects" class="btn">See what we do <ArrowRight size={16} /></a>
+          <a href="#about" class="btn btn-outline">About KSI</a>
         </div>
       </div>
-      <div class="z-1 hidden flex-1 flex-col opacity-80 xl:flex">
+      <div style="flex: 1; display: flex; justify-content: flex-end; min-width: 300px;">
         <img
           src="/members/0.webp"
-          class="skew h-full object-cover grayscale-80 transition-all hover:grayscale-0"
-          alt=""
+          style="max-width: 100%; object-fit: cover; opacity: 0.9; border: 1px solid var(--line); border-radius: 4px;"
+          alt="KSI Members"
         />
       </div>
     </div>
-  </section>
 
-  <FadeDivider tone="muted" />
-
-  <section class="noise dark text-base-100 relative flex flex-col items-center">
-    <PageSection id="about" guide="content-strong" class="bg-primary text-base-content page-stack">
-      <h1 class="3xl:text-7xl text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">
-        How we spend our time
-      </h1>
-      <p
-        class="3xl:text-3xl max-w-md text-center text-lg md:text-xl lg:max-w-lg 2xl:max-w-xl 2xl:text-2xl"
+    <!-- Socially -->
+    <section id="about" style="margin-bottom: 80px;">
+      <div
+        style="font-family: var(--mono); font-size: 11px; color: var(--muted); margin-bottom: 20px; text-transform: uppercase; letter-spacing: 0.05em;"
       >
-        Three threads run through everything we do — the people we meet, the things we build, and
-        the questions we chase. Here's a closer look at each.
-      </p>
-    </PageSection>
-
-    <PageSection guide="content-soft" class="bg-neutral page-stack">
-      <SectionEyebrow>( socially )</SectionEyebrow>
-      <div class="page-gutter flex flex-col items-center gap-16">
-        <h1 id="social">Connecting the community</h1>
-        <div
-          class="mt-4 mb-16 grid max-w-lg grid-cols-1 items-center justify-between gap-8 self-center px-4 py-4 md:grid-cols-3 md:gap-8 md:px-8 lg:max-w-4xl"
-        >
-          <StatCard value="500+" label="Children taught programming" />
-          <StatCard value="25+" label="Conferences organized" />
-          <StatCard value="20+" label="On-site lectures hosted" />
-        </div>
-        <div class="space-y-32">
-          <StoryBlock
-            title="ZOSIA"
-            image={{
-              src: 'https://pub-4e8af66414434008bafa6614f6af4b22.r2.dev/zosia-2026/01.webp',
-              alt: 'Group of around 20 conference attendees on a mountain viewpoint.'
-            }}
-            readMoreHref="/projects/zosia"
-          >
-            {#snippet lead()}
-              <p>
-                Our experienced team has been organizing the well-recognized conference in the
-                mountainous regions of Lower Silesia in southwestern Poland.
-              </p>
-              <b>The name</b>
-              <p>
-                It's an acronym for <i>Winter Camp of Computer Science Students</i> written in polish.
-              </p>
-              <b>Not just a conference – a camp</b>
-            {/snippet}
-            {#snippet fade()}
-              <p>
-                While our speakers give various talks, sharing their knowledge, scientific research,
-                hobbies and so on, we love to spend some time together in the free time.
-              </p>
-              <p>
-                We pick the location for the camp diligently, to provide many attractions such as
-                billiard table, a swimming pool, air hockey and more! We no-risk guarantee that
-                you'll have fun here!
-              </p>
-            {/snippet}
-          </StoryBlock>
-
-          <StoryBlock
-            title="Hour of Code"
-            image={{
-              src: 'https://pub-4e8af66414434008bafa6614f6af4b22.r2.dev/project-hoc-past/8.webp',
-              alt: 'Lecture room full of primary school students attending Python lecture.'
-            }}
-            reverse
-            readMoreHref="/projects/hoc"
-          >
-            {#snippet lead()}
-              <p>
-                Multiple brilliant volunteers, one goal – share the passion for Computer Science
-                with the youngest.
-              </p>
-              <b>Initiative</b>
-              <p>
-                Hour of Code is a global movement focused on bringing Computer Science and coding to
-                students, in a fun activities held within one hour.
-              </p>
-              <b>Minds</b>
-            {/snippet}
-            {#snippet fade()}
-              <p>
-                We are fortunate to have talented people, including high school educators, past
-                olympiad laureates and algorithm tutors spend their precious time to brainstorm,
-                debug and perfectionize simple coding problems that will serve high educational
-                value while kept engaging and funny to the youth.
-              </p>
-              <p>
-                Real computer science students volunteer to provide feedback and help whenever
-                problems get too tricky.
-              </p>
-            {/snippet}
-          </StoryBlock>
-        </div>
+        ( socially ) Connecting the community
       </div>
-    </PageSection>
-
-    <PageSection id="projects" guide="content-soft" class="bg-primary-background page-stack">
-      <SectionEyebrow>( technically )</SectionEyebrow>
-      <h1 id="technical" class="page-gutter">Engineering is our passion</h1>
-
-      <div class="page-gutter mt-8 flex flex-col items-center gap-16">
-        {#each data.projects as project}
-          <GithubProjectCard
-            repo={project.slug}
-            title={project.name}
-            description={project.description}
-          />
-        {/each}
-        {#if data.projects.length === 0}
-          <p class="text-neutral-content/60 text-lg">More projects coming soon.</p>
-        {/if}
-      </div>
-
-      <FadeDivider tone="secondary" pinned class="mt-10 md:px-8 lg:mt-14 xl:mt-20" />
-    </PageSection>
-
-    <PageSection id="scientific" guide="content-soft" class="bg-neutral page-stack">
-      <SectionEyebrow>( scientifically )</SectionEyebrow>
-      <div class="page-gutter flex flex-col items-center gap-16">
-        <div class="flex flex-col items-center gap-4 text-center">
-          <h1>Curiosity, kept rigorous</h1>
-          <p class="text-neutral-content/70 max-w-2xl text-lg md:text-xl">
-            We're still early in our research journey — no published papers to point to yet — but
-            the habits that lead there are already part of how we work together.
+      <div
+        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px;"
+      >
+        <div class="card" style="padding: 24px;">
+          <h3
+            style="font-size: 32px; font-family: var(--display); color: var(--primary); margin: 0 0 8px 0;"
+          >
+            500+
+          </h3>
+          <p style="margin: 0; color: var(--muted); font-size: 12px;">
+            Children taught programming
           </p>
         </div>
+        <div class="card" style="padding: 24px;">
+          <h3
+            style="font-size: 32px; font-family: var(--display); color: var(--primary); margin: 0 0 8px 0;"
+          >
+            25+
+          </h3>
+          <p style="margin: 0; color: var(--muted); font-size: 12px;">Conferences organized</p>
+        </div>
+        <div class="card" style="padding: 24px;">
+          <h3
+            style="font-size: 32px; font-family: var(--display); color: var(--primary); margin: 0 0 8px 0;"
+          >
+            20+
+          </h3>
+          <p style="margin: 0; color: var(--muted); font-size: 12px;">On-site lectures hosted</p>
+        </div>
+      </div>
 
-        <div class="grid w-full max-w-4xl grid-cols-1 gap-8 md:grid-cols-3">
-          <div class="flex flex-col items-center gap-3 text-center">
-            <Microscope class="text-primary size-8" strokeWidth={1.5} />
-            <h3>Reading groups</h3>
-            <p class="text-neutral-content/60 text-sm leading-relaxed">
+      <div
+        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px;"
+      >
+        <div
+          class="card"
+          style="padding: 0; display: flex; flex-direction: column; align-items: stretch; overflow: hidden;"
+        >
+          <img
+            src="https://pub-4e8af66414434008bafa6614f6af4b22.r2.dev/zosia-2026/01.webp"
+            alt="ZOSIA"
+            style="width: 100%; height: 200px; object-fit: cover; border-bottom: 1px solid var(--line);"
+          />
+          <div
+            style="padding: 24px; display: flex; flex-direction: column; align-items: flex-start; flex: 1;"
+          >
+            <h3
+              style="margin: 0 0 12px 0; font-family: var(--display); font-size: 18px; color: var(--ink);"
+            >
+              ZOSIA
+            </h3>
+            <p
+              style="color: var(--muted); font-size: 13px; line-height: 1.6; margin-bottom: 20px; flex: 1;"
+            >
+              Our experienced team has been organizing the well-recognized conference in the
+              mountainous regions of Lower Silesia in southwestern Poland. While our speakers give
+              various talks, sharing their knowledge, scientific research, hobbies and so on, we
+              love to spend some time together in the free time.
+            </p>
+            <a href="/projects/zosia" class="btn btn-outline">Read more</a>
+          </div>
+        </div>
+
+        <div
+          class="card"
+          style="padding: 0; display: flex; flex-direction: column; align-items: stretch; overflow: hidden;"
+        >
+          <img
+            src="https://pub-4e8af66414434008bafa6614f6af4b22.r2.dev/project-hoc-past/8.webp"
+            alt="Hour of Code"
+            style="width: 100%; height: 200px; object-fit: cover; border-bottom: 1px solid var(--line);"
+          />
+          <div
+            style="padding: 24px; display: flex; flex-direction: column; align-items: flex-start; flex: 1;"
+          >
+            <h3
+              style="margin: 0 0 12px 0; font-family: var(--display); font-size: 18px; color: var(--ink);"
+            >
+              Hour of Code
+            </h3>
+            <p
+              style="color: var(--muted); font-size: 13px; line-height: 1.6; margin-bottom: 20px; flex: 1;"
+            >
+              Hour of Code is a global movement focused on bringing Computer Science and coding to
+              students, in fun activities held within one hour. Multiple brilliant volunteers, one
+              goal – share the passion for Computer Science with the youngest.
+            </p>
+            <a href="/projects/hoc" class="btn btn-outline">Read more</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Technically -->
+    <section id="projects" style="margin-bottom: 80px;">
+      <div
+        style="font-family: var(--mono); font-size: 11px; color: var(--muted); margin-bottom: 20px; text-transform: uppercase; letter-spacing: 0.05em;"
+      >
+        ( technically ) Engineering is our passion
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 32px;">
+        {#each data.projects as project}
+          <div style="display: flex; flex-direction: column; gap: 16px;">
+            <a
+              href={`https://github.com/${project.slug}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="card group"
+              style="display: block; padding: 0; text-decoration: none; overflow: hidden;"
+            >
+              <img
+                src={`https://opengraph.githubassets.com/1/${project.slug}`}
+                alt=""
+                style="width: 100%; max-height: 400px; object-fit: cover; border-bottom: 1px solid var(--line); display: block;"
+              />
+              <div
+                style="padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; background: var(--surface-muted);"
+              >
+                <span
+                  style="font-family: var(--mono); color: var(--muted); font-size: 11px; letter-spacing: 0.05em; text-transform: uppercase;"
+                  >{project.slug}</span
+                >
+                <span
+                  style="color: var(--primary); font-size: 11px; display: flex; align-items: center; gap: 4px;"
+                  >View on GitHub <ArrowUpRight size={14} /></span
+                >
+              </div>
+            </a>
+            <div>
+              <h2
+                style="font-family: var(--display); font-size: 20px; margin: 0 0 8px 0; color: var(--ink);"
+              >
+                {project.name}
+              </h2>
+              <p style="color: var(--muted); font-size: 14px; margin: 0; line-height: 1.5;">
+                {project.description}
+              </p>
+            </div>
+          </div>
+        {/each}
+        {#if data.projects.length === 0}
+          <p style="color: var(--muted); font-size: 13px;">More projects coming soon.</p>
+        {/if}
+      </div>
+    </section>
+
+    <!-- Scientifically -->
+    <section id="scientific" style="margin-bottom: 60px;">
+      <div
+        style="font-family: var(--mono); font-size: 11px; color: var(--muted); margin-bottom: 20px; text-transform: uppercase; letter-spacing: 0.05em;"
+      >
+        ( scientifically ) Curiosity, kept rigorous
+      </div>
+      <p
+        style="font-size: 15px; color: var(--ink); max-width: 600px; line-height: 1.6; margin-bottom: 32px;"
+      >
+        We're still early in our research journey — no published papers to point to yet — but the
+        habits that lead there are already part of how we work together.
+      </p>
+      <div
+        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px;"
+      >
+        <div class="card" style="padding: 24px; display: flex; flex-direction: column; gap: 16px;">
+          <Microscope size={28} color="var(--primary)" />
+          <div>
+            <h3
+              style="margin: 0 0 8px 0; font-family: var(--display); font-size: 16px; color: var(--ink);"
+            >
+              Reading groups
+            </h3>
+            <p style="margin: 0; color: var(--muted); font-size: 13px; line-height: 1.5;">
               We pick apart papers and ideas together, well outside the lecture hall.
             </p>
           </div>
-          <div class="flex flex-col items-center gap-3 text-center">
-            <Presentation class="text-primary size-8" strokeWidth={1.5} />
-            <h3>Guest seminars</h3>
-            <p class="text-neutral-content/60 text-sm leading-relaxed">
+        </div>
+        <div class="card" style="padding: 24px; display: flex; flex-direction: column; gap: 16px;">
+          <Presentation size={28} color="var(--primary)" />
+          <div>
+            <h3
+              style="margin: 0 0 8px 0; font-family: var(--display); font-size: 16px; color: var(--ink);"
+            >
+              Guest seminars
+            </h3>
+            <p style="margin: 0; color: var(--muted); font-size: 13px; line-height: 1.5;">
               Researchers and alumni drop by to share what they're currently working on.
             </p>
           </div>
-          <div class="flex flex-col items-center gap-3 text-center">
-            <Lightbulb class="text-primary size-8" strokeWidth={1.5} />
-            <h3>Early-stage research</h3>
-            <p class="text-neutral-content/60 text-sm leading-relaxed">
+        </div>
+        <div class="card" style="padding: 24px; display: flex; flex-direction: column; gap: 16px;">
+          <Lightbulb size={28} color="var(--primary)" />
+          <div>
+            <h3
+              style="margin: 0 0 8px 0; font-family: var(--display); font-size: 16px; color: var(--ink);"
+            >
+              Early-stage research
+            </h3>
+            <p style="margin: 0; color: var(--muted); font-size: 13px; line-height: 1.5;">
               Members pair with faculty to explore open problems, long before any of it becomes a
               paper.
             </p>
           </div>
         </div>
       </div>
-    </PageSection>
-  </section>
+    </section>
+  </div>
 </main>

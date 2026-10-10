@@ -1,2 +1,23 @@
 @import 'tailwindcss';
+@import '@ksi-core/ui/platform.css';
+@import '@ksi-core/ui/platform-theme.css';
 @import '@ksi-core/ui/styles.css';
+
+/* Override some Tailwind base values to blend perfectly with our theme variables */
+:root {
+  --color-base-100: var(--paper);
+  --color-base-200: var(--surface);
+  --color-base-content: var(--ink);
+  --color-primary: var(--primary);
+  --color-primary-content: var(--primary-text);
+  --color-neutral: var(--surface-muted);
+}
+
+:root {
+  --color-base-50: var(--paper);
+}
+
+.btn-outline:hover {
+  outline: 1px solid var(--control-border-hover);
+  outline-offset: 2px;
+}
