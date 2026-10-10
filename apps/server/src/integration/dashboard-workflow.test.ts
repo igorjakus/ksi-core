@@ -129,6 +129,56 @@ describe.skipIf(!safe)('persistent dashboard workflows', () => {
     await db.delete(verifications).where(eq(verifications.identifier, signupEmail));
     await db.delete(users).where(inArray(users.id, allIds));
   });
+  test('member directory filters and dedicated profile management are authorized', async () => {
+    const directory = await request('admin', '/users?search=workflow&status=active&role=member');
+    expect(directory.status).toBe(200);
+    expect(
+      directory.body.users.every((u: any) => u.role === 'member' && u.membershipStatus === 'active')
+    ).toBe(true);
+    expect((await request('member', `/users/${ids.outsider}`)).status).toBe(403);
+    expect(
+      (await request('member', `/users/${ids.outsider}/profile`, 'PATCH', { nickname: 'No' }))
+        .status
+    ).toBe(403);
+    expect(
+      (
+        await request('admin', `/users/${ids.outsider}/profile`, 'PATCH', {
+          nickname: 'Directory test'
+        })
+      ).status
+    ).toBe(200);
+    expect((await request('admin', `/users/${ids.outsider}`)).body.nickname).toBe('Directory test');
+    expect(
+      (await request('admin', '/users?search=Directory%20test')).body.users.some(
+        (u: any) => u.id === ids.outsider
+      )
+    ).toBe(true);
+  });
+  test('internal collaboration rejects article gallery directives', async () => {
+    const gallery = ':::gallery preview=1\nfile:abcdefgh\n:::';
+    for (const [path, method, body] of [
+      [
+        `/platform/boards/${boardId}/items`,
+        'POST',
+        { title: 'Bad gallery', markdown: gallery, column: 'todo', position: 0, tags: [] }
+      ],
+      [`/platform/items/${itemId}`, 'PATCH', { version: 1, markdown: gallery }],
+      [`/platform/items/${itemId}/comments`, 'POST', { markdown: gallery }],
+      [
+        '/platform/threads',
+        'POST',
+        {
+          title: 'Bad gallery',
+          markdown: gallery,
+          projectId,
+          visibility: 'members',
+          invitedIds: []
+        }
+      ],
+      ['/platform/threads/missing/comments', 'POST', { markdown: gallery }]
+    ] as const)
+      expect((await request('member', path, method, body)).status).toBe(422);
+  });
   test('registration notifies administrators and auth profile updates cannot bypass avatar approval', async () => {
     const authHeaders = {
       'content-type': 'application/json',
@@ -187,7 +237,7 @@ describe.skipIf(!safe)('persistent dashboard workflows', () => {
   test('custom statuses persist and reject foreign statuses and unauthorized changes', async () => {
     const statuses = [
       { id: 'todo', name: 'To do' },
-      { id: 'review', name: 'Review' }
+      { id: 'review', name: 'Review', color: '#7766bb' }
     ];
     expect(
       (await request('outsider', `/platform/boards/${boardId}/statuses`, 'PUT', { statuses }))

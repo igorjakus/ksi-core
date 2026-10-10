@@ -177,7 +177,7 @@ th,
 .sidebar-btn.active {
   background: var(--surface-muted) !important;
   color: var(--ink);
-  box-shadow: inset 2px 0 0 var(--accent);
+  box-shadow: none;
 }
 .navigation-label {
   display: flex;
@@ -287,7 +287,7 @@ th,
 .menu-panel {
   position: absolute;
   right: 0;
-  top: calc(100% + 10px);
+  top: calc(100% + 6px);
   z-index: 30;
   width: 260px;
   max-width: calc(100vw - 32px);
@@ -1012,4 +1012,59 @@ a[aria-disabled='true'] {
   font-size: 12px;
   color: var(--muted);
   margin-bottom: 12px;
+}
+
+.sidebar-btn,
+.topbar-menu summary,
+.navigation-toggle {
+  border: 1px solid transparent;
+}
+.sidebar-btn:hover,
+.sidebar-btn.active,
+.topbar-menu summary:hover,
+.topbar-menu[open] summary,
+.navigation-toggle:hover {
+  border-color: var(--control-border-hover);
+  outline: 1px solid var(--control-border-hover);
+  outline-offset: 2px;
+}
+.menu-panel::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 0;
+  right: 0;
+  height: 10px;
+}
+.build-details {
+  margin-top: 8px;
+  font-family: var(--mono);
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+.build-details a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.profile-socials .btn {
+  min-height: 28px;
+  padding: 5px 9px;
+  font-size: 11px;
+  gap: 5px;
+}
+.profile-socials svg {
+  width: 13px;
+  height: 13px;
+}
+.forum-editor-gap {
+  margin-top: 16px;
+}
+
+.topbar-menu:hover summary {
+  background: var(--surface-muted);
+  border-color: var(--control-border-hover);
+  outline: 1px solid var(--control-border-hover);
+  outline-offset: 2px;
 }

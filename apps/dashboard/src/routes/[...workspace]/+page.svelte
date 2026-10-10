@@ -16,6 +16,7 @@
   import Skeleton from '$lib/Skeleton.svelte';
   import { fly } from 'svelte/transition';
   import MarkdownContent from '@ksi-core/ui/platform/MarkdownContent.svelte';
+  import Members from '$lib/Members.svelte';
   import Editor from '@ksi-core/ui/platform/Editor.svelte';
   import Dropdown from '@ksi-core/ui/platform/Dropdown.svelte';
   import {
@@ -111,7 +112,7 @@
   let articles = $state<Article[]>([]);
   let items = $state<Item[]>([]);
   let threads = $state<Thread[]>([]);
-  let members = $state<Profile[]>([]);
+
   let events = $state<{ id: string; action: string; createdAt: string }[]>([]);
 
   let boardId = $state('');
@@ -230,10 +231,6 @@
           } else selectedThread = null;
         }
       }
-      if (currentTab === 'users') {
-        const result = await api<Profile[]>('/users?page=0');
-        if (generation === loadGeneration) members = result;
-      }
       if (currentTab === 'events') {
         const result = await api<typeof events>(`/platform/events${query}`);
         if (generation === loadGeneration) events = result;
@@ -269,7 +266,7 @@
     items = [];
     threads = [];
     events = [];
-    members = [];
+
     boardId = '';
     title = '';
     markdown = '';
@@ -715,9 +712,22 @@
             onclick={guardNavigation}>{text('Członkowie', 'Members')}</a
           >
         {/if}
-        <span class="sidebar-footnote"
-          >KSI · {text('Uniwersytet Wrocławski', 'University of Wrocław')}</span
-        >
+        <a class="sidebar-btn" href={data.websiteOrigin}>{text('Strona KSI ↗', 'KSI website ↗')}</a>
+        <div class="sidebar-footnote">
+          KSI · {text('Uniwersytet Wrocławski', 'University of Wrocław')}
+          <div class="build-details">
+            v{import.meta.env.PUBLIC_APP_VERSION} ·
+            <a
+              href={import.meta.env.PUBLIC_COMMIT_HASH
+                ? `https://github.com/ksiuwr/ksi-core/commit/${import.meta.env.PUBLIC_COMMIT_HASH}`
+                : 'https://github.com/ksiuwr/ksi-core'}
+              target="_blank"
+              rel="noopener noreferrer"
+              >{import.meta.env.PUBLIC_COMMIT_HASH?.slice(0, 7) ||
+                text('Kod źródłowy', 'Source')}</a
+            >
+          </div>
+        </div>
       </div>
     </aside>
 
@@ -1329,7 +1339,9 @@
                         ]}
                       />
 
-                      <Editor {language} bind:value={markdown} />
+                      <div class="forum-editor-gap">
+                        <Editor {language} bind:value={markdown} />
+                      </div>
                       <button
                         class="btn"
                         disabled={busy || !title.trim()}
@@ -1582,99 +1594,18 @@
 
                   <!-- ── USERS (admin/board) ────────────────────────────────────────── -->
                 {:else if tab === 'users'}
-                  <div class="workspace-header">
-                    <div>
-                      <h1>{text('Członkowie', 'Members')}</h1>
+                  {#if !data.navigation.memberId}
+                    <div class="workspace-header">
+                      <div>
+                        <h1>{text('Członkowie', 'Members')}</h1>
+                      </div>
                     </div>
-                  </div>
-
-                  <div class="table-wrap">
-                    <table>
-                      <thead>
-                        <tr>
-                          <th>{text('Osoba', 'Person')}</th>
-                          <th>Status</th>
-                          <th>{text('Rola', 'Role')}</th>
-                          <th>{text('Działania', 'Actions')}</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {#each members as member (member.id)}
-                          <tr>
-                            <td>
-                              <strong>{member.firstName || member.name} {member.lastName}</strong>
-                              <br />
-                              <small
-                                style="font-family: var(--mono); font-size: 10px; color: var(--muted);"
-                                >{member.id}</small
-                              >
-                            </td>
-                            <td>
-                              <span
-                                class="tag {member.membershipStatus === 'active'
-                                  ? 'tag-mint'
-                                  : member.membershipStatus === 'suspended'
-                                    ? 'tag-coral'
-                                    : ''}">{member.membershipStatus}</span
-                              >
-                            </td>
-                            <td>
-                              <span
-                                class="tag {member.role === 'administrator' ? 'tag-lavender' : ''}"
-                                >{member.role}</span
-                              >
-                            </td>
-                            <td>
-                              <button
-                                disabled={busy}
-                                onclick={() =>
-                                  action(() =>
-                                    api(`/users/${member.id}/access`, 'PATCH', {
-                                      membershipStatus: 'active'
-                                    })
-                                  )}
-                              >
-                                {text('Aktywuj', 'Activate')}
-                              </button>
-                              {#if data.user.role === 'administrator'}
-                                <Dropdown
-                                  variant="compact"
-                                  label={text('Rola członka', 'Member role')}
-                                  value={member.role}
-                                  disabled={busy}
-                                  options={[
-                                    { value: 'member', label: text('Członek', 'Member') },
-                                    { value: 'board', label: text('Zarząd', 'Board') },
-                                    {
-                                      value: 'administrator',
-                                      label: text('Administrator', 'Administrator')
-                                    }
-                                  ]}
-                                  onselect={(role) =>
-                                    action(() =>
-                                      api(`/users/${member.id}/access`, 'PATCH', { role })
-                                    )}
-                                />
-
-                                <button
-                                  disabled={busy}
-                                  style="color: var(--danger);"
-                                  onclick={() =>
-                                    action(() =>
-                                      api(`/users/${member.id}/access`, 'PATCH', {
-                                        membershipStatus: 'suspended'
-                                      })
-                                    )}
-                                >
-                                  {text('Zawieś', 'Suspend')}
-                                </button>
-                              {/if}
-                            </td>
-                          </tr>
-                        {/each}
-                      </tbody>
-                    </table>
-                  </div>
+                  {/if}
+                  <Members
+                    {language}
+                    administrator={data.user.role === 'administrator'}
+                    memberId={data.navigation.memberId}
+                  />
 
                   <!-- ── EVENTS ─────────────────────────────────────────────────────── -->
                 {:else if tab === 'events'}

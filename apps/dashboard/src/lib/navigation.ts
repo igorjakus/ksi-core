@@ -5,9 +5,13 @@ const viewPaths: Record<string, string> = {
   articles: 'articles',
   events: 'activity'
 };
-export function parseDashboardPath(
-  pathname: string
-): { workspace: Workspace; projectSlug: string; tab: string; graveyard?: boolean } | null {
+export function parseDashboardPath(pathname: string): {
+  workspace: Workspace;
+  projectSlug: string;
+  tab: string;
+  graveyard?: boolean;
+  memberId?: string;
+} | null {
   let segments: string[];
   try {
     segments = pathname.split('/').filter(Boolean).map(decodeURIComponent);
@@ -20,6 +24,8 @@ export function parseDashboardPath(
     return null;
   if (segments.some((part) => part.includes('/') || part.includes('\\')) || segments.length > 4)
     return null;
+  if (root === 'members' && slug && segments.length === 2)
+    return { workspace: 'directory', projectSlug: '', tab: 'users', memberId: slug };
   if ((root === 'profile' || root === 'members' || root === 'inbox') && segments.length === 1)
     return {
       workspace: 'directory',

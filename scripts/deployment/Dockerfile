@@ -3,6 +3,8 @@ WORKDIR /app
 COPY . .
 RUN bun install --frozen-lockfile
 ARG APP
+ARG PUBLIC_COMMIT_HASH
+ENV PUBLIC_COMMIT_HASH=$PUBLIC_COMMIT_HASH
 RUN case "$APP" in web|auth|dashboard) bun run --cwd "apps/$APP" build ;; server) true ;; *) exit 1 ;; esac
 FROM oven/bun:1.3.14-alpine
 WORKDIR /app

@@ -61,3 +61,12 @@ describe('dashboard routes', () => {
       expect(parseDashboardPath(path)).toBeNull();
   });
 });
+
+test('member detail URLs preserve the selected person', () => {
+  expect(parseDashboardPath('/members/abc123')).toEqual({
+    workspace: 'directory',
+    projectSlug: '',
+    tab: 'users',
+    memberId: 'abc123'
+  });
+});

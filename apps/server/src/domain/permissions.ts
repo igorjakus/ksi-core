@@ -12,6 +12,7 @@ export const permissions = [
   'users.roles.assign',
   'users.permissions.assign',
   'users.accounts.anonymize',
+  'users.members.manage-profile',
   'projects.catalog.create',
   'projects.catalog.edit',
   'projects.membership.join',

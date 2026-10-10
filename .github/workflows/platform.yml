@@ -67,7 +67,9 @@ jobs:
           platforms: linux/arm64
           push: true
           tags: ghcr.io/${{ github.repository }}-${{ matrix.app }}:${{ github.sha }}
-          build-args: APP=${{ matrix.app }}
+          build-args: |
+            APP=${{ matrix.app }}
+            PUBLIC_COMMIT_HASH=${{ github.sha }}
           cache-from: type=gha,scope=${{ matrix.app }}
           cache-to: type=gha,mode=max,scope=${{ matrix.app }}
       - name: Record immutable digest

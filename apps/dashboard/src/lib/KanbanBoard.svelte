@@ -249,8 +249,17 @@
     >
       <div class="column-header">
         <span class="column-label"
-          ><span class="column-dot" style:background={color(status)}></span>{label(status)}<span
-            class="column-count">{items.filter((i) => i.column === status.id).length}</span
+          >{#if canManage}<input
+              class="status-color"
+              type="color"
+              value={color(status)}
+              disabled={busy}
+              aria-label={`${text('Kolor statusu', 'Status color')}: ${label(status)}`}
+              title={text('Zmień kolor statusu', 'Change status color')}
+              onchange={(event) => setColor(status, event.currentTarget.value)}
+            />{:else}<span class="column-dot" style:background={color(status)}></span>{/if}{label(
+            status
+          )}<span class="column-count">{items.filter((i) => i.column === status.id).length}</span
           ></span
         >
         <button
@@ -262,15 +271,6 @@
           onclick={() => openComposer(status.id)}><Plus size={17} aria-hidden="true" /></button
         >
       </div>
-      {#if canManage}<label class="status-color-label"
-          >{text('Kolor statusu', 'Status color')}<input
-            type="color"
-            value={color(status)}
-            disabled={busy}
-            aria-label={`${text('Kolor statusu', 'Status color')}: ${label(status)}`}
-            onchange={(event) => setColor(status, event.currentTarget.value)}
-          /></label
-        >{/if}
       <div class="column-items">
         {#each items
           .filter((i) => i.column === status.id)
@@ -521,20 +521,23 @@
   </dialog>{/if}
 
 <style>
-  .status-color-label {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    font-size: 11px;
-    color: var(--muted);
-    margin-bottom: 12px;
-  }
-  .status-color-label input {
-    width: 28px;
-    height: 24px;
-    padding: 2px;
+  .status-color {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    padding: 0;
     margin: 0;
+    border: none;
+    border-radius: 50%;
+    overflow: hidden;
     cursor: pointer;
+  }
+  .status-color::-webkit-color-swatch-wrapper {
+    padding: 0;
+  }
+  .status-color::-webkit-color-swatch {
+    border: none;
+    border-radius: 50%;
   }
   .delete-confirmation {
     border: 1px solid var(--danger);
@@ -545,7 +548,13 @@
   }
   .issue-tools :global(.dropdown-trigger) {
     min-height: 36px;
+    height: 36px;
+    line-height: 1.2;
     padding: 8px 12px;
+  }
+  .issue-tools > .btn {
+    height: 36px;
+    line-height: 1.2;
   }
   .board {
     overflow-x: auto;
@@ -692,32 +701,6 @@
     border-radius: 3px;
   }
   @media (max-width: 760px) {
-    .status-color-label {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      font-size: 11px;
-      color: var(--muted);
-      margin-bottom: 12px;
-    }
-    .status-color-label input {
-      width: 28px;
-      height: 24px;
-      padding: 2px;
-      margin: 0;
-      cursor: pointer;
-    }
-    .delete-confirmation {
-      border: 1px solid var(--danger);
-      padding: 16px;
-      margin-bottom: 20px;
-      display: grid;
-      gap: 12px;
-    }
-    .issue-tools :global(.dropdown-trigger) {
-      min-height: 36px;
-      padding: 8px 12px;
-    }
     .board {
       grid-template-columns: 1fr !important;
     }

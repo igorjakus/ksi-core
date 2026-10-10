@@ -16,6 +16,7 @@ export const load: PageServerLoad = ({ locals, params, url }) => {
     user: locals.user,
     navigation,
     activationContact: env.ACTIVATION_CONTACT ?? 'KSI board',
-    websocketOrigin: getUrls(env).websocket
+    websocketOrigin: getUrls(env).websocket,
+    websiteOrigin: getUrls(env).frontend.landing
   };
 };
