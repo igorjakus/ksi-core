@@ -609,6 +609,15 @@
   .status-create {
     margin-top: 20px;
   }
+  .status-create input[type='color'] {
+    width: 42px;
+    height: 36px;
+    padding: 3px;
+  }
+  .status-color::-moz-color-swatch {
+    border: none;
+    border-radius: 50%;
+  }
   .status-create input {
     max-width: 260px;
     margin: 0;

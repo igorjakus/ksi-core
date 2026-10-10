@@ -137,6 +137,13 @@ export const userRoutes = createElysia({ prefix: '/users', protectedRoute: true 
         if (!validProfileLink(provider, body[provider]))
           throw status(422, { code: `INVALID_${provider.toUpperCase()}_URL` });
       return db.transaction(async (tx) => {
+        const [currentActor] = await tx
+          .select()
+          .from(users)
+          .where(eq(users.id, actor.id))
+          .for('share');
+        requirePermission(currentActor ?? null, 'users.members.manage-profile');
+        if (currentActor?.role !== 'administrator') throw status(403, { code: 'FORBIDDEN' });
         const [member] = await tx.select().from(users).where(eq(users.id, params.id)).for('update');
         if (!member) throw status(404, { code: 'USER_NOT_FOUND' });
         if (member.membershipStatus === 'deleted') throw status(409, { code: 'ACCOUNT_DELETED' });

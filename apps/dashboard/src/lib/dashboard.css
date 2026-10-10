@@ -1068,3 +1068,15 @@ a[aria-disabled='true'] {
   outline: 1px solid var(--control-border-hover);
   outline-offset: 2px;
 }
+
+.icon-button:hover,
+.account-action:hover {
+  border-color: var(--control-border-hover);
+  outline: 1px solid var(--control-border-hover);
+  outline-offset: 2px;
+}
+.account-action {
+  border: 1px solid transparent;
+  padding: 10px 8px;
+  border-radius: 3px;
+}

@@ -33,6 +33,7 @@
     loading = $state(true),
     busy = $state(false),
     error = $state(''),
+    notice = $state(''),
     confirmDelete = $state(false),
     search = $state('');
   let generation = 0;
@@ -43,13 +44,31 @@
       body: body === undefined ? undefined : JSON.stringify(body)
     });
     const result = await response.json();
-    if (!response.ok) throw new Error(result.code ?? result.message);
+    if (!response.ok) {
+      const messages: Record<string, string> = {
+        INVALID_GITHUB_URL: text(
+          'Podaj link https://github.com/użytkownik.',
+          'Use a https://github.com/username profile link.'
+        ),
+        INVALID_LINKEDIN_URL: text(
+          'Podaj link https://linkedin.com/in/użytkownik.',
+          'Use a https://linkedin.com/in/username profile link.'
+        ),
+        LAST_ADMINISTRATOR: text(
+          'Ostatni aktywny administrator musi zachować dostęp.',
+          'The final active administrator must retain access.'
+        )
+      };
+      throw new Error(messages[result.code] ?? result.code ?? result.message);
+    }
     return result;
   }
   async function load(id: string | undefined, query: string) {
     const current = ++generation;
     loading = true;
     error = '';
+    notice = '';
+    member = null;
     confirmDelete = false;
     try {
       const result = await api(id ? `/${encodeURIComponent(id)}` : `?${query}`);
@@ -81,10 +100,14 @@
   async function mutate(path: string, method: string, body?: unknown) {
     busy = true;
     error = '';
+    notice = '';
     try {
       const result = await api(path, method, body);
       if (method === 'DELETE') await goto('/members');
-      else member = result.user ?? result;
+      else {
+        member = result.user ?? result;
+        notice = text('Zmiany zapisane.', 'Changes saved.');
+      }
     } catch (e) {
       error = e instanceof Error ? e.message : 'Error';
     } finally {
@@ -93,6 +116,7 @@
   }
 </script>
 
+{#if notice}<p role="status">{notice}</p>{/if}
 {#if error}<p class="error" role="alert">{error}</p>{/if}
 {#if loading}<Skeleton label={text('Ładowanie członków', 'Loading members')} />{:else if member}
   <a class="btn btn-outline" href="/members"
@@ -226,6 +250,8 @@
       {/if}
     </section>
   </div>
+{:else if memberId}
+  <a class="btn btn-outline" href="/members">{text('Wszyscy członkowie', 'All members')}</a>
 {:else}
   <form
     class="member-filters"
@@ -311,6 +337,14 @@
     grid-template-columns: 1fr 1fr;
     gap: 16px;
     margin-top: 24px;
+  }
+  .profile-fields label {
+    display: grid;
+    gap: 8px;
+  }
+  .profile-fields input,
+  .profile-fields textarea {
+    margin: 0;
   }
   .wide {
     grid-column: 1/-1;
