@@ -135,7 +135,7 @@
   onfocusout={(event) => {
     if (event.relatedTarget instanceof Node && !header.contains(event.relatedTarget)) closeMenu();
   }}
-  class="border-base-content/15 bg-base-200 fixed top-0 z-40 flex w-full flex-col border-b border-solid backdrop-blur-sm"
+  class="border-base-content/15 bg-base-100 fixed top-0 z-40 flex w-full flex-col border-b border-solid backdrop-blur-sm"
 >
   <div class="flex h-14 w-full shrink-0 flex-row items-center justify-between lg:px-8">
     <div class="flex h-full items-center">
@@ -268,7 +268,7 @@
     inert={openMenu === null}
   >
     <div class="menu-clip">
-      <div class="bg-base-200 border-base-content/15 border-b border-solid">
+      <div class="bg-base-100 border-base-content/15 border-b border-solid">
         {#if displayedMenu === 'mobile'}
           <div style="padding: 16px; display: flex; flex-direction: column; gap: 16px;">
             <div style="display: flex; flex-direction: column; gap: 8px;">

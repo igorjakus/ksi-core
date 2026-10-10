@@ -1,48 +1,44 @@
 <script lang="ts">
+  import { resolve } from '$app/paths';
   import { page } from '$app/state';
-  import { ArrowLeft, Compass } from '@lucide/svelte';
-  import Wrapper from '../components/Wrapper.svelte';
+  import { ArrowLeft } from '@lucide/svelte';
 </script>
 
 <svelte:head>
   <title>{page.status} · KSI UWr</title>
 </svelte:head>
 
-{#snippet hero()}
-  <header>
-    <p class="mb-4 font-mono text-xs tracking-widest uppercase">Error / {page.status}</p>
-    <h1>Let’s find your way back.</h1>
-  </header>
-{/snippet}
+<main class="bg-base-100 flex min-h-[calc(100vh-56px)] w-full flex-col justify-center">
+  <div class="mx-auto w-full max-w-225 px-5 py-15">
+    <div class="flex flex-wrap items-center gap-10">
+      <div class="flex min-w-75 flex-1 flex-col gap-4">
+        <h1
+          class="font-anybody text-base-content mb-5 text-[clamp(40px,8vw,64px)] leading-[1.1] font-bold tracking-tight"
+        >
+          This path led somewhere unexpected.
+        </h1>
+        <p class="text-base-content/70 mb-8 max-w-150 text-[18px] leading-relaxed">
+          The reliable route is back to the association — and room 24 at the Institute of Computer
+          Science is always worth finding.
+        </p>
+        <div class="flex flex-wrap gap-3">
+          <a href={resolve('/')} class="btn gap-2">
+            <ArrowLeft class="size-4" /> Return home
+          </a>
+        </div>
 
-<Wrapper name={`error / ${page.status}`} {hero}>
-  <div
-    class="border-base-content/15 grid min-h-[60vh] items-center gap-10 border-y py-16 lg:grid-cols-[0.55fr_1fr]"
-  >
-    <div
-      class="text-base-content/10 text-[clamp(7rem,20vw,15rem)] leading-none font-bold -tracking-widest"
-    >
-      {page.status}
-    </div>
-
-    <div class="max-w-2xl">
-      <p
-        class="text-primary mb-4 flex items-center gap-2 text-xs font-bold tracking-[0.2em] uppercase"
-      >
-        <Compass class="size-4" /> Route not resolved
-      </p>
-      <h1 class="mb-6! text-4xl tracking-tight md:text-6xl">This path led somewhere unexpected.</h1>
-      <p class="text-base-content/65 text-lg leading-relaxed">
-        {page.error?.message ||
-          'The page may have moved, or something went wrong while loading it.'}
-      </p>
-      <p class="text-base-content/65 mt-4 text-lg leading-relaxed">
-        The reliable route is back to the association — and room 24 at the Institute of Computer
-        Science is always worth finding.
-      </p>
-      <a href="/" class="group btn btn-primary mt-10 gap-2 px-6">
-        <ArrowLeft class="size-4 transition-transform group-hover:-translate-x-0.5" /> Return home
-      </a>
+        <p class="text-base-content/40 max-w-150 font-mono text-sm">
+          {page.error?.message ||
+            'The page may have moved, or something went wrong while loading it.'}
+        </p>
+      </div>
+      <div class="flex min-w-75 flex-1 justify-center md:justify-end">
+        <div
+          class="text-base-content/5 font-anybody text-[clamp(10rem,20vw,15rem)] leading-none font-bold tracking-tighter"
+        >
+          {page.status}
+        </div>
+      </div>
     </div>
   </div>
-</Wrapper>
+</main>

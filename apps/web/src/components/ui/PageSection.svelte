@@ -1,6 +1,5 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
-  import GuideFrame from './GuideFrame.svelte';
 
   /**
    * A full-bleed band with the noise texture + guide lines used throughout
@@ -20,9 +19,6 @@
   } = $props();
 </script>
 
-<div {id} class={`noise relative flex h-full w-full flex-col items-center ${className}`}>
-  {#if guide !== 'none'}
-    <GuideFrame tone={guide} />
-  {/if}
+<div {id} class={`relative flex h-full w-full flex-col items-center ${className}`}>
   {@render children()}
 </div>

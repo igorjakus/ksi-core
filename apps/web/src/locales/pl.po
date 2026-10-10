@@ -141,7 +141,6 @@ msgid "{0}'s profile picture"
 msgstr "Zdjęcie profilowe użytkownika {0}"
 
 #: src/components/Navbar.svelte
-#: src/routes/projects/+page.svelte
 msgid "KSI"
 msgstr "KSI"
 
@@ -406,9 +405,8 @@ msgstr "Społeczność"
 msgid "Research"
 msgstr "Badania"
 
-#: src/routes/projects/+page.svelte
-msgid "Search projects"
-msgstr "Szukaj projektów"
+#~ msgid "Search projects"
+#~ msgstr "Szukaj projektów"
 
 #: src/routes/projects/+page.svelte
 msgid "No matching projects."
@@ -473,9 +471,8 @@ msgstr "{0} · KSI UWr"
 msgid "The page may have moved, or something went wrong while loading it."
 msgstr "Strona mogła zostać przeniesiona lub wystąpił błąd podczas jej wczytywania."
 
-#: src/routes/+error.svelte
-msgid "<0/> Route not resolved"
-msgstr "<0/> Nie znaleziono ścieżki"
+#~ msgid "<0/> Route not resolved"
+#~ msgstr "<0/> Nie znaleziono ścieżki"
 
 #: src/routes/+error.svelte
 msgid "This path led somewhere unexpected."
@@ -680,14 +677,11 @@ msgstr ""
 msgid "ArrowDown"
 msgstr ""
 
-#. 0: page.status
-#: src/routes/+error.svelte
-msgid "Error / {0}"
-msgstr "Błąd / {0}"
+#~ msgid "Error / {0}"
+#~ msgstr "Błąd / {0}"
 
-#: src/routes/+error.svelte
-msgid "Let’s find your way back."
-msgstr "Znajdźmy drogę powrotną."
+#~ msgid "Let’s find your way back."
+#~ msgstr "Znajdźmy drogę powrotną."
 
 #: src/routes/projects/+page.svelte
 msgid "All projects"
@@ -701,9 +695,8 @@ msgstr "Poznaj projekty członków KSI — od konferencji studenckich i warsztat
 msgid "Projects · KSI UWr"
 msgstr "Projekty · KSI UWr"
 
-#: src/routes/projects/+page.svelte
-msgid "[ Our work ]"
-msgstr "[ Nasze działania ]"
+#~ msgid "[ Our work ]"
+#~ msgstr "[ Nasze działania ]"
 
 #: src/routes/projects/+page.svelte
 msgid "Good ideas.<0/>Real projects.<1/><2>Built together.</2>"
@@ -713,25 +706,20 @@ msgstr "Dobre pomysły.<0/>Realne projekty.<1/><2>Tworzone razem.</2>"
 msgid "From a first line of Python to a winter camp in the mountains. We turn shared curiosity into things worth making."
 msgstr "Od pierwszej linijki Pythona po zimowy obóz w górach. Wspólną ciekawość zamieniamy w rzeczy, które warto tworzyć."
 
-#: src/routes/projects/+page.svelte
-msgid "Meet."
-msgstr "Poznaj."
+#~ msgid "Meet."
+#~ msgstr "Poznaj."
 
-#: src/routes/projects/+page.svelte
-msgid "Build."
-msgstr "Twórz."
+#~ msgid "Build."
+#~ msgstr "Twórz."
 
-#: src/routes/projects/+page.svelte
-msgid "Explore."
-msgstr "Odkrywaj."
+#~ msgid "Explore."
+#~ msgstr "Odkrywaj."
 
-#: src/routes/projects/+page.svelte
-msgid "KSI / ideas in motion"
-msgstr "KSI / pomysły w działaniu"
+#~ msgid "KSI / ideas in motion"
+#~ msgstr "KSI / pomysły w działaniu"
 
-#: src/routes/projects/+page.svelte
-msgid "[ Explore ]"
-msgstr "[ Odkrywaj ]"
+#~ msgid "[ Explore ]"
+#~ msgstr "[ Odkrywaj ]"
 
 #: src/routes/projects/+page.svelte
 msgid "Find your kind of curiosity."
@@ -741,29 +729,25 @@ msgstr "Znajdź coś, co Cię zaciekawi."
 msgid "Different fields. One community.<0/>Take a closer look at what we do."
 msgstr "Różne dziedziny. Jedna społeczność.<0/>Zobacz, czym się zajmujemy."
 
-#: src/routes/projects/+page.svelte
-msgid "Filter projects"
-msgstr "Filtruj projekty"
+#~ msgid "Filter projects"
+#~ msgstr "Filtruj projekty"
 
 #: src/routes/projects/+page.svelte
 msgid "Search projects..."
 msgstr "Szukaj projektów..."
 
-#: src/routes/projects/+page.svelte
-msgid "Discover the project"
-msgstr "Poznaj projekt"
+#~ msgid "Discover the project"
+#~ msgstr "Poznaj projekt"
 
 #: src/routes/projects/+page.svelte
 msgid "Try another search or explore a different field."
 msgstr "Spróbuj innego hasła lub wybierz inną dziedzinę."
 
-#: src/routes/projects/+page.svelte
-msgid "<0/>Clear filters"
-msgstr "<0/>Wyczyść filtry"
+#~ msgid "<0/>Clear filters"
+#~ msgstr "<0/>Wyczyść filtry"
 
-#: src/routes/projects/+page.svelte
-msgid "[ What's next? ]"
-msgstr "[ Co dalej? ]"
+#~ msgid "[ What's next? ]"
+#~ msgstr "[ Co dalej? ]"
 
 #: src/routes/projects/+page.svelte
 msgid "Your idea could be next."
@@ -780,99 +764,125 @@ msgstr "Wyświetlono {0} z {1} projektów"
 
 #: src/routes/+error.svelte
 msgid "The reliable route is back to the association — and room 24 at the Institute of Computer Science is always worth finding."
-msgstr ""
+msgstr "Niezawodna droga prowadzi z powrotem do koła — a salę 24 w Instytucie Informatyki zawsze warto odwiedzić."
 
 #: src/components/ui/GithubProjectCard.svelte
 #: src/routes/+page.svelte
 msgid "View on GitHub <0/>"
-msgstr ""
+msgstr "Zobacz na GitHubie <0/>"
 
 #: src/routes/+page.svelte
 msgid "More projects coming soon."
-msgstr ""
+msgstr "Więcej projektów wkrótce."
 
 #: src/routes/projects/[slug]/+page.svelte
 msgid "<0/> Join Project"
-msgstr ""
+msgstr "<0/> Dołącz do projektu"
 
 #: src/routes/projects/[slug]/+page.svelte
 msgid "<0/> Manage"
-msgstr ""
+msgstr "<0/> Zarządzaj"
 
 #: src/routes/projects/[slug]/+page.svelte
 msgid "About the Project"
-msgstr ""
+msgstr "O projekcie"
 
 #: src/routes/projects/[slug]/+page.svelte
 msgid "Full project details and articles will be displayed here."
-msgstr ""
+msgstr "Pełne szczegóły projektu i artykuły będą wyświetlane tutaj."
 
 #: src/routes/+page.svelte
 msgid "About KSI"
-msgstr ""
+msgstr "O KSI"
 
 #: src/routes/+page.svelte
 msgid "Hello, World!<0/>We're KSI."
-msgstr ""
+msgstr "Hello, World!<0/>Jesteśmy KSI."
 
 #: src/routes/+page.svelte
 msgid "Our experienced team has been organizing the well-recognized conference in the mountainous regions of Lower Silesia in southwestern Poland. While our speakers give various talks, sharing their knowledge, scientific research, hobbies and so on, we love to spend some time together in the free time."
-msgstr ""
+msgstr "Nasz doświadczony zespół organizuje uznaną konferencję w górzystych rejonach Dolnego Śląska. Podczas gdy nasi prelegenci wygłaszają różnorodne prelekcje, dzieląc się swoją wiedzą, badaniami naukowymi, hobby i nie tylko, my chętnie spędzamy razem czas w wolnych chwilach."
 
 #: src/routes/+page.svelte
 #: src/routes/+page.svelte
 msgid "Read more"
-msgstr ""
+msgstr "Czytaj dalej"
 
 #: src/routes/+page.svelte
 msgid "Hour of Code is a global movement focused on bringing Computer Science and coding to students, in fun activities held within one hour. Multiple brilliant volunteers, one goal – share the passion for Computer Science with the youngest."
-msgstr ""
+msgstr "Hour of Code to globalny ruch mający na celu przybliżenie informatyki i programowania poprzez ciekawe zajęcia trwające zaledwie godzinę. Wielu wspaniałych wolontariuszy, jeden cel – dzielić się pasją do informatyki z najmłodszymi."
 
 #: src/routes/+page.svelte
 msgid "( socially ) Connecting the community"
-msgstr ""
+msgstr "( społecznie ) Budujemy społeczność"
 
 #: src/routes/+page.svelte
 msgid "( technically ) Engineering is our passion"
-msgstr ""
+msgstr "( technicznie ) Inżynieria to nasza pasja"
 
 #: src/routes/+page.svelte
 msgid "( scientifically ) Curiosity, kept rigorous"
-msgstr ""
+msgstr "( naukowo ) Ciekawość w rygorystycznym wydaniu"
 
 #: src/routes/projects/+page.svelte
 msgid "Project"
-msgstr ""
+msgstr "Projekt"
 
 #: src/routes/+page.svelte
 msgid "KSI Members"
-msgstr ""
+msgstr "Członkowie KSI"
 
 #. 0: import.meta.env.PUBLIC_APP_VERSION
 #: src/components/Footer.svelte
 msgid "v{0}"
-msgstr ""
+msgstr "v{0}"
 
 #: src/components/Navbar.svelte
 msgid "Toggle mobile menu"
-msgstr ""
+msgstr "Przełącz menu mobilne"
 
 #: src/components/Navbar.svelte
 msgid "Sign in"
-msgstr ""
+msgstr "Zaloguj się"
 
 #: src/routes/+page.svelte
 msgid "This website. Surrounded by many unfamiliar technologies, passionate members get to develop their engineering senses in a friendly environment."
-msgstr ""
+msgstr "Ta strona. Otoczeni wieloma nowymi technologiami, pełni pasji członkowie mają okazję rozwijać swoje inżynierskie zmysły w przyjaznym środowisku."
 
 #: src/routes/+page.svelte
 msgid "KSI-ML-research/krasnal"
-msgstr ""
+msgstr "KSI-ML-research/krasnal"
 
 #: src/routes/+page.svelte
 msgid "Krasnal"
-msgstr ""
+msgstr "Krasnal"
 
 #: src/routes/+page.svelte
 msgid "Chess engine built with Rust and machine learning."
-msgstr ""
+msgstr "Silnik szachowy zbudowany w języku Rust z wykorzystaniem uczenia maszynowego."
+
+#~ msgid "( error / {0} ) Let's find your way back"
+#~ msgstr "( błąd / {0} ) Znajdźmy drogę powrotną"
+
+#: src/routes/projects/+page.svelte
+msgid "( our work )"
+msgstr "( nasze działania )"
+
+#: src/routes/projects/+page.svelte
+msgid "( explore )"
+msgstr "( odkrywaj )"
+
+#: src/routes/projects/+page.svelte
+msgid "Discover the project <0/>"
+msgstr "Poznaj projekt <0/>"
+
+#: src/routes/projects/+page.svelte
+msgid "<0/> Clear filters"
+msgstr "<0/> Wyczyść filtry"
+
+#: src/routes/projects/+page.svelte
+msgid "( what's next? )"
+msgstr "( co dalej? )"
+
+#~ msgid "<0/> div <1/>"
+#~ msgstr ""

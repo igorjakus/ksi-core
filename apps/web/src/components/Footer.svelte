@@ -7,7 +7,6 @@
     Instagram,
     Linkedin
   } from '@lucide/svelte';
-  import GuideFrame from './ui/GuideFrame.svelte';
 
   const commitHash = import.meta.env.PUBLIC_COMMIT_HASH || '';
   const shortCommitHash = commitHash.slice(0, 7);

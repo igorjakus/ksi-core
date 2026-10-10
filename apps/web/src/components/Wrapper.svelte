@@ -1,9 +1,6 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
   import { cn } from '$lib/utils';
-  import GuideFrame from './ui/GuideFrame.svelte';
-  import FadeDivider from './ui/FadeDivider.svelte';
-
   let {
     name,
     hero,
@@ -47,8 +44,7 @@
 </script>
 
 <main class={cn('flex w-full flex-1 flex-col', className)}>
-  <section class="page-hero bg-base-200 noise noise-lg relative w-full">
-    <GuideFrame tone="hero" />
+  <section class="page-hero bg-base-100 relative w-full">
     <div class="page-gutter page-stack-hero relative mx-auto w-full max-w-[100rem]">
       <nav
         aria-label="Breadcrumb"
@@ -86,13 +82,11 @@
       {/if}
     </div>
   </section>
-  <FadeDivider tone="muted" />
 
   <section
     class:project-content={segments[0] === 'projects'}
-    class="page-content noise relative flex-1"
+    class="page-content bg-base-100 relative flex-1"
   >
-    <GuideFrame tone="content-soft" />
     <div class="page-gutter relative mx-auto w-full max-w-[100rem] py-10 lg:py-14 xl:py-20">
       {@render children()}
     </div>
@@ -118,16 +112,6 @@
   .page-hero :global(p.text-secondary),
   .page-hero :global(p.text-accent) {
     color: var(--color-base-content);
-  }
-
-  .project-content {
-    color-scheme: dark;
-    --color-base-100: var(--color-neutral);
-    --color-base-200: oklch(0.28 0.004 345.53);
-    --color-base-300: oklch(0.34 0.004 345.53);
-    --color-base-content: var(--color-neutral-content);
-    color: var(--color-base-content);
-    background: var(--color-neutral);
   }
 
   .page-content :global(a.group) {
