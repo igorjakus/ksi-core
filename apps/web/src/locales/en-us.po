@@ -245,7 +245,7 @@ msgstr "Member access"
 
 #: src/components/Sidebar.svelte
 #: src/routes/+page.svelte
-#: src/routes/projects/+page.svelte
+#: src/routes/+page.svelte
 msgid "Hour of Code"
 msgstr "Hour of Code"
 
@@ -253,13 +253,11 @@ msgstr "Hour of Code"
 msgid "Machine Learning"
 msgstr "Machine Learning"
 
-#: src/routes/projects/+page.svelte
 #: src/routes/projects/ml/+page.svelte
 #: src/routes/projects/ml/krasnal/+page.svelte
 msgid "Krasnal"
 msgstr "Krasnal"
 
-#: src/routes/projects/+page.svelte
 #: src/routes/projects/ml/+page.svelte
 msgid "Physarum"
 msgstr "Physarum"
@@ -844,98 +842,75 @@ msgid "KET recruitment poster"
 msgstr "KET recruitment poster"
 
 #: src/routes/projects/+page.svelte
-#: src/routes/projects/+page.svelte
 msgid "Education"
 msgstr "Education"
 
-#: src/routes/projects/+page.svelte
-msgid "Programming workshops introducing primary school students to Python and computational thinking."
-msgstr "Programming workshops introducing primary school students to Python and computational thinking."
+#~ msgid "Programming workshops introducing primary school students to Python and computational thinking."
+#~ msgstr "Programming workshops introducing primary school students to Python and computational thinking."
 
-#: src/routes/projects/+page.svelte
-msgid "Python"
-msgstr "Python"
+#~ msgid "Python"
+#~ msgstr "Python"
 
-#: src/routes/projects/+page.svelte
-msgid "Workshops"
-msgstr "Workshops"
+#~ msgid "Workshops"
+#~ msgstr "Workshops"
 
-#: src/routes/projects/+page.svelte
-#: src/routes/projects/+page.svelte
 #: src/routes/projects/+page.svelte
 msgid "Community"
 msgstr "Community"
 
-#: src/routes/projects/+page.svelte
-msgid "Quantum computing"
-msgstr "Quantum computing"
+#~ msgid "Quantum computing"
+#~ msgstr "Quantum computing"
 
-#: src/routes/projects/+page.svelte
-msgid "From qubit fundamentals to algorithms running on real quantum processors."
-msgstr "From qubit fundamentals to algorithms running on real quantum processors."
+#~ msgid "From qubit fundamentals to algorithms running on real quantum processors."
+#~ msgstr "From qubit fundamentals to algorithms running on real quantum processors."
 
-#: src/routes/projects/+page.svelte
-msgid "Qiskit"
-msgstr "Qiskit"
+#~ msgid "Qiskit"
+#~ msgstr "Qiskit"
 
-#: src/routes/projects/+page.svelte
-msgid "Algorithms"
-msgstr "Algorithms"
+#~ msgid "Algorithms"
+#~ msgstr "Algorithms"
 
-#: src/routes/projects/+page.svelte
 #: src/routes/projects/+page.svelte
 msgid "Research"
 msgstr "Research"
 
-#: src/routes/projects/+page.svelte
 #: src/routes/projects/ml/+page.svelte
 msgid "Machine learning"
 msgstr "Machine learning"
 
-#: src/routes/projects/+page.svelte
-msgid "A Transformer-based chess engine learning to produce strong, human-like moves."
-msgstr "A Transformer-based chess engine learning to produce strong, human-like moves."
+#~ msgid "A Transformer-based chess engine learning to produce strong, human-like moves."
+#~ msgstr "A Transformer-based chess engine learning to produce strong, human-like moves."
 
-#: src/routes/projects/+page.svelte
-msgid "Transformers"
-msgstr "Transformers"
+#~ msgid "Transformers"
+#~ msgstr "Transformers"
 
-#: src/routes/projects/+page.svelte
-msgid "Chess"
-msgstr "Chess"
+#~ msgid "Chess"
+#~ msgstr "Chess"
 
-#: src/routes/projects/+page.svelte
-msgid "Computational biology"
-msgstr "Computational biology"
+#~ msgid "Computational biology"
+#~ msgstr "Computational biology"
 
-#: src/routes/projects/+page.svelte
-msgid "Exploring whether slime mold behavior can inspire methods for training neural networks."
-msgstr "Exploring whether slime mold behavior can inspire methods for training neural networks."
+#~ msgid "Exploring whether slime mold behavior can inspire methods for training neural networks."
+#~ msgstr "Exploring whether slime mold behavior can inspire methods for training neural networks."
 
-#: src/routes/projects/+page.svelte
-msgid "Biology"
-msgstr "Biology"
+#~ msgid "Biology"
+#~ msgstr "Biology"
 
-#: src/routes/projects/+page.svelte
-msgid "Networks"
-msgstr "Networks"
+#~ msgid "Networks"
+#~ msgstr "Networks"
 
-#: src/routes/projects/+page.svelte
-msgid "Conference"
-msgstr "Conference"
+#~ msgid "Conference"
+#~ msgstr "Conference"
 
-#: src/routes/projects/+page.svelte
-msgid "The annual winter camp bringing together students, researchers, and the technology community."
-msgstr "The annual winter camp bringing together students, researchers, and the technology community."
+#~ msgid "The annual winter camp bringing together students, researchers, and the technology community."
+#~ msgstr "The annual winter camp bringing together students, researchers, and the technology community."
 
-#: src/routes/projects/+page.svelte
 #: src/routes/projects/zosia/+page.svelte
 msgid "Talks"
 msgstr "Talks"
 
-#: src/routes/projects/+page.svelte
-msgid "Wrocław"
-msgstr "Wrocław"
+#~ msgid "Wrocław"
+#~ msgstr "Wrocław"
 
 #: src/routes/projects/+page.svelte
 msgid "Search projects"
@@ -969,6 +944,7 @@ msgstr "Biology · Neural networks"
 msgid "Research into slime-mold behavior and its potential use in computational tasks."
 msgstr "Research into slime-mold behavior and its potential use in computational tasks."
 
+#: src/routes/+page.svelte
 #: src/routes/projects/zosia/+page.svelte
 msgid "ZOSIA"
 msgstr "ZOSIA"
@@ -1139,7 +1115,7 @@ msgstr "Find us online"
 msgid "<0/> Source code <1/>"
 msgstr "<0/> Source code <1/>"
 
-#: src/components/Footer.svelte
+#: src/components/Navbar.svelte
 #: src/components/ui/LocaleSwitcher.svelte
 msgid "Change language"
 msgstr "Change language"
@@ -1182,9 +1158,8 @@ msgstr "Projects <0/>"
 msgid "Groups <0/>"
 msgstr "Groups <0/>"
 
-#: src/routes/+page.svelte
-msgid "Hello, World!<0/> We're <1>KSI</1>"
-msgstr "Hello, World!<0/> We're <1>KSI</1>"
+#~ msgid "Hello, World!<0/> We're <1>KSI</1>"
+#~ msgstr "Hello, World!<0/> We're <1>KSI</1>"
 
 #: src/routes/+page.svelte
 msgid "A student community exploring computer science through research, education, and events at the University of Wrocław."
@@ -1194,13 +1169,11 @@ msgstr "A student community exploring computer science through research, educati
 msgid "See what we do <0/>"
 msgstr "See what we do <0/>"
 
-#: src/routes/+page.svelte
-msgid "About KSI <0/>"
-msgstr "About KSI <0/>"
+#~ msgid "About KSI <0/>"
+#~ msgstr "About KSI <0/>"
 
-#: src/routes/+page.svelte
-msgid "Connecting the community"
-msgstr "Connecting the community"
+#~ msgid "Connecting the community"
+#~ msgstr "Connecting the community"
 
 #: src/routes/+page.svelte
 msgid "Children taught programming"
@@ -1215,70 +1188,54 @@ msgid "On-site lectures hosted"
 msgstr "On-site lectures hosted"
 
 #: src/components/Goal.svelte
-#: src/routes/+page.svelte
 msgid "( technically )"
 msgstr "( technically )"
 
 #: src/components/Goal.svelte
-#: src/routes/+page.svelte
 msgid "( socially )"
 msgstr "( socially )"
 
-#: src/routes/+page.svelte
-msgid "Group of around 20 conference attendees on a mountain viewpoint."
-msgstr "Group of around 20 conference attendees on a mountain viewpoint."
+#~ msgid "Group of around 20 conference attendees on a mountain viewpoint."
+#~ msgstr "Group of around 20 conference attendees on a mountain viewpoint."
 
-#: src/routes/+page.svelte
-msgid "Our experienced team has been organizing the well-recognized conference in the mountainous regions of Lower Silesia in southwestern Poland."
-msgstr "Our experienced team has been organizing the well-recognized conference in the mountainous regions of Lower Silesia in southwestern Poland."
+#~ msgid "Our experienced team has been organizing the well-recognized conference in the mountainous regions of Lower Silesia in southwestern Poland."
+#~ msgstr "Our experienced team has been organizing the well-recognized conference in the mountainous regions of Lower Silesia in southwestern Poland."
 
-#: src/routes/+page.svelte
-msgid "It's an acronym for <0>Winter Camp of Computer Science Students</0> written in polish."
-msgstr "It's an acronym for <0>Winter Camp of Computer Science Students</0> written in polish."
+#~ msgid "It's an acronym for <0>Winter Camp of Computer Science Students</0> written in polish."
+#~ msgstr "It's an acronym for <0>Winter Camp of Computer Science Students</0> written in polish."
 
-#: src/routes/+page.svelte
-msgid "Not just a conference – a camp"
-msgstr "Not just a conference – a camp"
+#~ msgid "Not just a conference – a camp"
+#~ msgstr "Not just a conference – a camp"
 
-#: src/routes/+page.svelte
-msgid "The name"
-msgstr "The name"
+#~ msgid "The name"
+#~ msgstr "The name"
 
-#: src/routes/+page.svelte
-msgid "While our speakers give various talks, sharing their knowledge, scientific research, hobbies and so on, we love to spend some time together in the free time."
-msgstr "While our speakers give various talks, sharing their knowledge, scientific research, hobbies and so on, we love to spend some time together in the free time."
+#~ msgid "While our speakers give various talks, sharing their knowledge, scientific research, hobbies and so on, we love to spend some time together in the free time."
+#~ msgstr "While our speakers give various talks, sharing their knowledge, scientific research, hobbies and so on, we love to spend some time together in the free time."
 
-#: src/routes/+page.svelte
-msgid "We pick the location for the camp diligently, to provide many attractions such as billiard table, a swimming pool, air hockey and more! We no-risk guarantee that you'll have fun here!"
-msgstr "We pick the location for the camp diligently, to provide many attractions such as billiard table, a swimming pool, air hockey and more! We no-risk guarantee that you'll have fun here!"
+#~ msgid "We pick the location for the camp diligently, to provide many attractions such as billiard table, a swimming pool, air hockey and more! We no-risk guarantee that you'll have fun here!"
+#~ msgstr "We pick the location for the camp diligently, to provide many attractions such as billiard table, a swimming pool, air hockey and more! We no-risk guarantee that you'll have fun here!"
 
-#: src/routes/+page.svelte
-msgid "Multiple brilliant volunteers, one goal – share the passion for Computer Science with the youngest."
-msgstr "Multiple brilliant volunteers, one goal – share the passion for Computer Science with the youngest."
+#~ msgid "Multiple brilliant volunteers, one goal – share the passion for Computer Science with the youngest."
+#~ msgstr "Multiple brilliant volunteers, one goal – share the passion for Computer Science with the youngest."
 
-#: src/routes/+page.svelte
-msgid "Initiative"
-msgstr "Initiative"
+#~ msgid "Initiative"
+#~ msgstr "Initiative"
 
-#: src/routes/+page.svelte
-msgid "Hour of Code is a global movement focused on bringing Computer Science and coding to students, in a fun activities held within one hour."
-msgstr "Hour of Code is a global movement focused on bringing Computer Science and coding to students, in a fun activities held within one hour."
+#~ msgid "Hour of Code is a global movement focused on bringing Computer Science and coding to students, in a fun activities held within one hour."
+#~ msgstr "Hour of Code is a global movement focused on bringing Computer Science and coding to students, in a fun activities held within one hour."
 
-#: src/routes/+page.svelte
-msgid "Minds"
-msgstr "Minds"
+#~ msgid "Minds"
+#~ msgstr "Minds"
 
-#: src/routes/+page.svelte
-msgid "We are fortunate to have talented people, including high school educators, past olympiad laureates and algorithm tutors spend their precious time to brainstorm, debug and perfectionize simple coding problems that will serve high educational value while kept engaging and funny to the youth."
-msgstr "We are fortunate to have talented people, including high school educators, past olympiad laureates and algorithm tutors spend their precious time to brainstorm, debug and perfectionize simple coding problems that will serve high educational value while kept engaging and funny to the youth."
+#~ msgid "We are fortunate to have talented people, including high school educators, past olympiad laureates and algorithm tutors spend their precious time to brainstorm, debug and perfectionize simple coding problems that will serve high educational value while kept engaging and funny to the youth."
+#~ msgstr "We are fortunate to have talented people, including high school educators, past olympiad laureates and algorithm tutors spend their precious time to brainstorm, debug and perfectionize simple coding problems that will serve high educational value while kept engaging and funny to the youth."
 
-#: src/routes/+page.svelte
-msgid "Real computer science students volunteer to provide feedback and help whenever problems get too tricky."
-msgstr "Real computer science students volunteer to provide feedback and help whenever problems get too tricky."
+#~ msgid "Real computer science students volunteer to provide feedback and help whenever problems get too tricky."
+#~ msgstr "Real computer science students volunteer to provide feedback and help whenever problems get too tricky."
 
-#: src/routes/+page.svelte
-msgid "Lecture room full of primary school students attending Python lecture."
-msgstr "Lecture room full of primary school students attending Python lecture."
+#~ msgid "Lecture room full of primary school students attending Python lecture."
+#~ msgstr "Lecture room full of primary school students attending Python lecture."
 
 #~ msgid "View in GitHub"
 #~ msgstr "View in GitHub"
@@ -1286,24 +1243,20 @@ msgstr "Lecture room full of primary school students attending Python lecture."
 #~ msgid "This website. Surrounded by many unfamiliar technologies, passionate members get to develop their engineering senses in a friendly environment."
 #~ msgstr "This website. Surrounded by many unfamiliar technologies, passionate members get to develop their engineering senses in a friendly environment."
 
-#: src/routes/+page.svelte
-msgid "Engineering is our passion"
-msgstr "Engineering is our passion"
+#~ msgid "Engineering is our passion"
+#~ msgstr "Engineering is our passion"
 
-#: src/routes/+page.svelte
-msgid "How we spend our time"
-msgstr "How we spend our time"
+#~ msgid "How we spend our time"
+#~ msgstr "How we spend our time"
 
-#: src/routes/+page.svelte
-msgid "Three threads run through everything we do — the people we meet, the things we build, and the questions we chase. Here's a closer look at each."
-msgstr "Three threads run through everything we do — the people we meet, the things we build, and the questions we chase. Here's a closer look at each."
+#~ msgid "Three threads run through everything we do — the people we meet, the things we build, and the questions we chase. Here's a closer look at each."
+#~ msgstr "Three threads run through everything we do — the people we meet, the things we build, and the questions we chase. Here's a closer look at each."
 
 #~ msgid "KSI-ML-research/krasnal"
 #~ msgstr "KSI-ML-research/krasnal"
 
-#: src/routes/+page.svelte
-msgid "Curiosity, kept rigorous"
-msgstr "Curiosity, kept rigorous"
+#~ msgid "Curiosity, kept rigorous"
+#~ msgstr "Curiosity, kept rigorous"
 
 #: src/routes/+page.svelte
 msgid "We're still early in our research journey — no published papers to point to yet — but the habits that lead there are already part of how we work together."
@@ -1334,7 +1287,6 @@ msgid "Members pair with faculty to explore open problems, long before any of it
 msgstr "Members pair with faculty to explore open problems, long before any of it becomes a paper."
 
 #: src/components/Goal.svelte
-#: src/routes/+page.svelte
 msgid "( scientifically )"
 msgstr "( scientifically )"
 
@@ -1553,6 +1505,7 @@ msgid "The reliable route is back to the association — and room 24 at the Inst
 msgstr "The reliable route is back to the association — and room 24 at the Institute of Computer Science is always worth finding."
 
 #: src/components/ui/GithubProjectCard.svelte
+#: src/routes/+page.svelte
 msgid "View on GitHub <0/>"
 msgstr "View on GitHub <0/>"
 
@@ -1575,3 +1528,52 @@ msgstr "About the Project"
 #: src/routes/projects/[slug]/+page.svelte
 msgid "Full project details and articles will be displayed here."
 msgstr "Full project details and articles will be displayed here."
+
+#: src/routes/+page.svelte
+msgid "About KSI"
+msgstr "About KSI"
+
+#: src/routes/+page.svelte
+msgid "Hello, World!<0/>We're KSI."
+msgstr "Hello, World!<0/>We're KSI."
+
+#: src/routes/+page.svelte
+msgid "Our experienced team has been organizing the well-recognized conference in the mountainous regions of Lower Silesia in southwestern Poland. While our speakers give various talks, sharing their knowledge, scientific research, hobbies and so on, we love to spend some time together in the free time."
+msgstr "Our experienced team has been organizing the well-recognized conference in the mountainous regions of Lower Silesia in southwestern Poland. While our speakers give various talks, sharing their knowledge, scientific research, hobbies and so on, we love to spend some time together in the free time."
+
+#: src/routes/+page.svelte
+#: src/routes/+page.svelte
+msgid "Read more"
+msgstr "Read more"
+
+#: src/routes/+page.svelte
+msgid "Hour of Code is a global movement focused on bringing Computer Science and coding to students, in fun activities held within one hour. Multiple brilliant volunteers, one goal – share the passion for Computer Science with the youngest."
+msgstr "Hour of Code is a global movement focused on bringing Computer Science and coding to students, in fun activities held within one hour. Multiple brilliant volunteers, one goal – share the passion for Computer Science with the youngest."
+
+#: src/routes/+page.svelte
+msgid "( socially ) Connecting the community"
+msgstr "( socially ) Connecting the community"
+
+#~ msgid "Open Source"
+#~ msgstr "Open Source"
+
+#: src/routes/+page.svelte
+msgid "( technically ) Engineering is our passion"
+msgstr "( technically ) Engineering is our passion"
+
+#: src/routes/+page.svelte
+msgid "( scientifically ) Curiosity, kept rigorous"
+msgstr "( scientifically ) Curiosity, kept rigorous"
+
+#: src/routes/projects/+page.svelte
+msgid "Project"
+msgstr "Project"
+
+#: src/routes/+page.svelte
+msgid "KSI Members"
+msgstr "KSI Members"
+
+#. 0: import.meta.env.PUBLIC_APP_VERSION
+#: src/components/Footer.svelte
+msgid "v{0}"
+msgstr "v{0}"
