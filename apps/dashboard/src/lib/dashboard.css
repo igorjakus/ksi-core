@@ -888,3 +888,65 @@ a[aria-disabled='true'] {
     justify-content: flex-end;
   }
 }
+/* A reserved one-pixel outline keeps hover treatments from shifting layout. */
+.btn:hover,
+.btn-outline:hover,
+.project-card:hover,
+.list-strip:hover,
+.workspace-shortcut:hover,
+.kanban-card:hover,
+.column-add:hover {
+  outline: 1px solid var(--control-border-hover);
+  outline-offset: 2px;
+}
+.workspace-breadcrumb a {
+  color: var(--muted);
+  text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 280px;
+}
+.workspace-breadcrumb a:hover {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.segmented-control {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: var(--paper);
+}
+.segmented-control button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 10px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--muted);
+  border-radius: 2px;
+  font-size: 12px;
+  cursor: pointer;
+}
+.segmented-control button.active {
+  background: var(--surface);
+  color: var(--ink);
+  border-color: var(--line);
+}
+@media (prefers-reduced-motion: reduce) {
+  .workspace-view {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}
+@media (max-width: 760px) {
+  .workspace-breadcrumb a {
+    max-width: 120px;
+  }
+}

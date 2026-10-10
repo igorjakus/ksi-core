@@ -9,6 +9,8 @@
     setTheme,
     type ThemePreference
   } from '$lib/preferences.svelte';
+  import Skeleton from '$lib/Skeleton.svelte';
+  import { fly } from 'svelte/transition';
   import Editor from '@ksi-core/ui/platform/Editor.svelte';
   import Dropdown from '@ksi-core/ui/platform/Dropdown.svelte';
   import {
@@ -46,7 +48,7 @@
   let mobileNavigation = $state(false);
   let preferencesMenu = $state<HTMLDetailsElement>();
   let accountMenu = $state<HTMLDetailsElement>();
-  let loading = $state(false);
+  let loading = $state(true);
   let newArticle = $state(false);
   let composer = $state(false);
   let loadGeneration = 0;
@@ -131,11 +133,11 @@
     return result as T;
   }
 
-  async function load() {
+  async function load(foreground = false) {
     const generation = ++loadGeneration;
     const currentTab = tab;
     let currentScope = scope;
-    loading = true;
+    if (foreground) loading = true;
     try {
       error = '';
       const projectList = await api<Project[]>('/platform/public/projects');
@@ -252,7 +254,7 @@
 
     resetView();
     graveyard = location.graveyard ?? false;
-    void load();
+    void load(true);
   }
 
   $effect(() => {
@@ -694,9 +696,12 @@
           class="workspace-breadcrumb"
           aria-label={text('Bieżąca przestrzeń', 'Current workspace')}
         >
-          <span>{workspace === 'directory' ? 'KSI' : workspaceName}</span><span aria-hidden="true"
-            >/</span
-          ><strong>{viewName}</strong>
+          <a
+            href={workspace === 'directory'
+              ? '/projects'
+              : dashboardPath(workspace, projectSlug, 'overview')}
+            onclick={guardNavigation}>{workspace === 'directory' ? 'KSI' : workspaceName}</a
+          ><span aria-hidden="true">/</span><strong>{viewName}</strong>
         </div>
         <div class="topbar-controls">
           <details
@@ -769,865 +774,929 @@
       </header>
       <main class="dash-workspace" aria-busy={loading || busy}>
         {#if error}<p class="error" role="alert">{error}</p>{/if}
-        {#if loading}<p class="loading-status" role="status">
-            {text('Ładowanie…', 'Loading…')}
-          </p>{/if}
-
-        <!-- ── PROJECTS ──────────────────────────────────────────────────── -->
-        {#if workspace !== 'project' || scope}
-          {#if tab === 'projects'}
-            <div class="workspace-header">
-              <div>
-                <h1>{text('Projekty', 'Projects')}</h1>
-                <p class="workspace-description">
-                  {text(
-                    'Wybierz projekt i przejdź do wspólnej pracy.',
-                    'Choose a project and start collaborating.'
-                  )}
-                </p>
-              </div>
-              {#if data.user.role !== 'member'}
-                <button
-                  class="btn"
-                  disabled={busy}
-                  onclick={() => {
-                    changeTab('__create_project__');
-                  }}
-                >
-                  <Plus size={16} aria-hidden="true" />{text('Nowy projekt', 'New project')}
-                </button>
-              {/if}
-            </div>
-
-            <div class="project-grid">
-              {#each projects as project (project.id)}
-                <article class="project-card">
-                  <div class="eyebrow">
-                    {#each project.fields as field}
-                      <span class="tag" style="background: var(--mint);">{field}</span>
-                    {/each}
-                    {#if project.locked}
-                      <span class="tag">{text('Zamknięty', 'Locked')}</span>
+        {#if loading}<Skeleton
+            board={tab === 'board'}
+            label={text('Ładowanie przestrzeni', 'Loading workspace')}
+          />
+        {:else}
+          {#key page.url.pathname}<div class="workspace-view" in:fly={{ y: -6, duration: 160 }}>
+              <!-- ── PROJECTS ──────────────────────────────────────────────────── -->
+              {#if workspace !== 'project' || scope}
+                {#if tab === 'projects'}
+                  <div class="workspace-header">
+                    <div>
+                      <h1>{text('Projekty', 'Projects')}</h1>
+                      <p class="workspace-description">
+                        {text(
+                          'Wybierz projekt i przejdź do wspólnej pracy.',
+                          'Choose a project and start collaborating.'
+                        )}
+                      </p>
+                    </div>
+                    {#if data.user.role !== 'member'}
+                      <button
+                        class="btn"
+                        disabled={busy}
+                        onclick={() => {
+                          changeTab('__create_project__');
+                        }}
+                      >
+                        <Plus size={16} aria-hidden="true" />{text('Nowy projekt', 'New project')}
+                      </button>
                     {/if}
                   </div>
-                  <h2>{project.name}</h2>
-                  <p>{project.description || text('Brak opisu.', 'No description.')}</p>
-                  <div class="project-card-actions">
-                    <a
-                      class="btn"
-                      aria-disabled={busy}
-                      href={`/projects/${encodeURIComponent(project.slug)}`}
-                      onclick={guardNavigation}
-                    >
-                      {text('Otwórz projekt', 'Open project')}
-                      <ArrowUpRight size={15} aria-hidden="true" />
-                    </a>
+
+                  <div class="project-grid">
+                    {#each projects as project (project.id)}
+                      <article class="project-card">
+                        <div class="eyebrow">
+                          {#each project.fields as field}
+                            <span class="tag" style="background: var(--mint);">{field}</span>
+                          {/each}
+                          {#if project.locked}
+                            <span class="tag">{text('Zamknięty', 'Locked')}</span>
+                          {/if}
+                        </div>
+                        <h2>{project.name}</h2>
+                        <p>{project.description || text('Brak opisu.', 'No description.')}</p>
+                        <div class="project-card-actions">
+                          <a
+                            class="btn"
+                            aria-disabled={busy}
+                            href={`/projects/${encodeURIComponent(project.slug)}`}
+                            onclick={guardNavigation}
+                          >
+                            {text('Otwórz projekt', 'Open project')}
+                            <ArrowUpRight size={15} aria-hidden="true" />
+                          </a>
+                        </div>
+                      </article>
+                    {/each}
                   </div>
-                </article>
-              {/each}
-            </div>
 
-            {#if !loading && !projects.length && !error}
-              <div class="empty-state">
-                <h2>{text('Jeszcze nie ma projektów', 'No projects yet')}</h2>
-                <p>{text('Nowe projekty pojawią się tutaj.', 'New projects will appear here.')}</p>
-              </div>
-            {/if}
-          {:else if tab === 'overview'}
-            <div class="workspace-header">
-              <div>
-                <h1>{workspaceName}</h1>
-                <p class="workspace-description">
-                  {selectedProject?.description ||
-                    text(
-                      'Wspólne zadania, rozmowy i publikacje w jednym miejscu.',
-                      'Shared tasks, conversations, and publications in one place.'
-                    )}
-                </p>
-              </div>
-              {#if selectedProject}
-                <button
-                  class="btn btn-outline"
-                  disabled={busy}
-                  onclick={() => action(() => api(`/platform/projects/${scope}/join`, 'POST'))}
-                  >{text('Dołącz do projektu', 'Join project')}</button
-                >
-              {/if}
-            </div>
-            <div class="workspace-shortcuts">
-              {#each [['board', 'Kanban', text('Zaplanuj i śledź wspólne zadania.', 'Plan and track shared tasks.')], ['forum', 'Forum', text('Rozmawiaj, zadawaj pytania i dziel się pomysłami.', 'Discuss, ask questions, and share ideas.')], ['articles', text('Artykuły', 'Articles'), text('Twórz publikacje i proponuj zmiany.', 'Write publications and propose changes.')]] as [key, label, description]}
-                <a
-                  class="workspace-shortcut"
-                  aria-disabled={busy}
-                  href={dashboardPath(workspace, projectSlug, key)}
-                  onclick={guardNavigation}
-                  ><span class="shortcut-heading"
-                    >{label}<ArrowUpRight size={16} aria-hidden="true" /></span
-                  ><span>{description}</span></a
-                >
-              {/each}
-            </div>
+                  {#if !loading && !projects.length && !error}
+                    <div class="empty-state">
+                      <h2>{text('Jeszcze nie ma projektów', 'No projects yet')}</h2>
+                      <p>
+                        {text('Nowe projekty pojawią się tutaj.', 'New projects will appear here.')}
+                      </p>
+                    </div>
+                  {/if}
+                {:else if tab === 'overview'}
+                  <div class="workspace-header">
+                    <div>
+                      <h1>{workspaceName}</h1>
+                      <p class="workspace-description">
+                        {selectedProject?.description ||
+                          text(
+                            'Wspólne zadania, rozmowy i publikacje w jednym miejscu.',
+                            'Shared tasks, conversations, and publications in one place.'
+                          )}
+                      </p>
+                    </div>
+                    {#if selectedProject}
+                      <button
+                        class="btn btn-outline"
+                        disabled={busy}
+                        onclick={() =>
+                          action(() => api(`/platform/projects/${scope}/join`, 'POST'))}
+                        >{text('Dołącz do projektu', 'Join project')}</button
+                      >
+                    {/if}
+                  </div>
+                  <div class="workspace-shortcuts">
+                    {#each [['board', 'Kanban', text('Zaplanuj i śledź wspólne zadania.', 'Plan and track shared tasks.')], ['forum', 'Forum', text('Rozmawiaj, zadawaj pytania i dziel się pomysłami.', 'Discuss, ask questions, and share ideas.')], ['articles', text('Artykuły', 'Articles'), text('Twórz publikacje i proponuj zmiany.', 'Write publications and propose changes.')]] as [key, label, description]}
+                      <a
+                        class="workspace-shortcut"
+                        aria-disabled={busy}
+                        href={dashboardPath(workspace, projectSlug, key)}
+                        onclick={guardNavigation}
+                        ><span class="shortcut-heading"
+                          >{label}<ArrowUpRight size={16} aria-hidden="true" /></span
+                        ><span>{description}</span></a
+                      >
+                    {/each}
+                  </div>
 
-            <!-- ── ARTICLES ──────────────────────────────────────────────────── -->
-          {:else if tab === 'articles'}
-            <div class="workspace-header">
-              <div>
-                <h1>{text('Artykuły', 'Articles')}</h1>
-              </div>
-              <button
-                class="btn"
-                disabled={busy}
-                onclick={() => {
-                  selectedArticle = null;
-                  newArticle = true;
-                  title = '';
-                  markdown = '';
-                  slug = '';
-                }}
-              >
-                <Plus size={16} aria-hidden="true" />{text('Nowy artykuł', 'New article')}
-              </button>
-            </div>
-
-            {#each articles as article (article.id)}
-              <div
-                class="list-strip"
-                role="button"
-                tabindex="0"
-                onclick={() => {
-                  selectedArticle = article;
-                  slug = article.slug;
-                  title = article.title;
-                  markdown = article.markdown;
-                }}
-                onkeydown={(e) =>
-                  e.key === 'Enter' &&
-                  (() => {
-                    selectedArticle = article;
-                    slug = article.slug;
-                    title = article.title;
-                    markdown = article.markdown;
-                  })()}
-              >
-                <div class="list-strip-info">
-                  <h3>{article.title}</h3>
-                  <div class="list-strip-meta">{article.state} · {article.slug}</div>
-                </div>
-                <span class="tag {article.state === 'published' ? 'tag-mint' : ''}"
-                  >{article.state}</span
-                >
-              </div>
-            {/each}
-
-            {#if !loading && !articles.length && !newArticle}<p class="muted">
-                {text(
-                  'Brak artykułów. Utwórz pierwszy artykuł w tej przestrzeni.',
-                  'No articles yet. Create the first article in this workspace.'
-                )}
-              </p>{/if}
-            {#if selectedArticle || newArticle}
-              <div class="card" style="margin-top: 20px;">
-                <h2 style="font-size: 1.1rem; margin-bottom: 16px;">
-                  {selectedArticle
-                    ? text('Edytuj artykuł', 'Edit article')
-                    : text('Nowy artykuł', 'New article')}
-                </h2>
-                <label for="a-title">{text('Tytuł', 'Title')}</label>
-                <input id="a-title" bind:value={title} required />
-                <label for="a-slug">Slug</label>
-                <input id="a-slug" bind:value={slug} />
-                <Editor bind:value={markdown} />
-                <div class="row" style="margin-top: 16px; gap: 8px;">
-                  {#if selectedArticle}
+                  <!-- ── ARTICLES ──────────────────────────────────────────────────── -->
+                {:else if tab === 'articles'}
+                  <div class="workspace-header">
+                    <div>
+                      <h1>{text('Artykuły', 'Articles')}</h1>
+                    </div>
                     <button
                       class="btn"
                       disabled={busy}
-                      onclick={() => action(() => saveArticle(false))}
+                      onclick={() => {
+                        selectedArticle = null;
+                        newArticle = true;
+                        title = '';
+                        markdown = '';
+                        slug = '';
+                      }}
                     >
-                      {text('Zapisz szkic', 'Save draft')}
+                      <Plus size={16} aria-hidden="true" />{text('Nowy artykuł', 'New article')}
                     </button>
-                    <button
-                      class="btn-coral btn"
-                      disabled={busy}
-                      onclick={() => action(() => saveArticle(true))}
+                  </div>
+
+                  {#each articles as article (article.id)}
+                    <div
+                      class="list-strip"
+                      role="button"
+                      tabindex="0"
+                      onclick={() => {
+                        selectedArticle = article;
+                        slug = article.slug;
+                        title = article.title;
+                        markdown = article.markdown;
+                      }}
+                      onkeydown={(e) =>
+                        e.key === 'Enter' &&
+                        (() => {
+                          selectedArticle = article;
+                          slug = article.slug;
+                          title = article.title;
+                          markdown = article.markdown;
+                        })()}
                     >
-                      {text('Opublikuj', 'Publish')}
-                    </button>
-                    <button disabled={busy} onclick={() => action(propose)}>
-                      {text('Zaproponuj zmianę', 'Propose edit')}
-                    </button>
-                    <label
-                      style="display: flex; align-items: center; gap: 6px; font-size: 12px; text-transform: none; letter-spacing: 0; color: var(--muted); cursor: pointer;"
-                    >
-                      <input
-                        type="checkbox"
-                        bind:checked={showCredit}
-                        onchange={() =>
-                          action(() =>
-                            api(`/platform/articles/${selectedArticle!.id}/credit`, 'PUT', {
-                              publicCredit: showCredit
-                            })
-                          )}
-                      />
-                      {text('Pokaż mnie jako autora', 'Show my author credit')}
-                    </label>
+                      <div class="list-strip-info">
+                        <h3>{article.title}</h3>
+                        <div class="list-strip-meta">{article.state} · {article.slug}</div>
+                      </div>
+                      <span class="tag {article.state === 'published' ? 'tag-mint' : ''}"
+                        >{article.state}</span
+                      >
+                    </div>
+                  {/each}
+
+                  {#if !loading && !articles.length && !newArticle}<p class="muted">
+                      {text(
+                        'Brak artykułów. Utwórz pierwszy artykuł w tej przestrzeni.',
+                        'No articles yet. Create the first article in this workspace.'
+                      )}
+                    </p>{/if}
+                  {#if selectedArticle || newArticle}
+                    <div class="card" style="margin-top: 20px;">
+                      <h2 style="font-size: 1.1rem; margin-bottom: 16px;">
+                        {selectedArticle
+                          ? text('Edytuj artykuł', 'Edit article')
+                          : text('Nowy artykuł', 'New article')}
+                      </h2>
+                      <label for="a-title">{text('Tytuł', 'Title')}</label>
+                      <input id="a-title" bind:value={title} required />
+                      <label for="a-slug">Slug</label>
+                      <input id="a-slug" bind:value={slug} />
+                      <Editor {language} bind:value={markdown} />
+                      <div class="row" style="margin-top: 16px; gap: 8px;">
+                        {#if selectedArticle}
+                          <button
+                            class="btn"
+                            disabled={busy}
+                            onclick={() => action(() => saveArticle(false))}
+                          >
+                            {text('Zapisz szkic', 'Save draft')}
+                          </button>
+                          <button
+                            class="btn-coral btn"
+                            disabled={busy}
+                            onclick={() => action(() => saveArticle(true))}
+                          >
+                            {text('Opublikuj', 'Publish')}
+                          </button>
+                          <button disabled={busy} onclick={() => action(propose)}>
+                            {text('Zaproponuj zmianę', 'Propose edit')}
+                          </button>
+                          <label
+                            style="display: flex; align-items: center; gap: 6px; font-size: 12px; text-transform: none; letter-spacing: 0; color: var(--muted); cursor: pointer;"
+                          >
+                            <input
+                              type="checkbox"
+                              bind:checked={showCredit}
+                              onchange={() =>
+                                action(() =>
+                                  api(`/platform/articles/${selectedArticle!.id}/credit`, 'PUT', {
+                                    publicCredit: showCredit
+                                  })
+                                )}
+                            />
+                            {text('Pokaż mnie jako autora', 'Show my author credit')}
+                          </label>
+                        {:else}
+                          <button
+                            class="btn"
+                            disabled={busy || !title.trim()}
+                            onclick={() => action(create)}
+                          >
+                            {text('Utwórz', 'Create')}
+                          </button>
+                        {/if}
+                      </div>
+                    </div>
+                  {/if}
+
+                  <!-- ── BOARD ─────────────────────────────────────────────────────── -->
+                {:else if tab === 'board'}
+                  <div class="workspace-header">
+                    <h1>
+                      {graveyard
+                        ? text('Usunięte zadania', 'Removed tasks')
+                        : text('Tablica zadań', 'Task board')}
+                    </h1>
+                    {#if graveyard}
+                      <a
+                        class="btn btn-outline"
+                        href={dashboardPath(workspace, projectSlug, 'board')}
+                        onclick={guardNavigation}
+                        ><ArrowLeft size={15} aria-hidden="true" />{text(
+                          'Wróć do tablicy',
+                          'Back to board'
+                        )}</a
+                      >
+                    {:else}
+                      <a
+                        class="btn btn-outline"
+                        href={`${dashboardPath(workspace, projectSlug, 'board')}/graveyard`}
+                        onclick={guardNavigation}
+                        ><Trash2 size={15} aria-hidden="true" />{text(
+                          'Usunięte zadania',
+                          'Removed tasks'
+                        )}</a
+                      >
+                    {/if}
+                  </div>
+                  {#if graveyard}
+                    <div class="graveyard-notice">
+                      <Archive size={18} aria-hidden="true" />
+                      <p>
+                        {text(
+                          'Usunięte zadania są zachowane tutaj. Liderzy mogą przywrócić je do poprzedniej kolumny.',
+                          'Removed tasks are kept here. Leaders can restore them to their previous column.'
+                        )}
+                      </p>
+                    </div>
+                    <div class="graveyard-list">
+                      {#each items as item (item.id)}
+                        <article class="removed-task">
+                          <div class="removed-task-info">
+                            <h2>{item.title}</h2>
+                            <p>{item.markdown.slice(0, 180)}</p>
+                            <span class="tag"
+                              >{columnDefs.find(([key]) => key === item.column)?.[1]}</span
+                            >
+                            {#if item.deletedAt}<time datetime={item.deletedAt}
+                                >{new Date(item.deletedAt).toLocaleDateString(
+                                  language === 'pl' ? 'pl-PL' : 'en-GB'
+                                )}</time
+                              >{/if}
+                          </div>
+                          <button
+                            class="btn btn-outline"
+                            disabled={busy}
+                            onclick={() =>
+                              action(() =>
+                                api(`/platform/items/${item.id}/restore`, 'POST', {
+                                  version: item.version
+                                })
+                              )}
+                            ><RotateCcw size={15} aria-hidden="true" />{text(
+                              'Przywróć',
+                              'Restore'
+                            )}</button
+                          >
+                        </article>
+                      {/each}
+                      {#if !loading && !items.length && !error}<div class="empty-state">
+                          <Trash2 size={28} strokeWidth={1.4} aria-hidden="true" />
+                          <h2>{text('Brak usuniętych zadań', 'No removed tasks')}</h2>
+                          <p>
+                            {text(
+                              'Zadania usunięte z tablicy pojawią się tutaj.',
+                              'Tasks removed from the board will appear here.'
+                            )}
+                          </p>
+                        </div>{/if}
+                    </div>
                   {:else}
+                    <div class="board">
+                      {#each columnDefs as [column, label] (column)}
+                        <section class="board-column" aria-label={label}>
+                          <div class="column-header">
+                            <span class="column-label"
+                              ><span class={`column-dot ${column}`}></span>{label}<span
+                                class="column-count"
+                                >{items.filter((item) => item.column === column).length}</span
+                              ></span
+                            >
+                            <button
+                              id={`add-${column}`}
+                              type="button"
+                              class="icon-button"
+                              aria-label={`${text('Dodaj zadanie do', 'Add task to')} ${label}`}
+                              disabled={busy}
+                              onclick={() => openTaskComposer(column)}
+                              ><Plus size={17} aria-hidden="true" /></button
+                            >
+                          </div>
+                          <div class="column-items">
+                            {#each items.filter((item) => item.column === column) as item (item.id)}
+                              <article class="kanban-card">
+                                <strong>{item.title}</strong>
+                                {#if item.markdown}<p>
+                                    {item.markdown.slice(0, 120)}{item.markdown.length > 120
+                                      ? '…'
+                                      : ''}
+                                  </p>{/if}
+                                <div class="kanban-card-actions">
+                                  <Dropdown
+                                    variant="compact"
+                                    label={text('Przenieś zadanie', 'Move task')}
+                                    value={item.column}
+                                    options={columnOptions}
+                                    disabled={busy}
+                                    onselect={(column) =>
+                                      action(() =>
+                                        api(`/platform/items/${item.id}`, 'PATCH', {
+                                          version: item.version,
+                                          column
+                                        })
+                                      )}
+                                  />
+                                  <button
+                                    class="icon-button danger-button"
+                                    aria-label={`${text('Usuń zadanie', 'Remove task')}: ${item.title}`}
+                                    disabled={busy}
+                                    onclick={() =>
+                                      action(() =>
+                                        api(`/platform/items/${item.id}`, 'DELETE', {
+                                          version: item.version
+                                        })
+                                      )}><Trash2 size={15} aria-hidden="true" /></button
+                                  >
+                                </div>
+                              </article>
+                            {/each}
+                          </div>
+                          {#if composer && taskColumn === column}
+                            <form
+                              class="column-composer"
+                              onsubmit={(event) => {
+                                event.preventDefault();
+                                void action(create);
+                              }}
+                            >
+                              <label for="task-title" class="sr-only"
+                                >{text('Tytuł zadania', 'Task title')}</label
+                              >
+                              <input
+                                id="task-title"
+                                bind:value={title}
+                                placeholder={text('Co trzeba zrobić?', 'What needs to be done?')}
+                                required
+                              />
+                              <Editor {language} bind:value={markdown} />
+                              <div class="composer-actions">
+                                <button class="btn" disabled={busy || !title.trim()}
+                                  ><Plus size={15} aria-hidden="true" />{text(
+                                    'Dodaj zadanie',
+                                    'Add task'
+                                  )}</button
+                                >
+                                <button
+                                  class="icon-button"
+                                  type="button"
+                                  aria-label={text(
+                                    'Anuluj dodawanie zadania',
+                                    'Cancel task creation'
+                                  )}
+                                  disabled={busy}
+                                  onclick={() => {
+                                    composer = false;
+                                    document.getElementById(`add-${column}`)?.focus();
+                                  }}><X size={17} aria-hidden="true" /></button
+                                >
+                              </div>
+                            </form>
+                          {:else}
+                            <button
+                              class="column-add"
+                              disabled={busy}
+                              onclick={() => openTaskComposer(column)}
+                              ><Plus size={16} aria-hidden="true" />{text(
+                                'Dodaj zadanie',
+                                'Add task'
+                              )}</button
+                            >
+                          {/if}
+                        </section>
+                      {/each}
+                    </div>
+                  {/if}
+
+                  <!-- ── FORUM ─────────────────────────────────────────────────────── -->
+                {:else if tab === 'forum'}
+                  <div class="workspace-header">
+                    <div>
+                      <h1>Forum</h1>
+                    </div>
+                    <div class="row">
+                      <button
+                        class="btn"
+                        disabled={busy}
+                        onclick={async () => {
+                          title = '';
+                          markdown = '';
+                          selectedThread = null;
+                          composer = true;
+                          await tick();
+                          document.getElementById('thread-title')?.focus();
+                        }}
+                        ><Plus size={16} aria-hidden="true" />{text(
+                          'Nowy wątek',
+                          'New thread'
+                        )}</button
+                      >
+                      <div
+                        class="segmented-control"
+                        role="group"
+                        aria-label={text('Widok forum', 'Forum view')}
+                      >
+                        <button
+                          type="button"
+                          class:active={!archived}
+                          aria-pressed={!archived}
+                          onclick={() => {
+                            archived = false;
+                            selectedThread = null;
+                            void load(true);
+                          }}>{text('Aktywne', 'Active')}</button
+                        >
+                        <button
+                          type="button"
+                          class:active={archived}
+                          aria-pressed={archived}
+                          onclick={() => {
+                            archived = true;
+                            selectedThread = null;
+                            void load(true);
+                          }}
+                          ><Archive size={14} aria-hidden="true" />{text(
+                            'Archiwum',
+                            'Archive'
+                          )}</button
+                        >
+                      </div>
+                    </div>
+                  </div>
+
+                  {#each threads as thread (thread.id)}
+                    <div
+                      class="list-strip"
+                      role="button"
+                      tabindex="0"
+                      onclick={() =>
+                        action(async () => {
+                          selectedThread = await api(`/platform/threads/${thread.id}`);
+                        })}
+                      onkeydown={(e) =>
+                        e.key === 'Enter' &&
+                        action(async () => {
+                          selectedThread = await api(`/platform/threads/${thread.id}`);
+                        })}
+                    >
+                      <div class="list-strip-info">
+                        <h3>{thread.title}</h3>
+                        <div class="list-strip-meta">{thread.visibility}</div>
+                      </div>
+                      <span class="tag">{thread.visibility}</span>
+                    </div>
+                  {/each}
+
+                  {#if selectedThread}
+                    <div class="card" style="margin-top: 16px;">
+                      <h2 style="font-size: 1.1rem; margin-bottom: 12px;">
+                        {selectedThread.title}
+                      </h2>
+                      {#each selectedThread.comments ?? [] as comment (comment.id)}
+                        <div
+                          style="border-top: 1px solid var(--line); padding: 12px 0; font-size: 13px; white-space: pre-wrap;"
+                        >
+                          {comment.markdown}
+                        </div>
+                      {/each}
+                      <div style="margin-top: 16px; display: grid; gap: 8px;">
+                        <label for="reply-md">{text('Odpowiedź', 'Reply')}</label>
+                        <Editor {language} bind:value={markdown} />
+                        <div class="row" style="gap: 8px;">
+                          <button
+                            class="btn"
+                            disabled={busy}
+                            onclick={() =>
+                              action(() =>
+                                api(`/platform/threads/${selectedThread!.id}/comments`, 'POST', {
+                                  markdown
+                                })
+                              )}
+                          >
+                            {text('Dodaj odpowiedź', 'Reply')}
+                          </button>
+                          <button
+                            disabled={busy}
+                            onclick={() =>
+                              action(() =>
+                                api(`/platform/threads/${selectedThread!.id}/archive`, 'POST', {
+                                  version: selectedThread!.version,
+                                  archived: !archived
+                                })
+                              )}
+                          >
+                            {text('Archiwizuj / przywróć', 'Archive / restore')}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  {/if}
+
+                  <!-- New thread form -->
+                  {#if composer}
+                    <div class="card" style="margin-top: 20px;">
+                      <h2 style="font-size: 1rem; margin-bottom: 14px;">
+                        {text('Nowy wątek', 'New thread')}
+                      </h2>
+                      <label for="thread-title">{text('Temat', 'Subject')}</label>
+                      <input id="thread-title" bind:value={title} required />
+                      <label for="thread-vis">{text('Widoczność', 'Visibility')}</label>
+                      <Dropdown
+                        id="thread-vis"
+                        label={text('Widoczność', 'Visibility')}
+                        bind:value={visibility}
+                        options={[
+                          {
+                            value: 'association',
+                            label: text('Członkowie koła', 'Association members')
+                          },
+                          ...(scope
+                            ? [
+                                {
+                                  value: 'members',
+                                  label: text('Członkowie projektu', 'Project members')
+                                }
+                              ]
+                            : []),
+                          { value: 'leaders', label: text('Liderzy', 'Leaders') }
+                        ]}
+                      />
+
+                      <Editor {language} bind:value={markdown} />
+                      <button
+                        class="btn"
+                        disabled={busy || !title.trim()}
+                        onclick={() => action(create)}
+                        style="margin-top: 12px;"
+                      >
+                        {text('Utwórz wątek', 'Create thread')}
+                      </button>
+                    </div>
+                  {/if}
+
+                  <!-- ── PROFILE ────────────────────────────────────────────────────── -->
+                {:else if tab === 'profile'}
+                  <form
+                    class="profile-form"
+                    onsubmit={(event) => {
+                      event.preventDefault();
+                      void saveProfile();
+                    }}
+                    oninput={() => (profileSaved = false)}
+                  >
+                    <div class="workspace-header">
+                      <div>
+                        <h1>{text('Profil', 'Profile')}</h1>
+                        <p class="workspace-description">
+                          {text(
+                            'Przedstaw się członkom koła i zdecyduj, co pokażesz publicznie.',
+                            'Introduce yourself to the association and choose what to share publicly.'
+                          )}
+                        </p>
+                      </div>
+                      <div class="profile-save">
+                        <span role="status"
+                          >{#if profileSaved}<Check size={15} aria-hidden="true" />{text(
+                              'Zapisano',
+                              'Saved'
+                            )}{/if}</span
+                        ><button class="btn" disabled={busy}
+                          ><Save size={16} aria-hidden="true" />{text(
+                            'Zapisz zmiany',
+                            'Save changes'
+                          )}</button
+                        >
+                      </div>
+                    </div>
+                    <div class="profile-grid">
+                      <section
+                        class="profile-section profile-identity"
+                        aria-labelledby="identity-heading"
+                      >
+                        <div class="section-heading">
+                          <UserRound size={18} aria-hidden="true" />
+                          <h2 id="identity-heading">{text('O Tobie', 'About you')}</h2>
+                        </div>
+                        <div class="profile-fields">
+                          <div>
+                            <label for="p-first">{text('Imię', 'First name')}</label><input
+                              id="p-first"
+                              bind:value={profile.firstName}
+                              required
+                            />
+                          </div>
+                          <div>
+                            <label for="p-last">{text('Nazwisko', 'Last name')}</label><input
+                              id="p-last"
+                              bind:value={profile.lastName}
+                            />
+                          </div>
+                          <div class="field-wide">
+                            <label for="p-nick">{text('Pseudonim', 'Nickname')}</label><input
+                              id="p-nick"
+                              bind:value={profile.nickname}
+                              placeholder={text(
+                                'Jak możemy Cię nazywać?',
+                                'What should we call you?'
+                              )}
+                            />
+                          </div>
+                          <div class="field-wide">
+                            <label for="p-bio"
+                              >{text('Kilka słów o sobie', 'A little about you')}</label
+                            ><textarea
+                              id="p-bio"
+                              bind:value={profile.bio}
+                              placeholder={text(
+                                'Zainteresowania, projekty i rzeczy, które lubisz robić…',
+                                'Interests, projects, and things you enjoy…'
+                              )}
+                            ></textarea>
+                          </div>
+                        </div>
+                      </section>
+                      <section
+                        class="profile-section profile-preview"
+                        aria-labelledby="preview-heading"
+                      >
+                        <div class="section-heading">
+                          <Shield size={18} aria-hidden="true" />
+                          <h2 id="preview-heading">{text('Profil publiczny', 'Public profile')}</h2>
+                        </div>
+                        <div class="profile-preview-card">
+                          {#if profile.image}<img
+                              src={profile.image}
+                              alt=""
+                              class="profile-avatar"
+                            />{:else}<span class="profile-avatar"
+                              >{`${profile.firstName?.[0] ?? ''}${profile.lastName?.[0] ?? ''}`.toUpperCase() ||
+                                'K'}</span
+                            >{/if}<strong>{publicName}</strong>
+                          <p>
+                            {profile.bio ||
+                              text(
+                                'Twój publiczny profil na stronie KSI.',
+                                'Your public profile on the KSI website.'
+                              )}
+                          </p>
+                        </div>
+                        <label for="p-priv"
+                          >{text('Widoczność imienia i nazwiska', 'Name visibility')}</label
+                        >
+                        <Dropdown
+                          id="p-priv"
+                          label={text('Widoczność imienia i nazwiska', 'Name visibility')}
+                          value={profile.publicPrivacy}
+                          options={privacyOptions}
+                          onselect={(value) => {
+                            profile.publicPrivacy = value as Profile['publicPrivacy'];
+                            profileSaved = false;
+                          }}
+                        />
+                        <p class="field-help">
+                          {text(
+                            'Dotyczy strony publicznej. W dashboardzie członkowie widzą pełne imię i nazwisko.',
+                            'Applies to the public website. Members see your full name in the dashboard.'
+                          )}
+                        </p>
+                      </section>
+                      <section
+                        class="profile-section profile-links"
+                        aria-labelledby="links-heading"
+                      >
+                        <div class="section-heading">
+                          <ArrowUpRight size={18} aria-hidden="true" />
+                          <h2 id="links-heading">
+                            {text('Znajdź mnie w sieci', 'Find me online')}
+                          </h2>
+                        </div>
+                        <div class="profile-fields">
+                          <div>
+                            <label for="p-gh"><Github size={14} aria-hidden="true" />GitHub</label
+                            ><input
+                              id="p-gh"
+                              type="url"
+                              bind:value={profile.github}
+                              placeholder="https://github.com/…"
+                            />
+                          </div>
+                          <div>
+                            <label for="p-li"
+                              ><Linkedin size={14} aria-hidden="true" />LinkedIn</label
+                            ><input
+                              id="p-li"
+                              type="url"
+                              bind:value={profile.linkedin}
+                              placeholder="https://linkedin.com/in/…"
+                            />
+                          </div>
+                        </div>
+                      </section>
+                    </div>
+                  </form>
+                  <section class="profile-section account-danger">
+                    <details>
+                      <summary
+                        ><Trash2 size={17} aria-hidden="true" />{text(
+                          'Usuń konto',
+                          'Delete account'
+                        )}<ChevronDown size={15} aria-hidden="true" /></summary
+                      >
+                      <p class="field-help">
+                        {text(
+                          'Profil zostanie zanonimizowany. Treści pozostają własnością koła.',
+                          'Your profile will be anonymized. Association content remains.'
+                        )}
+                      </p>
+                      <button
+                        class="btn btn-outline danger-button"
+                        disabled={busy}
+                        onclick={() =>
+                          action(async () => {
+                            await api('/users/me', 'DELETE');
+                            location.reload();
+                          })}
+                        >{text('Potwierdzam usunięcie konta', 'Confirm account deletion')}</button
+                      >
+                    </details>
+                  </section>
+
+                  <!-- ── USERS (admin/board) ────────────────────────────────────────── -->
+                {:else if tab === 'users'}
+                  <div class="workspace-header">
+                    <div>
+                      <h1>{text('Członkowie', 'Members')}</h1>
+                    </div>
+                  </div>
+
+                  <div class="table-wrap">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>{text('Osoba', 'Person')}</th>
+                          <th>Status</th>
+                          <th>{text('Rola', 'Role')}</th>
+                          <th>{text('Działania', 'Actions')}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {#each members as member (member.id)}
+                          <tr>
+                            <td>
+                              <strong>{member.firstName || member.name} {member.lastName}</strong>
+                              <br />
+                              <small
+                                style="font-family: var(--mono); font-size: 10px; color: var(--muted);"
+                                >{member.id}</small
+                              >
+                            </td>
+                            <td>
+                              <span
+                                class="tag {member.membershipStatus === 'active'
+                                  ? 'tag-mint'
+                                  : member.membershipStatus === 'suspended'
+                                    ? 'tag-coral'
+                                    : ''}">{member.membershipStatus}</span
+                              >
+                            </td>
+                            <td>
+                              <span
+                                class="tag {member.role === 'administrator' ? 'tag-lavender' : ''}"
+                                >{member.role}</span
+                              >
+                            </td>
+                            <td>
+                              <button
+                                disabled={busy}
+                                onclick={() =>
+                                  action(() =>
+                                    api(`/users/${member.id}/access`, 'PATCH', {
+                                      membershipStatus: 'active'
+                                    })
+                                  )}
+                              >
+                                {text('Aktywuj', 'Activate')}
+                              </button>
+                              {#if data.user.role === 'administrator'}
+                                <Dropdown
+                                  variant="compact"
+                                  label={text('Rola członka', 'Member role')}
+                                  value={member.role}
+                                  disabled={busy}
+                                  options={[
+                                    { value: 'member', label: text('Członek', 'Member') },
+                                    { value: 'board', label: text('Zarząd', 'Board') },
+                                    {
+                                      value: 'administrator',
+                                      label: text('Administrator', 'Administrator')
+                                    }
+                                  ]}
+                                  onselect={(role) =>
+                                    action(() =>
+                                      api(`/users/${member.id}/access`, 'PATCH', { role })
+                                    )}
+                                />
+
+                                <button
+                                  disabled={busy}
+                                  style="color: var(--danger);"
+                                  onclick={() =>
+                                    action(() =>
+                                      api(`/users/${member.id}/access`, 'PATCH', {
+                                        membershipStatus: 'suspended'
+                                      })
+                                    )}
+                                >
+                                  {text('Zawieś', 'Suspend')}
+                                </button>
+                              {/if}
+                            </td>
+                          </tr>
+                        {/each}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <!-- ── EVENTS ─────────────────────────────────────────────────────── -->
+                {:else if tab === 'events'}
+                  <div class="workspace-header">
+                    <div>
+                      <h1>{text('Aktywność', 'Activity')}</h1>
+                    </div>
+                  </div>
+                  {#each events as event (event.id)}
+                    <div class="event-item">
+                      <time datetime={event.createdAt}
+                        >{new Date(event.createdAt).toLocaleString(
+                          language === 'pl' ? 'pl-PL' : 'en-GB'
+                        )}</time
+                      >
+                      <span>{event.action}</span>
+                    </div>
+                  {/each}
+                  {#if !events.length}
+                    <p class="muted" style="margin-top: 20px;">
+                      {text('Brak aktywności.', 'No activity yet.')}
+                    </p>
+                  {/if}
+
+                  <!-- ── CREATE PROJECT (board/admin only) ──────────────────────────── -->
+                {:else if tab === '__create_project__'}
+                  <div class="workspace-header">
+                    <div>
+                      <h1>{text('Nowy projekt', 'New project')}</h1>
+                    </div>
+                    <button onclick={() => changeTab('projects')} style="font-size: 13px;">
+                      <ArrowLeft size={15} aria-hidden="true" />{text('Wróć', 'Back')}
+                    </button>
+                  </div>
+                  <div class="card" style="max-width: 600px;">
+                    <label for="cp-title">{text('Nazwa', 'Name')}</label>
+                    <input id="cp-title" bind:value={title} required />
+                    <label for="cp-slug">Slug</label>
+                    <input id="cp-slug" bind:value={slug} />
+                    <label for="cp-leaders"
+                      >{text('ID liderów (po przecinku)', 'Leader IDs (comma-separated)')}</label
+                    >
+                    <input id="cp-leaders" bind:value={leaderIds} placeholder={data.user.id} />
+                    <label for="cp-desc">{text('Opis', 'Description')}</label>
+                    <Editor {language} bind:value={markdown} />
                     <button
                       class="btn"
                       disabled={busy || !title.trim()}
                       onclick={() => action(create)}
+                      style="margin-top: 12px;"
                     >
-                      {text('Utwórz', 'Create')}
+                      {text('Utwórz projekt', 'Create project')}
                     </button>
-                  {/if}
-                </div>
-              </div>
-            {/if}
-
-            <!-- ── BOARD ─────────────────────────────────────────────────────── -->
-          {:else if tab === 'board'}
-            <div class="workspace-header">
-              <h1>
-                {graveyard
-                  ? text('Usunięte zadania', 'Removed tasks')
-                  : text('Tablica zadań', 'Task board')}
-              </h1>
-              {#if graveyard}
-                <a
-                  class="btn btn-outline"
-                  href={dashboardPath(workspace, projectSlug, 'board')}
-                  onclick={guardNavigation}
-                  ><ArrowLeft size={15} aria-hidden="true" />{text(
-                    'Wróć do tablicy',
-                    'Back to board'
-                  )}</a
-                >
-              {:else}
-                <a
-                  class="btn btn-outline"
-                  href={`${dashboardPath(workspace, projectSlug, 'board')}/graveyard`}
-                  onclick={guardNavigation}
-                  ><Trash2 size={15} aria-hidden="true" />{text(
-                    'Usunięte zadania',
-                    'Removed tasks'
-                  )}</a
-                >
+                  </div>
+                {/if}
               {/if}
-            </div>
-            {#if graveyard}
-              <div class="graveyard-notice">
-                <Archive size={18} aria-hidden="true" />
-                <p>
-                  {text(
-                    'Usunięte zadania są zachowane tutaj. Liderzy mogą przywrócić je do poprzedniej kolumny.',
-                    'Removed tasks are kept here. Leaders can restore them to their previous column.'
-                  )}
-                </p>
-              </div>
-              <div class="graveyard-list">
-                {#each items as item (item.id)}
-                  <article class="removed-task">
-                    <div class="removed-task-info">
-                      <h2>{item.title}</h2>
-                      <p>{item.markdown.slice(0, 180)}</p>
-                      <span class="tag">{columnDefs.find(([key]) => key === item.column)?.[1]}</span
-                      >
-                      {#if item.deletedAt}<time datetime={item.deletedAt}
-                          >{new Date(item.deletedAt).toLocaleDateString(
-                            language === 'pl' ? 'pl-PL' : 'en-GB'
-                          )}</time
-                        >{/if}
-                    </div>
-                    <button
-                      class="btn btn-outline"
-                      disabled={busy}
-                      onclick={() =>
-                        action(() =>
-                          api(`/platform/items/${item.id}/restore`, 'POST', {
-                            version: item.version
-                          })
-                        )}
-                      ><RotateCcw size={15} aria-hidden="true" />{text(
-                        'Przywróć',
-                        'Restore'
-                      )}</button
-                    >
-                  </article>
-                {/each}
-                {#if !loading && !items.length && !error}<div class="empty-state">
-                    <Trash2 size={28} strokeWidth={1.4} aria-hidden="true" />
-                    <h2>{text('Brak usuniętych zadań', 'No removed tasks')}</h2>
-                    <p>
-                      {text(
-                        'Zadania usunięte z tablicy pojawią się tutaj.',
-                        'Tasks removed from the board will appear here.'
-                      )}
-                    </p>
-                  </div>{/if}
-              </div>
-            {:else}
-              <div class="board">
-                {#each columnDefs as [column, label] (column)}
-                  <section class="board-column" aria-label={label}>
-                    <div class="column-header">
-                      <span class="column-label"
-                        ><span class={`column-dot ${column}`}></span>{label}<span
-                          class="column-count"
-                          >{items.filter((item) => item.column === column).length}</span
-                        ></span
-                      >
-                      <button
-                        id={`add-${column}`}
-                        type="button"
-                        class="icon-button"
-                        aria-label={`${text('Dodaj zadanie do', 'Add task to')} ${label}`}
-                        disabled={busy}
-                        onclick={() => openTaskComposer(column)}
-                        ><Plus size={17} aria-hidden="true" /></button
-                      >
-                    </div>
-                    <div class="column-items">
-                      {#each items.filter((item) => item.column === column) as item (item.id)}
-                        <article class="kanban-card">
-                          <strong>{item.title}</strong>
-                          {#if item.markdown}<p>
-                              {item.markdown.slice(0, 120)}{item.markdown.length > 120 ? '…' : ''}
-                            </p>{/if}
-                          <div class="kanban-card-actions">
-                            <Dropdown
-                              variant="compact"
-                              label={text('Przenieś zadanie', 'Move task')}
-                              value={item.column}
-                              options={columnOptions}
-                              disabled={busy}
-                              onselect={(column) =>
-                                action(() =>
-                                  api(`/platform/items/${item.id}`, 'PATCH', {
-                                    version: item.version,
-                                    column
-                                  })
-                                )}
-                            />
-                            <button
-                              class="icon-button danger-button"
-                              aria-label={`${text('Usuń zadanie', 'Remove task')}: ${item.title}`}
-                              disabled={busy}
-                              onclick={() =>
-                                action(() =>
-                                  api(`/platform/items/${item.id}`, 'DELETE', {
-                                    version: item.version
-                                  })
-                                )}><Trash2 size={15} aria-hidden="true" /></button
-                            >
-                          </div>
-                        </article>
-                      {/each}
-                    </div>
-                    {#if composer && taskColumn === column}
-                      <form
-                        class="column-composer"
-                        onsubmit={(event) => {
-                          event.preventDefault();
-                          void action(create);
-                        }}
-                      >
-                        <label for="task-title" class="sr-only"
-                          >{text('Tytuł zadania', 'Task title')}</label
-                        >
-                        <input
-                          id="task-title"
-                          bind:value={title}
-                          placeholder={text('Co trzeba zrobić?', 'What needs to be done?')}
-                          required
-                        />
-                        <Editor bind:value={markdown} />
-                        <div class="composer-actions">
-                          <button class="btn" disabled={busy || !title.trim()}
-                            ><Plus size={15} aria-hidden="true" />{text(
-                              'Dodaj zadanie',
-                              'Add task'
-                            )}</button
-                          >
-                          <button
-                            class="icon-button"
-                            type="button"
-                            aria-label={text('Anuluj dodawanie zadania', 'Cancel task creation')}
-                            disabled={busy}
-                            onclick={() => {
-                              composer = false;
-                              document.getElementById(`add-${column}`)?.focus();
-                            }}><X size={17} aria-hidden="true" /></button
-                          >
-                        </div>
-                      </form>
-                    {:else}
-                      <button
-                        class="column-add"
-                        disabled={busy}
-                        onclick={() => openTaskComposer(column)}
-                        ><Plus size={16} aria-hidden="true" />{text(
-                          'Dodaj zadanie',
-                          'Add task'
-                        )}</button
-                      >
-                    {/if}
-                  </section>
-                {/each}
-              </div>
-            {/if}
-
-            <!-- ── FORUM ─────────────────────────────────────────────────────── -->
-          {:else if tab === 'forum'}
-            <div class="workspace-header">
-              <div>
-                <h1>Forum</h1>
-              </div>
-              <div class="row">
-                <button
-                  class="btn"
-                  disabled={busy}
-                  onclick={async () => {
-                    title = '';
-                    markdown = '';
-                    selectedThread = null;
-                    composer = true;
-                    await tick();
-                    document.getElementById('thread-title')?.focus();
-                  }}><Plus size={16} aria-hidden="true" />{text('Nowy wątek', 'New thread')}</button
-                >
-                <label
-                  style="display: flex; align-items: center; gap: 6px; font-size: 12px; text-transform: none; letter-spacing: 0; color: var(--muted); cursor: pointer;"
-                >
-                  <input type="checkbox" bind:checked={archived} onchange={() => void load()} />
-                  {text('Archiwum', 'Archive')}
-                </label>
-              </div>
-            </div>
-
-            {#each threads as thread (thread.id)}
-              <div
-                class="list-strip"
-                role="button"
-                tabindex="0"
-                onclick={() =>
-                  action(async () => {
-                    selectedThread = await api(`/platform/threads/${thread.id}`);
-                  })}
-                onkeydown={(e) =>
-                  e.key === 'Enter' &&
-                  action(async () => {
-                    selectedThread = await api(`/platform/threads/${thread.id}`);
-                  })}
-              >
-                <div class="list-strip-info">
-                  <h3>{thread.title}</h3>
-                  <div class="list-strip-meta">{thread.visibility}</div>
-                </div>
-                <span class="tag">{thread.visibility}</span>
-              </div>
-            {/each}
-
-            {#if selectedThread}
-              <div class="card" style="margin-top: 16px;">
-                <h2 style="font-size: 1.1rem; margin-bottom: 12px;">{selectedThread.title}</h2>
-                {#each selectedThread.comments ?? [] as comment (comment.id)}
-                  <div
-                    style="border-top: 1px solid var(--line); padding: 12px 0; font-size: 13px; white-space: pre-wrap;"
-                  >
-                    {comment.markdown}
-                  </div>
-                {/each}
-                <div style="margin-top: 16px; display: grid; gap: 8px;">
-                  <label for="reply-md">{text('Odpowiedź', 'Reply')}</label>
-                  <Editor bind:value={markdown} />
-                  <div class="row" style="gap: 8px;">
-                    <button
-                      class="btn"
-                      disabled={busy}
-                      onclick={() =>
-                        action(() =>
-                          api(`/platform/threads/${selectedThread!.id}/comments`, 'POST', {
-                            markdown
-                          })
-                        )}
-                    >
-                      {text('Dodaj odpowiedź', 'Reply')}
-                    </button>
-                    <button
-                      disabled={busy}
-                      onclick={() =>
-                        action(() =>
-                          api(`/platform/threads/${selectedThread!.id}/archive`, 'POST', {
-                            version: selectedThread!.version,
-                            archived: !archived
-                          })
-                        )}
-                    >
-                      {text('Archiwizuj / przywróć', 'Archive / restore')}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            {/if}
-
-            <!-- New thread form -->
-            {#if composer}
-              <div class="card" style="margin-top: 20px;">
-                <h2 style="font-size: 1rem; margin-bottom: 14px;">
-                  {text('Nowy wątek', 'New thread')}
-                </h2>
-                <label for="thread-title">{text('Temat', 'Subject')}</label>
-                <input id="thread-title" bind:value={title} required />
-                <label for="thread-vis">{text('Widoczność', 'Visibility')}</label>
-                <Dropdown
-                  id="thread-vis"
-                  label={text('Widoczność', 'Visibility')}
-                  bind:value={visibility}
-                  options={[
-                    { value: 'association', label: text('Członkowie koła', 'Association members') },
-                    ...(scope
-                      ? [
-                          {
-                            value: 'members',
-                            label: text('Członkowie projektu', 'Project members')
-                          }
-                        ]
-                      : []),
-                    { value: 'leaders', label: text('Liderzy', 'Leaders') }
-                  ]}
-                />
-
-                <Editor bind:value={markdown} />
-                <button
-                  class="btn"
-                  disabled={busy || !title.trim()}
-                  onclick={() => action(create)}
-                  style="margin-top: 12px;"
-                >
-                  {text('Utwórz wątek', 'Create thread')}
-                </button>
-              </div>
-            {/if}
-
-            <!-- ── PROFILE ────────────────────────────────────────────────────── -->
-          {:else if tab === 'profile'}
-            <form
-              class="profile-form"
-              onsubmit={(event) => {
-                event.preventDefault();
-                void saveProfile();
-              }}
-              oninput={() => (profileSaved = false)}
-            >
-              <div class="workspace-header">
-                <div>
-                  <h1>{text('Profil', 'Profile')}</h1>
-                  <p class="workspace-description">
-                    {text(
-                      'Przedstaw się członkom koła i zdecyduj, co pokażesz publicznie.',
-                      'Introduce yourself to the association and choose what to share publicly.'
-                    )}
-                  </p>
-                </div>
-                <div class="profile-save">
-                  <span role="status"
-                    >{#if profileSaved}<Check size={15} aria-hidden="true" />{text(
-                        'Zapisano',
-                        'Saved'
-                      )}{/if}</span
-                  ><button class="btn" disabled={busy}
-                    ><Save size={16} aria-hidden="true" />{text(
-                      'Zapisz zmiany',
-                      'Save changes'
-                    )}</button
-                  >
-                </div>
-              </div>
-              <div class="profile-grid">
-                <section
-                  class="profile-section profile-identity"
-                  aria-labelledby="identity-heading"
-                >
-                  <div class="section-heading">
-                    <UserRound size={18} aria-hidden="true" />
-                    <h2 id="identity-heading">{text('O Tobie', 'About you')}</h2>
-                  </div>
-                  <div class="profile-fields">
-                    <div>
-                      <label for="p-first">{text('Imię', 'First name')}</label><input
-                        id="p-first"
-                        bind:value={profile.firstName}
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label for="p-last">{text('Nazwisko', 'Last name')}</label><input
-                        id="p-last"
-                        bind:value={profile.lastName}
-                      />
-                    </div>
-                    <div class="field-wide">
-                      <label for="p-nick">{text('Pseudonim', 'Nickname')}</label><input
-                        id="p-nick"
-                        bind:value={profile.nickname}
-                        placeholder={text('Jak możemy Cię nazywać?', 'What should we call you?')}
-                      />
-                    </div>
-                    <div class="field-wide">
-                      <label for="p-bio">{text('Kilka słów o sobie', 'A little about you')}</label
-                      ><textarea
-                        id="p-bio"
-                        bind:value={profile.bio}
-                        placeholder={text(
-                          'Zainteresowania, projekty i rzeczy, które lubisz robić…',
-                          'Interests, projects, and things you enjoy…'
-                        )}
-                      ></textarea>
-                    </div>
-                  </div>
-                </section>
-                <section class="profile-section profile-preview" aria-labelledby="preview-heading">
-                  <div class="section-heading">
-                    <Shield size={18} aria-hidden="true" />
-                    <h2 id="preview-heading">{text('Profil publiczny', 'Public profile')}</h2>
-                  </div>
-                  <div class="profile-preview-card">
-                    {#if profile.image}<img
-                        src={profile.image}
-                        alt=""
-                        class="profile-avatar"
-                      />{:else}<span class="profile-avatar"
-                        >{`${profile.firstName?.[0] ?? ''}${profile.lastName?.[0] ?? ''}`.toUpperCase() ||
-                          'K'}</span
-                      >{/if}<strong>{publicName}</strong>
-                    <p>
-                      {profile.bio ||
-                        text(
-                          'Twój publiczny profil na stronie KSI.',
-                          'Your public profile on the KSI website.'
-                        )}
-                    </p>
-                  </div>
-                  <label for="p-priv"
-                    >{text('Widoczność imienia i nazwiska', 'Name visibility')}</label
-                  >
-                  <Dropdown
-                    id="p-priv"
-                    label={text('Widoczność imienia i nazwiska', 'Name visibility')}
-                    value={profile.publicPrivacy}
-                    options={privacyOptions}
-                    onselect={(value) => {
-                      profile.publicPrivacy = value as Profile['publicPrivacy'];
-                      profileSaved = false;
-                    }}
-                  />
-                  <p class="field-help">
-                    {text(
-                      'Dotyczy strony publicznej. W dashboardzie członkowie widzą pełne imię i nazwisko.',
-                      'Applies to the public website. Members see your full name in the dashboard.'
-                    )}
-                  </p>
-                </section>
-                <section class="profile-section profile-links" aria-labelledby="links-heading">
-                  <div class="section-heading">
-                    <ArrowUpRight size={18} aria-hidden="true" />
-                    <h2 id="links-heading">{text('Znajdź mnie w sieci', 'Find me online')}</h2>
-                  </div>
-                  <div class="profile-fields">
-                    <div>
-                      <label for="p-gh"><Github size={14} aria-hidden="true" />GitHub</label><input
-                        id="p-gh"
-                        type="url"
-                        bind:value={profile.github}
-                        placeholder="https://github.com/…"
-                      />
-                    </div>
-                    <div>
-                      <label for="p-li"><Linkedin size={14} aria-hidden="true" />LinkedIn</label
-                      ><input
-                        id="p-li"
-                        type="url"
-                        bind:value={profile.linkedin}
-                        placeholder="https://linkedin.com/in/…"
-                      />
-                    </div>
-                  </div>
-                </section>
-              </div>
-            </form>
-            <section class="profile-section account-danger">
-              <details>
-                <summary
-                  ><Trash2 size={17} aria-hidden="true" />{text(
-                    'Usuń konto',
-                    'Delete account'
-                  )}<ChevronDown size={15} aria-hidden="true" /></summary
-                >
-                <p class="field-help">
-                  {text(
-                    'Profil zostanie zanonimizowany. Treści pozostają własnością koła.',
-                    'Your profile will be anonymized. Association content remains.'
-                  )}
-                </p>
-                <button
-                  class="btn btn-outline danger-button"
-                  disabled={busy}
-                  onclick={() =>
-                    action(async () => {
-                      await api('/users/me', 'DELETE');
-                      location.reload();
-                    })}>{text('Potwierdzam usunięcie konta', 'Confirm account deletion')}</button
-                >
-              </details>
-            </section>
-
-            <!-- ── USERS (admin/board) ────────────────────────────────────────── -->
-          {:else if tab === 'users'}
-            <div class="workspace-header">
-              <div>
-                <h1>{text('Członkowie', 'Members')}</h1>
-              </div>
-            </div>
-
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>{text('Osoba', 'Person')}</th>
-                    <th>Status</th>
-                    <th>{text('Rola', 'Role')}</th>
-                    <th>{text('Działania', 'Actions')}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {#each members as member (member.id)}
-                    <tr>
-                      <td>
-                        <strong>{member.firstName || member.name} {member.lastName}</strong>
-                        <br />
-                        <small
-                          style="font-family: var(--mono); font-size: 10px; color: var(--muted);"
-                          >{member.id}</small
-                        >
-                      </td>
-                      <td>
-                        <span
-                          class="tag {member.membershipStatus === 'active'
-                            ? 'tag-mint'
-                            : member.membershipStatus === 'suspended'
-                              ? 'tag-coral'
-                              : ''}">{member.membershipStatus}</span
-                        >
-                      </td>
-                      <td>
-                        <span class="tag {member.role === 'administrator' ? 'tag-lavender' : ''}"
-                          >{member.role}</span
-                        >
-                      </td>
-                      <td>
-                        <button
-                          disabled={busy}
-                          onclick={() =>
-                            action(() =>
-                              api(`/users/${member.id}/access`, 'PATCH', {
-                                membershipStatus: 'active'
-                              })
-                            )}
-                        >
-                          {text('Aktywuj', 'Activate')}
-                        </button>
-                        {#if data.user.role === 'administrator'}
-                          <Dropdown
-                            variant="compact"
-                            label={text('Rola członka', 'Member role')}
-                            value={member.role}
-                            disabled={busy}
-                            options={[
-                              { value: 'member', label: text('Członek', 'Member') },
-                              { value: 'board', label: text('Zarząd', 'Board') },
-                              {
-                                value: 'administrator',
-                                label: text('Administrator', 'Administrator')
-                              }
-                            ]}
-                            onselect={(role) =>
-                              action(() => api(`/users/${member.id}/access`, 'PATCH', { role }))}
-                          />
-
-                          <button
-                            disabled={busy}
-                            style="color: var(--danger);"
-                            onclick={() =>
-                              action(() =>
-                                api(`/users/${member.id}/access`, 'PATCH', {
-                                  membershipStatus: 'suspended'
-                                })
-                              )}
-                          >
-                            {text('Zawieś', 'Suspend')}
-                          </button>
-                        {/if}
-                      </td>
-                    </tr>
-                  {/each}
-                </tbody>
-              </table>
-            </div>
-
-            <!-- ── EVENTS ─────────────────────────────────────────────────────── -->
-          {:else if tab === 'events'}
-            <div class="workspace-header">
-              <div>
-                <h1>{text('Aktywność', 'Activity')}</h1>
-              </div>
-            </div>
-            {#each events as event (event.id)}
-              <div class="event-item">
-                <time datetime={event.createdAt}
-                  >{new Date(event.createdAt).toLocaleString(
-                    language === 'pl' ? 'pl-PL' : 'en-GB'
-                  )}</time
-                >
-                <span>{event.action}</span>
-              </div>
-            {/each}
-            {#if !events.length}
-              <p class="muted" style="margin-top: 20px;">
-                {text('Brak aktywności.', 'No activity yet.')}
-              </p>
-            {/if}
-
-            <!-- ── CREATE PROJECT (board/admin only) ──────────────────────────── -->
-          {:else if tab === '__create_project__'}
-            <div class="workspace-header">
-              <div>
-                <h1>{text('Nowy projekt', 'New project')}</h1>
-              </div>
-              <button onclick={() => changeTab('projects')} style="font-size: 13px;">
-                <ArrowLeft size={15} aria-hidden="true" />{text('Wróć', 'Back')}
-              </button>
-            </div>
-            <div class="card" style="max-width: 600px;">
-              <label for="cp-title">{text('Nazwa', 'Name')}</label>
-              <input id="cp-title" bind:value={title} required />
-              <label for="cp-slug">Slug</label>
-              <input id="cp-slug" bind:value={slug} />
-              <label for="cp-leaders"
-                >{text('ID liderów (po przecinku)', 'Leader IDs (comma-separated)')}</label
-              >
-              <input id="cp-leaders" bind:value={leaderIds} placeholder={data.user.id} />
-              <label for="cp-desc">{text('Opis', 'Description')}</label>
-              <Editor bind:value={markdown} />
-              <button
-                class="btn"
-                disabled={busy || !title.trim()}
-                onclick={() => action(create)}
-                style="margin-top: 12px;"
-              >
-                {text('Utwórz projekt', 'Create project')}
-              </button>
-            </div>
-          {/if}
+            </div>{/key}
         {/if}
       </main>
     </div>
