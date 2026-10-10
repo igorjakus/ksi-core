@@ -40,8 +40,8 @@
         The reliable route is back to the association — and room 24 at the Institute of Computer
         Science is always worth finding.
       </p>
-      <a href="/" class="btn btn-primary btn-clipped mt-10 gap-2 px-6">
-        <ArrowLeft class="size-4" /> Return home
+      <a href="/" class="group btn btn-primary mt-10 gap-2 px-6">
+        <ArrowLeft class="size-4 transition-transform group-hover:-translate-x-0.5" /> Return home
       </a>
     </div>
   </div>

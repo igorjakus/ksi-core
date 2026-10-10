@@ -98,26 +98,6 @@
   @apply py-12 md:py-20 lg:py-24;
 }
 
-.btn-clipped {
-  --cut: 14px;
-  position: relative !important;
-  border: none !important;
-  isolation: isolate;
-
-  clip-path: polygon(
-    0 0,
-    100% 0,
-    100% calc(100% - var(--cut)),
-    calc(100% - var(--cut)) 100%,
-    0 100%
-  );
-
-  transition:
-    clip-path 0.18s ease-out,
-    background-color 0.18s ease,
-    color 0.18s ease;
-}
-
 .clipped {
   --cut: 28px;
   position: relative !important;
@@ -130,26 +110,6 @@
     calc(100% - var(--cut)) 100%,
     0 100%
   );
-}
-
-.btn-xs {
-  --cut: 6px;
-}
-.btn-sm {
-  --cut: 10px;
-}
-.btn-md {
-  --cut: 14px;
-}
-.btn-lg {
-  --cut: 18px;
-}
-.btn-xl {
-  --cut: 22px;
-}
-
-.btn-clipped:hover {
-  clip-path: polygon(0 0, 100% 0, 100% 100%, 100% 100%, 0 100%);
 }
 
 .noise {

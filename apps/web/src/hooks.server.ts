@@ -1,30 +1,35 @@
-import type { Handle } from '@sveltejs/kit';
+import { redirect, type Handle } from '@sveltejs/kit';
+import { env } from '$env/dynamic/private';
 import { locales } from './locales/data.js';
-import { getUrls } from 'shared';
-
+import { backendFetch, startSso, sessionCookie } from 'shared/server';
 export const handle: Handle = async ({ event, resolve }) => {
-  try {
-    const res = await event.fetch(`${getUrls().backend}/auth/get-session`, {
-      headers: { cookie: event.request.headers.get('cookie') ?? '' }
-    });
-    if (res.ok) {
-      const data = await res.json();
-      event.locals.session = data?.session ?? null;
-      event.locals.user = data?.user ?? null;
-    } else {
-      event.locals.session = null;
-      event.locals.user = null;
+  event.locals.user = null;
+  event.locals.session = null;
+  if (env.PROXY_SECRET && event.cookies.get(sessionCookie(env))) {
+    try {
+      const res = await backendFetch(event, env, '/sso/session');
+      if (res.ok) {
+        const { user } = await res.json();
+        event.locals.user = user;
+        event.locals.session = user ? { id: user.id } : null;
+      }
+    } catch {
+      /* public pages remain available */
     }
-  } catch {
-    event.locals.session = null;
-    event.locals.user = null;
   }
-
+  if (
+    env.PROXY_SECRET &&
+    !event.locals.user &&
+    !event.cookies.get('ksi-sso-probed') &&
+    event.request.method === 'GET' &&
+    event.request.headers.get('accept')?.includes('text/html') &&
+    !/^\/(api|sso|login|logout)(\/|$)/.test(event.url.pathname)
+  )
+    redirect(303, startSso(event, env, event.url.pathname + event.url.search, true));
   const cookieLocale = event.cookies.get('locale');
   const locale =
-    cookieLocale && (locales as readonly string[]).includes(cookieLocale) ? cookieLocale : 'en';
-
-  return await resolve(event, {
+    cookieLocale && (locales as readonly string[]).includes(cookieLocale) ? cookieLocale : 'pl';
+  return resolve(event, {
     transformPageChunk: ({ html }) => html.replace('%paraglide.lang%', locale)
   });
 };

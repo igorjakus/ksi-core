@@ -28,7 +28,9 @@
       "./src/*/index.ts"
     ],
     "./styles.css": "./styles.css",
-    "./dark.css": "./dark.css"
+    "./dark.css": "./dark.css",
+    "./platform/*": "./src/lib/platform/*",
+    "./platform.css": "./platform.css"
   },
   "scripts": {
     "dev": "vite dev",
@@ -49,7 +51,7 @@
     "svelte": "^5.56.1",
     "svelte-check": "^4.6.0",
     "tailwindcss": "^4.3.0",
-    "typescript": "^7.0.2",
+    "typescript": "6.0.2",
     "vite": "^8.0.16"
   },
   "peerDependencies": {

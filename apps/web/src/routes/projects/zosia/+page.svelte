@@ -20,8 +20,10 @@
         Three days of ideas, mountain air, and people who share your curiosity. Nearly 300 students,
         researchers, and technology professionals come together beyond the lecture hall.
       </p>
-      <a href="#editions" class="btn btn-primary btn-clipped mt-8 gap-3 px-6"
-        >Explore the editions <ArrowDown class="size-4" /></a
+      <a href="#editions" class="group btn btn-primary mt-8 gap-3 px-6"
+        >Explore the editions <ArrowDown
+          class="size-4 transition-transform group-hover:translate-y-0.5"
+        /></a
       >
     </div>
     <figure class="border-base-content/20 border p-3">

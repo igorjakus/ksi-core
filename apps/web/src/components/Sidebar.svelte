@@ -16,7 +16,8 @@
     TableProperties,
     Wrench
   } from '@lucide/svelte';
-  import type { User, Session } from '@ksi-core/server/lib/auth.types';
+  import type { Profile as User } from 'shared/types';
+  type Session = { id: string };
   import { authClient } from '../lib/auth-client';
   import { api } from '$lib/backend';
   import { toast } from 'svelte-sonner';
@@ -38,18 +39,7 @@
   let activeLocale = $derived(getActiveLocale());
 
   $effect(() => {
-    if (user !== null) {
-      api.dashboard.user.get().then(async (r) => {
-        if (r.error) {
-          await authClient.signOut();
-          await invalidateAll();
-          toast.error('Access denied.', {
-            id: 'access_denied'
-          });
-          return;
-        }
-      });
-    }
+    $showAdmin = user?.membershipStatus === 'active' && user.role !== 'member';
   });
 
   $effect(() => {
@@ -83,7 +73,7 @@
       <SidebarLink href="/#scientific" icon={FlaskConical}>Scientific research</SidebarLink>
     </SidebarAccordion>
 
-    {#if session !== null}
+    {#if session !== null && user?.membershipStatus === 'active'}
       <div class="border-base-200 mt-2 flex flex-col gap-1 border-t pt-3">
         <div class="bg-base-200/50 flex items-center justify-between rounded-lg px-3 py-2">
           <div class="flex min-w-0 flex-col">
@@ -93,8 +83,8 @@
           <button
             type="button"
             onclick={async () => {
-              const r = await authClient.signOut();
-              if (r.data?.success) {
+              const r = await fetch('/logout', { method: 'POST' });
+              if (r.ok) {
                 toast.success('Logged out');
                 await invalidateAll();
               }
@@ -107,7 +97,7 @@
         </div>
 
         <SidebarAccordion title="Dashboard">
-          <SidebarLink href="/dashboard" icon={Wrench}>Home</SidebarLink>
+          <SidebarLink href="/login" icon={Wrench}>Home</SidebarLink>
           <SidebarLink href="/dashboard/alerts" icon={Megaphone}>Alerts</SidebarLink>
           <SidebarLink href="/dashboard/s3cache" icon={TableProperties}>S3 Cache</SidebarLink>
         </SidebarAccordion>
@@ -154,20 +144,7 @@
       {#if session === null}
         <button
           onclick={() => {
-            authClient.signIn
-              .social({
-                provider: 'discord',
-                callbackURL: getUrls().frontend.landing + '/dashboard'
-              })
-              .catch((error) => {
-                if (error instanceof Error) {
-                  if (/(fetch|network|load failed)/i.test(error.message))
-                    toast.error('Network error when trying to sign in');
-                  else toast.error(`Unknown error occurred (${error.message})`);
-                } else {
-                  toast.error('Unknown error occurred');
-                }
-              });
+            window.location.assign('/login');
           }}
           class="btn btn-md btn-outline text-error ml-auto shrink-0"
           title="Member access"

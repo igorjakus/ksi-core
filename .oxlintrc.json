@@ -1,6 +1,7 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
   "plugins": ["typescript", "oxc"],
+  "ignorePatterns": ["**/.svelte-kit/**", "**/build/**", "**/dist/**", "**/node_modules/**"],
   "options": {
     "typeAware": true,
     "typeCheck": true

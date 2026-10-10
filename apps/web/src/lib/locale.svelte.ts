@@ -13,7 +13,7 @@ function getInitialLocale(): Locale {
       return cookieMatch[1] as Locale;
     }
   }
-  return 'en-us';
+  return 'pl';
 }
 
 export const locale = $state({ current: getInitialLocale() });

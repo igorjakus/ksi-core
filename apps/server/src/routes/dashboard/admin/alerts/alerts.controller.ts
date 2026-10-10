@@ -37,7 +37,7 @@ export default createElysia({
     async ({ db, body, user }) => {
       await db.insert(alerts).values({
         ...body,
-        createdBy: user.id
+        createdBy: user!.id
       });
 
       return status(200, { code: 'CREATED_ALERT' });

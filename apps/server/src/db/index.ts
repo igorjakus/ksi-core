@@ -18,7 +18,10 @@ const relations = defineRelations(schema, (r) => ({
   }
 }));
 
-const createDatabase = () => drizzle(Bun.env.DATABASE_URL!, { relations });
+const createDatabase = () =>
+  drizzle(Bun.env.DATABASE_URL ?? process.env.DATABASE_URL ?? 'postgres://none@localhost/none', {
+    relations
+  });
 
 const globalForDB = globalThis as unknown as {
   db: ReturnType<typeof createDatabase> | undefined;

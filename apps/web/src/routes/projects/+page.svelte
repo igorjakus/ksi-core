@@ -109,8 +109,10 @@
           From a first line of Python to a winter camp in the mountains. We turn shared curiosity
           into things worth making.
         </p>
-        <a href="#project-directory" class="btn btn-primary btn-clipped mt-8 gap-3 px-6">
-          Explore our projects <ArrowDown class="size-4" />
+        <a href="#project-directory" class="group btn btn-primary mt-8 gap-3 px-6">
+          Explore our projects <ArrowDown
+            class="size-4 transition-transform group-hover:translate-y-0.5"
+          />
         </a>
       </header>
 
@@ -254,7 +256,7 @@
             <h3 class="mb-3! text-2xl">No matching projects.</h3>
             <p class="text-base-content/60">Try another search or explore a different field.</p>
             <button
-              class="btn btn-primary btn-clipped mt-6 gap-2"
+              class="btn btn-primary mt-6 gap-2"
               type="button"
               onclick={() => {
                 query = '';
@@ -274,8 +276,10 @@
           </p>
           <h2 class="mb-0! text-2xl md:text-3xl">Your idea could be next.</h2>
         </div>
-        <a href="mailto:ksi@cs.uni.wroc.pl" class="btn btn-primary btn-clipped gap-3 px-6"
-          >Let's build something <ArrowUpRight class="size-4" /></a
+        <a href="mailto:ksi@cs.uni.wroc.pl" class="group btn btn-primary gap-3 px-6"
+          >Let's build something <ArrowUpRight
+            class="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+          /></a
         >
       </div>
     </div>

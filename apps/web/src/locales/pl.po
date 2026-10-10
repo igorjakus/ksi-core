@@ -46,9 +46,8 @@ msgstr "Usunięto alert"
 msgid "Institute of Computer Science, University of Wrocław"
 msgstr "Instytut Informatyki Uniwersytetu Wrocławskiego"
 
-#: src/components/Sidebar.svelte
-msgid "Access denied."
-msgstr "Brak dostępu."
+#~ msgid "Access denied."
+#~ msgstr "Brak dostępu."
 
 #: src/components/Sidebar.svelte
 msgid "Logged in as"
@@ -1159,22 +1158,14 @@ msgstr ""
 msgid "Commit {0}"
 msgstr "Rewizja {0}"
 
-#: src/components/Navbar.svelte
-#: src/components/Sidebar.svelte
-msgid "Unknown error occurred"
-msgstr "Wystąpił nieznany błąd"
+#~ msgid "Unknown error occurred"
+#~ msgstr "Wystąpił nieznany błąd"
 
-#: src/components/Navbar.svelte
-#: src/components/Sidebar.svelte
-msgid "Network error when trying to sign in"
-msgstr "Błąd sieciowy podczas logowania"
+#~ msgid "Network error when trying to sign in"
+#~ msgstr "Błąd sieciowy podczas logowania"
 
-#. 0: error.message
-#. 0: error.message
-#: src/components/Navbar.svelte
-#: src/components/Sidebar.svelte
-msgid "Unknown error occurred ({0})"
-msgstr "Wystąpił nieznany błąd ({0})"
+#~ msgid "Unknown error occurred ({0})"
+#~ msgstr "Wystąpił nieznany błąd ({0})"
 
 #: src/components/Navbar.svelte
 msgid "<0/> Sign in"
@@ -1290,9 +1281,8 @@ msgstr ""
 msgid "Lecture room full of primary school students attending Python lecture."
 msgstr ""
 
-#: src/components/ui/GithubProjectCard.svelte
-msgid "View in GitHub"
-msgstr ""
+#~ msgid "View in GitHub"
+#~ msgstr ""
 
 #: src/routes/+page.svelte
 msgid "This website. Surrounded by many unfamiliar technologies, passionate members get to develop their engineering senses in a friendly environment."
@@ -1563,4 +1553,8 @@ msgstr ""
 
 #: src/routes/+error.svelte
 msgid "The reliable route is back to the association — and room 24 at the Institute of Computer Science is always worth finding."
+msgstr ""
+
+#: src/components/ui/GithubProjectCard.svelte
+msgid "View on GitHub <0/>"
 msgstr ""

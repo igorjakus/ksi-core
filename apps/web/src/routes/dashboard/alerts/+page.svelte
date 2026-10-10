@@ -188,7 +188,7 @@
     </div>
     {#if !creating}
       <button
-        class="btn btn-primary btn-clipped w-fit gap-2 px-5"
+        class="btn btn-primary w-fit gap-2 px-5"
         type="button"
         onclick={() => (creating = true)}
       >
@@ -313,7 +313,7 @@
           <button class="btn btn-ghost" type="button" onclick={resetForm} disabled={saving}
             >Cancel</button
           >
-          <button class="btn btn-primary btn-clipped min-w-36" type="submit" disabled={saving}>
+          <button class="btn btn-primary min-w-36" type="submit" disabled={saving}>
             {saving ? 'Saving…' : editingId ? 'Save changes' : 'Create alert'}
           </button>
         </div>

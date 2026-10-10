@@ -57,8 +57,9 @@
       <p class="text-base-content/65 mt-6 text-lg">
         {data.edition.date}<br />{data.edition.location}
       </p>
-      <a href="/projects/zosia" class="btn btn-soft btn-clipped mt-8 gap-3"
-        ><ArrowLeft class="size-4" />Back to all editions</a
+      <a href="/projects/zosia" class="group btn btn-soft mt-8 gap-3"
+        ><ArrowLeft class="size-4 transition-transform group-hover:-translate-x-0.5" />Back to all
+        editions</a
       >
     </div>
     {#if bgImage}

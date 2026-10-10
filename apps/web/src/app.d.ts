@@ -4,8 +4,8 @@ declare global {
   namespace App {
     // interface Error {}
     interface Locals {
-      user: import('@ksi-core/server/lib/auth.types').User | null;
-      session: import('@ksi-core/server/lib/auth.types').Session | null;
+      user: import('shared/types').Profile | null;
+      session: { id: string } | null;
     }
     // interface PageData {}
     // interface PageState {}

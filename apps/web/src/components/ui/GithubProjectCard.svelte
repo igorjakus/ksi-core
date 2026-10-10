@@ -1,7 +1,11 @@
 <script lang="ts">
+  import { ArrowUpRight } from '@lucide/svelte';
+
   /**
-   * A GitHub repository preview card: an Open Graph screenshot on one side
-   * with a "View on GitHub" hover overlay, and a short blurb on the other.
+   * A GitHub repository preview card: an Open Graph screenshot framed with
+   * the same hairline/mono language as the rest of the site, topped with a
+   * label strip that always names the destination instead of hiding it
+   * behind a hover-only overlay.
    */
   let {
     repo,
@@ -18,25 +22,30 @@
 </script>
 
 <div
-  class="grid max-w-6xl grid-cols-1 items-center gap-16 md:grid-cols-[1fr_2fr] md:gap-8 lg:px-32"
+  class="grid max-w-6xl grid-cols-1 items-center gap-10 md:grid-cols-[1fr_2fr] md:gap-12 lg:px-32"
 >
   <a
     {href}
     target="_blank"
     rel="noopener noreferrer"
-    class="group relative overflow-hidden rounded-2xl"
+    class="group border-base-content/15 bg-base-200 relative block overflow-hidden border"
   >
-    <div
-      class="bg-base-content/70 pointer-events-none absolute inset-0 z-20 flex items-center justify-center rounded-2xl opacity-0 transition-all group-hover:scale-x-[0.99] group-hover:scale-y-[0.98] group-hover:opacity-100"
-    >
-      <p>View in GitHub</p>
-    </div>
     <img
       src={image}
       alt=""
-      class="rounded-2xl transition-transform group-hover:scale-x-[0.99] group-hover:scale-y-[0.98]"
-      style="width:100%;height:100%;object-fit:cover;display:block"
+      class="aspect-video w-full object-cover grayscale-[40%] transition-all duration-300 group-hover:grayscale-0"
     />
+    <div
+      class="border-base-content/15 bg-base-100 flex items-center justify-between gap-3 border-t px-4 py-2.5 font-mono text-[11px] tracking-[0.08em] uppercase"
+    >
+      <span class="text-base-content/50 truncate">{repo}</span>
+      <span class="text-primary flex shrink-0 items-center gap-1.5">
+        View on GitHub
+        <ArrowUpRight
+          class="size-3 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+        />
+      </span>
+    </div>
   </a>
   <div class="text-md basis-2 space-y-4">
     <h2>{title}</h2>

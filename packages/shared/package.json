@@ -5,13 +5,16 @@
   "dependencies": {
     "@elysiajs/eden": "^1.4.9",
     "@ksi-core/server": "workspace:*",
-    "@types/bun": "^1.3.14"
+    "@types/bun": "^1.3.14",
+    "marked": "^18.1.0",
+    "sanitize-html": "^2.18.0"
   },
   "devDependencies": {
+    "@types/sanitize-html": "^2.16.2",
     "bun-types": "^1.3.14",
     "elysia": "^1.4.29"
   },
   "peerDependencies": {
-    "typescript": "^7.0.2"
+    "typescript": "6.0.2"
   }
 }

@@ -14,7 +14,8 @@
   import { sidebarStore } from '$lib/sidebar';
   import { authClient } from '$lib/auth-client';
   import { getUrls } from 'shared';
-  import type { User, Session } from '@ksi-core/server/lib/auth.types';
+  import type { Profile as User } from 'shared/types';
+  type Session = { id: string };
   import { toast } from 'svelte-sonner';
   import { afterNavigate, invalidateAll } from '$app/navigation';
   import { page } from '$app/stores';
@@ -28,7 +29,7 @@
   import type { api } from '$lib/backend';
 
   interface Props {
-    alert: NonNullable<Awaited<ReturnType<typeof api.alerts.current.get>>['data']>;
+    alert: NonNullable<Awaited<ReturnType<typeof api.alerts.current.get>>['data']> | null;
     user: User | null;
     session: Session | null;
   }
@@ -202,9 +203,9 @@
             : ''}"
         />
       </button>
-      {#if session && user}
+      {#if session && user && user.membershipStatus === 'active'}
         <a
-          href="/dashboard"
+          href="/login"
           class="text-base-content font-anybody hover:text-base-content border-base-200 hover:bg-base-200/40 flex h-full items-center border-r px-5 text-sm transition-colors duration-150 {$page.url.pathname.startsWith(
             '/dashboard'
           )
@@ -218,10 +219,10 @@
 
     <div class="flex h-full items-center gap-2 pr-6">
       <LocaleSwitcher class="border-base-200 border-x" />
-      {#if session && user}
+      {#if session && user && user.membershipStatus === 'active'}
         <div class="border-base-200 flex h-full gap-4 border-r px-2">
           <a
-            href="/dashboard"
+            href="/login"
             class="text-muted hover:text-base-content flex items-center gap-4 text-sm"
           >
             {#if user.image}
@@ -236,8 +237,8 @@
           <button
             class="btn btn-square btn-sm btn-outline text-error"
             onclick={async () => {
-              const r = await authClient.signOut();
-              if (r.data?.success) {
+              const r = await fetch('/logout', { method: 'POST' });
+              if (r.ok) {
                 toast.success('Logged out');
                 await invalidateAll();
               }
@@ -249,22 +250,9 @@
       {:else}
         <button
           onclick={() => {
-            authClient.signIn
-              .social({
-                provider: 'discord',
-                callbackURL: getUrls().frontend.landing + '/dashboard'
-              })
-              .catch((error) => {
-                if (error instanceof Error) {
-                  if (/(fetch|network|load failed)/i.test(error.message))
-                    toast.error('Network error when trying to sign in');
-                  else toast.error(`Unknown error occurred (${error.message})`);
-                } else {
-                  toast.error('Unknown error occurred');
-                }
-              });
+            window.location.assign('/login');
           }}
-          class="btn btn-primary btn-clipped gap-3"
+          class="btn btn-primary gap-3"
         >
           <LogIn class="size-3 shrink-0" />
           Sign in

@@ -46,9 +46,8 @@ msgstr "Alert deleted"
 msgid "Institute of Computer Science, University of Wrocław"
 msgstr "Institute of Computer Science, University of Wrocław"
 
-#: src/components/Sidebar.svelte
-msgid "Access denied."
-msgstr "Access denied."
+#~ msgid "Access denied."
+#~ msgstr "Access denied."
 
 #: src/components/Sidebar.svelte
 msgid "Logged in as"
@@ -1159,22 +1158,14 @@ msgstr "cursor-pointer self-end underline"
 msgid "Commit {0}"
 msgstr "Commit {0}"
 
-#: src/components/Navbar.svelte
-#: src/components/Sidebar.svelte
-msgid "Unknown error occurred"
-msgstr "Unknown error occurred"
+#~ msgid "Unknown error occurred"
+#~ msgstr "Unknown error occurred"
 
-#: src/components/Navbar.svelte
-#: src/components/Sidebar.svelte
-msgid "Network error when trying to sign in"
-msgstr "Network error when trying to sign in"
+#~ msgid "Network error when trying to sign in"
+#~ msgstr "Network error when trying to sign in"
 
-#. 0: error.message
-#. 0: error.message
-#: src/components/Navbar.svelte
-#: src/components/Sidebar.svelte
-msgid "Unknown error occurred ({0})"
-msgstr "Unknown error occurred ({0})"
+#~ msgid "Unknown error occurred ({0})"
+#~ msgstr "Unknown error occurred ({0})"
 
 #: src/components/Navbar.svelte
 msgid "<0/> Sign in"
@@ -1290,9 +1281,8 @@ msgstr "Real computer science students volunteer to provide feedback and help wh
 msgid "Lecture room full of primary school students attending Python lecture."
 msgstr "Lecture room full of primary school students attending Python lecture."
 
-#: src/components/ui/GithubProjectCard.svelte
-msgid "View in GitHub"
-msgstr "View in GitHub"
+#~ msgid "View in GitHub"
+#~ msgstr "View in GitHub"
 
 #: src/routes/+page.svelte
 msgid "This website. Surrounded by many unfamiliar technologies, passionate members get to develop their engineering senses in a friendly environment."
@@ -1564,3 +1554,7 @@ msgstr "ZOSIA {0} camp photograph"
 #: src/routes/+error.svelte
 msgid "The reliable route is back to the association — and room 24 at the Institute of Computer Science is always worth finding."
 msgstr "The reliable route is back to the association — and room 24 at the Institute of Computer Science is always worth finding."
+
+#: src/components/ui/GithubProjectCard.svelte
+msgid "View on GitHub <0/>"
+msgstr "View on GitHub <0/>"

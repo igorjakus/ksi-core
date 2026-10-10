@@ -1,0 +1,185 @@
+name: Platform CI and GitOps promotion
+on:
+  push:
+    branches: ['**']
+  pull_request:
+permissions:
+  contents: read
+concurrency:
+  group: platform-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17.6-alpine
+        env:
+          POSTGRES_DB: ksi_integration
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: integration
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U postgres -d ksi_integration"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      DATABASE_URL: postgres://postgres:integration@127.0.0.1:5432/ksi_integration
+      KSI_ENVIRONMENT: integration
+      PROXY_SECRET: integration-proxy-secret
+      BETTER_AUTH_SECRET: integration-auth-secret-at-least-32-characters
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.3.14'
+      - run: bun install --frozen-lockfile
+      - run: bun run format:check
+      - run: bun run lint
+      - run: bun run test
+      - run: bun run test:integration
+      - run: python3 -m unittest discover -s scripts/deployment -p 'test_*.py'
+      - run: bun run --cwd apps/server check
+      - run: bun run check
+      - run: bun run build
+  images:
+    needs: checks
+    if: github.event_name == 'push'
+    runs-on: ubuntu-24.04-arm
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      matrix:
+        app: [server, web, auth, dashboard]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - id: image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: scripts/deployment/Dockerfile
+          platforms: linux/arm64
+          push: true
+          tags: ghcr.io/${{ github.repository }}-${{ matrix.app }}:${{ github.sha }}
+          build-args: APP=${{ matrix.app }}
+          cache-from: type=gha,scope=${{ matrix.app }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.app }}
+      - name: Record immutable digest
+        env:
+          APP: ${{ matrix.app }}
+          REPOSITORY: ${{ github.repository }}
+          DIGEST: ${{ steps.image.outputs.digest }}
+        run: |
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          Path('image.json').write_text(json.dumps({os.environ['APP']: 'ghcr.io/' + os.environ['REPOSITORY'] + '-' + os.environ['APP'] + '@' + os.environ['DIGEST']}))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: image-${{ matrix.app }}
+          path: image.json
+  promote:
+    needs: [checks, images]
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    environment: ${{ github.ref_name == 'master' && 'production' || 'preview' }}
+    concurrency:
+      group: ksi-cluster-writes
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: core
+      - uses: actions/checkout@v4
+        with:
+          repository: ksiuwr/ksi-cluster
+          token: ${{ secrets.CLUSTER_WRITE_TOKEN }}
+          path: cluster
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: image-*
+          path: images
+      - name: Install pinned SOPS
+        run: |
+          curl --fail --location --output sops https://github.com/getsops/sops/releases/download/v3.10.2/sops-v3.10.2.linux.amd64
+          curl --fail --location --output checksums https://github.com/getsops/sops/releases/download/v3.10.2/sops-v3.10.2.checksums.txt
+          expected=$(awk '$2 == "sops-v3.10.2.linux.amd64" {print $1}' checksums)
+          test -n "$expected"
+          echo "$expected  sops" | sha256sum --check
+          chmod +x sops
+          sudo mv sops /usr/local/bin/sops
+      - name: Encrypt initial environment configuration
+        env:
+          BRANCH: ${{ github.ref_name }}
+          SOPS_AGE_RECIPIENT: ${{ vars.SOPS_AGE_RECIPIENT }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
+          PROXY_SECRET: ${{ secrets.PROXY_SECRET }}
+          OAUTH_GITHUB_ID: ${{ secrets.OAUTH_GITHUB_ID }}
+          OAUTH_GITHUB_SECRET: ${{ secrets.OAUTH_GITHUB_SECRET }}
+          OAUTH_GOOGLE_ID: ${{ secrets.OAUTH_GOOGLE_ID }}
+          OAUTH_GOOGLE_SECRET: ${{ secrets.OAUTH_GOOGLE_SECRET }}
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          SMTP_FROM: ${{ secrets.SMTP_FROM }}
+          R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_PRIVATE_BUCKET: ${{ secrets.R2_PRIVATE_BUCKET }}
+          R2_PUBLIC_BUCKET: ${{ secrets.R2_PUBLIC_BUCKET }}
+          R2_PUBLIC_ORIGIN: ${{ vars.R2_PUBLIC_ORIGIN }}
+          ACTIVATION_CONTACT: ${{ vars.ACTIVATION_CONTACT }}
+          KSI_BACKUP_KEY: ${{ secrets.KSI_BACKUP_KEY }}
+        run: python3 core/scripts/deployment/secrets.py --cluster cluster --branch "$BRANCH"
+      - uses: azure/setup-kubectl@v4
+        with:
+          version: v1.34.0
+      - name: Render tested release
+        env:
+          BRANCH: ${{ github.ref_name }}
+          COMMIT: ${{ github.sha }}
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          images = {}
+          for path in Path('images').glob('*/image.json'):
+              images.update(json.loads(path.read_text()))
+          Path('images.json').write_text(json.dumps(images))
+          PY
+          python3 core/scripts/deployment/deploy.py promote --cluster cluster --branch "$BRANCH" --commit "$COMMIT" --images images.json
+          kubectl kustomize cluster/clusters/production >/dev/null
+          kubectl kustomize cluster/environments >/dev/null
+      - name: Configure owned preview DNS
+        env:
+          BRANCH: ${{ github.ref_name }}
+          CLOUDFLARE_DNS_TOKEN: ${{ secrets.CLOUDFLARE_DNS_TOKEN }}
+          CLOUDFLARE_ZONE_ID: ${{ vars.CLOUDFLARE_ZONE_ID }}
+          PREVIEW_DNS_TARGET: ${{ vars.PREVIEW_DNS_TARGET }}
+        run: python3 core/scripts/deployment/dns.py --branch "$BRANCH"
+      - name: Reject stale runs and commit promotion
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          BRANCH: ${{ github.ref_name }}
+          COMMIT: ${{ github.sha }}
+        run: |
+          encoded=$(python3 -c 'import os,urllib.parse; print(urllib.parse.quote(os.environ["BRANCH"], safe=""))')
+          current=$(gh api "repos/$REPOSITORY/branches/$encoded" --jq .commit.sha)
+          test "$current" = "$COMMIT" || { echo 'Stale build: branch advanced; refusing promotion'; exit 1; }
+          git -C cluster config user.name ksi-deployment
+          git -C cluster config user.email deployment@ksi.edu.pl
+          git -C cluster add environments infrastructure cleanup
+          if ! git -C cluster diff --cached --quiet; then
+            git -C cluster commit -m "Deploy tested $COMMIT"
+            git -C cluster push
+          fi

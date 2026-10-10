@@ -1,0 +1,39 @@
+name: Remove deleted branch preview
+on:
+  delete:
+permissions:
+  contents: read
+jobs:
+  cleanup:
+    if: github.event.ref_type == 'branch' && github.event.ref != 'master'
+    runs-on: ubuntu-latest
+    environment: preview
+    concurrency:
+      group: ksi-cluster-writes
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: ksiuwr/ksi-cluster
+          token: ${{ secrets.CLUSTER_WRITE_TOKEN }}
+          path: cluster
+      - name: Queue cleanup after workload pruning
+        env:
+          BRANCH: ${{ github.event.ref }}
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          encoded=$(python3 -c 'import os,urllib.parse; print(urllib.parse.quote(os.environ["BRANCH"], safe=""))')
+          if gh api "repos/$REPOSITORY/branches/$encoded" >/dev/null 2>&1; then
+            echo 'Branch recreated; refusing stale cleanup'
+            exit 1
+          fi
+          python3 scripts/deployment/deploy.py cleanup --cluster cluster --branch "$BRANCH"
+          git -C cluster config user.name ksi-deployment
+          git -C cluster config user.email deployment@ksi.edu.pl
+          git -C cluster add environments cleanup
+          if ! git -C cluster diff --cached --quiet; then
+            git -C cluster commit -m 'Remove deleted branch preview; queue data cleanup'
+            git -C cluster push
+          fi

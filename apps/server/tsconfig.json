@@ -7,14 +7,14 @@
     "moduleResolution": "bundler",
     "allowJs": true,
     "checkJs": true,
-    "declaration": true,
-    "emitDeclarationOnly": true,
+    "declaration": false,
+    "emitDeclarationOnly": false,
     "outDir": "dist",
     "noEmitOnError": false,
     "noErrorTruncation": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "skipLibCheck": false
+    "skipLibCheck": true
   }
 }

@@ -36,12 +36,16 @@
             at the University of Wrocław.
           </p>
           <div class="flex flex-wrap gap-3">
-            <a href="#projects" class="btn btn-primary btn-clipped gap-2 px-6">
+            <a href="#projects" class="group btn btn-primary gap-2 px-6">
               See what we do
-              <ArrowDown class="size-3 -translate-y-px" />
+              <ArrowDown
+                class="size-3 -translate-y-px transition-transform group-hover:translate-y-0.5"
+              />
             </a>
-            <a href="#about" class="btn btn-soft btn-clipped border-0 px-6">
-              About KSI <ArrowRight class="size-3 -translate-y-px " /></a
+            <a href="#about" class="group btn btn-soft border-0 px-6">
+              About KSI <ArrowRight
+                class="size-3 -translate-y-px transition-transform group-hover:translate-x-0.5"
+              /></a
             >
           </div>
         </div>

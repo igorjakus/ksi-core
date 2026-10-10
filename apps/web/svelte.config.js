@@ -14,7 +14,8 @@ const config = {
   preprocess: vitePreprocess(),
 
   kit: {
-    adapter: getAdapter()
+    adapter: getAdapter(),
+    alias: { '@ksi-core/server': '../server/src' }
   }
 };
 

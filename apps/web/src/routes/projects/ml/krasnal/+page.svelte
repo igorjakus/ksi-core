@@ -34,7 +34,7 @@
     </div>
 
     <a
-      class="btn btn-soft btn-clipped w-fit gap-2 border-0 px-6"
+      class="btn btn-soft w-fit gap-2 border-0 px-6"
       href="https://github.com/KSI-ML-research/krasnal"
       target="_blank"
       rel="noopener"

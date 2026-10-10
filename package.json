@@ -14,10 +14,16 @@
     "dev:frontend": "bun run --cwd apps/web dev",
     "dev:backend": "bun run --cwd apps/server dev",
     "dev": "concurrently -n \"server,web\" -c \"bgGreen,bgBlue\" \"bun run dev:backend\" \"bun run dev:frontend\"",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test": "bun test apps/server/src/domain apps/server/src/routes/platform/access.test.ts packages/shared",
+    "check": "bun run --cwd apps/server check && bun run --cwd apps/web check && bun run --cwd apps/auth check && bun run --cwd apps/dashboard check",
+    "lint": "oxlint",
+    "format:check": "oxfmt --check .",
+    "build": "bun run --cwd apps/web build && bun run --cwd apps/auth build && bun run --cwd apps/dashboard build",
+    "test:integration": "bun test apps/server/src/integration"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.1101.0"
+    "@aws-sdk/client-s3": "3.1149.0"
   },
   "devDependencies": {
     "@types/bun": "^1.3.14",
@@ -31,10 +37,11 @@
     "oxlint-tsgolint": "^7.0.2001"
   },
   "peerDependencies": {
-    "typescript": "^7.0.2"
+    "typescript": "6.0.2"
   },
   "lint-staged": {
     "*.{js,ts,jsx,tsx,json,yaml,toml,html,css,md,vue,svelte}": "bunx oxfmt",
     "*.{js,ts,jsx,tsx,svelte}": "bunx oxlint"
-  }
+  },
+  "packageManager": "bun@1.3.14"
 }

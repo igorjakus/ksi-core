@@ -44,13 +44,15 @@
     </div>
 
     <a
-      class="btn btn-primary btn-clipped w-fit gap-2 px-6"
+      class="group btn btn-primary w-fit gap-2 px-6"
       href="mailto:hourofcode.ksi@gmail.com"
       aria-label="Email the Hour of Code organizers"
     >
       <Mail class="size-4" />
       Contact us
-      <ArrowUpRight class="size-4" />
+      <ArrowUpRight
+        class="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+      />
     </a>
   </header>
 {/snippet}
