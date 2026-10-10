@@ -4,7 +4,7 @@
   import Dropdown from '@ksi-core/ui/platform/Dropdown.svelte';
   import Editor from '@ksi-core/ui/platform/Editor.svelte';
   import MarkdownContent from '@ksi-core/ui/platform/MarkdownContent.svelte';
-  export type BoardStatus = { id: string; name: string };
+  export type BoardStatus = { id: string; name: string; color?: string };
   export type Item = {
     id: string;
     title: string;
@@ -44,7 +44,11 @@
         : s.id === 'done'
           ? text('Gotowe', 'Done')
           : s.name;
-  const options = $derived(statuses.map((s) => ({ value: s.id, label: label(s) })));
+  const color = (s: BoardStatus) =>
+    s.color ?? { todo: '#8b8b8b', progress: '#d58a32', done: '#449a78' }[s.id] ?? '#8777b5';
+  const options = $derived(
+    statuses.map((s) => ({ value: s.id, label: label(s), color: color(s) }))
+  );
   let busy = $state(false),
     dragged = $state<string | null>(null),
     over = $state<string | null>(null);
@@ -52,7 +56,10 @@
     title = $state(''),
     markdown = $state(''),
     statusName = $state(''),
-    addingStatus = $state(false);
+    addingStatus = $state(false),
+    statusColor = $state('#8777b5'),
+    composerDialog = $state<HTMLDialogElement>(),
+    confirmingDelete = $state(false);
   let selected = $state<Item | null>(null),
     editing = $state(false),
     editTitle = $state(''),
@@ -98,7 +105,22 @@
     title = '';
     markdown = '';
     await tick();
+    composerDialog?.showModal();
     document.getElementById('task-title')?.focus();
+  }
+  function closeComposer() {
+    const column = composer;
+    composerDialog?.close();
+    composer = null;
+    document.getElementById(`add-${column}`)?.focus();
+  }
+  async function setColor(status: BoardStatus, value: string) {
+    await run(async () => {
+      const id = await ensureBoard();
+      await api(`/platform/boards/${id}/statuses`, 'PUT', {
+        statuses: statuses.map((s) => (s.id === status.id ? { ...s, color: value } : s))
+      });
+    });
   }
   async function create() {
     await run(async () => {
@@ -111,7 +133,7 @@
         position:
           Math.max(-1, ...items.filter((i) => i.column === composer).map((i) => i.position)) + 1
       });
-      composer = null;
+      closeComposer();
     });
   }
   async function move(item: Item, column: string) {
@@ -132,7 +154,11 @@
       await api(`/platform/boards/${id}/statuses`, 'PUT', {
         statuses: [
           ...statuses,
-          { id: `s-${crypto.randomUUID().slice(0, 8)}`, name: statusName.trim() }
+          {
+            id: `s-${crypto.randomUUID().slice(0, 8)}`,
+            name: statusName.trim(),
+            color: statusColor
+          }
         ]
       });
       statusName = '';
@@ -156,6 +182,7 @@
     lastTrigger = event.currentTarget as HTMLElement;
     selected = { ...item };
     editing = false;
+    confirmingDelete = false;
     reply = '';
     comments = [];
     await tick();
@@ -222,8 +249,8 @@
     >
       <div class="column-header">
         <span class="column-label"
-          ><span class={`column-dot ${status.id}`}></span>{label(status)}<span class="column-count"
-            >{items.filter((i) => i.column === status.id).length}</span
+          ><span class="column-dot" style:background={color(status)}></span>{label(status)}<span
+            class="column-count">{items.filter((i) => i.column === status.id).length}</span
           ></span
         >
         <button
@@ -235,6 +262,15 @@
           onclick={() => openComposer(status.id)}><Plus size={17} aria-hidden="true" /></button
         >
       </div>
+      {#if canManage}<label class="status-color-label"
+          >{text('Kolor statusu', 'Status color')}<input
+            type="color"
+            value={color(status)}
+            disabled={busy}
+            aria-label={`${text('Kolor statusu', 'Status color')}: ${label(status)}`}
+            onchange={(event) => setColor(status, event.currentTarget.value)}
+          /></label
+        >{/if}
       <div class="column-items">
         {#each items
           .filter((i) => i.column === status.id)
@@ -270,46 +306,53 @@
           </button>
         {/each}
       </div>
-      {#if composer === status.id}<form
-          class="column-composer"
-          onsubmit={(event) => {
-            event.preventDefault();
-            void create();
-          }}
-        >
-          <label for="task-title" class="sr-only">{text('Tytuł zadania', 'Task title')}</label
-          ><input
-            id="task-title"
-            bind:value={title}
-            placeholder={text('Co trzeba zrobić?', 'What needs to be done?')}
-            required
-            maxlength="200"
-          />
-          <Editor {language} bind:value={markdown} rows={5} />
-          <div class="composer-actions">
-            <button class="btn" disabled={busy || !title.trim()}
-              ><Plus size={15} aria-hidden="true" />{text('Dodaj zadanie', 'Add task')}</button
-            ><button
-              type="button"
-              class="icon-button"
-              aria-label={text('Anuluj', 'Cancel')}
-              disabled={busy}
-              onclick={() => {
-                composer = null;
-                document.getElementById(`add-${status.id}`)?.focus();
-              }}><X size={17} aria-hidden="true" /></button
-            >
-          </div>
-        </form>{:else}<button
-          type="button"
-          class="column-add"
-          disabled={busy}
-          onclick={() => openComposer(status.id)}
-          ><Plus size={16} aria-hidden="true" />{text('Dodaj zadanie', 'Add task')}</button
-        >{/if}
+      <button
+        type="button"
+        class="column-add"
+        disabled={busy}
+        onclick={() => openComposer(status.id)}
+        ><Plus size={16} aria-hidden="true" />{text('Dodaj zadanie', 'Add task')}</button
+      >
     </section>
   {/each}
 </div>
+{#if composer}<dialog
+    bind:this={composerDialog}
+    class="issue-dialog"
+    aria-labelledby="new-task-heading"
+    oncancel={(event) => {
+      event.preventDefault();
+      closeComposer();
+    }}
+  >
+    <div class="issue-heading">
+      <h2 id="new-task-heading">{text('Nowe zadanie', 'New task')}</h2>
+    </div>
+    <form
+      class="issue-editor"
+      onsubmit={(event) => {
+        event.preventDefault();
+        void create();
+      }}
+    >
+      <label for="task-title">{text('Tytuł zadania', 'Task title')}</label><input
+        id="task-title"
+        bind:value={title}
+        required
+        maxlength="200"
+        placeholder={text('Co trzeba zrobić?', 'What needs to be done?')}
+      />
+      <Dropdown label={text('Status zadania', 'Task status')} bind:value={composer} {options} />
+      <Editor {language} bind:value={markdown} rows={10} />
+      <div class="row">
+        <button class="btn" disabled={busy || !title.trim()}
+          >{text('Dodaj zadanie', 'Add task')}</button
+        ><button type="button" class="btn btn-outline" disabled={busy} onclick={closeComposer}
+          >{text('Anuluj', 'Cancel')}</button
+        >
+      </div>
+    </form>
+  </dialog>{/if}
 {#if canManage && statuses.length < 20}<div class="status-create">
     {#if addingStatus}<form
         class="row"
@@ -325,6 +368,10 @@
           placeholder={text('Nazwa statusu', 'Status name')}
           maxlength="60"
           required
+        /><input
+          type="color"
+          aria-label={text('Kolor statusu', 'Status color')}
+          bind:value={statusColor}
         /><button class="btn btn-outline" disabled={busy || !statusName.trim()}
           >{text('Dodaj status', 'Add status')}</button
         ><button
@@ -386,9 +433,30 @@
         type="button"
         class="btn btn-outline danger-button"
         disabled={busy}
-        onclick={removeItem}><Trash2 size={14} aria-hidden="true" />{text('Usuń', 'Remove')}</button
+        onclick={() => (confirmingDelete = true)}
+        ><Trash2 size={14} aria-hidden="true" />{text('Usuń', 'Remove')}</button
       >
     </div>
+    {#if confirmingDelete}<section
+        class="delete-confirmation"
+        role="alert"
+        aria-label={text('Potwierdzenie usunięcia', 'Confirm deletion')}
+      >
+        <h3>{text('Usunąć to zadanie?', 'Remove this task?')}</h3>
+        <p>
+          {text(
+            'Zadanie trafi do cmentarza. Lider może je przywrócić.',
+            'The task will move to the graveyard. A leader can restore it.'
+          )}
+        </p>
+        <div class="row">
+          <button class="btn danger-button" disabled={busy} onclick={removeItem}
+            >{text('Potwierdź usunięcie', 'Confirm removal')}</button
+          ><button class="btn btn-outline" onclick={() => (confirmingDelete = false)}
+            >{text('Anuluj', 'Cancel')}</button
+          >
+        </div>
+      </section>{/if}
     {#if editing}<form
         class="issue-editor"
         onsubmit={(event) => {
@@ -453,6 +521,32 @@
   </dialog>{/if}
 
 <style>
+  .status-color-label {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+  .status-color-label input {
+    width: 28px;
+    height: 24px;
+    padding: 2px;
+    margin: 0;
+    cursor: pointer;
+  }
+  .delete-confirmation {
+    border: 1px solid var(--danger);
+    padding: 16px;
+    margin-bottom: 20px;
+    display: grid;
+    gap: 12px;
+  }
+  .issue-tools :global(.dropdown-trigger) {
+    min-height: 36px;
+    padding: 8px 12px;
+  }
   .board {
     overflow-x: auto;
     padding: 3px 3px 12px;
@@ -598,6 +692,32 @@
     border-radius: 3px;
   }
   @media (max-width: 760px) {
+    .status-color-label {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+    .status-color-label input {
+      width: 28px;
+      height: 24px;
+      padding: 2px;
+      margin: 0;
+      cursor: pointer;
+    }
+    .delete-confirmation {
+      border: 1px solid var(--danger);
+      padding: 16px;
+      margin-bottom: 20px;
+      display: grid;
+      gap: 12px;
+    }
+    .issue-tools :global(.dropdown-trigger) {
+      min-height: 36px;
+      padding: 8px 12px;
+    }
     .board {
       grid-template-columns: 1fr !important;
     }

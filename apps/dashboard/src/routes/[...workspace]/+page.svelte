@@ -1004,7 +1004,7 @@
                       <input id="a-title" bind:value={title} required />
                       <label for="a-slug">Slug</label>
                       <input id="a-slug" bind:value={slug} />
-                      <Editor {language} bind:value={markdown} />
+                      <Editor {language} allowGallery bind:value={markdown} />
                       <div class="row" style="margin-top: 16px; gap: 8px;">
                         {#if selectedArticle}
                           <button

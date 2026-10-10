@@ -20,3 +20,8 @@ test('board statuses reject duplicate IDs, unsafe keys and empty names', () => {
   ])
     expect(validBoardStatuses(statuses)).toBe(false);
 });
+
+test('status colors accept only six-digit hex values', () => {
+  expect(validBoardStatuses([{ id: 'custom', name: 'Review', color: '#aA12ef' }])).toBe(true);
+  expect(validBoardStatuses([{ id: 'custom', name: 'Review', color: 'red' }])).toBe(false);
+});

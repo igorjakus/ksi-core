@@ -4,8 +4,9 @@
   let {
     value = $bindable(''),
     language = 'pl',
-    rows = 10
-  }: { value?: string; language?: 'pl' | 'en'; rows?: number } = $props();
+    rows = 10,
+    allowGallery = false
+  }: { value?: string; language?: 'pl' | 'en'; rows?: number; allowGallery?: boolean } = $props();
   const uid = $props.id();
   const text = (pl: string, en: string) => (language === 'pl' ? pl : en);
   let message = $state(''),
@@ -55,14 +56,14 @@
         ><Eye size={14} aria-hidden="true" />{text('Podgląd', 'Preview')}</button
       >
     </div>
-    <button
-      type="button"
-      class="gallery-button"
-      onclick={() => {
-        value += '\n:::gallery preview=3\nfile:IMAGE_ID\n:::\n';
-        preview = false;
-      }}><Images size={14} aria-hidden="true" />{text('Galeria', 'Gallery')}</button
-    >
+    {#if allowGallery}<button
+        type="button"
+        class="gallery-button"
+        onclick={() => {
+          value += '\n:::gallery preview=3\nfile:IMAGE_ID\n:::\n';
+          preview = false;
+        }}><Images size={14} aria-hidden="true" />{text('Galeria', 'Gallery')}</button
+      >{/if}
   </div>
   {#if preview}<div class="editor-preview"><MarkdownContent {value} {language} /></div>
   {:else}<label for={uid} class="sr-only">Markdown</label><textarea

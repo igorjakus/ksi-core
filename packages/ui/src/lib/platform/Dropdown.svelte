@@ -5,6 +5,7 @@
 
   export type DropdownOption = {
     value: string;
+    color?: string;
     label: string;
     description?: string;
     href?: string;
@@ -176,7 +177,9 @@
     }}
   >
     {#if leading}<span class="dropdown-leading">{@render leading()}</span>{/if}
-    <span class="dropdown-value">{selected?.label || placeholder || label}</span>
+    {#if selected?.color}<span class="color-dot" style:background={selected.color}></span>{/if}<span
+      class="dropdown-value">{selected?.label || placeholder || label}</span
+    >
     <ChevronsUpDown size={15} strokeWidth={1.7} aria-hidden="true" />
   </button>
   <div
@@ -235,8 +238,10 @@
             onclick={(event) => choose(option, event)}
           >
             <span
-              ><span>{option.label}</span>{#if option.description}<small>{option.description}</small
-                >{/if}</span
+              ><span
+                >{#if option.color}<span class="color-dot" style:background={option.color}
+                  ></span>{/if}{option.label}</span
+              >{#if option.description}<small>{option.description}</small>{/if}</span
             >
             {#if option.value === value}<Check size={16} aria-hidden="true" />{/if}
           </a>
@@ -254,8 +259,10 @@
             onclick={() => choose(option)}
           >
             <span
-              ><span>{option.label}</span>{#if option.description}<small>{option.description}</small
-                >{/if}</span
+              ><span
+                >{#if option.color}<span class="color-dot" style:background={option.color}
+                  ></span>{/if}{option.label}</span
+              >{#if option.description}<small>{option.description}</small>{/if}</span
             >
             {#if option.value === value}<Check size={16} aria-hidden="true" />{/if}
           </button>
@@ -267,6 +274,14 @@
 </div>
 
 <style>
+  .color-dot {
+    display: inline-block;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    margin-right: 7px;
+    flex-shrink: 0;
+  }
   .dropdown {
     min-width: 0;
     width: 100%;

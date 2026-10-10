@@ -10,7 +10,8 @@ import { validTags } from '../../domain/content-policy';
 import { active, scopeFor, requireLeader } from './content';
 
 const title = t.String({ minLength: 1, maxLength: 200 });
-const markdown = t.String({ minLength: 1, maxLength: 500000 });
+const internalMarkdownPattern = '^(?![\\s\\S]*:::gallery)[\\s\\S]*$';
+const markdown = t.String({ minLength: 1, maxLength: 500000, pattern: internalMarkdownPattern });
 const tags = t.Array(t.String({ minLength: 1, maxLength: 50 }), {
   maxItems: 30,
   uniqueItems: true
@@ -179,7 +180,8 @@ export default createElysia({ prefix: '/platform' })
         statuses: t.Array(
           t.Object({
             id: t.String({ pattern: '^[a-z][a-z0-9-]{0,39}$' }),
-            name: t.String({ minLength: 1, maxLength: 60 })
+            name: t.String({ minLength: 1, maxLength: 60 }),
+            color: t.Optional(t.String({ pattern: '^#[0-9a-fA-F]{6}$' }))
           }),
           { minItems: 1, maxItems: 20 }
         )
@@ -242,7 +244,7 @@ export default createElysia({ prefix: '/platform' })
     {
       body: t.Object({
         title,
-        markdown: t.String({ maxLength: 500000 }),
+        markdown: t.String({ maxLength: 500000, pattern: internalMarkdownPattern }),
         tags,
         column: t.String({ minLength: 1, maxLength: 40 }),
         position: t.Integer({ minimum: 0 })
@@ -293,7 +295,7 @@ export default createElysia({ prefix: '/platform' })
       body: t.Object({
         version: t.Integer({ minimum: 1 }),
         title: t.Optional(title),
-        markdown: t.Optional(t.String({ maxLength: 500000 })),
+        markdown: t.Optional(t.String({ maxLength: 500000, pattern: internalMarkdownPattern })),
         tags: t.Optional(tags),
         column: t.Optional(t.String({ minLength: 1, maxLength: 40 })),
         position: t.Optional(t.Integer({ minimum: 0 }))
