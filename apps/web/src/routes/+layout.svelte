@@ -1,5 +1,6 @@
 <script lang="ts">
   import '../app.css';
+  import {onMount} from 'svelte';
   import Navbar from '../components/Navbar.svelte';
   import Sidebar from '../components/Sidebar.svelte';
   import Footer from '../components/Footer.svelte';
@@ -10,6 +11,7 @@
   import '../locales/main.loader.svelte.js';
   import { locale } from '$lib/locale.svelte';
 
+  onMount(themeStore.initialize);
   $effect(() => {
     loadLocale(locale.current);
   });

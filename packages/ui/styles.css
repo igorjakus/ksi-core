@@ -177,3 +177,5 @@
     @apply font-anybody border-base-content/10 my-12;
   }
 }
+
+button, [role='button'], summary, .btn {user-select:none;}

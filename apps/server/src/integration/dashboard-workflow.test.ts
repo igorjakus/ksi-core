@@ -305,6 +305,55 @@ describe.skipIf(!safe)('persistent dashboard workflows', () => {
       'member Workflow'
     );
   });
+  test('status editing and deletion preserve tombstones and enforce live-task boundaries', async () => {
+    const path = `/platform/boards/${boardId}/statuses/review`;
+    expect((await request('outsider', path, 'DELETE')).status).toBe(403);
+    expect(
+      (await request('member', path, 'PATCH', { name: 'Final review', color: '#2244cc' })).status
+    ).toBe(200);
+    expect((await request('member', path, 'DELETE')).body.code).toBe('STATUS_HAS_LIVE_ITEMS');
+    expect((await request('member', path, 'PATCH', { deleted: true })).status).toBe(409);
+    const current = (await db.select().from(kanbanItems).where(eq(kanbanItems.id, itemId)))[0]!;
+    expect(
+      (await request('member', `/platform/items/${itemId}`, 'DELETE', { version: current.version }))
+        .status
+    ).toBe(200);
+    expect((await request('member', path, 'DELETE')).status).toBe(200);
+    const deleted = (
+      await request('member', `/platform/boards?projectId=${projectId}`)
+    ).body.statuses.find((s: any) => s.id === 'review');
+    expect(deleted).toMatchObject({ name: 'Final review', color: '#2244cc', deleted: true });
+    expect(
+      (
+        await request('member', `/platform/boards/${boardId}/items`, 'POST', {
+          title: 'No',
+          markdown: '',
+          column: 'review',
+          tags: [],
+          position: 0
+        })
+      ).status
+    ).toBe(422);
+    expect(
+      (
+        await request('member', `/platform/items/${itemId}/restore`, 'POST', {
+          version: current.version + 1
+        })
+      ).body.code
+    ).toBe('STATUS_DELETED');
+    expect((await request('member', path, 'PATCH', { deleted: false })).status).toBe(200);
+    expect(
+      (
+        await request('member', `/platform/items/${itemId}/restore`, 'POST', {
+          version: current.version + 1
+        })
+      ).status
+    ).toBe(200);
+    expect(
+      (await request('member', `/platform/boards/${boardId}/statuses/todo`, 'DELETE')).status
+    ).toBe(200);
+    expect((await request('member', path, 'DELETE')).status).toBe(422);
+  });
   test('avatar submissions stay private, preserve current avatar, and reject non-images', async () => {
     expect(
       (await request('pending', '/users/me/avatar-request', 'POST', { fileId: imageId })).status

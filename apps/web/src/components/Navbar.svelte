@@ -24,6 +24,8 @@
   import { MediaQuery } from 'svelte/reactivity';
   import { tick } from 'svelte';
   import Alert from './Alert.svelte';
+  import {locale} from '$lib/locale.svelte';
+  import ThemeSelector from '@ksi-core/ui/platform/ThemeSelector.svelte';
   import LocaleSwitcher from './ui/LocaleSwitcher.svelte';
   import NavMenuPanel from './ui/NavMenuPanel.svelte';
   import type { api } from '$lib/backend';
@@ -39,7 +41,7 @@
   let openMenu = $state<'projects' | 'groups' | null>(null);
 
   let displayedMenu = $state<'projects' | 'groups'>('projects');
-  let header: HTMLElement;
+  let header: HTMLElement = undefined as unknown as HTMLElement;
   const reducedMotion = new MediaQuery('(prefers-reduced-motion: reduce)');
   const desktop = new MediaQuery('(min-width: 64rem)');
 
@@ -218,6 +220,7 @@
     </nav>
 
     <div class="flex h-full items-center gap-2 pr-6">
+      <ThemeSelector language={locale.current==='en-us'?'en':'pl'} />
       <LocaleSwitcher class="border-base-200 border-x" />
       {#if session && user && user.membershipStatus === 'active'}
         <div class="border-base-200 flex h-full gap-4 border-r px-2">

@@ -1,4 +1,4 @@
-export type BoardStatus = { id: string; name: string; color?: string };
+export type BoardStatus = { id: string; name: string; color?: string; deleted?: boolean };
 export const defaultBoardStatuses: BoardStatus[] = [
   { id: 'todo', name: 'To do' },
   { id: 'progress', name: 'In progress' },
@@ -7,7 +7,9 @@ export const defaultBoardStatuses: BoardStatus[] = [
 export function validBoardStatuses(statuses: BoardStatus[]) {
   return (
     statuses.length >= 1 &&
-    statuses.length <= 20 &&
+    statuses.length <= 100 &&
+    statuses.filter((s) => !s.deleted).length >= 1 &&
+    statuses.filter((s) => !s.deleted).length <= 20 &&
     new Set(statuses.map((status) => status.id)).size === statuses.length &&
     statuses.every(
       (status) =>
@@ -19,5 +21,5 @@ export function validBoardStatuses(statuses: BoardStatus[]) {
   );
 }
 export function statusExists(statuses: BoardStatus[], id: string) {
-  return statuses.some((status) => status.id === id);
+  return statuses.some((status) => status.id === id && !status.deleted);
 }

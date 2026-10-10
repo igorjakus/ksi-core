@@ -1,5 +1,5 @@
 import { redirect, error } from '@sveltejs/kit';
-import { env } from '$env/dynamic/private';
+import {env} from '$lib/server/environment';
 import { backendFetch } from 'shared/server';
 import type { PageServerLoad } from './$types';
 export const load: PageServerLoad = async (event) => {

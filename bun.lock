@@ -27,6 +27,7 @@
       "version": "0.1.0",
       "dependencies": {
         "@ksi-core/ui": "workspace:*",
+        "@lucide/svelte": "0.548.0",
         "better-auth": "^1.6.25",
         "shared": "workspace:*",
       },

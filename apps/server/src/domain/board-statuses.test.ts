@@ -25,3 +25,13 @@ test('status colors accept only six-digit hex values', () => {
   expect(validBoardStatuses([{ id: 'custom', name: 'Review', color: '#aA12ef' }])).toBe(true);
   expect(validBoardStatuses([{ id: 'custom', name: 'Review', color: 'red' }])).toBe(false);
 });
+
+test('deleted statuses are retained but cannot receive live tasks', () => {
+  const statuses = [
+    { id: 'todo', name: 'To do' },
+    { id: 'old', name: 'Old', deleted: true }
+  ];
+  expect(validBoardStatuses(statuses)).toBe(true);
+  expect(statusExists(statuses, 'old')).toBe(false);
+  expect(validBoardStatuses([{ id: 'old', name: 'Old', deleted: true }])).toBe(false);
+});

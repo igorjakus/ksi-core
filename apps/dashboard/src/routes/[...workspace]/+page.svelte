@@ -103,6 +103,8 @@
     id: string;
     title: string;
     visibility: string;
+    projectId?:string|null;
+    archivedAt?:string|null;
     version: number;
     createdAt?: string;
     comments?: { id: string; markdown: string; authorName?: string; createdAt?: string }[];
@@ -220,15 +222,14 @@
         }
       }
       if (currentTab === 'forum') {
-        const result = await api<Thread[]>(
-          `/platform/threads?archived=${archived}${currentScope ? `&projectId=${encodeURIComponent(currentScope)}` : ''}`
-        );
-        if (generation === loadGeneration) {
-          threads = result;
-          if (selectedThread && result.some((thread) => thread.id === selectedThread?.id)) {
-            const detail = await api<Thread>(`/platform/threads/${selectedThread.id}`);
-            if (generation === loadGeneration) selectedThread = detail;
-          } else selectedThread = null;
+        const threadId=parseDashboardPath(page.url.pathname)?.threadId;
+        if(threadId){
+          const detail=await api<Thread>(`/platform/threads/${encodeURIComponent(threadId)}`);
+          if((detail.projectId ?? null)!==(currentScope || null))throw new Error(text('Wątek nie należy do tej przestrzeni.','This thread belongs to another workspace.'));
+          if(generation===loadGeneration){selectedThread=detail;archived=!!detail.archivedAt;}
+        }else{
+          const result=await api<Thread[]>(`/platform/threads?archived=${archived}${currentScope ? `&projectId=${encodeURIComponent(currentScope)}`:''}`);
+          if(generation===loadGeneration){threads=result;selectedThread=null;}
         }
       }
       if (currentTab === 'events') {
@@ -417,7 +418,7 @@
       return result;
     }
     if (tab === 'forum') {
-      const result = await api('/platform/threads', 'POST', {
+      const result = await api<Thread>('/platform/threads', 'POST', {
         title,
         markdown,
         visibility,
@@ -427,6 +428,7 @@
       composer = false;
       title = '';
       markdown = '';
+      await goto(`${dashboardPath(workspace,projectSlug,'forum')}/${encodeURIComponent(result.id)}`);
       return result;
     }
   }
@@ -1159,6 +1161,7 @@
 
                   <!-- ── FORUM ─────────────────────────────────────────────────────── -->
                 {:else if tab === 'forum'}
+                  {#if !data.navigation.threadId}
                   <div class="workspace-header">
                     <div>
                       <h1>Forum</h1>
@@ -1214,20 +1217,7 @@
                   </div>
 
                   {#each threads as thread (thread.id)}
-                    <div
-                      class="list-strip"
-                      role="button"
-                      tabindex="0"
-                      onclick={() =>
-                        action(async () => {
-                          selectedThread = await api(`/platform/threads/${thread.id}`);
-                        })}
-                      onkeydown={(e) =>
-                        e.key === 'Enter' &&
-                        action(async () => {
-                          selectedThread = await api(`/platform/threads/${thread.id}`);
-                        })}
-                    >
+                    <a class="list-strip forum-thread-link" href={`${dashboardPath(workspace,projectSlug,'forum')}/${encodeURIComponent(thread.id)}`} onclick={guardNavigation}>
                       <div class="list-strip-info">
                         <h3>{thread.title}</h3>
                         {#if thread.createdAt}<time
@@ -1245,14 +1235,15 @@
                             ? text('Członkowie projektu', 'Project members')
                             : text('Członkowie koła', 'Association members')}</span
                       >
-                    </div>
+                    </a>
                   {/each}
+                  {/if}
 
                   {#if selectedThread}
                     <div class="card" style="margin-top: 16px;">
-                      <h2 style="font-size: 1.1rem; margin-bottom: 12px;">
-                        {selectedThread.title}
-                      </h2>
+                      <a class="btn btn-outline" href={dashboardPath(workspace,projectSlug,'forum')} style="margin-bottom:20px"><ArrowLeft size={15} aria-hidden="true"/>{text('Wszystkie wątki','All threads')}</a>
+                      <h1 style="font-size:clamp(24px,3vw,36px);margin-bottom:24px">{selectedThread.title}</h1>
+                      {#if archived}<p class="notice">{text('Ten wątek jest zarchiwizowany.','This thread is archived.')}</p>{/if}
                       {#each selectedThread.comments ?? [] as comment (comment.id)}
                         <div
                           style="border-top: 1px solid var(--line); padding: 12px 0; font-size: 13px; white-space: pre-wrap;"
@@ -1310,7 +1301,7 @@
                   {/if}
 
                   <!-- New thread form -->
-                  {#if composer}
+                  {#if composer && !data.navigation.threadId}
                     <div class="card" style="margin-top: 20px;">
                       <h2 style="font-size: 1rem; margin-bottom: 14px;">
                         {text('Nowy wątek', 'New thread')}

@@ -2,10 +2,10 @@ import { and, eq, desc, inArray, isNull, isNotNull, sql } from 'drizzle-orm';
 import { status, t } from 'elysia';
 import { syncFileReferences } from './files';
 import { createElysia, requirePermission } from '../../lib/createElysia';
-import { recordEvent, type Executor } from '../../lib/audit';
+import { recordEvent, type Executor, type Transaction } from '../../lib/audit';
 import { boards, kanbanItems, threads, comments, users, auditEvents } from '../../db';
 import { canContribute, canReadThread } from '../../domain/permissions';
-import { validBoardStatuses, statusExists } from '../../domain/board-statuses';
+import { validBoardStatuses, statusExists, type BoardStatus } from '../../domain/board-statuses';
 import { validTags } from '../../domain/content-policy';
 import { active, scopeFor, requireLeader } from './content';
 
@@ -22,6 +22,34 @@ async function boardScope(executor: Executor, id: string) {
   const [board] = await executor.select().from(boards).where(eq(boards.id, id));
   if (!board) throw status(404, { code: 'BOARD_NOT_FOUND' });
   return { board, scope: await scopeFor(executor, board.projectId) };
+}
+async function persistStatuses(
+  tx: Transaction,
+  board: typeof boards.$inferSelect,
+  statuses: BoardStatus[],
+  actorId: string
+) {
+  if (!validBoardStatuses(statuses)) throw status(422, { code: 'INVALID_BOARD_STATUSES' });
+  const items = await tx
+    .select({ column: kanbanItems.column, deletedAt: kanbanItems.deletedAt })
+    .from(kanbanItems)
+    .where(eq(kanbanItems.boardId, board.id));
+  if (items.some((item) => !item.deletedAt && !statusExists(statuses, item.column)))
+    throw status(409, { code: 'STATUS_HAS_LIVE_ITEMS' });
+  if (items.some((item) => !statuses.some((s) => s.id === item.column)))
+    throw status(409, { code: 'STATUS_IN_USE' });
+  const [updated] = await tx
+    .update(boards)
+    .set({ statuses })
+    .where(eq(boards.id, board.id))
+    .returning();
+  await recordEvent(tx, {
+    actorId,
+    projectId: board.projectId,
+    action: 'boards.statuses.updated',
+    targetId: board.id
+  });
+  return updated;
 }
 async function threadScope(executor: Executor, id: string) {
   const [thread] = await executor.select().from(threads).where(eq(threads.id, id));
@@ -153,26 +181,7 @@ export default createElysia({ prefix: '/platform' })
         const { board, scope } = await boardScope(tx, params.id);
         requireLeader(actor, scope, 'projects.catalog.edit');
         await tx.select().from(boards).where(eq(boards.id, board.id)).for('update');
-        if (!validBoardStatuses(body.statuses))
-          throw status(422, { code: 'INVALID_BOARD_STATUSES' });
-        const items = await tx
-          .select({ column: kanbanItems.column })
-          .from(kanbanItems)
-          .where(eq(kanbanItems.boardId, board.id));
-        if (items.some((item) => !statusExists(body.statuses, item.column)))
-          throw status(409, { code: 'STATUS_IN_USE' });
-        const [updated] = await tx
-          .update(boards)
-          .set({ statuses: body.statuses })
-          .where(eq(boards.id, board.id))
-          .returning();
-        await recordEvent(tx, {
-          actorId: actor.id,
-          projectId: board.projectId,
-          action: 'boards.statuses.updated',
-          targetId: board.id
-        });
-        return updated;
+        return persistStatuses(tx, board, body.statuses, actor.id);
       });
     },
     {
@@ -181,13 +190,63 @@ export default createElysia({ prefix: '/platform' })
           t.Object({
             id: t.String({ pattern: '^[a-z][a-z0-9-]{0,39}$' }),
             name: t.String({ minLength: 1, maxLength: 60 }),
-            color: t.Optional(t.String({ pattern: '^#[0-9a-fA-F]{6}$' }))
+            color: t.Optional(t.String({ pattern: '^#[0-9a-fA-F]{6}$' })),
+            deleted: t.Optional(t.Boolean())
           }),
-          { minItems: 1, maxItems: 20 }
+          { minItems: 1, maxItems: 100 }
         )
       })
     }
   )
+  .patch(
+    '/boards/:id/statuses/:statusId',
+    async ({ db, user, params, body }) => {
+      const actor = active(user);
+      return db.transaction(async (tx) => {
+        const { board, scope } = await boardScope(tx, params.id);
+        requireLeader(actor, scope, 'projects.catalog.edit');
+        const [current] = await tx
+          .select()
+          .from(boards)
+          .where(eq(boards.id, board.id))
+          .for('update');
+        if (!current?.statuses.some((s) => s.id === params.statusId))
+          throw status(404, { code: 'STATUS_NOT_FOUND' });
+        return persistStatuses(
+          tx,
+          current,
+          current.statuses.map((s) => (s.id === params.statusId ? { ...s, ...body } : s)),
+          actor.id
+        );
+      });
+    },
+    {
+      body: t.Object(
+        {
+          name: t.Optional(t.String({ minLength: 1, maxLength: 60 })),
+          color: t.Optional(t.String({ pattern: '^#[0-9a-fA-F]{6}$' })),
+          deleted: t.Optional(t.Boolean())
+        },
+        { additionalProperties: false }
+      )
+    }
+  )
+  .delete('/boards/:id/statuses/:statusId', async ({ db, user, params }) => {
+    const actor = active(user);
+    return db.transaction(async (tx) => {
+      const { board, scope } = await boardScope(tx, params.id);
+      requireLeader(actor, scope, 'projects.catalog.edit');
+      const [current] = await tx.select().from(boards).where(eq(boards.id, board.id)).for('update');
+      if (!current?.statuses.some((s) => s.id === params.statusId))
+        throw status(404, { code: 'STATUS_NOT_FOUND' });
+      return persistStatuses(
+        tx,
+        current,
+        current.statuses.map((s) => (s.id === params.statusId ? { ...s, deleted: true } : s)),
+        actor.id
+      );
+    });
+  })
   .get(
     '/boards/:id/items',
     async ({ db, user, params, query }) => {
@@ -340,6 +399,13 @@ export default createElysia({ prefix: '/platform' })
       return db.transaction(async (tx) => {
         const { item, board, scope } = await itemScope(tx, params.id);
         requireLeader(actor, scope, 'collaboration.items.restore');
+        const [currentBoard] = await tx
+          .select()
+          .from(boards)
+          .where(eq(boards.id, board.id))
+          .for('share');
+        if (!currentBoard || !statusExists(currentBoard.statuses, item.column))
+          throw status(409, { code: 'STATUS_DELETED' });
         const [updated] = await tx
           .update(kanbanItems)
           .set({ deletedAt: null, version: sql`${kanbanItems.version} + 1` })

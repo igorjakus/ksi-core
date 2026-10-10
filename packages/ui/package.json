@@ -29,8 +29,10 @@
     ],
     "./styles.css": "./styles.css",
     "./dark.css": "./dark.css",
+    "./platform/preferences":"./src/lib/platform/preferences.svelte.ts",
     "./platform/*": "./src/lib/platform/*",
-    "./platform.css": "./platform.css"
+    "./platform.css": "./platform.css",
+    "./platform-theme.css":"./platform-theme.css"
   },
   "scripts": {
     "dev": "vite dev",

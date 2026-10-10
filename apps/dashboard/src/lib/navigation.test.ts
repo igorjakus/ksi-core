@@ -70,3 +70,5 @@ test('member detail URLs preserve the selected person', () => {
     memberId: 'abc123'
   });
 });
+
+test('forum threads have persistent project and association paths',()=>{expect(parseDashboardPath('/projects/roboty/forum/abc')).toEqual({workspace:'project',projectSlug:'roboty',tab:'forum',threadId:'abc'});expect(parseDashboardPath('/association/forum/abc')).toEqual({workspace:'association',projectSlug:'',tab:'forum',threadId:'abc'});expect(parseDashboardPath('/projects/roboty/forum/abc/extra')).toBeNull();});

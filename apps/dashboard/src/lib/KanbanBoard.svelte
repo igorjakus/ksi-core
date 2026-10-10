@@ -4,7 +4,7 @@
   import Dropdown from '@ksi-core/ui/platform/Dropdown.svelte';
   import Editor from '@ksi-core/ui/platform/Editor.svelte';
   import MarkdownContent from '@ksi-core/ui/platform/MarkdownContent.svelte';
-  export type BoardStatus = { id: string; name: string; color?: string };
+  export type BoardStatus = { id: string; name: string; color?: string; deleted?: boolean };
   export type Item = {
     id: string;
     title: string;
@@ -37,17 +37,21 @@
   } = $props();
   const text = (pl: string, en: string) => (language === 'pl' ? pl : en);
   const label = (s: BoardStatus) =>
-    s.id === 'todo'
+    s.id === 'todo' && s.name === 'To do'
       ? text('Do zrobienia', 'To do')
-      : s.id === 'progress'
+      : s.id === 'progress' && s.name === 'In progress'
         ? text('W trakcie', 'In progress')
-        : s.id === 'done'
+        : s.id === 'done' && s.name === 'Done'
           ? text('Gotowe', 'Done')
           : s.name;
   const color = (s: BoardStatus) =>
     s.color ?? { todo: '#8b8b8b', progress: '#d58a32', done: '#449a78' }[s.id] ?? '#8777b5';
+  const activeStatuses = $derived(statuses.filter((s) => !s.deleted));
+  let editingStatus = $state<BoardStatus | null>(null),
+    statusDialog = $state<HTMLDialogElement>(),
+    statusError = $state('');
   const options = $derived(
-    statuses.map((s) => ({ value: s.id, label: label(s), color: color(s) }))
+    activeStatuses.map((s) => ({ value: s.id, label: label(s), color: color(s) }))
   );
   let busy = $state(false),
     dragged = $state<string | null>(null),
@@ -114,13 +118,54 @@
     composer = null;
     document.getElementById(`add-${column}`)?.focus();
   }
-  async function setColor(status: BoardStatus, value: string) {
-    await run(async () => {
+  async function openStatus(status: BoardStatus, event: MouseEvent) {
+    lastTrigger = event.currentTarget as HTMLElement;
+    editingStatus = { ...status };
+    statusError = '';
+    await tick();
+    statusDialog?.showModal();
+  }
+  function closeStatus() {
+    statusDialog?.close();
+    editingStatus = null;
+    lastTrigger?.focus();
+  }
+  async function saveStatus(remove = false) {
+    if (!editingStatus) return;
+    busy = true;
+    statusError = '';
+    try {
       const id = await ensureBoard();
-      await api(`/platform/boards/${id}/statuses`, 'PUT', {
-        statuses: statuses.map((s) => (s.id === status.id ? { ...s, color: value } : s))
-      });
-    });
+      await api(
+        `/platform/boards/${id}/statuses/${editingStatus.id}`,
+        remove ? 'DELETE' : 'PATCH',
+        remove
+          ? undefined
+          : {
+              name: editingStatus.name.trim(),
+              color: color(editingStatus),
+              deleted: !!editingStatus.deleted
+            }
+      );
+      await refresh();
+      closeStatus();
+    } catch (e) {
+      const message = e instanceof Error ? e.message : 'Error';
+      statusError =
+        message === 'STATUS_HAS_LIVE_ITEMS'
+          ? text(
+              'Najpierw przenieś lub usuń wszystkie aktywne zadania z tego statusu.',
+              'Move or remove all live tasks from this status first.'
+            )
+          : message === 'INVALID_BOARD_STATUSES'
+            ? text(
+                'Tablica musi mieć od 1 do 20 aktywnych statusów.',
+                'A board must have between 1 and 20 active statuses.'
+              )
+            : message;
+    } finally {
+      busy = false;
+    }
   }
   async function create() {
     await run(async () => {
@@ -223,8 +268,11 @@
   }
 </script>
 
-<div class="board" style:grid-template-columns={`repeat(${statuses.length}, minmax(260px, 1fr))`}>
-  {#each statuses as status (status.id)}
+<div
+  class="board"
+  style:grid-template-columns={`repeat(${activeStatuses.length}, minmax(260px, 1fr))`}
+>
+  {#each activeStatuses as status (status.id)}
     <section
       class="board-column"
       class:drop-target={over === status.id}
@@ -249,19 +297,18 @@
     >
       <div class="column-header">
         <span class="column-label"
-          >{#if canManage}<input
-              class="status-color"
-              type="color"
-              value={color(status)}
-              disabled={busy}
-              aria-label={`${text('Kolor statusu', 'Status color')}: ${label(status)}`}
-              title={text('Zmień kolor statusu', 'Change status color')}
-              onchange={(event) => setColor(status, event.currentTarget.value)}
-            />{:else}<span class="column-dot" style:background={color(status)}></span>{/if}{label(
-            status
-          )}<span class="column-count">{items.filter((i) => i.column === status.id).length}</span
+          ><span class="column-dot" style:background={color(status)}></span>{label(status)}<span
+            class="column-count">{items.filter((i) => i.column === status.id).length}</span
           ></span
         >
+        {#if canManage}<button
+            type="button"
+            class="icon-button"
+            aria-label={`${text('Edytuj status', 'Edit status')}: ${label(status)}`}
+            disabled={busy}
+            onclick={(event) => openStatus(status, event)}
+            ><Pencil size={15} aria-hidden="true" /></button
+          >{/if}
         <button
           id={`add-${status.id}`}
           type="button"
@@ -353,7 +400,7 @@
       </div>
     </form>
   </dialog>{/if}
-{#if canManage && statuses.length < 20}<div class="status-create">
+{#if canManage && activeStatuses.length < 20 && statuses.length < 100}<div class="status-create">
     {#if addingStatus}<form
         class="row"
         onsubmit={(event) => {
@@ -392,6 +439,70 @@
         }}><Plus size={15} aria-hidden="true" />{text('Dodaj status', 'Add status')}</button
       >{/if}
   </div>{/if}
+{#if canManage && statuses.some((s) => s.deleted)}<details class="deleted-statuses">
+    <summary>{text('Usunięte statusy', 'Deleted statuses')}</summary
+    >{#each statuses.filter((s) => s.deleted) as status}<button
+        class="btn btn-outline"
+        onclick={(event) => openStatus(status, event)}
+        ><Pencil size={14} aria-hidden="true" />{label(status)}</button
+      >{/each}
+  </details>{/if}
+{#if editingStatus}<dialog
+    class="issue-dialog status-dialog"
+    bind:this={statusDialog}
+    aria-labelledby="status-heading"
+    oncancel={(event) => {
+      event.preventDefault();
+      closeStatus();
+    }}
+  >
+    <div class="issue-heading">
+      <h2 id="status-heading">{text('Edytuj status', 'Edit status')}</h2>
+      <button class="icon-button" aria-label={text('Zamknij', 'Close')} onclick={closeStatus}
+        ><X size={18} aria-hidden="true" /></button
+      >
+    </div>
+    <form
+      class="issue-editor"
+      onsubmit={(event) => {
+        event.preventDefault();
+        void saveStatus();
+      }}
+    >
+      <label for="edit-status-name">{text('Nazwa', 'Name')}</label><input
+        id="edit-status-name"
+        bind:value={editingStatus.name}
+        required
+        maxlength="60"
+      />
+      <label for="edit-status-color">{text('Kolor', 'Color')}</label><input
+        id="edit-status-color"
+        type="color"
+        value={color(editingStatus)}
+        oninput={(event) => (editingStatus!.color = event.currentTarget.value)}
+      />
+      <label class="status-state"
+        ><input type="checkbox" bind:checked={editingStatus.deleted} />{text(
+          'Usunięty',
+          'Deleted'
+        )}</label
+      >
+      {#if statusError}<p role="alert" class="error">{statusError}</p>{/if}
+      <div class="row">
+        <button class="btn" disabled={busy || !editingStatus.name.trim()}
+          ><Save size={14} aria-hidden="true" />{text('Zapisz', 'Save')}</button
+        ><button type="button" class="btn btn-outline" disabled={busy} onclick={closeStatus}
+          >{text('Anuluj', 'Cancel')}</button
+        >{#if !editingStatus.deleted}<button
+            type="button"
+            class="btn btn-outline danger-button"
+            disabled={busy}
+            onclick={() => saveStatus(true)}
+            ><Trash2 size={14} aria-hidden="true" />{text('Usuń status', 'Delete status')}</button
+          >{/if}
+      </div>
+    </form>
+  </dialog>{/if}
 {#if selected}<dialog
     bind:this={dialog}
     class="issue-dialog"
@@ -521,23 +632,29 @@
   </dialog>{/if}
 
 <style>
-  .status-color {
-    appearance: none;
-    width: 16px;
-    height: 16px;
-    padding: 0;
-    margin: 0;
-    border: none;
-    border-radius: 50%;
-    overflow: hidden;
+  .status-dialog {
+    width: min(560px, calc(100vw - 32px));
+  }
+  .status-state {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .deleted-statuses {
+    margin-top: 20px;
+  }
+  .deleted-statuses summary {
     cursor: pointer;
+    margin-bottom: 12px;
   }
-  .status-color::-webkit-color-swatch-wrapper {
-    padding: 0;
+  .deleted-statuses .btn {
+    margin: 4px;
   }
-  .status-color::-webkit-color-swatch {
-    border: none;
-    border-radius: 50%;
+  .column-label {
+    margin-right: auto;
+  }
+  .column-header {
+    gap: 8px;
   }
   .delete-confirmation {
     border: 1px solid var(--danger);
@@ -614,10 +731,7 @@
     height: 36px;
     padding: 3px;
   }
-  .status-color::-moz-color-swatch {
-    border: none;
-    border-radius: 50%;
-  }
+
   .status-create input {
     max-width: 260px;
     margin: 0;
