@@ -52,9 +52,14 @@ export const userRoutes = createElysia({ prefix: '/users', protectedRoute: true 
           lastName: t.Optional(t.String({ maxLength: 100 })),
           nickname: t.Optional(t.String({ maxLength: 100 })),
           bio: t.Optional(t.String({ maxLength: 5000 })),
-          github: t.Optional(t.String({ pattern: '^https://github\\.com/[A-Za-z0-9_-]+/?$' })),
+          github: t.Optional(
+            t.Union([t.Null(), t.String({ pattern: '^https://github\\.com/[A-Za-z0-9_-]+/?$' })])
+          ),
           linkedin: t.Optional(
-            t.String({ pattern: '^https://(www\\.)?linkedin\\.com/in/[A-Za-z0-9_-]+/?$' })
+            t.Union([
+              t.Null(),
+              t.String({ pattern: '^https://(www\\.)?linkedin\\.com/in/[A-Za-z0-9_-]+/?$' })
+            ])
           ),
           publicPrivacy: t.Optional(
             t.Union([t.Literal('full-name'), t.Literal('last-initial'), t.Literal('initials')])

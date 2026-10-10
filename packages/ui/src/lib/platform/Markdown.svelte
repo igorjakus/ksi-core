@@ -42,7 +42,7 @@
     overflow-wrap: anywhere;
   }
   .markdown :global(pre) {
-    background: #edf1ed;
+    background: var(--surface-muted, #edf1ed);
     padding: 16px;
     overflow: auto;
   }
@@ -69,9 +69,10 @@
     z-index: 100;
     width: min(95vw, 1000px);
     max-height: 95vh;
-    border: 1px solid #acbdb4;
+    border: 1px solid var(--line, #acbdb4);
     border-radius: 12px;
-    background: white;
+    background: var(--surface, white);
+    color: var(--ink, #272638);
     padding: 20px;
     box-shadow: 0 0 0 100vmax #0009;
   }

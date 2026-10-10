@@ -46,6 +46,7 @@
       "version": "0.1.0",
       "dependencies": {
         "@ksi-core/ui": "workspace:*",
+        "@lucide/svelte": "0.548.0",
         "better-auth": "^1.6.25",
         "shared": "workspace:*",
       },
@@ -159,6 +160,9 @@
     "packages/ui": {
       "name": "@ksi-core/ui",
       "version": "0.0.1",
+      "dependencies": {
+        "@lucide/svelte": "0.548.0",
+      },
       "devDependencies": {
         "@sveltejs/adapter-auto": "^7.0.1",
         "@sveltejs/kit": "^2.63.0",

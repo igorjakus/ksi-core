@@ -1,5 +1,9 @@
 <script lang="ts">
   import '@ksi-core/ui/platform.css';
+  import '$lib/dashboard.css';
+  import { onMount } from 'svelte';
+  import { initializePreferences } from '$lib/preferences.svelte';
+  onMount(initializePreferences);
   let { children } = $props();
 </script>
 

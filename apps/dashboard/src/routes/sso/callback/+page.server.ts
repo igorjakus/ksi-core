@@ -1,6 +1,6 @@
 import { redirect, error, isRedirect } from '@sveltejs/kit';
-import { env } from '$env/dynamic/private';
-import { startSso, finishSso } from 'shared/server';
+import { env } from '$lib/server/environment';
+import { finishSso } from 'shared/server';
 import type { PageServerLoad } from './$types';
 export const load: PageServerLoad = async (event) => {
   try {
