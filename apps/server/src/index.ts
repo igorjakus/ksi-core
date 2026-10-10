@@ -1,5 +1,11 @@
 import { app } from './app';
 import { consumeTicket, websocket, startRealtime, type SocketData } from './lib/realtime';
+
+const required = ['DATABASE_URL', 'PROXY_SECRET', 'BETTER_AUTH_SECRET'];
+for (const envVar of required) {
+  if (!Bun.env[envVar]) throw new Error(`Missing required environment variable: ${envVar}`);
+}
+
 const port = Number(Bun.env.PORT ?? 3000);
 const server = Bun.serve<SocketData>({
   port,
