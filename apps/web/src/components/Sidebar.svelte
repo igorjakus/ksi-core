@@ -5,13 +5,14 @@
     Blocks,
     BrainCircuit,
     ChevronDown,
-    File,
-    FileIcon,
+    CodeXml,
+    FlaskConical,
     LogIn,
     LogOut,
     Megaphone,
     MountainSnow,
     PanelLeftClose,
+    Share2,
     TableProperties,
     Wrench
   } from '@lucide/svelte';
@@ -24,8 +25,7 @@
   import SidebarLink from './SidebarLink.svelte';
   import { getUrls } from 'shared';
   import { invalidateAll } from '$app/navigation';
-  import { locale, setLocale } from '$lib/locale.svelte';
-  import { locales } from '../locales/data';
+  import { getActiveLocale, getAvailableLocales, locale, setLocale } from '$lib/locale.svelte';
 
   interface Props {
     user: User | null;
@@ -34,25 +34,8 @@
 
   const { user, session }: Props = $props();
 
-  let availableLocales = $derived(
-    locales
-      .map((locale) => ({
-        code: locale,
-        emoji: getFlagEmoji(locale),
-        formattedLocale: new Intl.DisplayNames([locale], { type: 'language' }).of(locale)!
-      }))
-      .toSorted((a, b) => a.formattedLocale.localeCompare(b.formattedLocale))
-  );
-  let activeLocale = $derived(
-    availableLocales.find((l) => l.code === locale.current) || availableLocales[0]
-  );
-
-  function getFlagEmoji(countryCode: string) {
-    if (countryCode.includes('-')) return getFlagEmoji(countryCode.split('-')[1]);
-    return [...countryCode.toUpperCase()]
-      .map((char) => String.fromCodePoint(127397 + char.charCodeAt(0)))
-      .join('');
-  }
+  let availableLocales = $derived(getAvailableLocales());
+  let activeLocale = $derived(getActiveLocale());
 
   $effect(() => {
     if (user !== null) {
@@ -77,7 +60,14 @@
 </script>
 
 {#snippet sidebarContent()}
-  <div class="flex w-full flex-1 flex-col gap-1 overflow-y-auto px-3 py-3">
+  <!-- svelte-ignore a11y_no_static_element_interactions -->
+  <!-- svelte-ignore a11y_click_events_have_key_events -->
+  <div
+    class="flex w-full flex-1 flex-col gap-1 overflow-y-auto px-3 py-3"
+    onclick={(event) => {
+      if ((event.target as HTMLElement).closest('a')) $sidebarStore = false;
+    }}
+  >
     <SidebarAccordion title="Projects">
       <SidebarLink href="/projects/zosia" icon={MountainSnow} exact={false}>Zosia</SidebarLink>
       <SidebarLink href="/projects/ml" icon={BrainCircuit} exact={false}
@@ -85,6 +75,12 @@
       >
       <SidebarLink href="/projects/hoc" icon={Blocks} exact={false}>Hour of Code</SidebarLink>
       <SidebarLink href="/projects/ket" icon={Atom} exact={false}>KET</SidebarLink>
+    </SidebarAccordion>
+
+    <SidebarAccordion title="Groups">
+      <SidebarLink href="/#social" icon={Share2}>Social</SidebarLink>
+      <SidebarLink href="/#technical" icon={CodeXml}>Technical</SidebarLink>
+      <SidebarLink href="/#scientific" icon={FlaskConical}>Scientific research</SidebarLink>
     </SidebarAccordion>
 
     {#if session !== null}

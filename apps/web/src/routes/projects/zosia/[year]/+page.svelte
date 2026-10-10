@@ -47,39 +47,39 @@
   </div>
 {/snippet}
 
-<Wrapper name={`projects / zosia / ${data.year}`}>
-  <a
-    href="/projects/zosia"
-    class="text-base-content/45 hover:text-primary mb-8 flex w-fit items-center gap-2 text-xs font-bold tracking-widest uppercase"
-  >
-    <ArrowLeft class="size-4" /> Back to all editions
-  </a>
-
-  <header class="border-base-content/15 bg-base-200 relative min-h-112 overflow-hidden border">
-    {#if bgImage}
-      <div
-        class="absolute inset-0 bg-cover bg-center opacity-35"
-        style={`background-image: url(${bgImage})`}
-      ></div>
-      <div
-        class="from-base-100 via-base-100/30 absolute inset-0 bg-linear-to-t to-transparent"
-      ></div>
-    {/if}
-
-    <div class="relative flex min-h-112 flex-col justify-between p-6 md:p-10">
-      <span
-        class="border-base-content/20 bg-base-100/70 w-fit border px-3 py-1.5 text-xs font-bold tracking-[0.2em] uppercase backdrop-blur"
-        >ZOSIA edition</span
+{#snippet hero()}
+  <header class="grid gap-10 lg:grid-cols-2 lg:items-center">
+    <div>
+      <p class="mb-5 font-mono text-xs tracking-widest uppercase">
+        [ Winter camp / Edition archive ]
+      </p>
+      <h1>ZOSIA <span class="bg-primary text-primary-content px-3">{data.year}</span></h1>
+      <p class="text-base-content/65 mt-6 text-lg">
+        {data.edition.date}<br />{data.edition.location}
+      </p>
+      <a href="/projects/zosia" class="btn btn-soft btn-clipped mt-8 gap-3"
+        ><ArrowLeft class="size-4" />Back to all editions</a
       >
-      <h1 class="mb-0! text-7xl leading-[0.75]! tracking-[-0.08em] sm:text-8xl lg:text-[10rem]">
-        {data.year}
-      </h1>
     </div>
+    {#if bgImage}
+      <img
+        src={bgImage}
+        alt={`ZOSIA ${data.year} camp photograph`}
+        class="clipped aspect-4/3 w-full object-cover"
+      />
+    {:else}
+      <div
+        aria-hidden="true"
+        class="border-base-content/20 bg-primary/10 font-anybody flex aspect-4/3 items-center justify-center border text-[clamp(4rem,12vw,10rem)] tracking-tight"
+      >
+        {data.year}
+      </div>
+    {/if}
   </header>
+{/snippet}
 
-  <section
-    class="bg-base-content/15 border-base-content/15 grid gap-px border-x border-b md:grid-cols-3"
-  >
+<Wrapper name={`projects / zosia / ${data.year}`} {hero}>
+  <section class="bg-base-content/15 border-base-content/15 grid gap-px border md:grid-cols-3">
     <div class="bg-base-100 p-6 md:p-8">
       <span
         class="text-base-content/40 mb-8 flex items-center gap-2 text-xs font-bold tracking-widest uppercase"

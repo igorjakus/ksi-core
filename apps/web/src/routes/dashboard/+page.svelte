@@ -7,7 +7,7 @@
   <Wrench class="size-4" />
 {/snippet}
 
-<Wrapper name="dashboard" icon={dashboardIcon}>
+{#snippet hero()}
   <header class="border-base-content/15 border-b pb-10 md:pb-14">
     <h1 class="mb-0! max-w-4xl text-4xl leading-tight tracking-[-0.04em] sm:text-5xl lg:text-6xl">
       Dashboard
@@ -16,7 +16,9 @@
       Manage public announcements and perform other tasks.
     </p>
   </header>
+{/snippet}
 
+<Wrapper name="dashboard" icon={dashboardIcon} {hero}>
   <section class="py-10 md:py-14" aria-labelledby="tools-heading">
     <div class="mb-8 flex items-end justify-between gap-6">
       <div>

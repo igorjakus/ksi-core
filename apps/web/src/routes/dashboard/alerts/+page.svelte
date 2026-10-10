@@ -175,7 +175,7 @@
   <Megaphone class="size-4" />
 {/snippet}
 
-<Wrapper name="dashboard / alerts" {icon}>
+{#snippet hero()}
   <header
     class="border-base-content/15 flex flex-col gap-8 border-b pb-10 md:flex-row md:items-end md:justify-between"
   >
@@ -188,7 +188,7 @@
     </div>
     {#if !creating}
       <button
-        class="btn btn-primary w-fit gap-2 px-5"
+        class="btn btn-primary btn-clipped w-fit gap-2 px-5"
         type="button"
         onclick={() => (creating = true)}
       >
@@ -197,7 +197,9 @@
       </button>
     {/if}
   </header>
+{/snippet}
 
+<Wrapper name="dashboard / alerts" {icon} {hero}>
   {#if creating}
     <section class="border-base-content/15 border-b py-10" aria-labelledby="editor-heading">
       <form class="border-base-content/20 bg-base-100 border" onsubmit={saveAlert}>
@@ -311,7 +313,7 @@
           <button class="btn btn-ghost" type="button" onclick={resetForm} disabled={saving}
             >Cancel</button
           >
-          <button class="btn btn-primary min-w-36" type="submit" disabled={saving}>
+          <button class="btn btn-primary btn-clipped min-w-36" type="submit" disabled={saving}>
             {saving ? 'Saving…' : editingId ? 'Save changes' : 'Create alert'}
           </button>
         </div>

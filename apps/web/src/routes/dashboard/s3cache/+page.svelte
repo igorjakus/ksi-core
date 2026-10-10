@@ -76,7 +76,7 @@
   <TableProperties class="size-4" />
 {/snippet}
 
-<Wrapper name="dashboard / s3 cache" {icon}>
+{#snippet hero()}
   <header class="border-base-content/15 border-b pb-10 md:pb-14">
     <p class="text-primary mb-4 text-xs font-bold tracking-[0.2em] uppercase">Storage operations</p>
     <h1 class="mb-0! text-4xl tracking-[-0.04em] sm:text-5xl">S3 cache</h1>
@@ -85,7 +85,9 @@
       storage. Inspect each cached group below or refresh a key after its bucket contents change.
     </p>
   </header>
+{/snippet}
 
+<Wrapper name="dashboard / s3 cache" {icon} {hero}>
   <section class="py-10 md:py-14" aria-labelledby="cache-list-heading" aria-busy={loading}>
     <div class="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
       <div>

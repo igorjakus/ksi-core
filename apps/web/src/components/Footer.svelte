@@ -6,36 +6,16 @@
     GitCommitHorizontal,
     Github,
     Instagram,
-    Linkedin,
-    Mail
+    Linkedin
   } from '@lucide/svelte';
-  import { locale, setLocale } from '$lib/locale.svelte';
-  import { locales } from '../locales/data';
+  import { getActiveLocale, getAvailableLocales, locale, setLocale } from '$lib/locale.svelte';
+  import GuideFrame from './ui/GuideFrame.svelte';
 
   const commitHash = import.meta.env.PUBLIC_COMMIT_HASH || '';
   const shortCommitHash = commitHash.slice(0, 7);
 
-  const availableLocales = $derived(
-    locales
-      .map((localeCode) => ({
-        code: localeCode,
-        emoji: getFlagEmoji(localeCode),
-        formattedLocale: new Intl.DisplayNames([localeCode], { type: 'language' }).of(localeCode)!
-      }))
-      .toSorted((a, b) => a.formattedLocale.localeCompare(b.formattedLocale))
-  );
-
-  const activeLocale = $derived(
-    availableLocales.find((availableLocale) => availableLocale.code === locale.current) ??
-      availableLocales[0]
-  );
-
-  function getFlagEmoji(localeCode: string) {
-    const countryCode = localeCode.includes('-') ? localeCode.split('-')[1] : localeCode;
-    return [...countryCode.toUpperCase()]
-      .map((character) => String.fromCodePoint(127397 + character.charCodeAt(0)))
-      .join('');
-  }
+  const availableLocales = $derived(getAvailableLocales());
+  const activeLocale = $derived(getActiveLocale());
 
   // @wc-ignore
   const socialLinks = [
@@ -47,10 +27,7 @@
 </script>
 
 <footer class="bg-base-50 text-base-content relative w-full">
-  <div class="pointer-events-none absolute inset-0 hidden md:block">
-    <div class="border-muted absolute top-0 left-8 h-full border-l border-dashed"></div>
-    <div class="border-muted absolute top-0 right-8 h-full border-l border-dashed"></div>
-  </div>
+  <GuideFrame tone="hero" />
   <div class="grid grid-cols-1 md:mx-8 lg:grid-cols-3">
     <div class="border-muted border-r border-dashed p-4 py-8 md:py-16">
       <a

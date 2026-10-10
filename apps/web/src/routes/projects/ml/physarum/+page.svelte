@@ -7,25 +7,27 @@
   const team = ['Igor Jakus', 'Hubert Berlicki', 'Wojciech Aszkiełowicz', 'Dr Marek Adamczyk'];
 </script>
 
-<Wrapper name="projects / ml / physarum">
-  <article class="text-base-content">
-    <header class="border-base-content/15 border-b pt-2 pb-14 lg:pb-20">
-      <div class="max-w-5xl">
-        <p class="text-accent mb-5 text-xs font-bold tracking-[0.2em] uppercase">
-          Computational Biology & AI
-        </p>
-        <h1 class="mb-0! text-5xl leading-[0.95]! tracking-[-0.055em] sm:text-6xl lg:text-8xl">
-          Can a Slime Mold<br />train Neural Networks?
-        </h1>
-        <p class="text-base-content/70 mt-8 max-w-3xl text-lg leading-relaxed md:text-xl">
-          This project explores the fascinating intersection of biology and computer science,
-          testing whether the natural processes of <em class="text-base-content font-serif italic"
-            >Physarum polycephalum</em
-          > can be used to perform computational tasks, such as training neural networks.
-        </p>
-      </div>
-    </header>
+{#snippet hero()}
+  <header class="border-base-content/15 border-b pt-2 pb-14 lg:pb-20">
+    <div class="max-w-5xl">
+      <p class="text-accent mb-5 text-xs font-bold tracking-[0.2em] uppercase">
+        Computational Biology & AI
+      </p>
+      <h1 class="mb-0! text-5xl leading-[0.95]! tracking-[-0.055em] sm:text-6xl lg:text-8xl">
+        Can a Slime Mold<br />train Neural Networks?
+      </h1>
+      <p class="text-base-content/70 mt-8 max-w-3xl text-lg leading-relaxed md:text-xl">
+        This project explores the fascinating intersection of biology and computer science, testing
+        whether the natural processes of <em class="text-base-content font-serif italic"
+          >Physarum polycephalum</em
+        > can be used to perform computational tasks, such as training neural networks.
+      </p>
+    </div>
+  </header>
+{/snippet}
 
+<Wrapper name="projects / ml / physarum" {hero}>
+  <article class="text-base-content">
     <section class="border-base-content/15 border-b py-14 lg:py-20">
       <div class="grid gap-10 lg:grid-cols-[0.55fr_1.45fr] lg:gap-16">
         <div>
@@ -74,9 +76,9 @@
       </div>
 
       <figure class="border-base-content/15 bg-base-200/20 border p-3 md:p-5">
-        <div class="overflow-x-auto bg-black">
+        <div class="bg-black">
           <img
-            class="mx-auto block h-auto min-w-160 object-contain"
+            class="mx-auto block h-auto w-full object-contain"
             src="/projects/physarum/graphic1.webp"
             alt="Three-panel visualization showing a U-Matrix heatmap, a neuron activation hit map, and neuron weight vectors"
           />

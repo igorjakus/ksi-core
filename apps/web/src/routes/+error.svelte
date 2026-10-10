@@ -8,7 +8,14 @@
   <title>{page.status} · KSI UWr</title>
 </svelte:head>
 
-<Wrapper name={`error / ${page.status}`}>
+{#snippet hero()}
+  <header>
+    <p class="mb-4 font-mono text-xs tracking-widest uppercase">Error / {page.status}</p>
+    <h1>Let’s find your way back.</h1>
+  </header>
+{/snippet}
+
+<Wrapper name={`error / ${page.status}`} {hero}>
   <div
     class="border-base-content/15 grid min-h-[60vh] items-center gap-10 border-y py-16 lg:grid-cols-[0.55fr_1fr]"
   >
@@ -28,10 +35,12 @@
       <p class="text-base-content/65 text-lg leading-relaxed">
         {page.error?.message ||
           'The page may have moved, or something went wrong while loading it.'}
-        The reliable route is back to the association — and room 24 at the Institute of Computer Science
-        is always worth finding.
       </p>
-      <a href="/" class="btn btn-primary mt-10 gap-2 px-6">
+      <p class="text-base-content/65 mt-4 text-lg leading-relaxed">
+        The reliable route is back to the association — and room 24 at the Institute of Computer
+        Science is always worth finding.
+      </p>
+      <a href="/" class="btn btn-primary btn-clipped mt-10 gap-2 px-6">
         <ArrowLeft class="size-4" /> Return home
       </a>
     </div>

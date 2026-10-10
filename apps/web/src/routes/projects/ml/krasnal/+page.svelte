@@ -15,36 +15,38 @@
   ];
 </script>
 
-<Wrapper name="projects / ml / krasnal">
-  <article class="text-base-content">
-    <header
-      class="border-base-content/15 grid gap-10 border-b pt-2 pb-14 lg:grid-cols-[1fr_auto] lg:items-end lg:pb-20"
+{#snippet hero()}
+  <header
+    class="border-base-content/15 grid gap-10 border-b pt-2 pb-14 lg:grid-cols-[1fr_auto] lg:items-end lg:pb-20"
+  >
+    <div class="max-w-4xl">
+      <p class="text-secondary mb-5 text-xs font-bold tracking-[0.2em] uppercase">
+        Machine learning · Chess
+      </p>
+      <h1 class="mb-0! text-5xl leading-[0.95]! tracking-[-0.055em] sm:text-6xl lg:text-8xl">
+        Krasnal
+      </h1>
+      <p class="text-base-content/70 mt-8 max-w-3xl text-lg leading-relaxed md:text-xl">
+        Krasnal is a chess engine developed in Wrocław, based on the Transformer architecture. It
+        utilizes deep neural networks to learn to play chess intuitively, departing from
+        traditional, heavy calculations and game tree searching.
+      </p>
+    </div>
+
+    <a
+      class="btn btn-soft btn-clipped w-fit gap-2 border-0 px-6"
+      href="https://github.com/KSI-ML-research/krasnal"
+      target="_blank"
+      rel="noopener"
     >
-      <div class="max-w-4xl">
-        <p class="text-secondary mb-5 text-xs font-bold tracking-[0.2em] uppercase">
-          Machine learning · Chess
-        </p>
-        <h1 class="mb-0! text-5xl leading-[0.95]! tracking-[-0.055em] sm:text-6xl lg:text-8xl">
-          Krasnal
-        </h1>
-        <p class="text-base-content/70 mt-8 max-w-3xl text-lg leading-relaxed md:text-xl">
-          Krasnal is a chess engine developed in Wrocław, based on the Transformer architecture. It
-          utilizes deep neural networks to learn to play chess intuitively, departing from
-          traditional, heavy calculations and game tree searching.
-        </p>
-      </div>
+      <Github class="size-4" />
+      GitHub
+    </a>
+  </header>
+{/snippet}
 
-      <a
-        class="btn btn-outline border-base-content/30 w-fit gap-2 px-6"
-        href="https://github.com/KSI-ML-research/krasnal"
-        target="_blank"
-        rel="noopener"
-      >
-        <Github class="size-4" />
-        GitHub
-      </a>
-    </header>
-
+<Wrapper name="projects / ml / krasnal" {hero}>
+  <article class="text-base-content">
     <section class="border-base-content/15 border-b py-14 lg:py-20">
       <div class="grid gap-10 lg:grid-cols-[0.55fr_1.45fr] lg:gap-16">
         <div>
@@ -99,7 +101,7 @@
           <div class="flex min-h-64 items-center justify-center bg-white p-3 md:p-6">
             <img
               class="h-auto max-h-[34rem] w-full object-contain"
-              src="/projects/krasnal/1.webp"
+              src="/projects/krasnal/3.webp"
               alt="Diagram comparing ambiguous standard UCI chess notation with Krasnal's color-aware tokenization"
             />
           </div>
@@ -135,7 +137,7 @@
           <div class="flex min-h-80 items-center justify-center bg-white p-3 md:p-6">
             <img
               class="h-auto max-h-[38rem] w-full object-contain"
-              src="/projects/krasnal/3.webp"
+              src="/projects/krasnal/1.webp"
               alt="Diagram comparing Stockfish's explicit search tree with Krasnal's Transformer-based direct next-move prediction"
             />
           </div>

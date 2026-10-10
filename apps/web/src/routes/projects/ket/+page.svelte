@@ -15,73 +15,79 @@
   ];
 </script>
 
-<Wrapper name="projects / ket">
-  <article class="text-base-content">
-    <header
-      class="border-base-content/15 grid gap-10 border-b pt-2 pb-14 lg:grid-cols-[1fr_auto] lg:items-end lg:pb-20"
+{#snippet hero()}
+  <header
+    class="border-base-content/15 grid gap-10 border-b pt-2 pb-14 lg:grid-cols-[1fr_auto] lg:items-end lg:pb-20"
+  >
+    <div class="max-w-4xl">
+      <p class="text-primary mb-5 text-xs font-bold tracking-[0.2em] uppercase">
+        Quantum algorithms · Qiskit
+      </p>
+      <!-- @wc-ignore -->
+      <h1 class="mb-0! text-6xl leading-[0.9]! tracking-[-0.06em] sm:text-7xl lg:text-9xl">KET</h1>
+      <p class="text-base-content/70 mt-8 max-w-3xl text-lg leading-relaxed md:text-xl">
+        Explore quantum algorithms with Qiskit — from your first qubit to code running on a real
+        quantum processor.
+      </p>
+    </div>
+
+    <a
+      class="btn btn-primary btn-clipped w-fit gap-2 px-6"
+      href="https://forms.gle/do7yFM1py8SsKeXd9"
+      target="_blank"
+      rel="noopener"
     >
-      <div class="max-w-4xl">
-        <p class="text-primary mb-5 text-xs font-bold tracking-[0.2em] uppercase">
-          Quantum algorithms · Qiskit
-        </p>
-        <!-- @wc-ignore -->
-        <h1 class="mb-0! text-6xl leading-[0.9]! tracking-[-0.06em] sm:text-7xl lg:text-9xl">
-          KET
-        </h1>
-        <p class="text-base-content/70 mt-8 max-w-3xl text-lg leading-relaxed md:text-xl">
-          The KET project focuses on pure quantum algorithmics, moving computation modeling to a
-          level of abstraction familiar from classical software engineering. It allows you to learn
-          and run code on a real quantum processor without requiring advanced knowledge of physics,
-          optics, or cryogenics. The development path leads from the basics of qubit operation and
-          cryptography in the Qiskit environment, through complexity theory, to variational
-          optimization methods. In the final phase, participants face the challenges of modern
-          hardware, learning advanced error-correcting codes, magic state distillation, and Quantum
-          Machine Learning.
-        </p>
-      </div>
+      Join us
+      <SquareArrowOutUpRight class="size-4" />
+    </a>
+  </header>
+{/snippet}
 
-      <a
-        class="btn btn-primary w-fit gap-2 px-6"
-        href="https://forms.gle/do7yFM1py8SsKeXd9"
-        target="_blank"
-        rel="noopener"
-      >
-        Join us
-        <SquareArrowOutUpRight class="size-4" />
-      </a>
-    </header>
-
+<Wrapper name="projects / ket" {hero}>
+  <article class="text-base-content">
     <section class="border-base-content/15 border-b py-14 lg:py-20">
       <div class="grid gap-10 lg:grid-cols-[0.55fr_1.45fr] lg:gap-16">
         <div>
           <p class="text-primary mb-3 text-xs font-bold tracking-[0.2em] uppercase">01 / Project</p>
           <h2 class="mb-0! text-3xl tracking-tight md:text-4xl">From qubits to real hardware.</h2>
         </div>
-        <dl class="border-base-content/15 grid border-t border-l md:grid-cols-3">
-          <div class="border-base-content/15 border-r border-b p-5">
-            <Atom class="text-primary mb-8 size-6" strokeWidth={1.5} />
-            <dt class="text-base-content/45 mb-2 text-xs font-bold tracking-[0.16em] uppercase">
-              Starting point
-            </dt>
-            <dd class="leading-relaxed">Basics of qubit operation and cryptography</dd>
-          </div>
-          <div class="border-base-content/15 border-r border-b p-5">
-            <Cpu class="text-secondary mb-8 size-6" strokeWidth={1.5} />
-            <dt class="text-base-content/45 mb-2 text-xs font-bold tracking-[0.16em] uppercase">
-              Environment
-            </dt>
-            <dd class="leading-relaxed">Qiskit and a real quantum processor</dd>
-          </div>
-          <div class="border-base-content/15 border-r border-b p-5">
-            <span class="text-accent mb-8 block text-2xl leading-none">Q</span>
-            <dt class="text-base-content/45 mb-2 text-xs font-bold tracking-[0.16em] uppercase">
-              Advanced path
-            </dt>
-            <dd class="leading-relaxed">
-              Error correction, optimization, and Quantum Machine Learning
-            </dd>
-          </div>
-        </dl>
+        <div class="space-y-8">
+          <p class="text-base-content/70 max-w-3xl text-lg leading-relaxed">
+            The KET project focuses on pure quantum algorithmics, moving computation modeling to a
+            level of abstraction familiar from classical software engineering. It allows you to
+            learn and run code on a real quantum processor without requiring advanced knowledge of
+            physics, optics, or cryogenics. The development path leads from the basics of qubit
+            operation and cryptography in the Qiskit environment, through complexity theory, to
+            variational optimization methods. In the final phase, participants face the challenges
+            of modern hardware, learning advanced error-correcting codes, magic state distillation,
+            and Quantum Machine Learning.
+          </p>
+          <dl class="border-base-content/15 grid border-t border-l md:grid-cols-3">
+            <div class="border-base-content/15 border-r border-b p-5">
+              <Atom class="text-primary mb-8 size-6" strokeWidth={1.5} />
+              <dt class="text-base-content/45 mb-2 text-xs font-bold tracking-[0.16em] uppercase">
+                Starting point
+              </dt>
+              <dd class="leading-relaxed">Basics of qubit operation and cryptography</dd>
+            </div>
+            <div class="border-base-content/15 border-r border-b p-5">
+              <Cpu class="text-secondary mb-8 size-6" strokeWidth={1.5} />
+              <dt class="text-base-content/45 mb-2 text-xs font-bold tracking-[0.16em] uppercase">
+                Environment
+              </dt>
+              <dd class="leading-relaxed">Qiskit and a real quantum processor</dd>
+            </div>
+            <div class="border-base-content/15 border-r border-b p-5">
+              <span class="text-accent mb-8 block text-2xl leading-none">Q</span>
+              <dt class="text-base-content/45 mb-2 text-xs font-bold tracking-[0.16em] uppercase">
+                Advanced path
+              </dt>
+              <dd class="leading-relaxed">
+                Error correction, optimization, and Quantum Machine Learning
+              </dd>
+            </div>
+          </dl>
+        </div>
       </div>
     </section>
 

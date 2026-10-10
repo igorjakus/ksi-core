@@ -1,33 +1,26 @@
 <script lang="ts">
-  import {
-    ArrowDown,
-    ArrowRight,
-    ArrowUpRight,
-    Bot,
-    ChevronDown,
-    ChevronUp,
-    CodeXml,
-    FlaskConical,
-    GraduationCap,
-    Share2
-  } from '@lucide/svelte';
+  import { ArrowDown, ArrowRight, Lightbulb, Microscope, Presentation } from '@lucide/svelte';
+  import GuideFrame from '../components/ui/GuideFrame.svelte';
+  import PageSection from '../components/ui/PageSection.svelte';
+  import FadeDivider from '../components/ui/FadeDivider.svelte';
+  import SectionEyebrow from '../components/ui/SectionEyebrow.svelte';
+  import StatCard from '../components/ui/StatCard.svelte';
+  import StoryBlock from '../components/ui/StoryBlock.svelte';
+  import GithubProjectCard from '../components/ui/GithubProjectCard.svelte';
 </script>
 
 <main class="flex w-full flex-col">
   <section
     class="bg-base-200 noise noise-lg relative flex min-h-[80vh] w-full justify-between overflow-hidden not-md:flex-col"
   >
-    <div class="pointer-events-none absolute inset-0 hidden md:block">
-      <div class="border-muted absolute top-0 left-8 h-full border-l border-dashed"></div>
-      <div class="border-muted absolute top-0 right-8 h-full border-l border-dashed"></div>
-    </div>
+    <GuideFrame tone="hero" />
     <img
-      src="http://localhost:5173/members/0.webp"
+      src="/members/0.webp"
       class="pointer-events-none absolute right-16 bottom-8 hidden w-lg opacity-20 grayscale-50 md:block xl:hidden"
       alt=""
     />
 
-    <div class="flex px-6 py-12 md:mx-8 md:px-14 md:py-20 lg:px-16 lg:py-24">
+    <div class="page-gutter-hero page-stack-hero flex">
       <div class="z-1 flex flex-1 flex-col justify-between gap-4">
         <h1
           class="3xl:text-9xl mb-20 text-6xl font-extrabold tracking-tight text-balance sm:text-7xl lg:text-8xl"
@@ -36,11 +29,7 @@
           We're
           <span class="text-highlight md:ml-8">KSI</span>
         </h1>
-        <img
-          src="http://localhost:5173/members/0.webp"
-          class="pointer-events-none opacity-80 md:hidden"
-          alt=""
-        />
+        <img src="/members/0.webp" class="pointer-events-none opacity-80 md:hidden" alt="" />
         <div class="flex max-w-xl flex-col gap-4">
           <p class="3xl:text-4xl text-xl md:text-2xl 2xl:text-3xl">
             A student community exploring computer science through research, education, and events
@@ -66,62 +55,43 @@
       </div>
     </div>
   </section>
-  <hr class="border-muted mt-0 mb-1 border-t" />
-  <hr class="border-muted/80 my-0.5 border-t" />
-  <hr class="border-muted/60 my-0.5 border-t" />
-  <hr class="border-muted/40 my-0.5 border-t" />
-  <hr class="border-muted/20 my-0.5 border-t" />
+
+  <FadeDivider tone="muted" />
+
   <section class="noise dark text-base-100 relative flex flex-col items-center">
-    <div
-      class="bg-primary noise text-base-content relative flex h-full w-full flex-col items-center py-10 lg:py-14 xl:py-20"
-    >
-      <div class="text-secondary pointer-events-none absolute inset-0 hidden md:block">
-        <div class="border-base-content absolute top-0 left-8 h-full border-l"></div>
-        <div class="border-base-content absolute top-0 right-8 h-full border-l"></div>
-        <div class="bg-base-content/25 absolute top-0 left-0 h-full w-8"></div>
-        <div class="bg-base-content/25 absolute top-0 right-0 h-full w-8"></div>
-      </div>
+    <PageSection id="about" guide="content-strong" class="bg-primary text-base-content page-stack">
       <h1 class="3xl:text-7xl text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">
-        Not just code
+        How we spend our time
       </h1>
       <p
         class="3xl:text-3xl max-w-md text-center text-lg md:text-xl lg:max-w-lg 2xl:max-w-xl 2xl:text-2xl"
       >
-        From a kid's first line of code to a published paper — here's where our time actually goes.
+        Three threads run through everything we do — the people we meet, the things we build, and
+        the questions we chase. Here's a closer look at each.
       </p>
-    </div>
+    </PageSection>
 
-    <div class="bg-neutral noise relative flex h-full w-full flex-col py-10 lg:py-14 xl:py-20">
-      <div class="text-secondary pointer-events-none absolute inset-0 hidden md:block">
-        <div class="border-muted/50 absolute top-0 left-8 h-full border-l"></div>
-        <div class="border-muted/50 absolute top-0 right-8 h-full border-l"></div>
-        <div class="bg-base-content/25 absolute top-0 left-0 h-full w-8"></div>
-        <div class="bg-base-content/25 absolute top-0 right-0 h-full w-8"></div>
-      </div>
-
-      <p class="text-secondary mb-4 self-center font-mono text-sm font-light">( socially )</p>
-      <div class="flex flex-col items-center gap-16 px-4 md:px-16">
-        <h1>Connecting the community</h1>
+    <PageSection guide="content-soft" class="bg-neutral page-stack">
+      <SectionEyebrow>( socially )</SectionEyebrow>
+      <div class="page-gutter flex flex-col items-center gap-16">
+        <h1 id="social">Connecting the community</h1>
         <div
           class="mt-4 mb-16 grid max-w-lg grid-cols-1 items-center justify-between gap-8 self-center px-4 py-4 md:grid-cols-3 md:gap-8 md:px-8 lg:max-w-4xl"
         >
-          <div class="flex h-full flex-col items-center gap-4">
-            <h1 class="text-primary my-0">500+</h1>
-            <h3 class="text-center text-balance">Children taught programming</h3>
-          </div>
-          <div class="flex h-full flex-col items-center gap-4">
-            <h1 class="text-primary my-0">25+</h1>
-            <h3 class="text-center text-balance">Conferences organized</h3>
-          </div>
-          <div class="flex h-full flex-col items-center gap-4">
-            <h1 class="text-primary my-0">20+</h1>
-            <h3 class="text-center text-balance">On-site lectures hosted</h3>
-          </div>
+          <StatCard value="500+" label="Children taught programming" />
+          <StatCard value="25+" label="Conferences organized" />
+          <StatCard value="20+" label="On-site lectures hosted" />
         </div>
         <div class="space-y-32">
-          <div class="grid w-full grid-cols-1 items-center gap-16 md:grid-cols-2 md:gap-8 lg:px-32">
-            <div class="text-md basis-2 space-y-4">
-              <h2>ZOSIA</h2>
+          <StoryBlock
+            title="ZOSIA"
+            image={{
+              src: 'https://pub-4e8af66414434008bafa6614f6af4b22.r2.dev/zosia-2026/01.webp',
+              alt: 'Group of around 20 conference attendees on a mountain viewpoint.'
+            }}
+            readMoreHref="/projects/zosia"
+          >
+            {#snippet lead()}
               <p>
                 Our experienced team has been organizing the well-recognized conference in the
                 mountainous regions of Lower Silesia in southwestern Poland.
@@ -131,41 +101,30 @@
                 It's an acronym for <i>Winter Camp of Computer Science Students</i> written in polish.
               </p>
               <b>Not just a conference – a camp</b>
-              <div class="relative h-max">
-                <div class="space-y-4 mask-b-from-0">
-                  <p>
-                    While our speakers give various talks, sharing their knowledge, scientific
-                    research, hobbies and so on, we love to spend some time together in the free
-                    time.
-                  </p>
-                  <p>
-                    We pick the location for the camp diligently, to provide many attractions such
-                    as billiard table, a swimming pool, air hockey and more! We no-risk guarantee
-                    that you'll have fun here!
-                  </p>
-                </div>
-                <div
-                  class="absolute bottom-0 z-1 flex w-full translate-y-8 flex-col items-center self-center"
-                >
-                  <p>Interested?</p>
-                  <a class="underline" href="/projects/zosia">read more here</a>
-                </div>
-              </div>
-            </div>
-            <img
-              class="border-secondary/20 basis-1 rounded-md border-4"
-              src="https://pub-4e8af66414434008bafa6614f6af4b22.r2.dev/zosia-2026/01.webp"
-              alt="Group of around 20 conference attendees on a mountain viewpoint."
-            />
-          </div>
-          <div class="grid w-full grid-cols-1 items-center gap-16 md:grid-cols-2 md:gap-8 lg:px-32">
-            <img
-              class="border-secondary/20 basis-1 rounded-md border-4"
-              src="https://pub-4e8af66414434008bafa6614f6af4b22.r2.dev/project-hoc-past/8.webp"
-              alt="Lecture room full of primary school students attending Python lecture."
-            />
-            <div class="text-md basis-2 space-y-4">
-              <h2>Hour of Code</h2>
+            {/snippet}
+            {#snippet fade()}
+              <p>
+                While our speakers give various talks, sharing their knowledge, scientific research,
+                hobbies and so on, we love to spend some time together in the free time.
+              </p>
+              <p>
+                We pick the location for the camp diligently, to provide many attractions such as
+                billiard table, a swimming pool, air hockey and more! We no-risk guarantee that
+                you'll have fun here!
+              </p>
+            {/snippet}
+          </StoryBlock>
+
+          <StoryBlock
+            title="Hour of Code"
+            image={{
+              src: 'https://pub-4e8af66414434008bafa6614f6af4b22.r2.dev/project-hoc-past/8.webp',
+              alt: 'Lecture room full of primary school students attending Python lecture.'
+            }}
+            reverse
+            readMoreHref="/projects/hoc"
+          >
+            {#snippet lead()}
               <p>
                 Multiple brilliant volunteers, one goal – share the passion for Computer Science
                 with the youngest.
@@ -176,53 +135,80 @@
                 students, in a fun activities held within one hour.
               </p>
               <b>Minds</b>
-              <div class="relative h-max">
-                <div class="space-y-4 mask-b-from-0">
-                  <p>
-                    We are fortunate to have talented people, including high school educators, past
-                    olympiad laureates and algorithm tutors spend their precious time to brainstorm,
-                    debug and perfectionize simple coding problems that will serve high educational
-                    value while kept engaging and funny to the youth.
-                  </p>
-                  <p>
-                    Real computer science students volunteer to provide feedback and help whenever
-                    problems get too tricky.
-                  </p>
-                </div>
-                <div
-                  class="absolute bottom-0 z-1 flex w-full translate-y-8 flex-col items-center self-center"
-                >
-                  <p>Interested?</p>
-                  <a class="underline" href="/projects/zosia">read more here</a>
-                </div>
-              </div>
-            </div>
+            {/snippet}
+            {#snippet fade()}
+              <p>
+                We are fortunate to have talented people, including high school educators, past
+                olympiad laureates and algorithm tutors spend their precious time to brainstorm,
+                debug and perfectionize simple coding problems that will serve high educational
+                value while kept engaging and funny to the youth.
+              </p>
+              <p>
+                Real computer science students volunteer to provide feedback and help whenever
+                problems get too tricky.
+              </p>
+            {/snippet}
+          </StoryBlock>
+        </div>
+      </div>
+    </PageSection>
+
+    <PageSection id="projects" guide="content-soft" class="bg-primary-background page-stack">
+      <SectionEyebrow>( technically )</SectionEyebrow>
+      <h1 id="technical" class="page-gutter">Engineering is our passion</h1>
+
+      <div class="page-gutter mt-8 flex flex-col items-center gap-16">
+        <GithubProjectCard
+          repo="KSI-ML-research/krasnal"
+          title="krasnal"
+          description="Krasnal is a chess engine developed in Wrocław, based on the Transformer architecture. It utilizes deep neural networks to learn to play chess intuitively, departing from traditional, heavy calculations and game tree searching."
+        />
+        <GithubProjectCard
+          repo="ksiuwr/ksi-core"
+          title="ksi-core"
+          description="This website. Surrounded by many unfamiliar technologies, passionate members get to develop their engineering senses in a friendly environment."
+        />
+      </div>
+
+      <FadeDivider tone="secondary" pinned class="mt-10 md:px-8 lg:mt-14 xl:mt-20" />
+    </PageSection>
+
+    <PageSection id="scientific" guide="content-soft" class="bg-neutral page-stack">
+      <SectionEyebrow>( scientifically )</SectionEyebrow>
+      <div class="page-gutter flex flex-col items-center gap-16">
+        <div class="flex flex-col items-center gap-4 text-center">
+          <h1>Curiosity, kept rigorous</h1>
+          <p class="text-neutral-content/70 max-w-2xl text-lg md:text-xl">
+            We're still early in our research journey — no published papers to point to yet — but
+            the habits that lead there are already part of how we work together.
+          </p>
+        </div>
+
+        <div class="grid w-full max-w-4xl grid-cols-1 gap-8 md:grid-cols-3">
+          <div class="flex flex-col items-center gap-3 text-center">
+            <Microscope class="text-primary size-8" strokeWidth={1.5} />
+            <h3>Reading groups</h3>
+            <p class="text-neutral-content/60 text-sm leading-relaxed">
+              We pick apart papers and ideas together, well outside the lecture hall.
+            </p>
+          </div>
+          <div class="flex flex-col items-center gap-3 text-center">
+            <Presentation class="text-primary size-8" strokeWidth={1.5} />
+            <h3>Guest seminars</h3>
+            <p class="text-neutral-content/60 text-sm leading-relaxed">
+              Researchers and alumni drop by to share what they're currently working on.
+            </p>
+          </div>
+          <div class="flex flex-col items-center gap-3 text-center">
+            <Lightbulb class="text-primary size-8" strokeWidth={1.5} />
+            <h3>Early-stage research</h3>
+            <p class="text-neutral-content/60 text-sm leading-relaxed">
+              Members pair with faculty to explore open problems, long before any of it becomes a
+              paper.
+            </p>
           </div>
         </div>
       </div>
-    </div>
-    <div
-      class="noise bg-primary-background relative flex h-full w-full flex-col items-center pt-10 lg:pt-14 xl:pt-20"
-    >
-      <div class="text-secondary pointer-events-none absolute inset-0 hidden md:block">
-        <div class="border-muted/50 absolute top-0 left-8 h-full border-l"></div>
-        <div class="border-muted/50 border-px absolute top-0 right-8 h-full border-l"></div>
-        <div class="bg-base-content/25 absolute top-0 left-0 h-full w-8"></div>
-        <div class="bg-base-content/25 absolute top-0 right-0 h-full w-8"></div>
-      </div>
-
-      <p class="text-secondary mb-4 self-center font-mono text-sm font-light">( technically )</p>
-      <div class="flex flex-col gap-4 px-4 md:px-16">
-        <h1>Engineering in practice</h1>
-      </div>
-
-      <div class="relative mt-10 w-full md:px-8 lg:mt-14 xl:mt-20">
-        <hr class="border-secondary absolute top-0 left-0 z-2 my-0 w-full border-t" />
-        <hr class="border-secondary/80 my-1 w-full border-t" />
-        <hr class="border-secondary/60 my-1 w-full border-t" />
-        <hr class="border-secondary/40 my-1 w-full border-t" />
-        <hr class="border-secondary/20 my-1 w-full border-t" />
-      </div>
-    </div>
+    </PageSection>
   </section>
 </main>

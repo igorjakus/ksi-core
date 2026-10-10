@@ -14,19 +14,19 @@
     scientific: {
       colorClass: 'border-accent bg-accent/5 text-accent',
       // @wc-include
-      label: '// Scientifically',
+      label: '( scientifically )',
       icon: FlaskConical
     },
     technical: {
       colorClass: 'border-secondary bg-secondary/5 text-secondary',
       // @wc-include
-      label: '// Technically',
+      label: '( technically )',
       icon: CodeXml
     },
     social: {
       colorClass: 'border-primary bg-primary/5 text-primary',
       // @wc-include
-      label: '// Socially',
+      label: '( socially )',
       icon: Share2
     }
   };
@@ -34,7 +34,7 @@
   const current = $derived(config[type]);
 </script>
 
-<div class={`flex w-full gap-4 rounded-r-md border-l-2 p-4 ${current.colorClass}`}>
+<div class={`clipped flex w-full gap-4 border-l-2 p-6 ${current.colorClass}`}>
   <div class="mt-1 shrink-0">
     {#if current}
       {@const Icon = current.icon}
