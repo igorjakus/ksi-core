@@ -35,19 +35,19 @@
 
   const { alert, user, session }: Props = $props();
 
-  let openMenu = $state<'projects' | 'groups' | null>(null);
+  let openMenu = $state<'projects' | 'groups' | 'mobile' | null>(null);
 
-  let displayedMenu = $state<'projects' | 'groups'>('projects');
+  let displayedMenu = $state<'projects' | 'groups' | 'mobile'>('projects');
   let header: HTMLElement = undefined as unknown as HTMLElement;
   const reducedMotion = new MediaQuery('(prefers-reduced-motion: reduce)');
   const desktop = new MediaQuery('(min-width: 64rem)');
 
-  function toggleMenu(menu: 'projects' | 'groups') {
+  function toggleMenu(menu: 'projects' | 'groups' | 'mobile') {
     displayedMenu = menu;
     openMenu = openMenu === menu ? null : menu;
   }
 
-  async function handleTriggerKey(event: KeyboardEvent, menu: 'projects' | 'groups') {
+  async function handleTriggerKey(event: KeyboardEvent, menu: 'projects' | 'groups' | 'mobile') {
     if (event.key !== 'ArrowDown') return;
     event.preventDefault();
     displayedMenu = menu;
@@ -139,22 +139,6 @@
 >
   <div class="flex h-14 w-full shrink-0 flex-row items-center justify-between lg:px-8">
     <div class="flex h-full items-center">
-      <button
-        onclick={() => {
-          $sidebarStore = !$sidebarStore;
-        }}
-        class="btn btn-square btn-ghost border-base-200 h-18 w-18 rounded-none border-y-0 border-r border-l-0 lg:!hidden"
-        aria-label={'Toggle sidebar'}
-      >
-        <div class="relative size-5">
-          <span
-            class="absolute inset-0 flex items-center justify-center transition-all duration-200"
-          >
-            <Menu class="size-5" />
-          </span>
-        </div>
-      </button>
-
       <a
         href="/"
         class="hover:bg-primary flex h-full items-center gap-3 px-4 transition-colors duration-150 lg:pr-6"
@@ -215,7 +199,17 @@
       {/if}
     </nav>
 
-    <div class="flex h-full items-center gap-2 pr-6">
+    <div class="flex h-full items-center pr-4 lg:hidden">
+      <button
+        onclick={() => toggleMenu('mobile')}
+        class="btn btn-square btn-outline"
+        style="min-height: 32px; height: 32px; width: 32px; padding: 0;"
+        aria-label="Toggle mobile menu"
+      >
+        <Menu class="size-4" />
+      </button>
+    </div>
+    <div class="flex h-full items-center gap-2 pr-6 not-lg:hidden">
       <ThemeSelector language={locale.current === 'en-us' ? 'en' : 'pl'} />
       <button
         class="btn btn-outline"
@@ -275,7 +269,77 @@
   >
     <div class="menu-clip">
       <div class="bg-base-200 border-base-content/15 border-b border-solid">
-        {#if displayedMenu === 'projects'}
+        {#if displayedMenu === 'mobile'}
+          <div style="padding: 16px; display: flex; flex-direction: column; gap: 16px;">
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <a
+                href="/projects"
+                onclick={closeMenu}
+                class="btn btn-outline"
+                style="justify-content: flex-start; height: 32px; min-height: 32px; font-size: 13px;"
+                >Projects</a
+              >
+              <a
+                href="/groups"
+                onclick={closeMenu}
+                class="btn btn-outline"
+                style="justify-content: flex-start; height: 32px; min-height: 32px; font-size: 13px;"
+                >Groups</a
+              >
+              {#if session && user && user.membershipStatus === 'active'}
+                <a
+                  href={$page.data.dashboardOrigin}
+                  onclick={closeMenu}
+                  class="btn btn-outline"
+                  style="justify-content: flex-start; height: 32px; min-height: 32px; font-size: 13px;"
+                  >Dashboard</a
+                >
+              {/if}
+            </div>
+            <div style="height: 1px; background: var(--line);"></div>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <ThemeSelector language={locale.current === 'en-us' ? 'en' : 'pl'} />
+              <button
+                class="btn btn-outline"
+                style="min-height: 32px; height: 32px; padding: 0 12px; font-size: 11px;"
+                aria-label="Change language"
+                onclick={() => setLocale(locale.current === 'pl' ? 'en-us' : 'pl')}
+                >{locale.current === 'pl' ? 'EN' : 'PL'}</button
+              >
+            </div>
+            <div style="height: 1px; background: var(--line);"></div>
+            {#if session && user}
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div
+                  style="display: flex; align-items: center; gap: 8px; color: var(--ink); font-size: 14px;"
+                >
+                  {#if user.image}
+                    <img src={user.image} class="size-6 rounded-full" alt="" />
+                  {/if}
+                  {user.name}
+                </div>
+                <button
+                  class="btn btn-outline text-error"
+                  style="min-height: 32px; height: 32px; padding: 0 12px;"
+                  onclick={async () => {
+                    const r = await fetch('/logout', { method: 'POST' });
+                    if (r.ok) {
+                      toast.success('Logged out');
+                      closeMenu();
+                      await invalidateAll();
+                    }
+                  }}>Logout</button
+                >
+              </div>
+            {:else}
+              <button
+                class="btn btn-primary"
+                style="min-height: 32px; height: 32px;"
+                onclick={() => window.location.assign('/login')}>Sign in</button
+              >
+            {/if}
+          </div>
+        {:else if displayedMenu === 'projects'}
           <NavMenuPanel
             items={projectItems}
             columns={4}
