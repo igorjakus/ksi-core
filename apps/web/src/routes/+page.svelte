@@ -7,6 +7,8 @@
   import StatCard from '../components/ui/StatCard.svelte';
   import StoryBlock from '../components/ui/StoryBlock.svelte';
   import GithubProjectCard from '../components/ui/GithubProjectCard.svelte';
+  
+  let { data } = $props<{ data: import('./$types').PageData }>();
 </script>
 
 <main class="flex w-full flex-col">
@@ -162,16 +164,16 @@
       <h1 id="technical" class="page-gutter">Engineering is our passion</h1>
 
       <div class="page-gutter mt-8 flex flex-col items-center gap-16">
-        <GithubProjectCard
-          repo="KSI-ML-research/krasnal"
-          title="krasnal"
-          description="Krasnal is a chess engine developed in Wrocław, based on the Transformer architecture. It utilizes deep neural networks to learn to play chess intuitively, departing from traditional, heavy calculations and game tree searching."
-        />
-        <GithubProjectCard
-          repo="ksiuwr/ksi-core"
-          title="ksi-core"
-          description="This website. Surrounded by many unfamiliar technologies, passionate members get to develop their engineering senses in a friendly environment."
-        />
+        {#each data.projects as project}
+          <GithubProjectCard
+            repo={project.slug}
+            title={project.name}
+            description={project.description}
+          />
+        {/each}
+        {#if data.projects.length === 0}
+          <p class="text-neutral-content/60 text-lg">More projects coming soon.</p>
+        {/if}
       </div>
 
       <FadeDivider tone="secondary" pinned class="mt-10 md:px-8 lg:mt-14 xl:mt-20" />

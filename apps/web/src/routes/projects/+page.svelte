@@ -4,64 +4,22 @@
   import FadeDivider from '../../components/ui/FadeDivider.svelte';
   import ProjectPreview from '../../components/ui/ProjectPreview.svelte';
 
-  const projects = [
-    {
-      title: 'Hour of Code',
-      kind: 'education' as const,
-      group: 'education',
-      number: '02',
-      category: 'Education',
-      href: '/projects/hoc',
-      summary:
-        'Programming workshops introducing primary school students to Python and computational thinking.',
-      tags: ['Python', 'Workshops', 'Community']
-    },
-    {
-      title: 'KET',
-      kind: 'quantum' as const,
-      group: 'research',
-      number: '03',
-      category: 'Quantum computing',
-      href: '/projects/ket',
-      summary: 'From qubit fundamentals to algorithms running on real quantum processors.',
-      tags: ['Qiskit', 'Algorithms', 'Research']
-    },
-    {
-      title: 'Krasnal',
-      kind: 'chess' as const,
-      group: 'research',
-      number: '04',
-      category: 'Machine learning',
-      href: '/projects/ml/krasnal',
-      summary: 'A Transformer-based chess engine learning to produce strong, human-like moves.',
-      tags: ['Transformers', 'Chess', 'AI']
-    },
-    {
-      title: 'Physarum',
-      kind: 'biology' as const,
-      group: 'research',
-      number: '05',
-      category: 'Computational biology',
-      href: '/projects/ml/physarum',
-      summary:
-        'Exploring whether slime mold behavior can inspire methods for training neural networks.',
-      tags: ['Biology', 'Networks', 'AI']
-    },
-    {
-      title: 'ZOSIA',
-      kind: 'conference' as const,
-      group: 'community',
-      number: '01',
-      category: 'Conference',
-      href: '/projects/zosia',
-      summary:
-        'The annual winter camp bringing together students, researchers, and the technology community.',
-      tags: ['Talks', 'Community', 'Wrocław']
-    }
-  ];
+  let { data } = $props<{ data: import('./$types').PageData }>();
 
-  // Feature the conference first, followed by education and research.
-  const orderedProjects = $derived([projects[4], ...projects.slice(0, 4)]);
+  // Map backend data to frontend model
+  let projects = $derived((data.projects || []).map((p: any, i: number) => ({
+    title: p.name,
+    kind: 'research', // default placeholder
+    group: p.tags[0] || 'community',
+    number: String(i + 1).padStart(2, '0'),
+    category: p.fields[0] || 'Project',
+    href: `/projects/${p.slug}`,
+    summary: p.description,
+    tags: p.tags || []
+  })));
+
+  // Sort projects alphabetically for now instead of hardcoded slices
+  const orderedProjects = $derived([...projects].sort((a, b) => a.title.localeCompare(b.title)));
   const filters = [
     { value: 'all', label: 'All projects' },
     { value: 'community', label: 'Community' },
