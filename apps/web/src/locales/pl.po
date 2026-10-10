@@ -164,7 +164,6 @@ msgstr "Członkowie zespołu"
 msgid "The \"Hour of Code\" classes organized by the Computer Science Students' Club of the University of Wrocław introduce students to the Python programming language. They are intended for primary school students in grades 4-8. The classes consist of two parts:"
 msgstr "Zajęcia „Godzina Kodowania” organizowane przez Koło Studentów Informatyki Uniwersytetu Wrocławskiego wprowadzają uczniów w język programowania Python. Przeznaczone są dla uczniów szkół podstawowych z klas 4-8. Zajęcia składają się z dwóch części:"
 
-#: src/routes/+page.svelte
 #: src/routes/projects/ml/krasnal/+page.svelte
 msgid "Krasnal is a chess engine developed in Wrocław, based on the Transformer architecture. It utilizes deep neural networks to learn to play chess intuitively, departing from traditional, heavy calculations and game tree searching."
 msgstr "Krasnal to silnik szachowy rozwijany we Wrocławiu, oparty na architekturze Transformer. Wykorzystuje głębokie sieci neuronowe do intuicyjnej nauki gry w szachy, odchodząc od tradycyjnych, ciężkich obliczeń i przeszukiwania drzewa gry."
@@ -1284,9 +1283,8 @@ msgstr ""
 #~ msgid "View in GitHub"
 #~ msgstr ""
 
-#: src/routes/+page.svelte
-msgid "This website. Surrounded by many unfamiliar technologies, passionate members get to develop their engineering senses in a friendly environment."
-msgstr ""
+#~ msgid "This website. Surrounded by many unfamiliar technologies, passionate members get to develop their engineering senses in a friendly environment."
+#~ msgstr ""
 
 #: src/routes/+page.svelte
 msgid "Engineering is our passion"
@@ -1300,9 +1298,8 @@ msgstr ""
 msgid "Three threads run through everything we do — the people we meet, the things we build, and the questions we chase. Here's a closer look at each."
 msgstr ""
 
-#: src/routes/+page.svelte
-msgid "KSI-ML-research/krasnal"
-msgstr ""
+#~ msgid "KSI-ML-research/krasnal"
+#~ msgstr ""
 
 #: src/routes/+page.svelte
 msgid "Curiosity, kept rigorous"
@@ -1557,4 +1554,24 @@ msgstr ""
 
 #: src/components/ui/GithubProjectCard.svelte
 msgid "View on GitHub <0/>"
+msgstr ""
+
+#: src/routes/+page.svelte
+msgid "More projects coming soon."
+msgstr ""
+
+#: src/routes/projects/[slug]/+page.svelte
+msgid "<0/> Join Project"
+msgstr ""
+
+#: src/routes/projects/[slug]/+page.svelte
+msgid "<0/> Manage"
+msgstr ""
+
+#: src/routes/projects/[slug]/+page.svelte
+msgid "About the Project"
+msgstr ""
+
+#: src/routes/projects/[slug]/+page.svelte
+msgid "Full project details and articles will be displayed here."
 msgstr ""

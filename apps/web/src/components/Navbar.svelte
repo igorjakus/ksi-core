@@ -205,7 +205,7 @@
       </button>
       {#if session && user && user.membershipStatus === 'active'}
         <a
-          href="/login"
+          href={$page.data.dashboardOrigin}
           class="text-base-content font-anybody hover:text-base-content border-base-200 hover:bg-base-200/40 flex h-full items-center border-r px-5 text-sm transition-colors duration-150 {$page.url.pathname.startsWith(
             '/dashboard'
           )
@@ -222,7 +222,7 @@
       {#if session && user && user.membershipStatus === 'active'}
         <div class="border-base-200 flex h-full gap-4 border-r px-2">
           <a
-            href="/login"
+            href={$page.data.dashboardOrigin}
             class="text-muted hover:text-base-content flex items-center gap-4 text-sm"
           >
             {#if user.image}

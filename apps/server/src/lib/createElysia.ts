@@ -10,7 +10,18 @@ export const createContext = (protectedRoute: boolean) => (app: Elysia) =>
     let user: typeof users.$inferSelect | null = null;
     const proxyKey = request.headers.get('x-ksi-proxy-key');
     const frontendToken = request.headers.get('x-ksi-session');
-    if (frontendToken && Bun.env.PROXY_SECRET && proxyKey === Bun.env.PROXY_SECRET) {
+    if (
+      proxyKey &&
+      Bun.env.PROXY_SECRET &&
+      proxyKey === Bun.env.PROXY_SECRET &&
+      request.headers.get('x-ksi-origin') === getUrls().frontend.auth
+    ) {
+      const central = await auth.api.getSession({ headers: request.headers });
+      if (central) {
+        const [record] = await db.select().from(users).where(eq(users.id, central.user.id));
+        user = record ?? null;
+      }
+    } else if (frontendToken && Bun.env.PROXY_SECRET && proxyKey === Bun.env.PROXY_SECRET) {
       const [record] = await db
         .select({ user: users })
         .from(frontendSessions)
@@ -29,17 +40,6 @@ export const createContext = (protectedRoute: boolean) => (app: Elysia) =>
           )
         );
       user = record?.user ?? null;
-    } else if (
-      proxyKey &&
-      Bun.env.PROXY_SECRET &&
-      proxyKey === Bun.env.PROXY_SECRET &&
-      request.headers.get('x-ksi-origin') === getUrls().frontend.auth
-    ) {
-      const central = await auth.api.getSession({ headers: request.headers });
-      if (central) {
-        const [record] = await db.select().from(users).where(eq(users.id, central.user.id));
-        user = record ?? null;
-      }
     }
     if (protectedRoute && !user) throw status(401, { code: 'AUTH_REQUIRED' });
     return { db, user, unauthorizedError: user ? null : 'AUTH_REQUIRED' };

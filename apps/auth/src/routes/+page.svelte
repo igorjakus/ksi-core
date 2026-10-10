@@ -38,13 +38,13 @@
     try {
       const result =
         mode === 'signup'
-          ? await client.signUp.email({ email, password, name, callbackURL: callback() })
+          ? await client.signUp.email({ email, password, name })
           : mode === 'reset'
             ? await client.requestPasswordReset({
                 email,
                 redirectTo: `${location.origin}/reset-password`
               })
-            : await client.signIn.email({ email, password, callbackURL: callback() });
+            : await client.signIn.email({ email, password });
 
       if (result.error) {
         message = result.error.message ?? text('Nie udało się zalogować.', 'Login failed.');

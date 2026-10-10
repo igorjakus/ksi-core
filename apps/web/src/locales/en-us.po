@@ -164,7 +164,6 @@ msgstr "Team Members"
 msgid "The \"Hour of Code\" classes organized by the Computer Science Students' Club of the University of Wrocław introduce students to the Python programming language. They are intended for primary school students in grades 4-8. The classes consist of two parts:"
 msgstr "The \"Hour of Code\" classes organized by the Computer Science Students' Club of the University of Wrocław introduce students to the Python programming language. They are intended for primary school students in grades 4-8. The classes consist of two parts:"
 
-#: src/routes/+page.svelte
 #: src/routes/projects/ml/krasnal/+page.svelte
 msgid "Krasnal is a chess engine developed in Wrocław, based on the Transformer architecture. It utilizes deep neural networks to learn to play chess intuitively, departing from traditional, heavy calculations and game tree searching."
 msgstr "Krasnal is a chess engine developed in Wrocław, based on the Transformer architecture. It utilizes deep neural networks to learn to play chess intuitively, departing from traditional, heavy calculations and game tree searching."
@@ -1284,9 +1283,8 @@ msgstr "Lecture room full of primary school students attending Python lecture."
 #~ msgid "View in GitHub"
 #~ msgstr "View in GitHub"
 
-#: src/routes/+page.svelte
-msgid "This website. Surrounded by many unfamiliar technologies, passionate members get to develop their engineering senses in a friendly environment."
-msgstr "This website. Surrounded by many unfamiliar technologies, passionate members get to develop their engineering senses in a friendly environment."
+#~ msgid "This website. Surrounded by many unfamiliar technologies, passionate members get to develop their engineering senses in a friendly environment."
+#~ msgstr "This website. Surrounded by many unfamiliar technologies, passionate members get to develop their engineering senses in a friendly environment."
 
 #: src/routes/+page.svelte
 msgid "Engineering is our passion"
@@ -1300,9 +1298,8 @@ msgstr "How we spend our time"
 msgid "Three threads run through everything we do — the people we meet, the things we build, and the questions we chase. Here's a closer look at each."
 msgstr "Three threads run through everything we do — the people we meet, the things we build, and the questions we chase. Here's a closer look at each."
 
-#: src/routes/+page.svelte
-msgid "KSI-ML-research/krasnal"
-msgstr "KSI-ML-research/krasnal"
+#~ msgid "KSI-ML-research/krasnal"
+#~ msgstr "KSI-ML-research/krasnal"
 
 #: src/routes/+page.svelte
 msgid "Curiosity, kept rigorous"
@@ -1558,3 +1555,23 @@ msgstr "The reliable route is back to the association — and room 24 at the Ins
 #: src/components/ui/GithubProjectCard.svelte
 msgid "View on GitHub <0/>"
 msgstr "View on GitHub <0/>"
+
+#: src/routes/+page.svelte
+msgid "More projects coming soon."
+msgstr "More projects coming soon."
+
+#: src/routes/projects/[slug]/+page.svelte
+msgid "<0/> Join Project"
+msgstr "<0/> Join Project"
+
+#: src/routes/projects/[slug]/+page.svelte
+msgid "<0/> Manage"
+msgstr "<0/> Manage"
+
+#: src/routes/projects/[slug]/+page.svelte
+msgid "About the Project"
+msgstr "About the Project"
+
+#: src/routes/projects/[slug]/+page.svelte
+msgid "Full project details and articles will be displayed here."
+msgstr "Full project details and articles will be displayed here."

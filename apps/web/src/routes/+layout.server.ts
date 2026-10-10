@@ -13,6 +13,7 @@ export const load: LayoutServerLoad = async ({ fetch, locals }) => {
   return {
     alert,
     user: locals.user,
-    session: locals.session
+    session: locals.session,
+    dashboardOrigin: (await import('shared')).getUrls().frontend.dashboard
   };
 };

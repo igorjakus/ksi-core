@@ -77,6 +77,7 @@ export const accounts = snakeCase.table('accounts', {
   refreshTokenExpiresAt: timestamp(),
   scope: text(),
   password: text(),
+  issuer: text(),
   createdAt: timestamp()
     .$defaultFn(() => new Date())
     .notNull(),
