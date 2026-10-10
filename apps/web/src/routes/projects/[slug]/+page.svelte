@@ -4,8 +4,8 @@
   let { data } = $props<{ data: import('./$types').PageData }>();
   let project = $derived(data.project);
   let user = $derived(data.user);
-  let isMember = $derived(project.members?.some(m => m.id === user?.id));
-  let isLeader = $derived(project.members?.some(m => m.id === user?.id && m.leader));
+  let isMember = $derived(project.members?.some((m: any) => m.id === user?.id));
+  let isLeader = $derived(project.members?.some((m: any) => m.id === user?.id && m.leader));
 </script>
 
 <div class="page-gutter py-12">
