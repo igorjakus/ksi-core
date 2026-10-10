@@ -31,7 +31,7 @@
 
 <div
   class={[
-    'border-base-content/15 bg-base-content/15 page-gutter grid w-full grid-cols-1 gap-px border-y sm:grid-cols-2',
+    'border-base-content/15 grid w-full grid-cols-1 gap-px border-y sm:grid-cols-2',
     columns === 4 ? 'lg:grid-cols-4' : 'lg:grid-cols-3'
   ]}
 >

@@ -12,8 +12,6 @@
     Share2
   } from '@lucide/svelte';
   import { sidebarStore } from '$lib/sidebar';
-  import { authClient } from '$lib/auth-client';
-  import { getUrls } from 'shared';
   import type { Profile as User } from 'shared/types';
   type Session = { id: string };
   import { toast } from 'svelte-sonner';
@@ -24,9 +22,8 @@
   import { MediaQuery } from 'svelte/reactivity';
   import { tick } from 'svelte';
   import Alert from './Alert.svelte';
-  import {locale} from '$lib/locale.svelte';
+  import { locale, setLocale } from '$lib/locale.svelte';
   import ThemeSelector from '@ksi-core/ui/platform/ThemeSelector.svelte';
-  import LocaleSwitcher from './ui/LocaleSwitcher.svelte';
   import NavMenuPanel from './ui/NavMenuPanel.svelte';
   import type { api } from '$lib/backend';
 
@@ -138,7 +135,7 @@
   onfocusout={(event) => {
     if (event.relatedTarget instanceof Node && !header.contains(event.relatedTarget)) closeMenu();
   }}
-  class="border-muted bg-base-200 fixed top-0 z-40 flex w-full flex-col border-b border-dashed backdrop-blur-sm"
+  class="border-base-content/15 bg-base-200 fixed top-0 z-40 flex w-full flex-col border-b border-solid backdrop-blur-sm"
 >
   <div class="flex h-14 w-full shrink-0 flex-row items-center justify-between lg:px-8">
     <div class="flex h-full items-center">
@@ -146,7 +143,7 @@
         onclick={() => {
           $sidebarStore = !$sidebarStore;
         }}
-        class="btn btn-square btn-ghost border-base-200 h-18 w-18 rounded-none border-y-0 border-r border-l-0 lg:hidden"
+        class="btn btn-square btn-ghost border-base-200 h-18 w-18 rounded-none border-y-0 border-r border-l-0 lg:!hidden"
         aria-label={'Toggle sidebar'}
       >
         <div class="relative size-5">
@@ -160,28 +157,31 @@
 
       <a
         href="/"
-        class="hover:bg-primary hover:text-base-content flex h-full items-center gap-3 px-4 transition-colors duration-150 lg:pr-6"
+        class="hover:bg-primary flex h-full items-center gap-3 px-4 transition-colors duration-150 lg:pr-6"
+        style="color: var(--ink);"
       >
-        <img src="/logo.svg" alt="" class="size-8 min-w-10 shrink-0" />
-        <span class="font-anybody text-xl tracking-tight not-lg:hidden">KSI</span>
+        <img src="/logo.svg" alt="" class="size-8 min-w-10 shrink-0 dark:invert" />
+        <span class="font-anybody text-xl tracking-tight not-lg:hidden" style="color: inherit;"
+          >KSI</span
+        >
       </a>
     </div>
-    <nav class="flex h-full items-center gap-4 not-lg:hidden">
+    <nav class="flex h-full items-center gap-3 not-lg:hidden">
       <button
         type="button"
         onclick={() => toggleMenu('projects')}
         onkeydown={(event) => handleTriggerKey(event, 'projects')}
         aria-controls="navbar-menu"
         aria-expanded={openMenu === 'projects'}
-        class="text-base-content/80 font-anybody hover:text-base-content border-base-200 hover:bg-primary flex items-center gap-2 px-2 py-1 text-sm transition-colors duration-150 {openMenu ===
-          'projects' || $page.url.pathname.startsWith('/projects')
-          ? 'text-primary-content bg-primary hover:bg-primary/95'
+        class="btn btn-outline {openMenu === 'projects' ||
+        $page.url.pathname.startsWith('/projects')
+          ? 'active'
           : ''}"
+        style="height: 32px; min-height: 32px; font-size: 12px; gap: 6px;"
       >
         Projects
         <ChevronDown
-          class="size-4 shrink-0 -translate-y-px transition-transform duration-300 {openMenu ===
-          'projects'
+          class="size-3.5 shrink-0 transition-transform duration-300 {openMenu === 'projects'
             ? 'rotate-180'
             : ''}"
         />
@@ -192,15 +192,14 @@
         onkeydown={(event) => handleTriggerKey(event, 'groups')}
         aria-controls="navbar-menu"
         aria-expanded={openMenu === 'groups'}
-        class="text-base-content/80 font-anybody hover:text-base-content border-base-200 hover:bg-primary flex items-center gap-2 px-2 py-1 text-sm transition-colors duration-150 {openMenu ===
-          'groups' || $page.url.pathname.startsWith('/groups')
-          ? 'text-primary-content bg-primary hover:bg-primary/95'
+        class="btn btn-outline {openMenu === 'groups' || $page.url.pathname.startsWith('/groups')
+          ? 'active'
           : ''}"
+        style="height: 32px; min-height: 32px; font-size: 12px; gap: 6px;"
       >
         Groups
         <ChevronDown
-          class="size-4 shrink-0 -translate-y-px transition-transform duration-300 {openMenu ===
-          'groups'
+          class="size-3.5 shrink-0 transition-transform duration-300 {openMenu === 'groups'
             ? 'rotate-180'
             : ''}"
         />
@@ -208,11 +207,8 @@
       {#if session && user && user.membershipStatus === 'active'}
         <a
           href={$page.data.dashboardOrigin}
-          class="text-base-content font-anybody hover:text-base-content border-base-200 hover:bg-base-200/40 flex h-full items-center border-r px-5 text-sm transition-colors duration-150 {$page.url.pathname.startsWith(
-            '/dashboard'
-          )
-            ? 'text-base-content bg-base-200/30'
-            : ''}"
+          class="btn btn-outline {$page.url.pathname.startsWith('/dashboard') ? 'active' : ''}"
+          style="height: 32px; min-height: 32px; font-size: 12px;"
         >
           Dashboard
         </a>
@@ -220,13 +216,20 @@
     </nav>
 
     <div class="flex h-full items-center gap-2 pr-6">
-      <ThemeSelector language={locale.current==='en-us'?'en':'pl'} />
-      <LocaleSwitcher class="border-base-200 border-x" />
+      <ThemeSelector language={locale.current === 'en-us' ? 'en' : 'pl'} />
+      <button
+        class="btn btn-outline"
+        style="min-height: 32px; height: 32px; padding: 0 12px; font-size: 11px;"
+        aria-label="Change language"
+        onclick={() => setLocale(locale.current === 'pl' ? 'en-us' : 'pl')}
+        >{locale.current === 'pl' ? 'EN' : 'PL'}</button
+      >
       {#if session && user && user.membershipStatus === 'active'}
-        <div class="border-base-200 flex h-full gap-4 border-r px-2">
+        <div class="border-base-200 flex h-full items-center gap-4 border-r px-2">
           <a
             href={$page.data.dashboardOrigin}
-            class="text-muted hover:text-base-content flex items-center gap-4 text-sm"
+            class="flex items-center gap-4 text-sm"
+            style="color: var(--ink);"
           >
             {#if user.image}
               <img
@@ -271,7 +274,7 @@
     inert={openMenu === null}
   >
     <div class="menu-clip">
-      <div class="bg-base-200 border-muted border-b border-dashed">
+      <div class="bg-base-200 border-base-content/15 border-b border-solid">
         {#if displayedMenu === 'projects'}
           <NavMenuPanel
             items={projectItems}

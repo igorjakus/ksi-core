@@ -1,21 +1,16 @@
 <script lang="ts">
   import {
     ArrowUpRight,
-    ChevronDown,
     Facebook,
     GitCommitHorizontal,
     Github,
     Instagram,
     Linkedin
   } from '@lucide/svelte';
-  import { getActiveLocale, getAvailableLocales, locale, setLocale } from '$lib/locale.svelte';
   import GuideFrame from './ui/GuideFrame.svelte';
 
   const commitHash = import.meta.env.PUBLIC_COMMIT_HASH || '';
   const shortCommitHash = commitHash.slice(0, 7);
-
-  const availableLocales = $derived(getAvailableLocales());
-  const activeLocale = $derived(getActiveLocale());
 
   // @wc-ignore
   const socialLinks = [
@@ -26,10 +21,9 @@
   ];
 </script>
 
-<footer class="bg-base-50 text-base-content relative w-full">
-  <GuideFrame tone="hero" />
+<footer class="relative w-full" style="background: var(--surface); color: var(--ink);">
   <div class="grid grid-cols-1 md:mx-8 lg:grid-cols-3">
-    <div class="border-muted border-r border-dashed p-4 py-8 md:py-16">
+    <div class="border-muted lg:border-base-content/15 border-r border-dashed p-4 py-8 md:py-16">
       <a
         href="/"
         class="hover:text-primary font-anybody inline-block text-6xl font-semibold tracking-[-0.04em]"
@@ -48,7 +42,7 @@
 
     <nav
       aria-label="Footer navigation"
-      class="border-muted lg:border-base-content/15 border-t border-dashed px-4 py-8 md:py-16 lg:border-t-0 lg:border-r lg:px-10"
+      class="border-muted lg:border-base-content/15 flex flex-col gap-8 border-t border-dashed px-4 py-8 md:py-16 lg:border-t-0 lg:border-r lg:px-10"
     >
       <p class="text-base-content/40 mb-5 text-xs font-bold tracking-[0.18em] uppercase">Explore</p>
       <ul class="space-y-3 text-sm">
@@ -62,7 +56,9 @@
       </ul>
     </nav>
 
-    <div class="border-muted border-t border-dashed px-4 py-8 md:py-16 lg:border-t-0 lg:pl-10">
+    <div
+      class="border-muted flex flex-col gap-8 border-t border-dashed px-4 py-8 md:py-16 lg:border-t-0 lg:pl-10"
+    >
       <p class="text-base-content/40 mb-5 text-xs font-bold tracking-[0.18em] uppercase">
         Find us online
       </p>
@@ -88,52 +84,15 @@
   </div>
 
   <div
-    class="border-muted text-base-100 bg-base-content flex flex-col items-center gap-3 border-t border-dashed px-4 py-3 text-xs sm:flex-row sm:justify-between md:px-12"
+    class="flex flex-col items-center gap-3 border-t border-dashed px-4 py-3 text-xs sm:flex-row sm:justify-between md:px-12"
+    style="background: var(--surface-muted); color: var(--ink); border-color: var(--line);"
   >
     <span>© KSI {new Date().getFullYear()}</span>
 
     <div class="flex flex-wrap items-center gap-x-6 gap-y-3 not-sm:w-full">
-      <div class="dropdown font-anybody dropdown-top dropdown-end not-sm:w-full">
-        <button
-          type="button"
-          tabindex="0"
-          aria-label="Change language"
-          class="hover:text-primary flex items-center justify-center gap-2 transition-colors not-sm:w-full"
-        >
-          <span aria-hidden="true">{activeLocale.emoji}</span>
-          <span
-            >{activeLocale.formattedLocale.replace(/\b[a-zA-Z]/g, (char) =>
-              char.toUpperCase()
-            )}</span
-          >
-          <ChevronDown class="size-3.5 rotate-180" />
-        </button>
-
-        <ul
-          tabindex="-1"
-          class="dropdown-content menu border-base-content/15 bg-base-100 text-base-content z-50 mb-3 w-56 border p-2 shadow-lg not-sm:w-full"
-        >
-          {#each availableLocales as availableLocale (availableLocale.code)}
-            <li>
-              <button
-                type="button"
-                onclick={() => setLocale(availableLocale.code)}
-                class={[
-                  'flex gap-3 rounded-none py-2',
-                  locale.current === availableLocale.code
-                    ? 'bg-primary text-primary-content'
-                    : 'hover:bg-base-200'
-                ]}
-              >
-                <span aria-hidden="true">{availableLocale.emoji}</span>
-                {availableLocale.formattedLocale.replace(/\b[a-zA-Z]/g, (char) =>
-                  char.toUpperCase()
-                )}
-              </button>
-            </li>
-          {/each}
-        </ul>
-      </div>
+      <span class="font-mono" style="color: var(--muted);"
+        >v{import.meta.env.PUBLIC_APP_VERSION}</span
+      >
 
       <a
         href="https://github.com/ksiuwr/ksi-core"
