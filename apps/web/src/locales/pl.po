@@ -860,3 +860,19 @@ msgstr ""
 #: src/components/Navbar.svelte
 msgid "Sign in"
 msgstr ""
+
+#: src/routes/+page.svelte
+msgid "This website. Surrounded by many unfamiliar technologies, passionate members get to develop their engineering senses in a friendly environment."
+msgstr ""
+
+#: src/routes/+page.svelte
+msgid "KSI-ML-research/krasnal"
+msgstr ""
+
+#: src/routes/+page.svelte
+msgid "Krasnal"
+msgstr ""
+
+#: src/routes/+page.svelte
+msgid "Chess engine built with Rust and machine learning."
+msgstr ""

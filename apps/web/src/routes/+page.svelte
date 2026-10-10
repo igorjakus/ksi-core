@@ -1,6 +1,19 @@
 <script lang="ts">
   import { ArrowRight, Microscope, Presentation, Lightbulb, ArrowUpRight } from '@lucide/svelte';
   let { data } = $props<{ data: import('./$types').PageData }>();
+  const hardcodedProjects = [
+    {
+      slug: 'ksiuwr/ksi-core',
+      name: 'ksi-core',
+      description:
+        'This website. Surrounded by many unfamiliar technologies, passionate members get to develop their engineering senses in a friendly environment.'
+    },
+    {
+      slug: 'KSI-ML-research/krasnal',
+      name: 'Krasnal',
+      description: 'Chess engine built with Rust and machine learning.'
+    }
+  ];
 </script>
 
 <main class="w-full" style="background: var(--paper); min-height: calc(100vh - 56px);">
@@ -143,23 +156,30 @@
         ( technically ) Engineering is our passion
       </div>
       <div style="display: flex; flex-direction: column; gap: 32px;">
-        {#each data.projects as project}
-          <div style="display: flex; flex-direction: column; gap: 16px;">
-            <a
-              href={`https://github.com/${project.slug}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="card group"
-              style="display: block; padding: 0; text-decoration: none; overflow: hidden;"
+        {#each hardcodedProjects as project}
+          <a
+            href={`https://github.com/${project.slug}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="card group grid grid-cols-1 md:grid-cols-2"
+            style="padding: 0; text-decoration: none; overflow: hidden;"
+          >
+            <!-- Left Side: Image -->
+            <div
+              class="border-b md:border-r md:border-b-0"
+              style="border-color: var(--line); display: flex;"
             >
               <img
                 src={`https://opengraph.githubassets.com/1/${project.slug}`}
                 alt=""
-                style="width: 100%; max-height: 400px; object-fit: cover; border-bottom: 1px solid var(--line); display: block;"
+                style="width: 100%; height: 100%; min-height: 200px; object-fit: cover; display: block;"
               />
-              <div
-                style="padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; background: var(--surface-muted);"
-              >
+            </div>
+            <!-- Right Side: Content -->
+            <div
+              style="padding: 32px 24px; display: flex; flex-direction: column; justify-content: center; gap: 16px; background: var(--surface-muted);"
+            >
+              <div style="display: flex; justify-content: space-between; align-items: center;">
                 <span
                   style="font-family: var(--mono); color: var(--muted); font-size: 11px; letter-spacing: 0.05em; text-transform: uppercase;"
                   >{project.slug}</span
@@ -169,20 +189,20 @@
                   >View on GitHub <ArrowUpRight size={14} /></span
                 >
               </div>
-            </a>
-            <div>
-              <h2
-                style="font-family: var(--display); font-size: 20px; margin: 0 0 8px 0; color: var(--ink);"
-              >
-                {project.name}
-              </h2>
-              <p style="color: var(--muted); font-size: 14px; margin: 0; line-height: 1.5;">
-                {project.description}
-              </p>
+              <div>
+                <h2
+                  style="font-family: var(--display); font-size: 24px; margin: 0 0 12px 0; color: var(--ink);"
+                >
+                  {project.name}
+                </h2>
+                <p style="color: var(--muted); font-size: 14px; margin: 0; line-height: 1.6;">
+                  {project.description}
+                </p>
+              </div>
             </div>
-          </div>
+          </a>
         {/each}
-        {#if data.projects.length === 0}
+        {#if hardcodedProjects.length === 0}
           <p style="color: var(--muted); font-size: 13px;">More projects coming soon.</p>
         {/if}
       </div>
