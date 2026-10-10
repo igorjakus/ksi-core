@@ -1,3 +1,4 @@
+import { defaultBoardStatuses, type BoardStatus } from '../domain/board-statuses';
 import { createId } from '@paralleldrive/cuid2';
 import {
   text,
@@ -240,7 +241,8 @@ export const boards = snakeCase.table('boards', {
   id: text().primaryKey().$defaultFn(createId),
   projectId: text().references(() => projects.id),
   scopeKey: text().notNull().unique(),
-  tags: text().array().notNull().default([])
+  tags: text().array().notNull().default([]),
+  statuses: jsonb().$type<BoardStatus[]>().notNull().default(defaultBoardStatuses)
 });
 export const kanbanItems = snakeCase.table('kanban_items', {
   id: text().primaryKey().$defaultFn(createId),

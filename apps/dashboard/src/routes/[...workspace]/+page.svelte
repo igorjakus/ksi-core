@@ -9,8 +9,10 @@
     setTheme,
     type ThemePreference
   } from '$lib/preferences.svelte';
+  import KanbanBoard, { type BoardStatus } from '$lib/KanbanBoard.svelte';
   import Skeleton from '$lib/Skeleton.svelte';
   import { fly } from 'svelte/transition';
+  import MarkdownContent from '@ksi-core/ui/platform/MarkdownContent.svelte';
   import Editor from '@ksi-core/ui/platform/Editor.svelte';
   import Dropdown from '@ksi-core/ui/platform/Dropdown.svelte';
   import {
@@ -86,7 +88,7 @@
     id: string;
     title: string;
     markdown: string;
-    column: 'todo' | 'progress' | 'done';
+    column: string;
     version: number;
     position: number;
     tags: string[];
@@ -116,7 +118,12 @@
   let visibility = $state('association');
   let leaderIds = $state('');
   let graveyard = $state(untrack(() => data.navigation.graveyard ?? false));
-  let taskColumn = $state<Item['column']>('todo');
+  let statuses = $state<BoardStatus[]>([
+    { id: 'todo', name: 'To do' },
+    { id: 'progress', name: 'In progress' },
+    { id: 'done', name: 'Done' }
+  ]);
+  let boardLeader = $state(false);
   let profileSaved = $state(false);
   let archived = $state(false);
   let showCredit = $state(false);
@@ -157,9 +164,9 @@
         if (generation === loadGeneration) articles = result;
       }
       if (currentTab === 'board') {
-        let board: { id: string } | null = null;
+        let board: { id: string; statuses: BoardStatus[] } | null = null;
         try {
-          board = await api<{ id: string }>(`/platform/boards${query}`);
+          board = await api<{ id: string; statuses: BoardStatus[] }>(`/platform/boards${query}`);
         } catch (cause) {
           if (!(cause instanceof Error && cause.message === 'BOARD_NOT_FOUND')) throw cause;
         }
@@ -170,14 +177,34 @@
           : [];
         if (generation === loadGeneration) {
           boardId = id;
+          statuses = board?.statuses ?? [
+            { id: 'todo', name: 'To do' },
+            { id: 'progress', name: 'In progress' },
+            { id: 'done', name: 'Done' }
+          ];
           items = result;
+          const roster = currentScope
+            ? await api<{ id: string; leader: boolean }[]>(
+                `/platform/projects/${currentScope}/members`
+              )
+            : [];
+          if (generation === loadGeneration)
+            boardLeader =
+              data.user.role !== 'member' ||
+              roster.some((member) => member.id === data.user.id && member.leader);
         }
       }
       if (currentTab === 'forum') {
         const result = await api<Thread[]>(
           `/platform/threads?archived=${archived}${currentScope ? `&projectId=${encodeURIComponent(currentScope)}` : ''}`
         );
-        if (generation === loadGeneration) threads = result;
+        if (generation === loadGeneration) {
+          threads = result;
+          if (selectedThread && result.some((thread) => thread.id === selectedThread?.id)) {
+            const detail = await api<Thread>(`/platform/threads/${selectedThread.id}`);
+            if (generation === loadGeneration) selectedThread = detail;
+          } else selectedThread = null;
+        }
       }
       if (currentTab === 'users') {
         const result = await api<Profile[]>('/users?page=0');
@@ -312,15 +339,6 @@
     }
   }
 
-  async function openTaskComposer(column: Item['column']) {
-    title = '';
-    markdown = '';
-    taskColumn = column;
-    composer = true;
-    await tick();
-    document.getElementById('task-title')?.focus();
-  }
-
   async function saveProfile() {
     profileSaved = false;
     await action(async () => {
@@ -363,27 +381,6 @@
       selectedArticle = result;
       return result;
     }
-    if (tab === 'board') {
-      if (!boardId) {
-        const board = await api<{ id: string }>(
-          '/platform/boards',
-          'POST',
-          scope ? { projectId: scope } : {}
-        );
-        boardId = board.id;
-      }
-      const result = await api(`/platform/boards/${boardId}/items`, 'POST', {
-        title,
-        markdown,
-        tags: [],
-        column: taskColumn,
-        position: items.filter((item) => item.column === taskColumn).length
-      });
-      composer = false;
-      title = '';
-      markdown = '';
-      return result;
-    }
     if (tab === 'forum') {
       const result = await api('/platform/threads', 'POST', {
         title,
@@ -422,11 +419,18 @@
       });
   }
 
-  const columnDefs = $derived([
-    ['todo', text('Do zrobienia', 'To do')],
-    ['progress', text('W trakcie', 'In progress')],
-    ['done', text('Gotowe', 'Done')]
-  ] as const);
+  const columnDefs = $derived(
+    statuses.map((status) => [
+      status.id,
+      status.id === 'todo'
+        ? text('Do zrobienia', 'To do')
+        : status.id === 'progress'
+          ? text('W trakcie', 'In progress')
+          : status.id === 'done'
+            ? text('Gotowe', 'Done')
+            : status.name
+    ])
+  );
 
   const tabs = $derived([
     ['overview', text('Przegląd', 'Overview')],
@@ -475,7 +479,6 @@
       )
     }))
   ]);
-  const columnOptions = $derived(columnDefs.map(([value, label]) => ({ value, label })));
   const privacyOptions = $derived([
     { value: 'full-name', label: text('Pełne imię i nazwisko', 'Full name') },
     { value: 'last-initial', label: text('Imię i inicjał nazwiska', 'First name + last initial') },
@@ -1077,119 +1080,16 @@
                         </div>{/if}
                     </div>
                   {:else}
-                    <div class="board">
-                      {#each columnDefs as [column, label] (column)}
-                        <section class="board-column" aria-label={label}>
-                          <div class="column-header">
-                            <span class="column-label"
-                              ><span class={`column-dot ${column}`}></span>{label}<span
-                                class="column-count"
-                                >{items.filter((item) => item.column === column).length}</span
-                              ></span
-                            >
-                            <button
-                              id={`add-${column}`}
-                              type="button"
-                              class="icon-button"
-                              aria-label={`${text('Dodaj zadanie do', 'Add task to')} ${label}`}
-                              disabled={busy}
-                              onclick={() => openTaskComposer(column)}
-                              ><Plus size={17} aria-hidden="true" /></button
-                            >
-                          </div>
-                          <div class="column-items">
-                            {#each items.filter((item) => item.column === column) as item (item.id)}
-                              <article class="kanban-card">
-                                <strong>{item.title}</strong>
-                                {#if item.markdown}<p>
-                                    {item.markdown.slice(0, 120)}{item.markdown.length > 120
-                                      ? '…'
-                                      : ''}
-                                  </p>{/if}
-                                <div class="kanban-card-actions">
-                                  <Dropdown
-                                    variant="compact"
-                                    label={text('Przenieś zadanie', 'Move task')}
-                                    value={item.column}
-                                    options={columnOptions}
-                                    disabled={busy}
-                                    onselect={(column) =>
-                                      action(() =>
-                                        api(`/platform/items/${item.id}`, 'PATCH', {
-                                          version: item.version,
-                                          column
-                                        })
-                                      )}
-                                  />
-                                  <button
-                                    class="icon-button danger-button"
-                                    aria-label={`${text('Usuń zadanie', 'Remove task')}: ${item.title}`}
-                                    disabled={busy}
-                                    onclick={() =>
-                                      action(() =>
-                                        api(`/platform/items/${item.id}`, 'DELETE', {
-                                          version: item.version
-                                        })
-                                      )}><Trash2 size={15} aria-hidden="true" /></button
-                                  >
-                                </div>
-                              </article>
-                            {/each}
-                          </div>
-                          {#if composer && taskColumn === column}
-                            <form
-                              class="column-composer"
-                              onsubmit={(event) => {
-                                event.preventDefault();
-                                void action(create);
-                              }}
-                            >
-                              <label for="task-title" class="sr-only"
-                                >{text('Tytuł zadania', 'Task title')}</label
-                              >
-                              <input
-                                id="task-title"
-                                bind:value={title}
-                                placeholder={text('Co trzeba zrobić?', 'What needs to be done?')}
-                                required
-                              />
-                              <Editor {language} bind:value={markdown} />
-                              <div class="composer-actions">
-                                <button class="btn" disabled={busy || !title.trim()}
-                                  ><Plus size={15} aria-hidden="true" />{text(
-                                    'Dodaj zadanie',
-                                    'Add task'
-                                  )}</button
-                                >
-                                <button
-                                  class="icon-button"
-                                  type="button"
-                                  aria-label={text(
-                                    'Anuluj dodawanie zadania',
-                                    'Cancel task creation'
-                                  )}
-                                  disabled={busy}
-                                  onclick={() => {
-                                    composer = false;
-                                    document.getElementById(`add-${column}`)?.focus();
-                                  }}><X size={17} aria-hidden="true" /></button
-                                >
-                              </div>
-                            </form>
-                          {:else}
-                            <button
-                              class="column-add"
-                              disabled={busy}
-                              onclick={() => openTaskComposer(column)}
-                              ><Plus size={16} aria-hidden="true" />{text(
-                                'Dodaj zadanie',
-                                'Add task'
-                              )}</button
-                            >
-                          {/if}
-                        </section>
-                      {/each}
-                    </div>
+                    <KanbanBoard
+                      {items}
+                      {statuses}
+                      {boardId}
+                      projectId={scope}
+                      {language}
+                      canManage={boardLeader}
+                      refresh={() => load()}
+                      reportError={(message) => (error = message)}
+                    />
                   {/if}
 
                   <!-- ── FORUM ─────────────────────────────────────────────────────── -->
@@ -1280,7 +1180,7 @@
                         <div
                           style="border-top: 1px solid var(--line); padding: 12px 0; font-size: 13px; white-space: pre-wrap;"
                         >
-                          {comment.markdown}
+                          <MarkdownContent value={comment.markdown} {language} />
                         </div>
                       {/each}
                       <div style="margin-top: 16px; display: grid; gap: 8px;">

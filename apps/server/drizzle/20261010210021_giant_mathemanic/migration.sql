@@ -1,0 +1,1 @@
+ALTER TABLE "boards" ADD COLUMN "statuses" jsonb DEFAULT '[{"id":"todo","name":"To do"},{"id":"progress","name":"In progress"},{"id":"done","name":"Done"}]' NOT NULL;

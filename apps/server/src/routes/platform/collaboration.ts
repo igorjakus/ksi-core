@@ -5,6 +5,7 @@ import { createElysia, requirePermission } from '../../lib/createElysia';
 import { recordEvent, type Executor } from '../../lib/audit';
 import { boards, kanbanItems, threads, comments, users, auditEvents } from '../../db';
 import { canContribute, canReadThread } from '../../domain/permissions';
+import { validBoardStatuses, statusExists } from '../../domain/board-statuses';
 import { validTags } from '../../domain/content-policy';
 import { active, scopeFor, requireLeader } from './content';
 
@@ -143,6 +144,48 @@ export default createElysia({ prefix: '/platform' })
     },
     { body: t.Object({ tags }) }
   )
+  .put(
+    '/boards/:id/statuses',
+    async ({ db, user, params, body }) => {
+      const actor = active(user);
+      return db.transaction(async (tx) => {
+        const { board, scope } = await boardScope(tx, params.id);
+        requireLeader(actor, scope, 'projects.catalog.edit');
+        await tx.select().from(boards).where(eq(boards.id, board.id)).for('update');
+        if (!validBoardStatuses(body.statuses))
+          throw status(422, { code: 'INVALID_BOARD_STATUSES' });
+        const items = await tx
+          .select({ column: kanbanItems.column })
+          .from(kanbanItems)
+          .where(eq(kanbanItems.boardId, board.id));
+        if (items.some((item) => !statusExists(body.statuses, item.column)))
+          throw status(409, { code: 'STATUS_IN_USE' });
+        const [updated] = await tx
+          .update(boards)
+          .set({ statuses: body.statuses })
+          .where(eq(boards.id, board.id))
+          .returning();
+        await recordEvent(tx, {
+          actorId: actor.id,
+          projectId: board.projectId,
+          action: 'boards.statuses.updated',
+          targetId: board.id
+        });
+        return updated;
+      });
+    },
+    {
+      body: t.Object({
+        statuses: t.Array(
+          t.Object({
+            id: t.String({ pattern: '^[a-z][a-z0-9-]{0,39}$' }),
+            name: t.String({ minLength: 1, maxLength: 60 })
+          }),
+          { minItems: 1, maxItems: 20 }
+        )
+      })
+    }
+  )
   .get(
     '/boards/:id/items',
     async ({ db, user, params, query }) => {
@@ -178,6 +221,8 @@ export default createElysia({ prefix: '/platform' })
           .for('share');
         if (!lockedBoard || !validTags(body.tags, lockedBoard.tags))
           throw status(422, { code: 'INVALID_BOARD_TAGS' });
+        if (!statusExists(lockedBoard.statuses, body.column))
+          throw status(422, { code: 'INVALID_BOARD_STATUS' });
         const [item] = await tx
           .insert(kanbanItems)
           .values({ ...body, authorId: actor.id, boardId: board.id })
@@ -199,7 +244,7 @@ export default createElysia({ prefix: '/platform' })
         title,
         markdown: t.String({ maxLength: 500000 }),
         tags,
-        column: t.Union([t.Literal('todo'), t.Literal('progress'), t.Literal('done')]),
+        column: t.String({ minLength: 1, maxLength: 40 }),
         position: t.Integer({ minimum: 0 })
       })
     }
@@ -218,6 +263,8 @@ export default createElysia({ prefix: '/platform' })
           .for('share');
         if (body.tags && (!lockedBoard || !validTags(body.tags, lockedBoard.tags)))
           throw status(422, { code: 'INVALID_BOARD_TAGS' });
+        if (body.column && (!lockedBoard || !statusExists(lockedBoard.statuses, body.column)))
+          throw status(422, { code: 'INVALID_BOARD_STATUS' });
         const { version, ...values } = body;
         const [updated] = await tx
           .update(kanbanItems)
@@ -248,7 +295,7 @@ export default createElysia({ prefix: '/platform' })
         title: t.Optional(title),
         markdown: t.Optional(t.String({ maxLength: 500000 })),
         tags: t.Optional(tags),
-        column: t.Optional(t.Union([t.Literal('todo'), t.Literal('progress'), t.Literal('done')])),
+        column: t.Optional(t.String({ minLength: 1, maxLength: 40 })),
         position: t.Optional(t.Integer({ minimum: 0 }))
       })
     }
@@ -320,8 +367,14 @@ export default createElysia({ prefix: '/platform' })
     const { item, scope } = await itemScope(db, params.id);
     if (item.deletedAt) requireLeader(actor, scope, 'collaboration.items.restore');
     return db
-      .select()
+      .select({
+        id: comments.id,
+        markdown: comments.markdown,
+        createdAt: comments.createdAt,
+        authorName: users.name
+      })
       .from(comments)
+      .leftJoin(users, eq(comments.authorId, users.id))
       .where(and(eq(comments.itemId, item.id), isNull(comments.deletedAt)))
       .orderBy(comments.createdAt);
   })
@@ -440,8 +493,14 @@ export default createElysia({ prefix: '/platform' })
     const { thread, scope } = await threadScope(db, params.id);
     assertThreadRead(actor, thread, scope);
     const posts = await db
-      .select()
+      .select({
+        id: comments.id,
+        markdown: comments.markdown,
+        createdAt: comments.createdAt,
+        authorName: users.name
+      })
       .from(comments)
+      .leftJoin(users, eq(comments.authorId, users.id))
       .where(and(eq(comments.threadId, thread.id), isNull(comments.deletedAt)))
       .orderBy(comments.createdAt);
     return { ...thread, comments: posts };
