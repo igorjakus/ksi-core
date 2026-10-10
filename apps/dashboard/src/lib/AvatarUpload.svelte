@@ -12,7 +12,7 @@
     onchange: () => Promise<void>;
     reportError: (error: string) => void;
   } = $props();
-  const text = (pl: string, en: string) => (language === 'pl' ? pl : en);
+
   let input = $state<HTMLInputElement>(),
     busy = $state(false),
     dragging = $state(false);
@@ -23,12 +23,7 @@
       !['image/jpeg', 'image/png', 'image/webp', 'image/avif', 'image/gif'].includes(file.type) ||
       file.size > 5 * 1024 * 1024
     ) {
-      reportError(
-        text(
-          'Wybierz obraz JPEG, PNG, WebP, AVIF lub GIF do 5 MiB.',
-          'Choose a JPEG, PNG, WebP, AVIF or GIF image up to 5 MiB.'
-        )
-      );
+      reportError('Choose a JPEG, PNG, WebP, AVIF or GIF image up to 5 MiB.');
       return;
     }
     busy = true;
@@ -68,33 +63,21 @@
 </script>
 
 <div class="avatar-upload">
-  <h3>{text('Zdjęcie profilowe', 'Profile picture')}</h3>
+  <h3>{'Profile picture'}</h3>
   {#if request?.state === 'pending' && request.fileId}<div class="avatar-pending">
-      <img
-        src={`/media/${request.fileId}`}
-        alt={text('Zdjęcie oczekujące na akceptację', 'Picture awaiting approval')}
-      />
+      <img src={`/media/${request.fileId}`} alt={'Picture awaiting approval'} />
       <div>
-        <strong>{text('Oczekuje na akceptację', 'Awaiting approval')}</strong>
+        <strong>{'Awaiting approval'}</strong>
         <p>
-          {text(
-            'Obecne zdjęcie pozostaje widoczne do decyzji administratora.',
-            'Your current picture remains visible until an administrator decides.'
-          )}
+          {'Your current picture remains visible until an administrator decides.'}
         </p>
         <button type="button" class="btn btn-outline" disabled={busy} onclick={cancel}
-          ><X size={14} aria-hidden="true" />{text(
-            'Wycofaj zgłoszenie',
-            'Withdraw request'
-          )}</button
+          ><X size={14} aria-hidden="true" />{'Withdraw request'}</button
         >
       </div>
     </div>
   {:else if request?.state === 'declined'}<p class="avatar-feedback" role="status">
-      {text(
-        'Zdjęcie nie zostało zaakceptowane. Możesz przesłać inne.',
-        'The picture was declined. You can submit another.'
-      )}
+      {'The picture was declined. You can submit another.'}
     </p>{/if}
   <input
     bind:this={input}
@@ -122,18 +105,13 @@
       void upload(event.dataTransfer?.files[0]);
     }}
     ><UploadCloud size={21} aria-hidden="true" /><span
-      >{busy
-        ? text('Przesyłanie…', 'Uploading…')
-        : text('Przeciągnij zdjęcie lub wybierz plik', 'Drop a picture or choose a file')}<small
+      >{busy ? 'Uploading…' : 'Drop a picture or choose a file'}<small
         >JPEG · PNG · WebP · AVIF · GIF · 5 MiB</small
       ></span
     ></button
   >
   <p class="avatar-help">
-    {text(
-      'Każde nowe zdjęcie wymaga akceptacji administratora.',
-      'Every new picture requires administrator approval.'
-    )}
+    {'Every new picture requires administrator approval.'}
   </p>
 </div>
 

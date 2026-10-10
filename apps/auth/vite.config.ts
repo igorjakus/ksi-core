@@ -1,6 +1,7 @@
 import { execSync } from 'node:child_process';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
+import { wuchale } from 'wuchale/vite';
 import manifest from './package.json';
 let commit = process.env.PUBLIC_COMMIT_HASH || process.env.GITHUB_SHA || '';
 if (!commit) {
@@ -11,7 +12,7 @@ if (!commit) {
   } catch {}
 }
 export default defineConfig({
-  plugins: [sveltekit()],
+  plugins: [wuchale(), sveltekit()],
   define: {
     'import.meta.env.PUBLIC_COMMIT_HASH': JSON.stringify(commit),
     'import.meta.env.PUBLIC_APP_VERSION': JSON.stringify(manifest.version)

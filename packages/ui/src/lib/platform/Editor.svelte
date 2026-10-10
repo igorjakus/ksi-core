@@ -8,7 +8,7 @@
     allowGallery = false
   }: { value?: string; language?: 'pl' | 'en'; rows?: number; allowGallery?: boolean } = $props();
   const uid = $props.id();
-  const text = (pl: string, en: string) => (language === 'pl' ? pl : en);
+
   let message = $state(''),
     preview = $state(false),
     busy = $state(false),
@@ -24,13 +24,11 @@
         body.set('file', file);
         const response = await fetch('/api/files', { method: 'POST', body });
         const data = await response.json();
-        if (!response.ok)
-          throw new Error(data.code ?? text('Nie udało się wysłać pliku.', 'Upload failed.'));
+        if (!response.ok) throw new Error(data.code ?? 'Upload failed.');
         value += `\n${file.type.startsWith('image/') ? '!' : ''}[${file.name.replace(/[[\]\\]/g, '_')}](file:${data.id})\n`;
       }
     } catch (error) {
-      message =
-        error instanceof Error ? error.message : text('Błąd przesyłania.', 'Upload failed.');
+      message = error instanceof Error ? error.message : 'Upload failed.';
     } finally {
       busy = false;
       if (input) input.value = '';
@@ -40,20 +38,18 @@
 
 <div class="editor">
   <div class="editor-toolbar">
-    <div class="editor-tabs" role="group" aria-label={text('Tryb edytora', 'Editor mode')}>
+    <div class="editor-tabs" role="group" aria-label={'Editor mode'}>
       <button
         type="button"
         class:active={!preview}
         aria-pressed={!preview}
-        onclick={() => (preview = false)}
-        ><Pencil size={14} aria-hidden="true" />{text('Edytuj', 'Write')}</button
+        onclick={() => (preview = false)}><Pencil size={14} aria-hidden="true" />{'Write'}</button
       >
       <button
         type="button"
         class:active={preview}
         aria-pressed={preview}
-        onclick={() => (preview = true)}
-        ><Eye size={14} aria-hidden="true" />{text('Podgląd', 'Preview')}</button
+        onclick={() => (preview = true)}><Eye size={14} aria-hidden="true" />{'Preview'}</button
       >
     </div>
     {#if allowGallery}<button
@@ -62,7 +58,7 @@
         onclick={() => {
           value += '\n:::gallery preview=3\nfile:IMAGE_ID\n:::\n';
           preview = false;
-        }}><Images size={14} aria-hidden="true" />{text('Galeria', 'Gallery')}</button
+        }}><Images size={14} aria-hidden="true" />{'Gallery'}</button
       >{/if}
   </div>
   {#if preview}<div class="editor-preview"><MarkdownContent {value} {language} /></div>
@@ -70,7 +66,7 @@
       id={uid}
       bind:value
       {rows}
-      placeholder={text('Opis w Markdown…', 'Write a Markdown description…')}
+      placeholder={'Write a Markdown description…'}
     ></textarea>{/if}
   <input
     bind:this={input}
@@ -99,15 +95,10 @@
       void upload(event.dataTransfer?.files ?? null);
     }}
   >
-    {#if busy}<UploadCloud size={18} aria-hidden="true" />{text(
-        'Przesyłanie…',
-        'Uploading…'
-      )}{:else}<Paperclip size={17} aria-hidden="true" /><span
-        >{text(
-          'Przeciągnij pliki lub wybierz załączniki',
-          'Drop files here or choose attachments'
-        )}</span
-      >{/if}
+    {#if busy}<UploadCloud size={18} aria-hidden="true" />{'Uploading…'}{:else}<Paperclip
+        size={17}
+        aria-hidden="true"
+      /><span>{'Drop files here or choose attachments'}</span>{/if}
   </button>
   {#if message}<p role="alert" class="error">{message}</p>{/if}
 </div>

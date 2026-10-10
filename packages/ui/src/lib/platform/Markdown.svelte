@@ -3,7 +3,7 @@
   import { X, ChevronLeft, ChevronRight } from '@lucide/svelte';
   import type { MarkdownBlock } from 'shared/markdown';
   let { blocks, language = 'pl' }: { blocks: MarkdownBlock[]; language?: 'pl' | 'en' } = $props();
-  const text = (pl: string, en: string) => (language === 'pl' ? pl : en);
+
   let dialog = $state<HTMLDialogElement>();
   function close() {
     dialog?.close();
@@ -24,10 +24,10 @@
         {#each block.ids.slice(0, block.preview) as id, index}<button
             type="button"
             onclick={() => (active = { ids: block.ids, index })}
-            aria-label={`${text('Otwórz obraz', 'Open image')} ${index + 1}`}
+            aria-label={`${'Open image'} ${index + 1}`}
             ><img
               src={`/media/${id}`}
-              alt={`${text('Obraz z galerii', 'Gallery image')} ${index + 1}`}
+              alt={`${'Gallery image'} ${index + 1}`}
               loading="lazy"
             /></button
           >{/each}{#if block.ids.length > block.preview}<button
@@ -39,16 +39,14 @@
 </div>
 {#if active}<dialog
     bind:this={dialog}
-    aria-label={text('Galeria', 'Gallery')}
+    aria-label={'Gallery'}
     class="lightbox"
     oncancel={(event) => {
       event.preventDefault();
       close();
     }}
   >
-    <button type="button" onclick={close}
-      ><X size={16} aria-hidden="true" />{text('Zamknij', 'Close')}</button
-    >
+    <button type="button" onclick={close}><X size={16} aria-hidden="true" />{'Close'}</button>
     <div class="row">
       <button
         type="button"
@@ -57,17 +55,15 @@
             ids: active!.ids,
             index: (active!.index - 1 + active!.ids.length) % active!.ids.length
           })}
-        aria-label={text('Poprzedni obraz', 'Previous image')}
-        ><ChevronLeft size={20} aria-hidden="true" /></button
+        aria-label={'Previous image'}><ChevronLeft size={20} aria-hidden="true" /></button
       ><img
         src={`/media/${active.ids[active.index]}`}
-        alt={`${text('Obraz z galerii', 'Gallery image')} ${active.index + 1}`}
+        alt={`${'Gallery image'} ${active.index + 1}`}
       /><button
         type="button"
         onclick={() =>
           (active = { ids: active!.ids, index: (active!.index + 1) % active!.ids.length })}
-        aria-label={text('Następny obraz', 'Next image')}
-        ><ChevronRight size={20} aria-hidden="true" /></button
+        aria-label={'Next image'}><ChevronRight size={20} aria-hidden="true" /></button
       >
     </div>
   </dialog>{/if}

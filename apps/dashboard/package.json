@@ -13,8 +13,10 @@
   "dependencies": {
     "@ksi-core/ui": "workspace:*",
     "@lucide/svelte": "0.548.0",
+    "@wuchale/svelte": "^0.20.5",
     "better-auth": "^1.6.25",
-    "shared": "workspace:*"
+    "shared": "workspace:*",
+    "wuchale": "^0.25.6"
   },
   "devDependencies": {
     "@sveltejs/adapter-node": "^5.5.7",

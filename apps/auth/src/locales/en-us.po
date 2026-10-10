@@ -1,0 +1,191 @@
+msgid ""
+msgstr ""
+"Plural-Forms: nplurals=2; plural=n == 1 ? 0 : 1;\n"
+"Source-Language: en-us\n"
+"Language: en-us\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/routes/+page.svelte
+#: src/routes/+page.svelte
+msgid "Login failed."
+msgstr "Login failed."
+
+#: src/routes/+page.svelte
+msgid "Check your email inbox."
+msgstr "Check your email inbox."
+
+#: src/routes/+page.svelte
+#: src/routes/+page.svelte
+#: src/routes/reset-password/+page.svelte
+msgid "Server unavailable."
+msgstr "Server unavailable."
+
+#: src/routes/+page.svelte
+#: src/routes/+page.svelte
+msgid "Create account"
+msgstr "Create account"
+
+#: src/routes/+page.svelte
+msgid "Send recovery link"
+msgstr "Send recovery link"
+
+#: src/routes/+page.svelte
+#: src/routes/+page.svelte
+#: src/routes/+page.svelte
+msgid "Sign in"
+msgstr "Sign in"
+
+#: src/routes/+page.svelte
+msgid "Join KSI"
+msgstr "Join KSI"
+
+#: src/routes/+page.svelte
+msgid "Recover access"
+msgstr "Recover access"
+
+#: src/routes/+page.svelte
+msgid "Welcome to KSI"
+msgstr "Welcome to KSI"
+
+#. 0: 'Sign in'
+#. 0: 'New password'
+#: src/routes/+page.svelte
+#: src/routes/reset-password/+page.svelte
+msgid "{0} — KSI"
+msgstr "{0} — KSI"
+
+#: src/routes/+page.svelte
+#: src/routes/reset-password/+page.svelte
+msgid "Change language"
+msgstr "Change language"
+
+#: src/routes/+page.svelte
+#: src/routes/reset-password/+page.svelte
+msgid "KSI<0>/ core</0>"
+msgstr "KSI<0>/ core</0>"
+
+#: src/routes/+page.svelte
+msgid "One account. Every KSI project and conversation."
+msgstr "One account. Every KSI project and conversation."
+
+#: src/routes/+page.svelte
+msgid "Account options"
+msgstr "Account options"
+
+#: src/routes/+page.svelte
+msgid "Remembered accounts"
+msgstr "Remembered accounts"
+
+#: src/routes/+page.svelte
+msgid "Forget account"
+msgstr "Forget account"
+
+#: src/routes/+page.svelte
+msgid "Forget"
+msgstr "Forget"
+
+#: src/routes/+page.svelte
+msgid "Continue with GitHub"
+msgstr "Continue with GitHub"
+
+#: src/routes/+page.svelte
+msgid "Continue with Google"
+msgstr "Continue with Google"
+
+#: src/routes/+page.svelte
+msgid "G"
+msgstr "G"
+
+#: src/routes/+page.svelte
+msgid "Full name"
+msgstr "Full name"
+
+#: src/routes/+page.svelte
+msgid "Anna Kowalska"
+msgstr "Anna Kowalska"
+
+#: src/routes/+page.svelte
+msgid "E-mail"
+msgstr "E-mail"
+
+#: src/routes/+page.svelte
+#: src/routes/reset-password/+page.svelte
+msgid "Password"
+msgstr "Password"
+
+#: src/routes/+page.svelte
+msgid "Forgot password"
+msgstr "Forgot password"
+
+#: src/routes/+page.svelte
+msgid "Remember account on this device"
+msgstr "Remember account on this device"
+
+#: src/routes/+page.svelte
+msgid "Please wait…"
+msgstr "Please wait…"
+
+#: src/routes/+page.svelte
+#: src/routes/reset-password/+page.svelte
+msgid "Back to sign in"
+msgstr "Back to sign in"
+
+#: src/routes/+page.svelte
+msgid "New accounts require activation by the KSI board."
+msgstr "New accounts require activation by the KSI board."
+
+#: src/routes/+page.svelte
+#: src/routes/reset-password/+page.svelte
+msgid "Back to KSI"
+msgstr "Back to KSI"
+
+#: src/routes/+page.svelte
+#: src/routes/reset-password/+page.svelte
+msgid "University of Wrocław"
+msgstr "University of Wrocław"
+
+#: src/routes/+page.svelte
+#: src/routes/reset-password/+page.svelte
+msgid "Source"
+msgstr "Source"
+
+#. 0: 'University of Wrocław'
+#. 0: 'University of Wrocław'
+#: src/routes/+page.svelte
+#: src/routes/reset-password/+page.svelte
+msgid "KSI · {0}"
+msgstr "KSI · {0}"
+
+#. 0: import.meta.env.PUBLIC_APP_VERSION
+#. 0: import.meta.env.PUBLIC_APP_VERSION
+#: src/routes/+page.svelte
+#: src/routes/reset-password/+page.svelte
+msgid "v{0}"
+msgstr "v{0}"
+
+#: src/routes/reset-password/+page.svelte
+msgid "Password changed. You can sign in now."
+msgstr "Password changed. You can sign in now."
+
+#: src/routes/reset-password/+page.svelte
+#: src/routes/reset-password/+page.svelte
+msgid "New password"
+msgstr "New password"
+
+#: src/routes/reset-password/+page.svelte
+msgid "Choose a new password for your KSI account."
+msgstr "Choose a new password for your KSI account."
+
+#: src/routes/reset-password/+page.svelte
+msgid "Recovery link missing. Request a new link on the sign-in page."
+msgstr "Recovery link missing. Request a new link on the sign-in page."
+
+#: src/routes/reset-password/+page.svelte
+msgid "Saving…"
+msgstr "Saving…"
+
+#: src/routes/reset-password/+page.svelte
+msgid "Save password"
+msgstr "Save password"

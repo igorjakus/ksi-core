@@ -66,8 +66,6 @@
   let error = $state('');
   let busy = $state(false);
 
-  const text = (pl: string, en: string) => (language === 'pl' ? pl : en);
-
   type Project = {
     id: string;
     slug: string;
@@ -103,8 +101,8 @@
     id: string;
     title: string;
     visibility: string;
-    projectId?:string|null;
-    archivedAt?:string|null;
+    projectId?: string | null;
+    archivedAt?: string | null;
     version: number;
     createdAt?: string;
     comments?: { id: string; markdown: string; authorName?: string; createdAt?: string }[];
@@ -180,7 +178,7 @@
       if (workspace === 'project') {
         const project = projectList.find((project) => project.slug === projectSlug);
         if (!project) {
-          error = text('Nie znaleziono projektu.', 'Project not found.');
+          error = 'Project not found.';
           return;
         }
         scope = currentScope = project.id;
@@ -222,14 +220,23 @@
         }
       }
       if (currentTab === 'forum') {
-        const threadId=parseDashboardPath(page.url.pathname)?.threadId;
-        if(threadId){
-          const detail=await api<Thread>(`/platform/threads/${encodeURIComponent(threadId)}`);
-          if((detail.projectId ?? null)!==(currentScope || null))throw new Error(text('Wątek nie należy do tej przestrzeni.','This thread belongs to another workspace.'));
-          if(generation===loadGeneration){selectedThread=detail;archived=!!detail.archivedAt;}
-        }else{
-          const result=await api<Thread[]>(`/platform/threads?archived=${archived}${currentScope ? `&projectId=${encodeURIComponent(currentScope)}`:''}`);
-          if(generation===loadGeneration){threads=result;selectedThread=null;}
+        const threadId = parseDashboardPath(page.url.pathname)?.threadId;
+        if (threadId) {
+          const detail = await api<Thread>(`/platform/threads/${encodeURIComponent(threadId)}`);
+          if ((detail.projectId ?? null) !== (currentScope || null))
+            throw new Error('This thread belongs to another workspace.');
+          if (generation === loadGeneration) {
+            selectedThread = detail;
+            archived = !!detail.archivedAt;
+          }
+        } else {
+          const result = await api<Thread[]>(
+            `/platform/threads?archived=${archived}${currentScope ? `&projectId=${encodeURIComponent(currentScope)}` : ''}`
+          );
+          if (generation === loadGeneration) {
+            threads = result;
+            selectedThread = null;
+          }
         }
       }
       if (currentTab === 'events') {
@@ -364,17 +371,11 @@
   async function saveProfile() {
     profileSaved = false;
     if (!validProfileLink('github', profile.github)) {
-      error = text(
-        'Wpisz link do profilu https://github.com/nazwa.',
-        'Enter a https://github.com/username profile link.'
-      );
+      error = 'Enter a https://github.com/username profile link.';
       return;
     }
     if (!validProfileLink('linkedin', profile.linkedin)) {
-      error = text(
-        'Wpisz link do profilu https://linkedin.com/in/nazwa.',
-        'Enter a https://linkedin.com/in/username profile link.'
-      );
+      error = 'Enter a https://linkedin.com/in/username profile link.';
       return;
     }
     await action(async () => {
@@ -428,7 +429,9 @@
       composer = false;
       title = '';
       markdown = '';
-      await goto(`${dashboardPath(workspace,projectSlug,'forum')}/${encodeURIComponent(result.id)}`);
+      await goto(
+        `${dashboardPath(workspace, projectSlug, 'forum')}/${encodeURIComponent(result.id)}`
+      );
       return result;
     }
   }
@@ -460,41 +463,39 @@
     statuses.map((status) => [
       status.id,
       status.id === 'todo'
-        ? text('Do zrobienia', 'To do')
+        ? 'To do'
         : status.id === 'progress'
-          ? text('W trakcie', 'In progress')
+          ? 'In progress'
           : status.id === 'done'
-            ? text('Gotowe', 'Done')
+            ? 'Done'
             : status.name
     ])
   );
 
   const tabs = $derived([
-    ['overview', text('Przegląd', 'Overview')],
+    ['overview', 'Overview'],
     ['board', 'Kanban'],
     ['forum', 'Forum'],
-    ['articles', text('Artykuły', 'Articles')],
-    ['events', text('Aktywność', 'Activity')]
+    ['articles', 'Articles'],
+    ['events', 'Activity']
   ] as [string, string][]);
   const selectedProject = $derived(projects.find((project) => project.slug === projectSlug));
   const workspaceName = $derived(
-    workspace === 'project'
-      ? (selectedProject?.name ?? text('Projekt', 'Project'))
-      : text('Całe koło', 'Association')
+    workspace === 'project' ? (selectedProject?.name ?? 'Project') : 'Association'
   );
   const viewName = $derived(
     graveyard && tab === 'board'
-      ? text('Usunięte zadania', 'Removed tasks')
+      ? 'Removed tasks'
       : tab === 'inbox'
-        ? text('Skrzynka akceptacji', 'Approval inbox')
+        ? 'Approval inbox'
         : tab === 'projects'
-          ? text('Projekty', 'Projects')
+          ? 'Projects'
           : tab === 'profile'
-            ? text('Mój profil', 'My profile')
+            ? 'My profile'
             : tab === 'users'
-              ? text('Członkowie', 'Members')
+              ? 'Members'
               : tab === '__create_project__'
-                ? text('Nowy projekt', 'New project')
+                ? 'New project'
                 : (tabs.find(([key]) => key === tab)?.[1] ?? '')
   );
 
@@ -506,8 +507,8 @@
     events: Activity
   };
   const pickerOptions = $derived([
-    { value: 'directory', label: text('Wszystkie projekty', 'All projects'), href: '/projects' },
-    { value: 'association', label: text('Całe koło', 'Association'), href: '/association' },
+    { value: 'directory', label: 'All projects', href: '/projects' },
+    { value: 'association', label: 'Association', href: '/association' },
     ...projects.map((project) => ({
       value: project.id,
       label: project.name,
@@ -519,9 +520,9 @@
     }))
   ]);
   const privacyOptions = $derived([
-    { value: 'full-name', label: text('Pełne imię i nazwisko', 'Full name') },
-    { value: 'last-initial', label: text('Imię i inicjał nazwiska', 'First name + last initial') },
-    { value: 'initials', label: text('Tylko inicjały', 'Initials only') }
+    { value: 'full-name', label: 'Full name' },
+    { value: 'last-initial', label: 'First name + last initial' },
+    { value: 'initials', label: 'Initials only' }
   ]);
   const publicName = $derived(
     profile.publicPrivacy === 'initials'
@@ -582,17 +583,14 @@
 {#if data.user.membershipStatus !== 'active'}
   <div class="pending-screen">
     <div class="pending-card">
-      <h1>{text('Konto wymaga aktywacji', 'Account activation required')}</h1>
+      <h1>{'Account activation required'}</h1>
       <p>
-        {text(
-          'Twoje konto musi zostać aktywowane przez administratora. Zapytaj bezpośrednio:',
-          'Your account first needs to be activated by an administrator. Ask directly:'
-        )}
+        {'Your account first needs to be activated by an administrator. Ask directly:'}
         {data.activationContact}.
       </p>
       <form method="POST" action="/logout">
         <button class="btn" style="margin: 0 auto;">
-          {text('Wyloguj się', 'Sign out')}
+          {'Sign out'}
         </button>
       </form>
     </div>
@@ -606,7 +604,7 @@
         class="navigation-backdrop"
         tabindex="-1"
         aria-hidden="true"
-        aria-label={text('Zamknij nawigację', 'Close navigation')}
+        aria-label={'Close navigation'}
         onclick={() => {
           mobileNavigation = false;
           document.getElementById('navigation-toggle')?.focus();
@@ -619,7 +617,7 @@
       class:mobile-open={mobileNavigation}
       role={mobileNavigation ? 'dialog' : undefined}
       aria-modal={mobileNavigation ? true : undefined}
-      aria-label={text('Nawigacja', 'Navigation')}
+      aria-label={'Navigation'}
     >
       <div class="sidebar-brand">
         <span class="sidebar-logo">KSI<span> / core</span></span>
@@ -629,13 +627,12 @@
             mobileNavigation = false;
             document.getElementById('navigation-toggle')?.focus();
           }}
-          aria-label={text('Zamknij nawigację', 'Close navigation')}
-          ><X size={20} aria-hidden="true" /></button
+          aria-label={'Close navigation'}><X size={20} aria-hidden="true" /></button
         >
       </div>
       <div class="sidebar-context">
         <Dropdown
-          label={text('Wybierz przestrzeń', 'Choose workspace')}
+          label={'Choose workspace'}
           value={workspace === 'project'
             ? scope
             : workspace === 'association'
@@ -646,8 +643,8 @@
           searchable
           variant="workspace"
           disabled={busy}
-          searchPlaceholder={text('Szukaj projektu…', 'Search projects…')}
-          emptyLabel={text('Nie znaleziono projektu.', 'No projects found.')}
+          searchPlaceholder={'Search projects…'}
+          emptyLabel={'No projects found.'}
         >
           {#snippet leading()}<Folder size={18} strokeWidth={1.7} aria-hidden="true" />{/snippet}
         </Dropdown>
@@ -678,45 +675,39 @@
           href="/projects"
           onclick={guardNavigation}
           aria-current={tab === 'projects' ? 'page' : undefined}
-          ><span class="navigation-label"
-            ><Folder size={16} aria-hidden="true" />{text('Projekty', 'Projects')}</span
+          ><span class="navigation-label"><Folder size={16} aria-hidden="true" />{'Projects'}</span
           ></a
         >
         <a class="sidebar-btn" aria-disabled={busy} href="/association" onclick={guardNavigation}>
-          <span class="navigation-label"
-            ><Users size={16} aria-hidden="true" />{text('Całe koło', 'Association')}</span
+          <span class="navigation-label"><Users size={16} aria-hidden="true" />{'Association'}</span
           ><ArrowUpRight size={14} aria-hidden="true" />
         </a>
         <p class="sidebar-hint">
-          {text(
-            'Wybierz projekt, aby otworzyć jego tablicę, forum i artykuły.',
-            'Choose a project to open its board, forum, and articles.'
-          )}
+          {'Choose a project to open its board, forum, and articles.'}
         </p>
       {/if}
       <div class="sidebar-global">
         {#if workspace === 'project'}
           <a class="sidebar-btn" aria-disabled={busy} href="/association" onclick={guardNavigation}
             ><span class="navigation-label"
-              ><Users size={16} aria-hidden="true" />{text('Całe koło', 'Association')}</span
+              ><Users size={16} aria-hidden="true" />{'Association'}</span
             ><ArrowUpRight size={14} aria-hidden="true" /></a
           >
         {/if}
         {#if data.user.role !== 'member'}
-          <span class="sidebar-section">{text('Administracja koła', 'Association management')}</span
-          >
+          <span class="sidebar-section">{'Association management'}</span>
           <a
             class="sidebar-btn"
             class:active={tab === 'users'}
             aria-disabled={busy}
             aria-current={tab === 'users' ? 'page' : undefined}
             href="/members"
-            onclick={guardNavigation}>{text('Członkowie', 'Members')}</a
+            onclick={guardNavigation}>{'Members'}</a
           >
         {/if}
-        <a class="sidebar-btn" href={data.websiteOrigin}>{text('Strona KSI ↗', 'KSI website ↗')}</a>
+        <a class="sidebar-btn" href={data.websiteOrigin}>{'KSI website ↗'}</a>
         <div class="sidebar-footnote">
-          KSI · {text('Uniwersytet Wrocławski', 'University of Wrocław')}
+          KSI · {'University of Wrocław'}
           <div class="build-details">
             v{import.meta.env.PUBLIC_APP_VERSION} ·
             <a
@@ -725,8 +716,7 @@
                 : 'https://github.com/ksiuwr/ksi-core'}
               target="_blank"
               rel="noopener noreferrer"
-              >{import.meta.env.PUBLIC_COMMIT_HASH?.slice(0, 7) ||
-                text('Kod źródłowy', 'Source')}</a
+              >{import.meta.env.PUBLIC_COMMIT_HASH?.slice(0, 7) || 'Source'}</a
             >
           </div>
         </div>
@@ -744,13 +734,10 @@
           onclick={openNavigation}
         >
           <Menu size={20} strokeWidth={1.7} aria-hidden="true" /><span class="sr-only"
-            >{text('Nawigacja', 'Navigation')}</span
+            >{'Navigation'}</span
           >
         </button>
-        <div
-          class="workspace-breadcrumb"
-          aria-label={text('Bieżąca przestrzeń', 'Current workspace')}
-        >
+        <div class="workspace-breadcrumb" aria-label={'Current workspace'}>
           <a
             href={workspace === 'directory'
               ? '/projects'
@@ -762,7 +749,7 @@
           {#if data.user.role !== 'member'}<a
               class="icon-button inbox-link"
               href="/inbox"
-              aria-label={`${text('Skrzynka akceptacji', 'Approval inbox')}: ${inboxCount}`}
+              aria-label={`${'Approval inbox'}: ${inboxCount}`}
               onclick={guardNavigation}
               ><Bell size={18} aria-hidden="true" />{#if inboxCount}<span class="inbox-badge"
                   >{inboxCount}</span
@@ -775,16 +762,16 @@
               if (preferencesMenu?.open && accountMenu) accountMenu.open = false;
             }}
           >
-            <summary aria-label={text('Język i wygląd', 'Language and appearance')}
+            <summary aria-label={'Language and appearance'}
               ><SunMoon size={18} aria-hidden="true" /><span class="preferences-label"
-                >{text('Preferencje', 'Preferences')}</span
+                >{'Preferences'}</span
               ></summary
             >
             <div class="menu-panel preferences-panel">
-              <label for="dashboard-language">{text('Język', 'Language')}</label>
+              <label for="dashboard-language">{'Language'}</label>
               <Dropdown
                 id="dashboard-language"
-                label={text('Język', 'Language')}
+                label={'Language'}
                 value={language}
                 options={[
                   { value: 'pl', label: 'Polski' },
@@ -792,15 +779,15 @@
                 ]}
                 onselect={(value) => setLanguage(value as 'pl' | 'en')}
               />
-              <label for="dashboard-theme">{text('Wygląd', 'Appearance')}</label>
+              <label for="dashboard-theme">{'Appearance'}</label>
               <Dropdown
                 id="dashboard-theme"
-                label={text('Wygląd', 'Appearance')}
+                label={'Appearance'}
                 value={preferences.theme}
                 options={[
-                  { value: 'system', label: text('Systemowy', 'System') },
-                  { value: 'light', label: text('Jasny', 'Light') },
-                  { value: 'dark', label: text('Ciemny', 'Dark') }
+                  { value: 'system', label: 'System' },
+                  { value: 'light', label: 'Light' },
+                  { value: 'dark', label: 'Dark' }
                 ]}
                 onselect={(value) => setTheme(value as ThemePreference)}
               />
@@ -813,7 +800,7 @@
               if (accountMenu?.open && preferencesMenu) preferencesMenu.open = false;
             }}
           >
-            <summary aria-label={text('Moje konto', 'My account')}
+            <summary aria-label={'My account'}
               ><span class="account-avatar"
                 >{#if data.user.image}<img
                     src={data.user.image}
@@ -826,16 +813,13 @@
             >
             <div class="menu-panel account-panel">
               <strong>{data.user.firstName || data.user.name} {data.user.lastName}</strong>
-              <span class="muted">{text('Ustawienia konta', 'Account settings')}</span>
+              <span class="muted">{'Account settings'}</span>
               <button class="account-action" disabled={busy} onclick={() => changeTab('profile')}
-                ><UserRound size={16} aria-hidden="true" />{text(
-                  'Mój profil',
-                  'My profile'
-                )}</button
+                ><UserRound size={16} aria-hidden="true" />{'My profile'}</button
               >
               <form method="POST" action="/logout">
                 <button class="account-action sign-out"
-                  ><LogOut size={16} aria-hidden="true" />{text('Wyloguj się', 'Sign out')}</button
+                  ><LogOut size={16} aria-hidden="true" />{'Sign out'}</button
                 >
               </form>
             </div>
@@ -844,10 +828,7 @@
       </header>
       <main class="dash-workspace" aria-busy={loading || busy}>
         {#if error}<p class="error" role="alert">{error}</p>{/if}
-        {#if loading}<Skeleton
-            board={tab === 'board'}
-            label={text('Ładowanie przestrzeni', 'Loading workspace')}
-          />
+        {#if loading}<Skeleton board={tab === 'board'} label={'Loading workspace'} />
         {:else}
           {#key page.url.pathname}<div class="workspace-view" in:fly={{ y: -6, duration: 160 }}>
               <!-- ── PROJECTS ──────────────────────────────────────────────────── -->
@@ -855,12 +836,9 @@
                 {#if tab === 'projects'}
                   <div class="workspace-header">
                     <div>
-                      <h1>{text('Projekty', 'Projects')}</h1>
+                      <h1>{'Projects'}</h1>
                       <p class="workspace-description">
-                        {text(
-                          'Wybierz projekt i przejdź do wspólnej pracy.',
-                          'Choose a project and start collaborating.'
-                        )}
+                        {'Choose a project and start collaborating.'}
                       </p>
                     </div>
                     {#if data.user.role !== 'member'}
@@ -871,7 +849,7 @@
                           changeTab('__create_project__');
                         }}
                       >
-                        <Plus size={16} aria-hidden="true" />{text('Nowy projekt', 'New project')}
+                        <Plus size={16} aria-hidden="true" />{'New project'}
                       </button>
                     {/if}
                   </div>
@@ -884,11 +862,11 @@
                             <span class="tag" style="background: var(--mint);">{field}</span>
                           {/each}
                           {#if project.locked}
-                            <span class="tag">{text('Zamknięty', 'Locked')}</span>
+                            <span class="tag">{'Locked'}</span>
                           {/if}
                         </div>
                         <h2>{project.name}</h2>
-                        <p>{project.description || text('Brak opisu.', 'No description.')}</p>
+                        <p>{project.description || 'No description.'}</p>
                         <div class="project-card-actions">
                           <a
                             class="btn"
@@ -896,7 +874,7 @@
                             href={`/projects/${encodeURIComponent(project.slug)}`}
                             onclick={guardNavigation}
                           >
-                            {text('Otwórz projekt', 'Open project')}
+                            {'Open project'}
                             <ArrowUpRight size={15} aria-hidden="true" />
                           </a>
                         </div>
@@ -906,9 +884,9 @@
 
                   {#if !loading && !projects.length && !error}
                     <div class="empty-state">
-                      <h2>{text('Jeszcze nie ma projektów', 'No projects yet')}</h2>
+                      <h2>{'No projects yet'}</h2>
                       <p>
-                        {text('Nowe projekty pojawią się tutaj.', 'New projects will appear here.')}
+                        {'New projects will appear here.'}
                       </p>
                     </div>
                   {/if}
@@ -918,10 +896,7 @@
                       <h1>{workspaceName}</h1>
                       <p class="workspace-description">
                         {selectedProject?.description ||
-                          text(
-                            'Wspólne zadania, rozmowy i publikacje w jednym miejscu.',
-                            'Shared tasks, conversations, and publications in one place.'
-                          )}
+                          'Shared tasks, conversations, and publications in one place.'}
                       </p>
                     </div>
                     {#if selectedProject}
@@ -930,12 +905,12 @@
                         disabled={busy}
                         onclick={() =>
                           action(() => api(`/platform/projects/${scope}/join`, 'POST'))}
-                        >{text('Dołącz do projektu', 'Join project')}</button
+                        >{'Join project'}</button
                       >
                     {/if}
                   </div>
                   <div class="workspace-shortcuts">
-                    {#each [['board', 'Kanban', text('Zaplanuj i śledź wspólne zadania.', 'Plan and track shared tasks.')], ['forum', 'Forum', text('Rozmawiaj, zadawaj pytania i dziel się pomysłami.', 'Discuss, ask questions, and share ideas.')], ['articles', text('Artykuły', 'Articles'), text('Twórz publikacje i proponuj zmiany.', 'Write publications and propose changes.')]] as [key, label, description]}
+                    {#each [['board', 'Kanban', 'Plan and track shared tasks.'], ['forum', 'Forum', 'Discuss, ask questions, and share ideas.'], ['articles', 'Articles', 'Write publications and propose changes.']] as [key, label, description]}
                       <a
                         class="workspace-shortcut"
                         aria-disabled={busy}
@@ -952,7 +927,7 @@
                 {:else if tab === 'articles'}
                   <div class="workspace-header">
                     <div>
-                      <h1>{text('Artykuły', 'Articles')}</h1>
+                      <h1>{'Articles'}</h1>
                     </div>
                     <button
                       class="btn"
@@ -965,7 +940,7 @@
                         slug = '';
                       }}
                     >
-                      <Plus size={16} aria-hidden="true" />{text('Nowy artykuł', 'New article')}
+                      <Plus size={16} aria-hidden="true" />{'New article'}
                     </button>
                   </div>
 
@@ -1000,19 +975,14 @@
                   {/each}
 
                   {#if !loading && !articles.length && !newArticle}<p class="muted">
-                      {text(
-                        'Brak artykułów. Utwórz pierwszy artykuł w tej przestrzeni.',
-                        'No articles yet. Create the first article in this workspace.'
-                      )}
+                      {'No articles yet. Create the first article in this workspace.'}
                     </p>{/if}
                   {#if selectedArticle || newArticle}
                     <div class="card" style="margin-top: 20px;">
                       <h2 style="font-size: 1.1rem; margin-bottom: 16px;">
-                        {selectedArticle
-                          ? text('Edytuj artykuł', 'Edit article')
-                          : text('Nowy artykuł', 'New article')}
+                        {selectedArticle ? 'Edit article' : 'New article'}
                       </h2>
-                      <label for="a-title">{text('Tytuł', 'Title')}</label>
+                      <label for="a-title">{'Title'}</label>
                       <input id="a-title" bind:value={title} required />
                       <label for="a-slug">Slug</label>
                       <input id="a-slug" bind:value={slug} />
@@ -1024,17 +994,17 @@
                             disabled={busy}
                             onclick={() => action(() => saveArticle(false))}
                           >
-                            {text('Zapisz szkic', 'Save draft')}
+                            {'Save draft'}
                           </button>
                           <button
                             class="btn-coral btn"
                             disabled={busy}
                             onclick={() => action(() => saveArticle(true))}
                           >
-                            {text('Opublikuj', 'Publish')}
+                            {'Publish'}
                           </button>
                           <button disabled={busy} onclick={() => action(propose)}>
-                            {text('Zaproponuj zmianę', 'Propose edit')}
+                            {'Propose edit'}
                           </button>
                           <label
                             style="display: flex; align-items: center; gap: 6px; font-size: 12px; text-transform: none; letter-spacing: 0; color: var(--muted); cursor: pointer;"
@@ -1049,7 +1019,7 @@
                                   })
                                 )}
                             />
-                            {text('Pokaż mnie jako autora', 'Show my author credit')}
+                            {'Show my author credit'}
                           </label>
                         {:else}
                           <button
@@ -1057,7 +1027,7 @@
                             disabled={busy || !title.trim()}
                             onclick={() => action(create)}
                           >
-                            {text('Utwórz', 'Create')}
+                            {'Create'}
                           </button>
                         {/if}
                       </div>
@@ -1068,29 +1038,21 @@
                 {:else if tab === 'board'}
                   <div class="workspace-header">
                     <h1>
-                      {graveyard
-                        ? text('Usunięte zadania', 'Removed tasks')
-                        : text('Tablica zadań', 'Task board')}
+                      {graveyard ? 'Removed tasks' : 'Task board'}
                     </h1>
                     {#if graveyard}
                       <a
                         class="btn btn-outline"
                         href={dashboardPath(workspace, projectSlug, 'board')}
                         onclick={guardNavigation}
-                        ><ArrowLeft size={15} aria-hidden="true" />{text(
-                          'Wróć do tablicy',
-                          'Back to board'
-                        )}</a
+                        ><ArrowLeft size={15} aria-hidden="true" />{'Back to board'}</a
                       >
                     {:else}
                       <a
                         class="btn btn-outline"
                         href={`${dashboardPath(workspace, projectSlug, 'board')}/graveyard`}
                         onclick={guardNavigation}
-                        ><Trash2 size={15} aria-hidden="true" />{text(
-                          'Usunięte zadania',
-                          'Removed tasks'
-                        )}</a
+                        ><Trash2 size={15} aria-hidden="true" />{'Removed tasks'}</a
                       >
                     {/if}
                   </div>
@@ -1098,10 +1060,7 @@
                     <div class="graveyard-notice">
                       <Archive size={18} aria-hidden="true" />
                       <p>
-                        {text(
-                          'Usunięte zadania są zachowane tutaj. Liderzy mogą przywrócić je do poprzedniej kolumny.',
-                          'Removed tasks are kept here. Leaders can restore them to their previous column.'
-                        )}
+                        {'Removed tasks are kept here. Leaders can restore them to their previous column.'}
                       </p>
                     </div>
                     <div class="graveyard-list">
@@ -1127,22 +1086,15 @@
                                 api(`/platform/items/${item.id}/restore`, 'POST', {
                                   version: item.version
                                 })
-                              )}
-                            ><RotateCcw size={15} aria-hidden="true" />{text(
-                              'Przywróć',
-                              'Restore'
-                            )}</button
+                              )}><RotateCcw size={15} aria-hidden="true" />{'Restore'}</button
                           >
                         </article>
                       {/each}
                       {#if !loading && !items.length && !error}<div class="empty-state">
                           <Trash2 size={28} strokeWidth={1.4} aria-hidden="true" />
-                          <h2>{text('Brak usuniętych zadań', 'No removed tasks')}</h2>
+                          <h2>{'No removed tasks'}</h2>
                           <p>
-                            {text(
-                              'Zadania usunięte z tablicy pojawią się tutaj.',
-                              'Tasks removed from the board will appear here.'
-                            )}
+                            {'Tasks removed from the board will appear here.'}
                           </p>
                         </div>{/if}
                     </div>
@@ -1162,88 +1114,87 @@
                   <!-- ── FORUM ─────────────────────────────────────────────────────── -->
                 {:else if tab === 'forum'}
                   {#if !data.navigation.threadId}
-                  <div class="workspace-header">
-                    <div>
-                      <h1>Forum</h1>
-                    </div>
-                    <div class="row">
-                      <button
-                        class="btn"
-                        disabled={busy}
-                        onclick={async () => {
-                          title = '';
-                          markdown = '';
-                          selectedThread = null;
-                          composer = true;
-                          await tick();
-                          document.getElementById('thread-title')?.focus();
-                        }}
-                        ><Plus size={16} aria-hidden="true" />{text(
-                          'Nowy wątek',
-                          'New thread'
-                        )}</button
-                      >
-                      <div
-                        class="segmented-control"
-                        role="group"
-                        aria-label={text('Widok forum', 'Forum view')}
-                      >
+                    <div class="workspace-header">
+                      <div>
+                        <h1>Forum</h1>
+                      </div>
+                      <div class="row">
                         <button
-                          type="button"
-                          class:active={!archived}
-                          aria-pressed={!archived}
-                          onclick={() => {
-                            archived = false;
+                          class="btn"
+                          disabled={busy}
+                          onclick={async () => {
+                            title = '';
+                            markdown = '';
                             selectedThread = null;
-                            void load(true);
-                          }}>{text('Aktywne', 'Active')}</button
+                            composer = true;
+                            await tick();
+                            document.getElementById('thread-title')?.focus();
+                          }}><Plus size={16} aria-hidden="true" />{'New thread'}</button
                         >
-                        <button
-                          type="button"
-                          class:active={archived}
-                          aria-pressed={archived}
-                          onclick={() => {
-                            archived = true;
-                            selectedThread = null;
-                            void load(true);
-                          }}
-                          ><Archive size={14} aria-hidden="true" />{text(
-                            'Archiwum',
-                            'Archive'
-                          )}</button
-                        >
+                        <div class="segmented-control" role="group" aria-label={'Forum view'}>
+                          <button
+                            type="button"
+                            class:active={!archived}
+                            aria-pressed={!archived}
+                            onclick={() => {
+                              archived = false;
+                              selectedThread = null;
+                              void load(true);
+                            }}>{'Active'}</button
+                          >
+                          <button
+                            type="button"
+                            class:active={archived}
+                            aria-pressed={archived}
+                            onclick={() => {
+                              archived = true;
+                              selectedThread = null;
+                              void load(true);
+                            }}><Archive size={14} aria-hidden="true" />{'Archive'}</button
+                          >
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  {#each threads as thread (thread.id)}
-                    <a class="list-strip forum-thread-link" href={`${dashboardPath(workspace,projectSlug,'forum')}/${encodeURIComponent(thread.id)}`} onclick={guardNavigation}>
-                      <div class="list-strip-info">
-                        <h3>{thread.title}</h3>
-                        {#if thread.createdAt}<time
-                            class="list-strip-meta"
-                            datetime={thread.createdAt}
-                            >{new Date(thread.createdAt).toLocaleDateString(
-                              language === 'pl' ? 'pl-PL' : 'en-GB'
-                            )}</time
-                          >{/if}
-                      </div>
-                      <span class="tag"
-                        >{thread.visibility === 'leaders'
-                          ? text('Liderzy', 'Leaders')
-                          : thread.visibility === 'members'
-                            ? text('Członkowie projektu', 'Project members')
-                            : text('Członkowie koła', 'Association members')}</span
+                    {#each threads as thread (thread.id)}
+                      <a
+                        class="list-strip forum-thread-link"
+                        href={`${dashboardPath(workspace, projectSlug, 'forum')}/${encodeURIComponent(thread.id)}`}
+                        onclick={guardNavigation}
                       >
-                    </a>
-                  {/each}
+                        <div class="list-strip-info">
+                          <h3>{thread.title}</h3>
+                          {#if thread.createdAt}<time
+                              class="list-strip-meta"
+                              datetime={thread.createdAt}
+                              >{new Date(thread.createdAt).toLocaleDateString(
+                                language === 'pl' ? 'pl-PL' : 'en-GB'
+                              )}</time
+                            >{/if}
+                        </div>
+                        <span class="tag"
+                          >{thread.visibility === 'leaders'
+                            ? 'Leaders'
+                            : thread.visibility === 'members'
+                              ? 'Project members'
+                              : 'Association members'}</span
+                        >
+                      </a>
+                    {/each}
                   {/if}
 
                   {#if selectedThread}
                     <div class="card" style="margin-top: 16px;">
-                      <a class="btn btn-outline" href={dashboardPath(workspace,projectSlug,'forum')} style="margin-bottom:20px"><ArrowLeft size={15} aria-hidden="true"/>{text('Wszystkie wątki','All threads')}</a>
-                      <h1 style="font-size:clamp(24px,3vw,36px);margin-bottom:24px">{selectedThread.title}</h1>
-                      {#if archived}<p class="notice">{text('Ten wątek jest zarchiwizowany.','This thread is archived.')}</p>{/if}
+                      <a
+                        class="btn btn-outline"
+                        href={dashboardPath(workspace, projectSlug, 'forum')}
+                        style="margin-bottom:20px"
+                        ><ArrowLeft size={15} aria-hidden="true" />{'All threads'}</a
+                      >
+                      <h1 style="font-size:clamp(24px,3vw,36px);margin-bottom:24px">
+                        {selectedThread.title}
+                      </h1>
+                      {#if archived}<p class="notice">{'This thread is archived.'}</p>{/if}
                       {#each selectedThread.comments ?? [] as comment (comment.id)}
                         <div
                           style="border-top: 1px solid var(--line); padding: 12px 0; font-size: 13px; white-space: pre-wrap;"
@@ -1260,7 +1211,7 @@
                         </div>
                       {/each}
                       <div style="margin-top: 16px; display: grid; gap: 8px;">
-                        {#if !archived}<h3>{text('Odpowiedź', 'Reply')}</h3>
+                        {#if !archived}<h3>{'Reply'}</h3>
                           <Editor {language} bind:value={markdown} />{/if}
                         <div class="row" style="gap: 8px;">
                           {#if !archived}<button
@@ -1274,7 +1225,7 @@
                                     { markdown }
                                   );
                                   markdown = '';
-                                })}>{text('Dodaj odpowiedź', 'Reply')}</button
+                                })}>{'Reply'}</button
                             >{/if}
                           <button
                             class="btn btn-outline"
@@ -1287,13 +1238,13 @@
                                 })
                               )}
                           >
-                            {#if archived}<RotateCcw size={15} aria-hidden="true" />{text(
-                                'Przywróć wątek',
-                                'Restore thread'
-                              )}{:else}<Archive size={15} aria-hidden="true" />{text(
-                                'Archiwizuj wątek',
-                                'Archive thread'
-                              )}{/if}
+                            {#if archived}<RotateCcw
+                                size={15}
+                                aria-hidden="true"
+                              />{'Restore thread'}{:else}<Archive
+                                size={15}
+                                aria-hidden="true"
+                              />{'Archive thread'}{/if}
                           </button>
                         </div>
                       </div>
@@ -1304,29 +1255,29 @@
                   {#if composer && !data.navigation.threadId}
                     <div class="card" style="margin-top: 20px;">
                       <h2 style="font-size: 1rem; margin-bottom: 14px;">
-                        {text('Nowy wątek', 'New thread')}
+                        {'New thread'}
                       </h2>
-                      <label for="thread-title">{text('Temat', 'Subject')}</label>
+                      <label for="thread-title">{'Subject'}</label>
                       <input id="thread-title" bind:value={title} required />
-                      <label for="thread-vis">{text('Widoczność', 'Visibility')}</label>
+                      <label for="thread-vis">{'Visibility'}</label>
                       <Dropdown
                         id="thread-vis"
-                        label={text('Widoczność', 'Visibility')}
+                        label={'Visibility'}
                         bind:value={visibility}
                         options={[
                           {
                             value: 'association',
-                            label: text('Członkowie koła', 'Association members')
+                            label: 'Association members'
                           },
                           ...(scope
                             ? [
                                 {
                                   value: 'members',
-                                  label: text('Członkowie projektu', 'Project members')
+                                  label: 'Project members'
                                 }
                               ]
                             : []),
-                          { value: 'leaders', label: text('Liderzy', 'Leaders') }
+                          { value: 'leaders', label: 'Leaders' }
                         ]}
                       />
 
@@ -1339,7 +1290,7 @@
                         onclick={() => action(create)}
                         style="margin-top: 12px;"
                       >
-                        {text('Utwórz wątek', 'Create thread')}
+                        {'Create thread'}
                       </button>
                     </div>
                   {/if}
@@ -1367,25 +1318,19 @@
                   >
                     <div class="workspace-header">
                       <div>
-                        <h1>{text('Profil', 'Profile')}</h1>
+                        <h1>{'Profile'}</h1>
                         <p class="workspace-description">
-                          {text(
-                            'Przedstaw się członkom koła i zdecyduj, co pokażesz publicznie.',
-                            'Introduce yourself to the association and choose what to share publicly.'
-                          )}
+                          {'Introduce yourself to the association and choose what to share publicly.'}
                         </p>
                       </div>
                       <div class="profile-save">
                         <span role="status"
-                          >{#if profileSaved}<Check size={15} aria-hidden="true" />{text(
-                              'Zapisano',
-                              'Saved'
-                            )}{/if}</span
+                          >{#if profileSaved}<Check
+                              size={15}
+                              aria-hidden="true"
+                            />{'Saved'}{/if}</span
                         ><button class="btn" disabled={busy}
-                          ><Save size={16} aria-hidden="true" />{text(
-                            'Zapisz zmiany',
-                            'Save changes'
-                          )}</button
+                          ><Save size={16} aria-hidden="true" />{'Save changes'}</button
                         >
                       </div>
                     </div>
@@ -1396,42 +1341,34 @@
                       >
                         <div class="section-heading">
                           <UserRound size={18} aria-hidden="true" />
-                          <h2 id="identity-heading">{text('O Tobie', 'About you')}</h2>
+                          <h2 id="identity-heading">{'About you'}</h2>
                         </div>
                         <div class="profile-fields">
                           <div>
-                            <label for="p-first">{text('Imię', 'First name')}</label><input
+                            <label for="p-first">{'First name'}</label><input
                               id="p-first"
                               bind:value={profile.firstName}
                               required
                             />
                           </div>
                           <div>
-                            <label for="p-last">{text('Nazwisko', 'Last name')}</label><input
+                            <label for="p-last">{'Last name'}</label><input
                               id="p-last"
                               bind:value={profile.lastName}
                             />
                           </div>
                           <div class="field-wide">
-                            <label for="p-nick">{text('Pseudonim', 'Nickname')}</label><input
+                            <label for="p-nick">{'Nickname'}</label><input
                               id="p-nick"
                               bind:value={profile.nickname}
-                              placeholder={text(
-                                'Jak możemy Cię nazywać?',
-                                'What should we call you?'
-                              )}
+                              placeholder={'What should we call you?'}
                             />
                           </div>
                           <div class="field-wide">
-                            <label for="p-bio"
-                              >{text('Kilka słów o sobie', 'A little about you')}</label
-                            ><textarea
+                            <label for="p-bio">{'A little about you'}</label><textarea
                               id="p-bio"
                               bind:value={profile.bio}
-                              placeholder={text(
-                                'Zainteresowania, projekty i rzeczy, które lubisz robić…',
-                                'Interests, projects, and things you enjoy…'
-                              )}
+                              placeholder={'Interests, projects, and things you enjoy…'}
                             ></textarea>
                           </div>
                         </div>
@@ -1448,7 +1385,7 @@
                       >
                         <div class="section-heading">
                           <Shield size={18} aria-hidden="true" />
-                          <h2 id="preview-heading">{text('Profil publiczny', 'Public profile')}</h2>
+                          <h2 id="preview-heading">{'Public profile'}</h2>
                         </div>
                         <div class="profile-preview-card">
                           {#if profile.image}<img
@@ -1463,11 +1400,7 @@
                               >aka. {profile.nickname}</span
                             >{/if}
                           <p>
-                            {profile.bio ||
-                              text(
-                                'Twój publiczny profil na stronie KSI.',
-                                'Your public profile on the KSI website.'
-                              )}
+                            {profile.bio || 'Your public profile on the KSI website.'}
                           </p>
                           <div class="profile-socials">
                             {#if profile.github && validProfileLink('github', profile.github)}<a
@@ -1484,12 +1417,10 @@
                               >{/if}
                           </div>
                         </div>
-                        <label for="p-priv"
-                          >{text('Widoczność imienia i nazwiska', 'Name visibility')}</label
-                        >
+                        <label for="p-priv">{'Name visibility'}</label>
                         <Dropdown
                           id="p-priv"
-                          label={text('Widoczność imienia i nazwiska', 'Name visibility')}
+                          label={'Name visibility'}
                           value={profile.publicPrivacy}
                           options={privacyOptions}
                           onselect={(value) => {
@@ -1498,10 +1429,7 @@
                           }}
                         />
                         <p class="field-help">
-                          {text(
-                            'Dotyczy strony publicznej. W dashboardzie członkowie widzą pełne imię i nazwisko.',
-                            'Applies to the public website. Members see your full name in the dashboard.'
-                          )}
+                          {'Applies to the public website. Members see your full name in the dashboard.'}
                         </p>
                       </section>
                       <section
@@ -1511,7 +1439,7 @@
                         <div class="section-heading">
                           <ArrowUpRight size={18} aria-hidden="true" />
                           <h2 id="links-heading">
-                            {text('Znajdź mnie w sieci', 'Find me online')}
+                            {'Find me online'}
                           </h2>
                         </div>
                         <div class="profile-fields">
@@ -1527,10 +1455,7 @@
                                 class="field-error"
                                 role="status"
                               >
-                                {text(
-                                  'Wpisz link https://github.com/nazwa.',
-                                  'Use a https://github.com/username link.'
-                                )}
+                                {'Use a https://github.com/username link.'}
                               </p>{/if}
                           </div>
                           <div>
@@ -1546,10 +1471,7 @@
                                 class="field-error"
                                 role="status"
                               >
-                                {text(
-                                  'Wpisz link https://linkedin.com/in/nazwa.',
-                                  'Use a https://linkedin.com/in/username link.'
-                                )}
+                                {'Use a https://linkedin.com/in/username link.'}
                               </p>{/if}
                           </div>
                         </div>
@@ -1559,16 +1481,13 @@
                   <section class="profile-section account-danger">
                     <details>
                       <summary
-                        ><Trash2 size={17} aria-hidden="true" />{text(
-                          'Usuń konto',
-                          'Delete account'
-                        )}<ChevronDown size={15} aria-hidden="true" /></summary
+                        ><Trash2 size={17} aria-hidden="true" />{'Delete account'}<ChevronDown
+                          size={15}
+                          aria-hidden="true"
+                        /></summary
                       >
                       <p class="field-help">
-                        {text(
-                          'Profil zostanie zanonimizowany. Treści pozostają własnością koła.',
-                          'Your profile will be anonymized. Association content remains.'
-                        )}
+                        {'Your profile will be anonymized. Association content remains.'}
                       </p>
                       <button
                         class="btn btn-outline danger-button"
@@ -1577,8 +1496,7 @@
                           action(async () => {
                             await api('/users/me', 'DELETE');
                             location.reload();
-                          })}
-                        >{text('Potwierdzam usunięcie konta', 'Confirm account deletion')}</button
+                          })}>{'Confirm account deletion'}</button
                       >
                     </details>
                   </section>
@@ -1588,7 +1506,7 @@
                   {#if !data.navigation.memberId}
                     <div class="workspace-header">
                       <div>
-                        <h1>{text('Członkowie', 'Members')}</h1>
+                        <h1>{'Members'}</h1>
                       </div>
                     </div>
                   {/if}
@@ -1602,7 +1520,7 @@
                 {:else if tab === 'events'}
                   <div class="workspace-header">
                     <div>
-                      <h1>{text('Aktywność', 'Activity')}</h1>
+                      <h1>{'Activity'}</h1>
                     </div>
                   </div>
                   {#each events as event (event.id)}
@@ -1617,7 +1535,7 @@
                   {/each}
                   {#if !events.length}
                     <p class="muted" style="margin-top: 20px;">
-                      {text('Brak aktywności.', 'No activity yet.')}
+                      {'No activity yet.'}
                     </p>
                   {/if}
 
@@ -1625,22 +1543,20 @@
                 {:else if tab === '__create_project__'}
                   <div class="workspace-header">
                     <div>
-                      <h1>{text('Nowy projekt', 'New project')}</h1>
+                      <h1>{'New project'}</h1>
                     </div>
                     <button onclick={() => changeTab('projects')} style="font-size: 13px;">
-                      <ArrowLeft size={15} aria-hidden="true" />{text('Wróć', 'Back')}
+                      <ArrowLeft size={15} aria-hidden="true" />{'Back'}
                     </button>
                   </div>
                   <div class="card" style="max-width: 600px;">
-                    <label for="cp-title">{text('Nazwa', 'Name')}</label>
+                    <label for="cp-title">{'Name'}</label>
                     <input id="cp-title" bind:value={title} required />
                     <label for="cp-slug">Slug</label>
                     <input id="cp-slug" bind:value={slug} />
-                    <label for="cp-leaders"
-                      >{text('ID liderów (po przecinku)', 'Leader IDs (comma-separated)')}</label
-                    >
+                    <label for="cp-leaders">{'Leader IDs (comma-separated)'}</label>
                     <input id="cp-leaders" bind:value={leaderIds} placeholder={data.user.id} />
-                    <label for="cp-desc">{text('Opis', 'Description')}</label>
+                    <label for="cp-desc">{'Description'}</label>
                     <Editor {language} bind:value={markdown} />
                     <button
                       class="btn"
@@ -1648,7 +1564,7 @@
                       onclick={() => action(create)}
                       style="margin-top: 12px;"
                     >
-                      {text('Utwórz projekt', 'Create project')}
+                      {'Create project'}
                     </button>
                   </div>
                 {/if}

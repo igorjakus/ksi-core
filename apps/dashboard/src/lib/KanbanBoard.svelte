@@ -35,14 +35,14 @@
     refresh: () => Promise<void>;
     reportError: (error: string) => void;
   } = $props();
-  const text = (pl: string, en: string) => (language === 'pl' ? pl : en);
+
   const label = (s: BoardStatus) =>
     s.id === 'todo' && s.name === 'To do'
-      ? text('Do zrobienia', 'To do')
+      ? 'To do'
       : s.id === 'progress' && s.name === 'In progress'
-        ? text('W trakcie', 'In progress')
+        ? 'In progress'
         : s.id === 'done' && s.name === 'Done'
-          ? text('Gotowe', 'Done')
+          ? 'Done'
           : s.name;
   const color = (s: BoardStatus) =>
     s.color ?? { todo: '#8b8b8b', progress: '#d58a32', done: '#449a78' }[s.id] ?? '#8777b5';
@@ -81,10 +81,7 @@
       body: body === undefined ? undefined : JSON.stringify(body)
     });
     const result = await response.json();
-    if (!response.ok)
-      throw new Error(
-        result.code ?? result.message ?? text('Operacja nie powiodła się.', 'Request failed.')
-      );
+    if (!response.ok) throw new Error(result.code ?? result.message ?? 'Request failed.');
     return result;
   }
   async function run(work: () => Promise<void>) {
@@ -153,15 +150,9 @@
       const message = e instanceof Error ? e.message : 'Error';
       statusError =
         message === 'STATUS_HAS_LIVE_ITEMS'
-          ? text(
-              'Najpierw przenieś lub usuń wszystkie aktywne zadania z tego statusu.',
-              'Move or remove all live tasks from this status first.'
-            )
+          ? 'Move or remove all live tasks from this status first.'
           : message === 'INVALID_BOARD_STATUSES'
-            ? text(
-                'Tablica musi mieć od 1 do 20 aktywnych statusów.',
-                'A board must have between 1 and 20 active statuses.'
-              )
+            ? 'A board must have between 1 and 20 active statuses.'
             : message;
     } finally {
       busy = false;
@@ -304,7 +295,7 @@
         {#if canManage}<button
             type="button"
             class="icon-button"
-            aria-label={`${text('Edytuj status', 'Edit status')}: ${label(status)}`}
+            aria-label={`${'Edit status'}: ${label(status)}`}
             disabled={busy}
             onclick={(event) => openStatus(status, event)}
             ><Pencil size={15} aria-hidden="true" /></button
@@ -313,7 +304,7 @@
           id={`add-${status.id}`}
           type="button"
           class="icon-button"
-          aria-label={`${text('Dodaj zadanie do', 'Add task to')} ${label(status)}`}
+          aria-label={`${'Add task to'} ${label(status)}`}
           disabled={busy}
           onclick={() => openComposer(status.id)}><Plus size={17} aria-hidden="true" /></button
         >
@@ -358,7 +349,7 @@
         class="column-add"
         disabled={busy}
         onclick={() => openComposer(status.id)}
-        ><Plus size={16} aria-hidden="true" />{text('Dodaj zadanie', 'Add task')}</button
+        ><Plus size={16} aria-hidden="true" />{'Add task'}</button
       >
     </section>
   {/each}
@@ -373,7 +364,7 @@
     }}
   >
     <div class="issue-heading">
-      <h2 id="new-task-heading">{text('Nowe zadanie', 'New task')}</h2>
+      <h2 id="new-task-heading">{'New task'}</h2>
     </div>
     <form
       class="issue-editor"
@@ -382,20 +373,21 @@
         void create();
       }}
     >
-      <label for="task-title">{text('Tytuł zadania', 'Task title')}</label><input
+      <label for="task-title">{'Task title'}</label><input
         id="task-title"
         bind:value={title}
         required
         maxlength="200"
-        placeholder={text('Co trzeba zrobić?', 'What needs to be done?')}
+        placeholder={'What needs to be done?'}
       />
-      <Dropdown label={text('Status zadania', 'Task status')} bind:value={composer} {options} />
+      <Dropdown label={'Task status'} bind:value={composer} {options} />
       <Editor {language} bind:value={markdown} rows={10} />
       <div class="row">
-        <button class="btn" disabled={busy || !title.trim()}
-          >{text('Dodaj zadanie', 'Add task')}</button
-        ><button type="button" class="btn btn-outline" disabled={busy} onclick={closeComposer}
-          >{text('Anuluj', 'Cancel')}</button
+        <button class="btn" disabled={busy || !title.trim()}>{'Add task'}</button><button
+          type="button"
+          class="btn btn-outline"
+          disabled={busy}
+          onclick={closeComposer}>{'Cancel'}</button
         >
       </div>
     </form>
@@ -408,23 +400,19 @@
           void addStatus();
         }}
       >
-        <label for="status-name" class="sr-only">{text('Nazwa statusu', 'Status name')}</label
-        ><input
+        <label for="status-name" class="sr-only">{'Status name'}</label><input
           id="status-name"
           bind:value={statusName}
-          placeholder={text('Nazwa statusu', 'Status name')}
+          placeholder={'Status name'}
           maxlength="60"
           required
-        /><input
-          type="color"
-          aria-label={text('Kolor statusu', 'Status color')}
-          bind:value={statusColor}
-        /><button class="btn btn-outline" disabled={busy || !statusName.trim()}
-          >{text('Dodaj status', 'Add status')}</button
+        /><input type="color" aria-label={'Status color'} bind:value={statusColor} /><button
+          class="btn btn-outline"
+          disabled={busy || !statusName.trim()}>{'Add status'}</button
         ><button
           type="button"
           class="icon-button"
-          aria-label={text('Anuluj', 'Cancel')}
+          aria-label={'Cancel'}
           onclick={() => (addingStatus = false)}><X size={16} aria-hidden="true" /></button
         >
       </form>
@@ -436,11 +424,11 @@
           addingStatus = true;
           await tick();
           document.getElementById('status-name')?.focus();
-        }}><Plus size={15} aria-hidden="true" />{text('Dodaj status', 'Add status')}</button
+        }}><Plus size={15} aria-hidden="true" />{'Add status'}</button
       >{/if}
   </div>{/if}
 {#if canManage && statuses.some((s) => s.deleted)}<details class="deleted-statuses">
-    <summary>{text('Usunięte statusy', 'Deleted statuses')}</summary
+    <summary>{'Deleted statuses'}</summary
     >{#each statuses.filter((s) => s.deleted) as status}<button
         class="btn btn-outline"
         onclick={(event) => openStatus(status, event)}
@@ -457,8 +445,8 @@
     }}
   >
     <div class="issue-heading">
-      <h2 id="status-heading">{text('Edytuj status', 'Edit status')}</h2>
-      <button class="icon-button" aria-label={text('Zamknij', 'Close')} onclick={closeStatus}
+      <h2 id="status-heading">{'Edit status'}</h2>
+      <button class="icon-button" aria-label={'Close'} onclick={closeStatus}
         ><X size={18} aria-hidden="true" /></button
       >
     </div>
@@ -469,36 +457,33 @@
         void saveStatus();
       }}
     >
-      <label for="edit-status-name">{text('Nazwa', 'Name')}</label><input
+      <label for="edit-status-name">{'Name'}</label><input
         id="edit-status-name"
         bind:value={editingStatus.name}
         required
         maxlength="60"
       />
-      <label for="edit-status-color">{text('Kolor', 'Color')}</label><input
+      <label for="edit-status-color">{'Color'}</label><input
         id="edit-status-color"
         type="color"
         value={color(editingStatus)}
         oninput={(event) => (editingStatus!.color = event.currentTarget.value)}
       />
       <label class="status-state"
-        ><input type="checkbox" bind:checked={editingStatus.deleted} />{text(
-          'Usunięty',
-          'Deleted'
-        )}</label
+        ><input type="checkbox" bind:checked={editingStatus.deleted} />{'Deleted'}</label
       >
       {#if statusError}<p role="alert" class="error">{statusError}</p>{/if}
       <div class="row">
         <button class="btn" disabled={busy || !editingStatus.name.trim()}
-          ><Save size={14} aria-hidden="true" />{text('Zapisz', 'Save')}</button
+          ><Save size={14} aria-hidden="true" />{'Save'}</button
         ><button type="button" class="btn btn-outline" disabled={busy} onclick={closeStatus}
-          >{text('Anuluj', 'Cancel')}</button
+          >{'Cancel'}</button
         >{#if !editingStatus.deleted}<button
             type="button"
             class="btn btn-outline danger-button"
             disabled={busy}
             onclick={() => saveStatus(true)}
-            ><Trash2 size={14} aria-hidden="true" />{text('Usuń status', 'Delete status')}</button
+            ><Trash2 size={14} aria-hidden="true" />{'Delete status'}</button
           >{/if}
       </div>
     </form>
@@ -517,16 +502,13 @@
         <span class="tag">{options.find((s) => s.value === selected?.column)?.label}</span>
         <h2 id="issue-title">{selected.title}</h2>
       </div>
-      <button
-        type="button"
-        class="icon-button"
-        aria-label={text('Zamknij zadanie', 'Close task')}
-        onclick={closeItem}><X size={20} aria-hidden="true" /></button
+      <button type="button" class="icon-button" aria-label={'Close task'} onclick={closeItem}
+        ><X size={20} aria-hidden="true" /></button
       >
     </div>
     <div class="issue-tools">
       <Dropdown
-        label={text('Status zadania', 'Task status')}
+        label={'Task status'}
         value={selected.column}
         {options}
         disabled={busy}
@@ -539,32 +521,29 @@
           editing = !editing;
           editTitle = selected!.title;
           editMarkdown = selected!.markdown;
-        }}><Pencil size={14} aria-hidden="true" />{text('Edytuj', 'Edit')}</button
+        }}><Pencil size={14} aria-hidden="true" />{'Edit'}</button
       ><button
         type="button"
         class="btn btn-outline danger-button"
         disabled={busy}
         onclick={() => (confirmingDelete = true)}
-        ><Trash2 size={14} aria-hidden="true" />{text('Usuń', 'Remove')}</button
+        ><Trash2 size={14} aria-hidden="true" />{'Remove'}</button
       >
     </div>
     {#if confirmingDelete}<section
         class="delete-confirmation"
         role="alert"
-        aria-label={text('Potwierdzenie usunięcia', 'Confirm deletion')}
+        aria-label={'Confirm deletion'}
       >
-        <h3>{text('Usunąć to zadanie?', 'Remove this task?')}</h3>
+        <h3>{'Remove this task?'}</h3>
         <p>
-          {text(
-            'Zadanie trafi do cmentarza. Lider może je przywrócić.',
-            'The task will move to the graveyard. A leader can restore it.'
-          )}
+          {'The task will move to the graveyard. A leader can restore it.'}
         </p>
         <div class="row">
           <button class="btn danger-button" disabled={busy} onclick={removeItem}
-            >{text('Potwierdź usunięcie', 'Confirm removal')}</button
+            >{'Confirm removal'}</button
           ><button class="btn btn-outline" onclick={() => (confirmingDelete = false)}
-            >{text('Anuluj', 'Cancel')}</button
+            >{'Cancel'}</button
           >
         </div>
       </section>{/if}
@@ -575,7 +554,7 @@
           void saveItem();
         }}
       >
-        <label for="issue-edit-title">{text('Tytuł', 'Title')}</label><input
+        <label for="issue-edit-title">{'Title'}</label><input
           id="issue-edit-title"
           bind:value={editTitle}
           required
@@ -583,9 +562,9 @@
         /><Editor {language} bind:value={editMarkdown} />
         <div class="row">
           <button class="btn" disabled={busy || !editTitle.trim()}
-            ><Save size={14} aria-hidden="true" />{text('Zapisz', 'Save')}</button
+            ><Save size={14} aria-hidden="true" />{'Save'}</button
           ><button type="button" class="btn btn-outline" onclick={() => (editing = false)}
-            >{text('Anuluj', 'Cancel')}</button
+            >{'Cancel'}</button
           >
         </div>
       </form>
@@ -594,18 +573,18 @@
       </div>{/if}
     <section class="issue-discussion" aria-labelledby="discussion-title">
       <h3 id="discussion-title">
-        <MessagesSquare size={18} aria-hidden="true" />{text('Dyskusja', 'Discussion')}<span
-          class="muted">{comments.length}</span
+        <MessagesSquare size={18} aria-hidden="true" />{'Discussion'}<span class="muted"
+          >{comments.length}</span
         >
       </h3>
       {#if commentsLoading}<div
           class="discussion-skeleton"
-          aria-label={text('Ładowanie dyskusji', 'Loading discussion')}
+          aria-label={'Loading discussion'}
         ></div>{:else}
         {#each comments as comment (comment.id)}<article class="discussion-post">
             <div class="post-meta">
-              <strong>{comment.authorName || text('Członek koła', 'Association member')}</strong
-              ><time datetime={comment.createdAt}
+              <strong>{comment.authorName || 'Association member'}</strong><time
+                datetime={comment.createdAt}
                 >{new Date(comment.createdAt).toLocaleString(
                   language === 'pl' ? 'pl-PL' : 'en-GB'
                 )}</time
@@ -614,7 +593,7 @@
             <MarkdownContent value={comment.markdown} {language} />
           </article>{/each}
         {#if !comments.length}<p class="muted">
-            {text('Rozpocznij dyskusję o tym zadaniu.', 'Start a discussion about this task.')}
+            {'Start a discussion about this task.'}
           </p>{/if}{/if}
       <form
         class="issue-reply"
@@ -625,7 +604,7 @@
       >
         <Editor {language} bind:value={reply} rows={4} /><button
           class="btn"
-          disabled={busy || !reply.trim()}>{text('Dodaj odpowiedź', 'Reply')}</button
+          disabled={busy || !reply.trim()}>{'Reply'}</button
         >
       </form>
     </section>

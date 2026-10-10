@@ -17,8 +17,6 @@
   let hints = $state<{ email: string; name: string }[]>([]);
   let client: ReturnType<typeof createAuthClient>;
 
-  const text = (pl: string, en: string) => (language === 'pl' ? pl : en);
-
   onMount(() => {
     client = createAuthClient({ baseURL: location.origin, basePath: '/api/auth' });
     try {
@@ -55,9 +53,9 @@
             : await client.signIn.email({ email, password });
 
       if (result.error) {
-        message = result.error.message ?? text('Nie udało się zalogować.', 'Login failed.');
+        message = result.error.message ?? 'Login failed.';
       } else if (mode !== 'login') {
-        message = text('Sprawdź skrzynkę e-mail.', 'Check your email inbox.');
+        message = 'Check your email inbox.';
       } else {
         if (consent) {
           hints = [{ email, name: name || email }, ...hints.filter((h) => h.email !== email)].slice(
@@ -69,7 +67,7 @@
         location.assign(callback());
       }
     } catch {
-      message = text('Nie można połączyć się z serwerem.', 'Server unavailable.');
+      message = 'Server unavailable.';
     } finally {
       busy = false;
     }
@@ -81,11 +79,11 @@
     try {
       const result = await client.signIn.social({ provider: p, callbackURL: callback() });
       if (result.error) {
-        message = result.error.message ?? text('Nie udało się zalogować.', 'Login failed.');
+        message = result.error.message ?? 'Login failed.';
         busy = false;
       }
     } catch {
-      message = text('Nie można połączyć się z serwerem.', 'Server unavailable.');
+      message = 'Server unavailable.';
       busy = false;
     }
   }
@@ -95,24 +93,16 @@
   }
 
   const modeLabel = $derived(
-    mode === 'signup'
-      ? text('Utwórz konto', 'Create account')
-      : mode === 'reset'
-        ? text('Wyślij link', 'Send recovery link')
-        : text('Zaloguj się', 'Sign in')
+    mode === 'signup' ? 'Create account' : mode === 'reset' ? 'Send recovery link' : 'Sign in'
   );
 
   const titleLabel = $derived(
-    mode === 'signup'
-      ? text('Dołącz do KSI', 'Join KSI')
-      : mode === 'reset'
-        ? text('Odzyskaj dostęp', 'Recover access')
-        : text('Witaj w KSI', 'Welcome to KSI')
+    mode === 'signup' ? 'Join KSI' : mode === 'reset' ? 'Recover access' : 'Welcome to KSI'
   );
 </script>
 
 <svelte:head>
-  <title>{text('Logowanie', 'Sign in')} — KSI</title>
+  <title>{'Sign in'} — KSI</title>
 </svelte:head>
 
 <main class="auth-shell">
@@ -122,7 +112,7 @@
       <div class="auth-preferences">
         <ThemeSelector {language} /><button
           class="btn btn-outline language-button"
-          aria-label={text('Zmień język', 'Change language')}
+          aria-label={'Change language'}
           onclick={() => setLanguage(language === 'pl' ? 'en' : 'pl')}
           >{language === 'pl' ? 'EN' : 'PL'}</button
         >
@@ -131,16 +121,9 @@
     <section class="auth-card" aria-labelledby="auth-title">
       <h1 id="auth-title">{titleLabel}</h1>
       <p class="auth-intro">
-        {text(
-          'Jedno konto. Wszystkie projekty i rozmowy KSI.',
-          'One account. Every KSI project and conversation.'
-        )}
+        {'One account. Every KSI project and conversation.'}
       </p>
-      {#if mode !== 'reset'}<div
-          class="auth-mode"
-          role="group"
-          aria-label={text('Opcje konta', 'Account options')}
-        >
+      {#if mode !== 'reset'}<div class="auth-mode" role="group" aria-label={'Account options'}>
           <button
             class:active={mode === 'login'}
             aria-pressed={mode === 'login'}
@@ -148,7 +131,7 @@
             onclick={() => {
               mode = 'login';
               message = '';
-            }}>{text('Logowanie', 'Sign in')}</button
+            }}>{'Sign in'}</button
           ><button
             class:active={mode === 'signup'}
             aria-pressed={mode === 'signup'}
@@ -156,11 +139,11 @@
             onclick={() => {
               mode = 'signup';
               message = '';
-            }}>{text('Nowe konto', 'Create account')}</button
+            }}>{'Create account'}</button
           >
         </div>{/if}
       {#if hints.length && mode === 'login'}<div class="hint-list">
-          <p class="hint-label">{text('Zapamiętane konta', 'Remembered accounts')}</p>
+          <p class="hint-label">{'Remembered accounts'}</p>
           {#each hints as hint (hint.email)}<div class="hint-item">
               <button
                 class="hint-name"
@@ -176,8 +159,7 @@
                 class="hint-forget"
                 disabled={busy}
                 onclick={() => forget(hint.email)}
-                aria-label={`${text('Zapomnij konto', 'Forget account')}: ${hint.email}`}
-                >{text('Zapomnij', 'Forget')}</button
+                aria-label={`${'Forget account'}: ${hint.email}`}>{'Forget'}</button
               >
             </div>{/each}
         </div>{/if}
@@ -187,8 +169,7 @@
             class="btn btn-outline oauth-btn"
             disabled={busy}
             onclick={() => provider('github')}
-            ><Github size={18} aria-hidden="true" /><span
-              >{text('Kontynuuj z GitHub', 'Continue with GitHub')}</span
+            ><Github size={18} aria-hidden="true" /><span>{'Continue with GitHub'}</span
             ><ArrowUpRight size={15} aria-hidden="true" /></button
           ><button
             type="button"
@@ -196,14 +177,14 @@
             disabled={busy}
             onclick={() => provider('google')}
             ><span class="google-icon" aria-hidden="true">G</span><span
-              >{text('Kontynuuj z Google', 'Continue with Google')}</span
+              >{'Continue with Google'}</span
             ><ArrowUpRight size={15} aria-hidden="true" /></button
           >
         </div>
-        <div class="separator">{text('lub przez e-mail', 'or use email')}</div>{/if}
+        <div class="separator">{'or use email'}</div>{/if}
       <form class="auth-form" onsubmit={submit}>
         {#if mode === 'signup'}<div class="auth-field">
-            <label for="auth-name">{text('Imię i nazwisko', 'Full name')}</label><input
+            <label for="auth-name">{'Full name'}</label><input
               id="auth-name"
               autocomplete="name"
               bind:value={name}
@@ -225,15 +206,14 @@
         </div>
         {#if mode !== 'reset'}<div class="auth-field">
             <div class="password-label">
-              <label for="auth-password">{text('Hasło', 'Password')}</label
-              >{#if mode === 'login'}<button
+              <label for="auth-password">{'Password'}</label>{#if mode === 'login'}<button
                   type="button"
                   class="text-button"
                   disabled={busy}
                   onclick={() => {
                     mode = 'reset';
                     message = '';
-                  }}>{text('Nie pamiętam hasła', 'Forgot password')}</button
+                  }}>{'Forgot password'}</button
                 >{/if}
             </div>
             <input
@@ -247,16 +227,14 @@
             />
           </div>{/if}
         {#if mode === 'login'}<label class="remember"
-            ><input type="checkbox" bind:checked={consent} disabled={busy} />{text(
-              'Zapamiętaj konto na tym urządzeniu',
-              'Remember account on this device'
-            )}</label
+            ><input
+              type="checkbox"
+              bind:checked={consent}
+              disabled={busy}
+            />{'Remember account on this device'}</label
           >{/if}
         <button class="btn submit-button" disabled={busy}
-          >{busy ? text('Proszę czekać…', 'Please wait…') : modeLabel}<ArrowRight
-            size={16}
-            aria-hidden="true"
-          /></button
+          >{busy ? 'Please wait…' : modeLabel}<ArrowRight size={16} aria-hidden="true" /></button
         >
       </form>
       {#if message}<p role="status" class="auth-message">{message}</p>{/if}
@@ -266,27 +244,23 @@
           onclick={() => {
             mode = 'login';
             message = '';
-          }}>{text('Wróć do logowania', 'Back to sign in')}</button
+          }}>{'Back to sign in'}</button
         >{/if}
       <p class="activation-note">
-        {text(
-          'Nowe konta wymagają aktywacji przez zarząd KSI.',
-          'New accounts require activation by the KSI board.'
-        )}
+        {'New accounts require activation by the KSI board.'}
       </p>
     </section>
     <footer class="auth-footer">
-      <a href={data.websiteOrigin}
-        >{text('Wróć na stronę KSI', 'Back to KSI')}<ArrowUpRight size={13} aria-hidden="true" /></a
-      ><span class="right-col">KSI · {text('Uniwersytet Wrocławski', 'University of Wrocław')}</span
-      ><span>v{import.meta.env.PUBLIC_APP_VERSION}</span><a
+      <a href={data.websiteOrigin}>{'Back to KSI'}<ArrowUpRight size={13} aria-hidden="true" /></a
+      ><span class="right-col">KSI · {'University of Wrocław'}</span><span
+        >v{import.meta.env.PUBLIC_APP_VERSION}</span
+      ><a
         class="right-col"
         href={import.meta.env.PUBLIC_COMMIT_HASH
           ? `https://github.com/ksiuwr/ksi-core/commit/${import.meta.env.PUBLIC_COMMIT_HASH}`
           : 'https://github.com/ksiuwr/ksi-core'}
         target="_blank"
-        rel="noopener noreferrer"
-        >{import.meta.env.PUBLIC_COMMIT_HASH?.slice(0, 7) || text('Kod źródłowy', 'Source')}</a
+        rel="noopener noreferrer">{import.meta.env.PUBLIC_COMMIT_HASH?.slice(0, 7) || 'Source'}</a
       >
     </footer>
   </div>
