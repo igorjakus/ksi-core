@@ -364,3 +364,16 @@ export const mailJobs = snakeCase.table('mail_jobs', {
   availableAt: timestamp().notNull().defaultNow(),
   sentAt: timestamp()
 });
+
+// One current avatar proposal per member; approved profile references are separate.
+export const avatarRequests = snakeCase.table('avatar_requests', {
+  userId: text()
+    .primaryKey()
+    .references(() => users.id),
+  fileId: text().references(() => files.id),
+  state: text().notNull().default('pending'),
+  version: integer().notNull().default(1),
+  createdAt: timestamp().notNull().defaultNow(),
+  reviewedAt: timestamp(),
+  reviewedBy: text().references(() => users.id)
+});

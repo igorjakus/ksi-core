@@ -1,7 +1,8 @@
-import { and, eq, inArray, isNull, sql } from 'drizzle-orm';
+import { and, eq, inArray, isNull } from 'drizzle-orm';
 import { status, t } from 'elysia';
 import {
   db,
+  avatarRequests,
   articles,
   articleRevisions,
   articleProposals,
@@ -42,6 +43,7 @@ type Database = typeof db | Transaction;
 type Member = typeof users.$inferSelect;
 export const ownerTypes = [
   'profile',
+  'avatar-request',
   'article',
   'revision',
   'proposal',
@@ -68,7 +70,23 @@ export async function referenceAccess(
 ): Promise<{ read: boolean; edit: boolean; public: boolean; projectId: string | null }> {
   const denied = { read: false, edit: false, public: false, projectId: null };
   const active = user?.membershipStatus === 'active';
-  const elevated = active && user.role !== 'member';
+  if (ownerType === 'avatar-request') {
+    const [proposal] = await database
+      .select()
+      .from(avatarRequests)
+      .where(eq(avatarRequests.userId, ownerId));
+    if (!proposal || proposal.state !== 'pending') return denied;
+    return {
+      read:
+        !!active &&
+        (user!.id === ownerId ||
+          (user!.role === 'administrator' &&
+            effectivePermissions(user!).has('users.approvals.review-avatar'))),
+      edit: !!active && user!.id === ownerId,
+      public: false,
+      projectId: null
+    };
+  }
   if (ownerType === 'profile') {
     const [profile] = await database.select().from(users).where(eq(users.id, ownerId));
     if (!profile || profile.membershipStatus !== 'active') return denied;
@@ -222,6 +240,13 @@ async function referenceContainsFile(
   fileId: string
 ) {
   let content: string | null | undefined;
+  if (type === 'avatar-request') {
+    const [proposal] = await database
+      .select()
+      .from(avatarRequests)
+      .where(eq(avatarRequests.userId, ownerId));
+    content = proposal?.state === 'pending' && proposal.fileId ? `file:${proposal.fileId}` : '';
+  }
   if (type === 'article') {
     const [owner] = await database
       .select({ content: articles.markdown })

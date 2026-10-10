@@ -10,6 +10,6 @@ export const GET: RequestHandler = async (event) => {
     { redirect: 'manual' }
   );
   const location = response.headers.get('location');
-  if (!location) error(response.status, 'File unavailable');
+  if (!location) error(response.status >= 400 ? response.status : 502, 'File unavailable');
   redirect(302, location);
 };

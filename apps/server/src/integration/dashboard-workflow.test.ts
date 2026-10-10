@@ -1,0 +1,402 @@
+import { beforeAll, afterAll, describe, expect, test } from 'bun:test';
+import { eq, inArray } from 'drizzle-orm';
+import { createId } from '@paralleldrive/cuid2';
+import { getUrls } from 'shared';
+import { digest } from '../domain/sso';
+import {
+  db,
+  users,
+  sessions,
+  frontendSessions,
+  boards,
+  kanbanItems,
+  comments,
+  files,
+  fileReferences,
+  avatarRequests,
+  auditEvents,
+  outbox,
+  projects,
+  projectMembers,
+  mailJobs,
+  verifications
+} from '../db';
+import { app } from '../app';
+import { canReadFile } from '../routes/platform/files';
+const safe =
+  process.env.KSI_ENVIRONMENT === 'integration' &&
+  new URL(process.env.DATABASE_URL ?? 'postgres://none@localhost/none').pathname ===
+    '/ksi_integration';
+const names = ['admin', 'member', 'outsider', 'pending'] as const;
+type Actor = (typeof names)[number];
+const ids = Object.fromEntries(names.map((name) => [name, createId()])) as Record<Actor, string>;
+const tokens = Object.fromEntries(names.map((name) => [name, createId()])) as Record<Actor, string>;
+const projectId = createId(),
+  boardId = createId(),
+  imageId = createId(),
+  replacementId = createId(),
+  pdfId = createId(),
+  itemId = createId();
+let signupId: string | undefined;
+const signupEmail = `signup-${createId()}@example.test`;
+async function request(actor: Actor, path: string, method = 'GET', body?: unknown) {
+  const response = await app.handle(
+    new Request(`http://localhost:3000${path}`, {
+      method,
+      headers: {
+        'content-type': 'application/json',
+        'x-ksi-proxy-key': process.env.PROXY_SECRET!,
+        'x-ksi-origin': getUrls().frontend.dashboard,
+        'x-ksi-session': tokens[actor]
+      },
+      body: body === undefined ? undefined : JSON.stringify(body)
+    })
+  );
+  return { status: response.status, body: (await response.json()) as any };
+}
+describe.skipIf(!safe)('persistent dashboard workflows', () => {
+  beforeAll(async () => {
+    const expiry = new Date(Date.now() + 3600000);
+    await db.insert(users).values(
+      names.map((name) => ({
+        id: ids[name],
+        name: `${name} Workflow`,
+        firstName: name,
+        email: `${ids[name]}@example.test`,
+        membershipStatus: name === 'pending' ? ('pending' as const) : ('active' as const),
+        role: name === 'admin' ? ('administrator' as const) : ('member' as const),
+        image: name === 'member' ? 'https://example.invalid/old.webp' : null
+      }))
+    );
+    for (const name of names) {
+      const id = createId();
+      await db.insert(sessions).values({
+        id,
+        userId: ids[name],
+        token: createId(),
+        expiresAt: expiry,
+        updatedAt: new Date()
+      });
+      await db.insert(frontendSessions).values({
+        id: digest(tokens[name]),
+        sessionId: id,
+        origin: getUrls().frontend.dashboard,
+        environment: 'integration',
+        expiresAt: expiry
+      });
+    }
+    await db.insert(projects).values({ id: projectId, name: 'Workflow project', slug: projectId });
+    await db.insert(projectMembers).values({ projectId, userId: ids.member, leader: true });
+    await db.insert(boards).values({ id: boardId, projectId, scopeKey: `project:${projectId}` });
+    for (const id of [imageId, replacementId, pdfId])
+      await db.insert(files).values({
+        id,
+        uploaderId: ids.member,
+        hash: id,
+        objectKey: `integration/${id}`,
+        environment: 'integration',
+        filename: 'test',
+        mime: id === pdfId ? 'application/pdf' : 'image/png',
+        size: 100,
+        state: 'private'
+      });
+  });
+  afterAll(async () => {
+    const allIds = [...Object.values(ids), ...(signupId ? [signupId] : [])];
+    await db
+      .delete(fileReferences)
+      .where(inArray(fileReferences.fileId, [imageId, replacementId, pdfId]));
+    await db.delete(avatarRequests).where(inArray(avatarRequests.userId, allIds));
+    await db.delete(files).where(inArray(files.id, [imageId, replacementId, pdfId]));
+    await db.delete(comments).where(eq(comments.itemId, itemId));
+    await db.delete(kanbanItems).where(eq(kanbanItems.boardId, boardId));
+    await db.delete(boards).where(eq(boards.id, boardId));
+    await db.delete(projectMembers).where(eq(projectMembers.projectId, projectId));
+    const events = await db
+      .select({ id: auditEvents.id })
+      .from(auditEvents)
+      .where(inArray(auditEvents.actorId, allIds));
+    if (events.length)
+      await db.delete(outbox).where(
+        inArray(
+          outbox.eventId,
+          events.map((e) => e.id)
+        )
+      );
+    await db.delete(auditEvents).where(inArray(auditEvents.actorId, allIds));
+    await db.delete(projects).where(eq(projects.id, projectId));
+    await db.delete(mailJobs).where(eq(mailJobs.to, signupEmail));
+    await db.delete(verifications).where(eq(verifications.identifier, signupEmail));
+    await db.delete(users).where(inArray(users.id, allIds));
+  });
+  test('registration notifies administrators and auth profile updates cannot bypass avatar approval', async () => {
+    const authHeaders = {
+      'content-type': 'application/json',
+      'x-ksi-proxy-key': process.env.PROXY_SECRET!,
+      'x-ksi-origin': getUrls().frontend.auth,
+      origin: getUrls().frontend.auth
+    };
+    const password = 'DisposableOnly-123456!';
+    const signup = await app.handle(
+      new Request('http://localhost:3000/api/auth/sign-up/email', {
+        method: 'POST',
+        headers: authHeaders,
+        body: JSON.stringify({
+          name: 'New workflow member',
+          email: signupEmail,
+          password,
+          image: 'https://example.test/unreviewed.png'
+        })
+      })
+    );
+    const [created] = await db.select().from(users).where(eq(users.email, signupEmail));
+    signupId = created?.id;
+    expect(signup.status).toBe(200);
+    expect(created?.membershipStatus).toBe('pending');
+    expect(created?.image).toBeNull();
+    expect(
+      (await request('admin', '/users/inbox')).body.memberships.some(
+        (member: any) => member.id === signupId
+      )
+    ).toBe(true);
+    const events = await db.select().from(auditEvents).where(eq(auditEvents.targetId, signupId!));
+    expect(events.some((event) => event.action === 'users.membership.requested')).toBe(true);
+    await db.update(users).set({ emailVerified: true }).where(eq(users.id, signupId!));
+    const signin = await app.handle(
+      new Request('http://localhost:3000/api/auth/sign-in/email', {
+        method: 'POST',
+        headers: authHeaders,
+        body: JSON.stringify({ email: signupEmail, password })
+      })
+    );
+    expect(signin.status).toBe(200);
+    const cookie = signin.headers
+      .getSetCookie()
+      .map((cookie) => cookie.split(';')[0])
+      .join('; ');
+    const update = await app.handle(
+      new Request('http://localhost:3000/api/auth/update-user', {
+        method: 'POST',
+        headers: { ...authHeaders, cookie },
+        body: JSON.stringify({ image: 'https://example.test/bypass.png' })
+      })
+    );
+    expect(update.status).toBe(200);
+    expect((await db.select().from(users).where(eq(users.id, signupId!)))[0]?.image).toBeNull();
+  });
+  test('custom statuses persist and reject foreign statuses and unauthorized changes', async () => {
+    const statuses = [
+      { id: 'todo', name: 'To do' },
+      { id: 'review', name: 'Review' }
+    ];
+    expect(
+      (await request('outsider', `/platform/boards/${boardId}/statuses`, 'PUT', { statuses }))
+        .status
+    ).toBe(403);
+    expect(
+      (await request('member', `/platform/boards/${boardId}/statuses`, 'PUT', { statuses })).status
+    ).toBe(200);
+    expect(
+      (await request('member', `/platform/boards?projectId=${projectId}`)).body.statuses
+    ).toEqual(statuses);
+    expect(
+      (
+        await request('member', `/platform/boards/${boardId}/items`, 'POST', {
+          title: 'Test',
+          markdown: '**Description**',
+          tags: [],
+          column: 'foreign',
+          position: 0
+        })
+      ).status
+    ).toBe(422);
+    await db
+      .insert(kanbanItems)
+      .values({ id: itemId, boardId, authorId: ids.member, title: 'Test', column: 'todo' });
+    expect(
+      (
+        await request('member', `/platform/items/${itemId}`, 'PATCH', {
+          version: 1,
+          column: 'review',
+          position: 0
+        })
+      ).status
+    ).toBe(200);
+    expect(
+      (
+        await request('member', `/platform/items/${itemId}`, 'PATCH', {
+          version: 1,
+          column: 'todo'
+        })
+      ).status
+    ).toBe(409);
+    expect(
+      (
+        await request('member', `/platform/boards/${boardId}/statuses`, 'PUT', {
+          statuses: [{ id: 'todo', name: 'To do' }]
+        })
+      ).status
+    ).toBe(409);
+    expect(
+      (
+        await request('member', `/platform/items/${itemId}/comments`, 'POST', {
+          markdown: '**Reply**'
+        })
+      ).status
+    ).toBe(200);
+    expect(
+      (
+        await request('outsider', `/platform/items/${itemId}/comments`, 'POST', {
+          markdown: 'No access'
+        })
+      ).status
+    ).toBe(403);
+    expect((await request('member', `/platform/items/${itemId}/comments`)).body[0].authorName).toBe(
+      'member Workflow'
+    );
+  });
+  test('avatar submissions stay private, preserve current avatar, and reject non-images', async () => {
+    expect(
+      (await request('pending', '/users/me/avatar-request', 'POST', { fileId: imageId })).status
+    ).toBe(403);
+    expect(
+      (await request('member', '/users/me/avatar-request', 'POST', { fileId: pdfId })).status
+    ).toBe(422);
+    expect(
+      (await request('outsider', '/users/me/avatar-request', 'POST', { fileId: imageId })).status
+    ).toBe(422);
+    expect(
+      (await request('member', '/users/me/avatar-request', 'POST', { fileId: imageId })).status
+    ).toBe(200);
+    expect((await request('member', '/users/me')).body.user.image).toBe(
+      'https://example.invalid/old.webp'
+    );
+    const [file] = await db.select().from(files).where(eq(files.id, imageId));
+    const [admin] = await db.select().from(users).where(eq(users.id, ids.admin));
+    const [outsider] = await db.select().from(users).where(eq(users.id, ids.outsider));
+    expect(await canReadFile(db, file!, null)).toBe(false);
+    expect(await canReadFile(db, file!, admin!)).toBe(true);
+    expect(await canReadFile(db, file!, outsider!)).toBe(false);
+    expect((await request('member', '/users/inbox')).status).toBe(403);
+    expect(
+      (await request('admin', '/users/inbox')).body.avatars.some(
+        (a: any) => a.userId === ids.member
+      )
+    ).toBe(true);
+  });
+  test('avatar replacement invalidates stale approvals; approvals require active admin capability', async () => {
+    expect(
+      (await request('member', '/users/me/avatar-request', 'POST', { fileId: replacementId }))
+        .status
+    ).toBe(200);
+    const current = (await request('member', '/users/me/avatar-request')).body;
+    expect(
+      (
+        await request('admin', `/users/inbox/avatars/${ids.member}`, 'POST', {
+          approved: true,
+          version: 1
+        })
+      ).status
+    ).toBe(409);
+    expect(
+      (
+        await request('member', `/users/inbox/avatars/${ids.member}`, 'POST', {
+          approved: true,
+          version: current.version
+        })
+      ).status
+    ).toBe(403);
+    await db
+      .update(users)
+      .set({ flags: ['-users.approvals.*'] })
+      .where(eq(users.id, ids.admin));
+    expect(
+      (
+        await request('admin', `/users/inbox/avatars/${ids.member}`, 'POST', {
+          approved: true,
+          version: current.version
+        })
+      ).status
+    ).toBe(403);
+    await db.update(users).set({ flags: [] }).where(eq(users.id, ids.admin));
+    expect(
+      (
+        await request('admin', `/users/inbox/avatars/${ids.member}`, 'POST', {
+          approved: true,
+          version: current.version
+        })
+      ).status
+    ).toBe(200);
+    expect((await request('member', '/users/me')).body.user.image).toBe(`/media/${replacementId}`);
+    const [file] = await db.select().from(files).where(eq(files.id, replacementId));
+    expect(await canReadFile(db, file!, null)).toBe(true);
+    expect(
+      (
+        await request('admin', `/users/inbox/avatars/${ids.member}`, 'POST', {
+          approved: true,
+          version: current.version
+        })
+      ).status
+    ).toBe(409);
+  });
+  test('inbox activation is persistent and prevents duplicate reviews', async () => {
+    expect(
+      (await request('admin', '/users/inbox')).body.memberships.some(
+        (m: any) => m.id === ids.pending
+      )
+    ).toBe(true);
+    expect(
+      (await request('admin', `/users/inbox/members/${ids.pending}`, 'POST', { approved: true }))
+        .status
+    ).toBe(200);
+    expect(
+      (await request('admin', `/users/inbox/members/${ids.pending}`, 'POST', { approved: false }))
+        .status
+    ).toBe(409);
+  });
+  test('profile URL errors describe the expected provider and allow clearing', async () => {
+    const response = await request('member', '/users/me', 'PATCH', {
+      github: 'https://example.com/member'
+    });
+    expect(response.status).toBe(422);
+    expect(response.body.code).toBe('INVALID_GITHUB_URL');
+    expect(response.body.message).toContain('github.com');
+    expect(
+      (await request('member', '/users/me', 'PATCH', { github: null, linkedin: null })).status
+    ).toBe(200);
+  });
+  test('decline keeps the approved avatar and anonymization removes pending/avatar references while retaining tasks', async () => {
+    await request('member', '/users/me/avatar-request', 'POST', { fileId: imageId });
+    const pending = (await request('member', '/users/me/avatar-request')).body;
+    expect(
+      (
+        await request('admin', `/users/inbox/avatars/${ids.member}`, 'POST', {
+          approved: false,
+          version: pending.version
+        })
+      ).status
+    ).toBe(200);
+    expect((await request('member', '/users/me')).body.user.image).toBe(`/media/${replacementId}`);
+    expect((await request('member', '/users/me/avatar-request')).body.state).toBe('declined');
+    await request('member', '/users/me/avatar-request', 'POST', { fileId: imageId });
+    expect((await request('member', '/users/me', 'DELETE')).status).toBe(200);
+    const [member] = await db.select().from(users).where(eq(users.id, ids.member));
+    expect(member?.membershipStatus).toBe('deleted');
+    expect(member?.image).toBeNull();
+    expect(
+      (await db.select().from(kanbanItems).where(eq(kanbanItems.id, itemId)))[0]?.authorId
+    ).toBe(ids.member);
+    expect(
+      (await db.select().from(avatarRequests).where(eq(avatarRequests.userId, ids.member)))[0]
+        ?.fileId
+    ).toBeNull();
+    expect(
+      (
+        await db
+          .select()
+          .from(fileReferences)
+          .where(inArray(fileReferences.fileId, [imageId, replacementId]))
+      ).length
+    ).toBe(0);
+  });
+});

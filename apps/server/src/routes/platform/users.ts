@@ -1,3 +1,4 @@
+import { validProfileLink } from 'shared/profile-links';
 import { status, t } from 'elysia';
 import { eq } from 'drizzle-orm';
 import { users, auditEvents, outbox } from '../../db';
@@ -20,6 +21,15 @@ export const userRoutes = createElysia({ prefix: '/users', protectedRoute: true 
       };
       for (const key of Object.keys(body)) requirePermission(user, mappings[key]!);
       if (!user) throw status(401);
+      for (const provider of ['github', 'linkedin'] as const)
+        if (!validProfileLink(provider, body[provider]))
+          throw status(422, {
+            code: provider === 'github' ? 'INVALID_GITHUB_URL' : 'INVALID_LINKEDIN_URL',
+            message:
+              provider === 'github'
+                ? 'Use a https://github.com/username profile link.'
+                : 'Use a https://linkedin.com/in/username profile link.'
+          });
       return db.transaction(async (tx) => {
         const [updated] = await tx
           .update(users)
@@ -52,15 +62,8 @@ export const userRoutes = createElysia({ prefix: '/users', protectedRoute: true 
           lastName: t.Optional(t.String({ maxLength: 100 })),
           nickname: t.Optional(t.String({ maxLength: 100 })),
           bio: t.Optional(t.String({ maxLength: 5000 })),
-          github: t.Optional(
-            t.Union([t.Null(), t.String({ pattern: '^https://github\\.com/[A-Za-z0-9_-]+/?$' })])
-          ),
-          linkedin: t.Optional(
-            t.Union([
-              t.Null(),
-              t.String({ pattern: '^https://(www\\.)?linkedin\\.com/in/[A-Za-z0-9_-]+/?$' })
-            ])
-          ),
+          github: t.Optional(t.Union([t.Null(), t.String({ maxLength: 300 })])),
+          linkedin: t.Optional(t.Union([t.Null(), t.String({ maxLength: 300 })])),
           publicPrivacy: t.Optional(
             t.Union([t.Literal('full-name'), t.Literal('last-initial'), t.Literal('initials')])
           )

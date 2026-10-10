@@ -2,6 +2,7 @@ export const permissions = [
   'users.profile.edit-first-name',
   'users.profile.edit-last-name',
   'users.profile.edit-avatar',
+  'users.approvals.review-avatar',
   'users.profile.edit-bio',
   'users.profile.edit-social-links',
   'users.profile.edit-privacy',

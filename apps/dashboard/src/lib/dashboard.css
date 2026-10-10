@@ -950,3 +950,56 @@ a[aria-disabled='true'] {
     max-width: 120px;
   }
 }
+.inbox-link {
+  position: relative;
+  text-decoration: none;
+}
+.inbox-badge {
+  position: absolute;
+  top: -3px;
+  right: -5px;
+  min-width: 16px;
+  height: 16px;
+  display: grid;
+  place-items: center;
+  padding: 0 3px;
+  border-radius: 8px;
+  background: var(--primary);
+  color: var(--primary-text);
+  font-size: 9px;
+}
+.profile-nickname {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 5px;
+  overflow-wrap: anywhere;
+}
+.profile-socials {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 16px;
+}
+.field-error {
+  font-size: 12px;
+  color: var(--danger);
+  margin-top: 6px;
+}
+.account-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 4px;
+}
+.issue-description .markdown h1,
+.issue-description .markdown h2 {
+  font-size: 20px;
+  margin: 14px 0;
+}
+.issue-description .markdown h3,
+.discussion-post .markdown h1,
+.discussion-post .markdown h2 {
+  font-size: 16px;
+}

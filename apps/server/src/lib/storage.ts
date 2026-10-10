@@ -233,9 +233,11 @@ export function storageEnvironment() {
 export function referencedFileIds(content: string): string[] {
   return [
     ...new Set(
-      [...content.matchAll(/(?:\/files\/|file:)([a-zA-Z0-9_-]{8,64})(?=[/\s)\]"'?,}]|$)/g)].map(
-        (match) => match[1]!
-      )
+      [
+        ...content.matchAll(
+          /(?:\/(?:files|media)\/|file:)([a-zA-Z0-9_-]{8,64})(?=[/\s)\]"'?,}]|$)/g
+        )
+      ].map((match) => match[1]!)
     )
   ];
 }

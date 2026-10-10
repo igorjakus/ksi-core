@@ -20,11 +20,11 @@ export function parseDashboardPath(
     return null;
   if (segments.some((part) => part.includes('/') || part.includes('\\')) || segments.length > 4)
     return null;
-  if ((root === 'profile' || root === 'members') && segments.length === 1)
+  if ((root === 'profile' || root === 'members' || root === 'inbox') && segments.length === 1)
     return {
       workspace: 'directory',
       projectSlug: '',
-      tab: root === 'profile' ? 'profile' : 'users'
+      tab: root === 'members' ? 'users' : root
     };
   if (root === 'projects' && segments.length === 1)
     return { workspace: 'directory', projectSlug: '', tab: 'projects' };
@@ -49,6 +49,7 @@ export function parseDashboardPath(
 }
 export function dashboardPath(workspace: Workspace, projectSlug: string, tab: string): string {
   if (tab === 'profile') return '/profile';
+  if (tab === 'inbox') return '/inbox';
   if (tab === 'users') return '/members';
   if (tab === '__create_project__') return '/projects/new';
   if (tab === 'projects' || workspace === 'directory') return '/projects';

@@ -10,6 +10,9 @@
     type ThemePreference
   } from '$lib/preferences.svelte';
   import KanbanBoard, { type BoardStatus } from '$lib/KanbanBoard.svelte';
+  import ApprovalInbox, { type InboxData } from '$lib/ApprovalInbox.svelte';
+  import AvatarUpload, { type AvatarRequest } from '$lib/AvatarUpload.svelte';
+  import { validProfileLink } from 'shared/profile-links';
   import Skeleton from '$lib/Skeleton.svelte';
   import { fly } from 'svelte/transition';
   import MarkdownContent from '@ksi-core/ui/platform/MarkdownContent.svelte';
@@ -39,7 +42,8 @@
     Github,
     Linkedin,
     Check,
-    Archive
+    Archive,
+    Bell
   } from '@lucide/svelte';
   import type { Profile } from 'shared/types';
 
@@ -124,6 +128,9 @@
     { id: 'done', name: 'Done' }
   ]);
   let boardLeader = $state(false);
+  let inbox = $state<InboxData>({ memberships: [], avatars: [] });
+  let avatarRequest = $state<AvatarRequest | null>(null);
+  const inboxCount = $derived(inbox.memberships.length + inbox.avatars.length);
   let profileSaved = $state(false);
   let archived = $state(false);
   let showCredit = $state(false);
@@ -150,6 +157,22 @@
       const projectList = await api<Project[]>('/platform/public/projects');
       if (generation !== loadGeneration) return;
       projects = projectList;
+      if (data.user.role !== 'member') {
+        try {
+          const result = await api<InboxData>('/users/inbox');
+          if (generation === loadGeneration) inbox = result;
+        } catch {
+          /* Permission denials must not block unrelated workspace pages. */
+        }
+      }
+      if (currentTab === 'profile') {
+        const request = await api<AvatarRequest | null>('/users/me/avatar-request');
+        const current = await api<{ user: Profile }>('/users/me');
+        if (generation === loadGeneration) {
+          avatarRequest = request;
+          profile.image = current.user.image;
+        }
+      }
       if (workspace === 'project') {
         const project = projectList.find((project) => project.slug === projectSlug);
         if (!project) {
@@ -341,6 +364,20 @@
 
   async function saveProfile() {
     profileSaved = false;
+    if (!validProfileLink('github', profile.github)) {
+      error = text(
+        'Wpisz link do profilu https://github.com/nazwa.',
+        'Enter a https://github.com/username profile link.'
+      );
+      return;
+    }
+    if (!validProfileLink('linkedin', profile.linkedin)) {
+      error = text(
+        'Wpisz link do profilu https://linkedin.com/in/nazwa.',
+        'Enter a https://linkedin.com/in/username profile link.'
+      );
+      return;
+    }
     await action(async () => {
       const result = await api<{ user: Profile }>('/users/me', 'PATCH', {
         firstName: profile.firstName,
@@ -448,15 +485,17 @@
   const viewName = $derived(
     graveyard && tab === 'board'
       ? text('Usunięte zadania', 'Removed tasks')
-      : tab === 'projects'
-        ? text('Projekty', 'Projects')
-        : tab === 'profile'
-          ? text('Mój profil', 'My profile')
-          : tab === 'users'
-            ? text('Członkowie', 'Members')
-            : tab === '__create_project__'
-              ? text('Nowy projekt', 'New project')
-              : (tabs.find(([key]) => key === tab)?.[1] ?? '')
+      : tab === 'inbox'
+        ? text('Skrzynka akceptacji', 'Approval inbox')
+        : tab === 'projects'
+          ? text('Projekty', 'Projects')
+          : tab === 'profile'
+            ? text('Mój profil', 'My profile')
+            : tab === 'users'
+              ? text('Członkowie', 'Members')
+              : tab === '__create_project__'
+                ? text('Nowy projekt', 'New project')
+                : (tabs.find(([key]) => key === tab)?.[1] ?? '')
   );
 
   const navigationIcons: Record<string, typeof LayoutDashboard> = {
@@ -707,6 +746,15 @@
           ><span aria-hidden="true">/</span><strong>{viewName}</strong>
         </div>
         <div class="topbar-controls">
+          {#if data.user.role !== 'member'}<a
+              class="icon-button inbox-link"
+              href="/inbox"
+              aria-label={`${text('Skrzynka akceptacji', 'Approval inbox')}: ${inboxCount}`}
+              onclick={guardNavigation}
+              ><Bell size={18} aria-hidden="true" />{#if inboxCount}<span class="inbox-badge"
+                  >{inboxCount}</span
+                >{/if}</a
+            >{/if}
           <details
             class="topbar-menu"
             bind:this={preferencesMenu}
@@ -753,9 +801,15 @@
             }}
           >
             <summary aria-label={text('Moje konto', 'My account')}
-              ><span class="account-avatar">{initials}</span><span class="account-name"
-                >{data.user.firstName || data.user.name}</span
-              ><ChevronDown size={14} aria-hidden="true" /></summary
+              ><span class="account-avatar"
+                >{#if data.user.image}<img
+                    src={data.user.image}
+                    alt=""
+                  />{:else}{initials}{/if}</span
+              ><span class="account-name">{data.user.firstName || data.user.name}</span><ChevronDown
+                size={14}
+                aria-hidden="true"
+              /></summary
             >
             <div class="menu-panel account-panel">
               <strong>{data.user.firstName || data.user.name} {data.user.lastName}</strong>
@@ -1259,6 +1313,17 @@
                   {/if}
 
                   <!-- ── PROFILE ────────────────────────────────────────────────────── -->
+                {:else if tab === 'inbox'}
+                  <ApprovalInbox
+                    {inbox}
+                    {language}
+                    administrator={data.user.role === 'administrator'}
+                    refresh={async () => {
+                      await load();
+                      await invalidateAll();
+                    }}
+                    reportError={(message) => (error = message)}
+                  />
                 {:else if tab === 'profile'}
                   <form
                     class="profile-form"
@@ -1338,6 +1403,12 @@
                             ></textarea>
                           </div>
                         </div>
+                        <AvatarUpload
+                          request={avatarRequest}
+                          {language}
+                          onchange={() => load()}
+                          reportError={(message) => (error = message)}
+                        />
                       </section>
                       <section
                         class="profile-section profile-preview"
@@ -1356,6 +1427,9 @@
                               >{`${profile.firstName?.[0] ?? ''}${profile.lastName?.[0] ?? ''}`.toUpperCase() ||
                                 'K'}</span
                             >{/if}<strong>{publicName}</strong>
+                          {#if profile.nickname?.trim()}<span class="profile-nickname"
+                              >aka. {profile.nickname}</span
+                            >{/if}
                           <p>
                             {profile.bio ||
                               text(
@@ -1363,6 +1437,20 @@
                                 'Your public profile on the KSI website.'
                               )}
                           </p>
+                          <div class="profile-socials">
+                            {#if profile.github && validProfileLink('github', profile.github)}<a
+                                class="btn btn-outline"
+                                href={profile.github}
+                                target="_blank"
+                                rel="noopener noreferrer"><Github size={15} />GitHub</a
+                              >{/if}
+                            {#if profile.linkedin && validProfileLink('linkedin', profile.linkedin)}<a
+                                class="btn btn-outline"
+                                href={profile.linkedin}
+                                target="_blank"
+                                rel="noopener noreferrer"><Linkedin size={15} />LinkedIn</a
+                              >{/if}
+                          </div>
                         </div>
                         <label for="p-priv"
                           >{text('Widoczność imienia i nazwiska', 'Name visibility')}</label
@@ -1403,6 +1491,15 @@
                               bind:value={profile.github}
                               placeholder="https://github.com/…"
                             />
+                            {#if !validProfileLink('github', profile.github)}<p
+                                class="field-error"
+                                role="status"
+                              >
+                                {text(
+                                  'Wpisz link https://github.com/nazwa.',
+                                  'Use a https://github.com/username link.'
+                                )}
+                              </p>{/if}
                           </div>
                           <div>
                             <label for="p-li"
@@ -1413,6 +1510,15 @@
                               bind:value={profile.linkedin}
                               placeholder="https://linkedin.com/in/…"
                             />
+                            {#if !validProfileLink('linkedin', profile.linkedin)}<p
+                                class="field-error"
+                                role="status"
+                              >
+                                {text(
+                                  'Wpisz link https://linkedin.com/in/nazwa.',
+                                  'Use a https://linkedin.com/in/username link.'
+                                )}
+                              </p>{/if}
                           </div>
                         </div>
                       </section>

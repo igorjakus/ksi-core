@@ -2,6 +2,7 @@ import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { db } from '@ksi-core/server/db';
 import { getUrls } from 'shared';
+import { recordEvent } from './audit';
 import * as schema from '../db/schema';
 
 const urls = getUrls();
@@ -36,6 +37,24 @@ export const auth = betterAuth({
     ...(Bun.env.OAUTH_GOOGLE_ID && Bun.env.OAUTH_GOOGLE_SECRET
       ? { google: { clientId: Bun.env.OAUTH_GOOGLE_ID, clientSecret: Bun.env.OAUTH_GOOGLE_SECRET } }
       : {})
+  },
+  databaseHooks: {
+    user: {
+      create: {
+        before: async (user) => ({ data: { ...user, image: null } }),
+        after: async (user) => {
+          await db.transaction(async (tx) => {
+            await recordEvent(tx, {
+              actorId: user.id,
+              action: 'users.membership.requested',
+              targetId: user.id
+            });
+          });
+        }
+      },
+      // Provider synchronization and Better Auth's update-user route cannot bypass avatar review.
+      update: { before: async (user) => ({ data: { ...user, image: undefined } }) }
+    }
   },
   user: {
     additionalFields: {

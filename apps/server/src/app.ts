@@ -5,6 +5,7 @@ import { db } from './db';
 import { sql } from 'drizzle-orm';
 import routes from './routes';
 import { ssoRoutes } from './routes/platform/sso';
+import { approvalRoutes } from './routes/platform/approvals';
 import { userRoutes } from './routes/platform/users';
 import content from './routes/platform/content';
 import collaboration from './routes/platform/collaboration';
@@ -21,7 +22,8 @@ export const app = new Elysia()
       'USE_ANONYMIZATION',
       'LEADER_REASSIGNMENT_REQUIRED',
       'ACTIVE_LEADER_REQUIRED',
-      'INVALID_DESTINATION'
+      'INVALID_DESTINATION',
+      'REQUEST_ALREADY_REVIEWED'
     ];
     if (codes.includes(message)) {
       set.status = message === 'FORBIDDEN' ? 403 : 409;
@@ -46,6 +48,7 @@ export const app = new Elysia()
     return auth.handler(request);
   })
   .use(ssoRoutes)
+  .use(approvalRoutes)
   .use(userRoutes)
   .use(content)
   .use(collaboration)

@@ -2,6 +2,7 @@ import { and, eq, sql } from 'drizzle-orm';
 import { createId } from '@paralleldrive/cuid2';
 import {
   db,
+  avatarRequests,
   users,
   sessions,
   accounts,
@@ -21,7 +22,8 @@ import {
 export async function manageUser(
   actorId: string,
   userId: string,
-  change: { role?: Role; membershipStatus?: MembershipStatus; flags?: string[] }
+  change: { role?: Role; membershipStatus?: MembershipStatus; flags?: string[] },
+  expectedStatus?: MembershipStatus
 ) {
   if (change.flags) validateFlags(change.flags);
   return db.transaction(async (tx) => {
@@ -29,6 +31,8 @@ export async function manageUser(
     const [actor] = await tx.select().from(users).where(eq(users.id, actorId));
     const [target] = await tx.select().from(users).where(eq(users.id, userId)).for('update');
     if (!actor || !target || actor.membershipStatus !== 'active') throw new Error('FORBIDDEN');
+    if (expectedStatus && target.membershipStatus !== expectedStatus)
+      throw new Error('REQUEST_ALREADY_REVIEWED');
     if (
       actor.role !== 'administrator' &&
       !(
@@ -170,6 +174,11 @@ export async function anonymizeUser(actorId: string, userId: string) {
     await tx.delete(verifications).where(eq(verifications.identifier, target.email));
     await tx.delete(projectMembers).where(eq(projectMembers.userId, userId));
     const { syncFileReferences } = await import('../routes/platform/files');
+    await tx
+      .update(avatarRequests)
+      .set({ state: 'withdrawn', fileId: null })
+      .where(eq(avatarRequests.userId, userId));
+    await syncFileReferences(tx, 'avatar-request', userId, '', target);
     await tx.update(users).set({ image: null }).where(eq(users.id, userId));
     await syncFileReferences(tx, 'profile', userId, '', target);
     await tx
