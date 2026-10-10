@@ -24,6 +24,12 @@ describe('dashboard routes', () => {
       tab: 'projects'
     });
     expect(dashboardPath('project', 'roboty', 'profile')).toBe('/profile');
+    expect(parseDashboardPath('/inbox')).toEqual({
+      workspace: 'directory',
+      projectSlug: '',
+      tab: 'inbox'
+    });
+    expect(dashboardPath('project', 'roboty', 'inbox')).toBe('/inbox');
     expect(parseDashboardPath('/projects/new')?.tab).toBe('__create_project__');
   });
   test('removed task routes retain their board scope on refresh', () => {

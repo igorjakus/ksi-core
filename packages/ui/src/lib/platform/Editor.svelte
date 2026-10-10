@@ -44,13 +44,15 @@
         type="button"
         class:active={!preview}
         aria-pressed={!preview}
-        onclick={() => (preview = false)}><Pencil size={14} />{text('Edytuj', 'Write')}</button
+        onclick={() => (preview = false)}
+        ><Pencil size={14} aria-hidden="true" />{text('Edytuj', 'Write')}</button
       >
       <button
         type="button"
         class:active={preview}
         aria-pressed={preview}
-        onclick={() => (preview = true)}><Eye size={14} />{text('Podgląd', 'Preview')}</button
+        onclick={() => (preview = true)}
+        ><Eye size={14} aria-hidden="true" />{text('Podgląd', 'Preview')}</button
       >
     </div>
     <button
@@ -59,7 +61,7 @@
       onclick={() => {
         value += '\n:::gallery preview=3\nfile:IMAGE_ID\n:::\n';
         preview = false;
-      }}><Images size={14} />{text('Galeria', 'Gallery')}</button
+      }}><Images size={14} aria-hidden="true" />{text('Galeria', 'Gallery')}</button
     >
   </div>
   {#if preview}<div class="editor-preview"><MarkdownContent {value} {language} /></div>
@@ -96,9 +98,10 @@
       void upload(event.dataTransfer?.files ?? null);
     }}
   >
-    {#if busy}<UploadCloud size={18} />{text('Przesyłanie…', 'Uploading…')}{:else}<Paperclip
-        size={17}
-      /><span
+    {#if busy}<UploadCloud size={18} aria-hidden="true" />{text(
+        'Przesyłanie…',
+        'Uploading…'
+      )}{:else}<Paperclip size={17} aria-hidden="true" /><span
         >{text(
           'Przeciągnij pliki lub wybierz załączniki',
           'Drop files here or choose attachments'

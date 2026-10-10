@@ -232,7 +232,7 @@
           class="icon-button"
           aria-label={`${text('Dodaj zadanie do', 'Add task to')} ${label(status)}`}
           disabled={busy}
-          onclick={() => openComposer(status.id)}><Plus size={17} /></button
+          onclick={() => openComposer(status.id)}><Plus size={17} aria-hidden="true" /></button
         >
       </div>
       <div class="column-items">
@@ -288,7 +288,7 @@
           <Editor {language} bind:value={markdown} rows={5} />
           <div class="composer-actions">
             <button class="btn" disabled={busy || !title.trim()}
-              ><Plus size={15} />{text('Dodaj zadanie', 'Add task')}</button
+              ><Plus size={15} aria-hidden="true" />{text('Dodaj zadanie', 'Add task')}</button
             ><button
               type="button"
               class="icon-button"
@@ -297,7 +297,7 @@
               onclick={() => {
                 composer = null;
                 document.getElementById(`add-${status.id}`)?.focus();
-              }}><X size={17} /></button
+              }}><X size={17} aria-hidden="true" /></button
             >
           </div>
         </form>{:else}<button
@@ -305,7 +305,7 @@
           class="column-add"
           disabled={busy}
           onclick={() => openComposer(status.id)}
-          ><Plus size={16} />{text('Dodaj zadanie', 'Add task')}</button
+          ><Plus size={16} aria-hidden="true" />{text('Dodaj zadanie', 'Add task')}</button
         >{/if}
     </section>
   {/each}
@@ -331,7 +331,7 @@
           type="button"
           class="icon-button"
           aria-label={text('Anuluj', 'Cancel')}
-          onclick={() => (addingStatus = false)}><X size={16} /></button
+          onclick={() => (addingStatus = false)}><X size={16} aria-hidden="true" /></button
         >
       </form>
     {:else}<button
@@ -342,7 +342,7 @@
           addingStatus = true;
           await tick();
           document.getElementById('status-name')?.focus();
-        }}><Plus size={15} />{text('Dodaj status', 'Add status')}</button
+        }}><Plus size={15} aria-hidden="true" />{text('Dodaj status', 'Add status')}</button
       >{/if}
   </div>{/if}
 {#if selected}<dialog
@@ -363,7 +363,7 @@
         type="button"
         class="icon-button"
         aria-label={text('Zamknij zadanie', 'Close task')}
-        onclick={closeItem}><X size={20} /></button
+        onclick={closeItem}><X size={20} aria-hidden="true" /></button
       >
     </div>
     <div class="issue-tools">
@@ -381,12 +381,12 @@
           editing = !editing;
           editTitle = selected!.title;
           editMarkdown = selected!.markdown;
-        }}><Pencil size={14} />{text('Edytuj', 'Edit')}</button
+        }}><Pencil size={14} aria-hidden="true" />{text('Edytuj', 'Edit')}</button
       ><button
         type="button"
         class="btn btn-outline danger-button"
         disabled={busy}
-        onclick={removeItem}><Trash2 size={14} />{text('Usuń', 'Remove')}</button
+        onclick={removeItem}><Trash2 size={14} aria-hidden="true" />{text('Usuń', 'Remove')}</button
       >
     </div>
     {#if editing}<form
@@ -404,7 +404,7 @@
         /><Editor {language} bind:value={editMarkdown} />
         <div class="row">
           <button class="btn" disabled={busy || !editTitle.trim()}
-            ><Save size={14} />{text('Zapisz', 'Save')}</button
+            ><Save size={14} aria-hidden="true" />{text('Zapisz', 'Save')}</button
           ><button type="button" class="btn btn-outline" onclick={() => (editing = false)}
             >{text('Anuluj', 'Cancel')}</button
           >
@@ -415,8 +415,8 @@
       </div>{/if}
     <section class="issue-discussion" aria-labelledby="discussion-title">
       <h3 id="discussion-title">
-        <MessagesSquare size={18} />{text('Dyskusja', 'Discussion')}<span class="muted"
-          >{comments.length}</span
+        <MessagesSquare size={18} aria-hidden="true" />{text('Dyskusja', 'Discussion')}<span
+          class="muted">{comments.length}</span
         >
       </h3>
       {#if commentsLoading}<div

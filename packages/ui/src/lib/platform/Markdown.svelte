@@ -1,38 +1,73 @@
 <script lang="ts">
+  import { tick } from 'svelte';
+  import { X, ChevronLeft, ChevronRight } from '@lucide/svelte';
   import type { MarkdownBlock } from 'shared/markdown';
-  let { blocks }: { blocks: MarkdownBlock[] } = $props();
+  let { blocks, language = 'pl' }: { blocks: MarkdownBlock[]; language?: 'pl' | 'en' } = $props();
+  const text = (pl: string, en: string) => (language === 'pl' ? pl : en);
+  let dialog = $state<HTMLDialogElement>();
+  function close() {
+    dialog?.close();
+    active = null;
+  }
+  $effect(() => {
+    if (active) {
+      void tick().then(() => {
+        if (dialog && !dialog.open) dialog.showModal();
+      });
+    }
+  });
   let active = $state<{ ids: string[]; index: number } | null>(null);
 </script>
 
 <div class="markdown">
   {#each blocks as block}{#if block.type === 'html'}{@html block.html}{:else}<div class="gallery">
         {#each block.ids.slice(0, block.preview) as id, index}<button
+            type="button"
             onclick={() => (active = { ids: block.ids, index })}
-            aria-label={`Open image ${index + 1}`}
-            ><img src={`/media/${id}`} alt={`Gallery image ${index + 1}`} loading="lazy" /></button
+            aria-label={`${text('Otwórz obraz', 'Open image')} ${index + 1}`}
+            ><img
+              src={`/media/${id}`}
+              alt={`${text('Obraz z galerii', 'Gallery image')} ${index + 1}`}
+              loading="lazy"
+            /></button
           >{/each}{#if block.ids.length > block.preview}<button
+            type="button"
             onclick={() => (active = { ids: block.ids, index: block.preview })}
             >+{block.ids.length - block.preview}</button
           >{/if}
       </div>{/if}{/each}
 </div>
-{#if active}<dialog open aria-label="Gallery" class="lightbox">
-    <button onclick={() => (active = null)}>Zamknij / Close</button>
+{#if active}<dialog
+    bind:this={dialog}
+    aria-label={text('Galeria', 'Gallery')}
+    class="lightbox"
+    oncancel={(event) => {
+      event.preventDefault();
+      close();
+    }}
+  >
+    <button type="button" onclick={close}
+      ><X size={16} aria-hidden="true" />{text('Zamknij', 'Close')}</button
+    >
     <div class="row">
       <button
+        type="button"
         onclick={() =>
           (active = {
             ids: active!.ids,
             index: (active!.index - 1 + active!.ids.length) % active!.ids.length
           })}
-        aria-label="Previous image">←</button
+        aria-label={text('Poprzedni obraz', 'Previous image')}
+        ><ChevronLeft size={20} aria-hidden="true" /></button
       ><img
         src={`/media/${active.ids[active.index]}`}
-        alt={`Gallery image ${active.index + 1}`}
+        alt={`${text('Obraz z galerii', 'Gallery image')} ${active.index + 1}`}
       /><button
+        type="button"
         onclick={() =>
           (active = { ids: active!.ids, index: (active!.index + 1) % active!.ids.length })}
-        aria-label="Next image">→</button
+        aria-label={text('Następny obraz', 'Next image')}
+        ><ChevronRight size={20} aria-hidden="true" /></button
       >
     </div>
   </dialog>{/if}
@@ -74,7 +109,9 @@
     background: var(--surface, white);
     color: var(--ink, #272638);
     padding: 20px;
-    box-shadow: 0 0 0 100vmax #0009;
+  }
+  .lightbox::backdrop {
+    background: #0009;
   }
   .lightbox img {
     max-height: 75vh;

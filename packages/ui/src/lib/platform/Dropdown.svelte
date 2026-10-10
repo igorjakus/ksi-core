@@ -290,6 +290,8 @@
   .dropdown-trigger:hover,
   .dropdown-trigger[aria-expanded='true'] {
     border-color: var(--control-border-hover, var(--muted));
+    outline: 1px solid var(--control-border-hover, var(--muted));
+    outline-offset: 2px;
     background: var(--surface-muted, #f0ede4);
   }
   .dropdown-value {

@@ -43,7 +43,7 @@
       : 'Preview unavailable. Please try again.'}
   </p>
 {:else if !value.trim()}<p class="muted">{language === 'pl' ? 'Brak opisu.' : 'No description.'}</p>
-{:else}<Markdown {blocks} />{/if}
+{:else}<Markdown {blocks} {language} />{/if}
 
 <style>
   .markdown-skeleton {

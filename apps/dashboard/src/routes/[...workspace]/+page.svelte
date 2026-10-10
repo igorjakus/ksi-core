@@ -103,7 +103,8 @@
     title: string;
     visibility: string;
     version: number;
-    comments?: { id: string; markdown: string }[];
+    createdAt?: string;
+    comments?: { id: string; markdown: string; authorName?: string; createdAt?: string }[];
   };
 
   let projects = $state<Project[]>([]);
@@ -476,7 +477,7 @@
     ['articles', text('Artykuły', 'Articles')],
     ['events', text('Aktywność', 'Activity')]
   ] as [string, string][]);
-  const selectedProject = $derived(projects.find((project) => project.id === scope));
+  const selectedProject = $derived(projects.find((project) => project.slug === projectSlug));
   const workspaceName = $derived(
     workspace === 'project'
       ? (selectedProject?.name ?? text('Projekt', 'Project'))
@@ -1219,9 +1220,21 @@
                     >
                       <div class="list-strip-info">
                         <h3>{thread.title}</h3>
-                        <div class="list-strip-meta">{thread.visibility}</div>
+                        {#if thread.createdAt}<time
+                            class="list-strip-meta"
+                            datetime={thread.createdAt}
+                            >{new Date(thread.createdAt).toLocaleDateString(
+                              language === 'pl' ? 'pl-PL' : 'en-GB'
+                            )}</time
+                          >{/if}
                       </div>
-                      <span class="tag">{thread.visibility}</span>
+                      <span class="tag"
+                        >{thread.visibility === 'leaders'
+                          ? text('Liderzy', 'Leaders')
+                          : thread.visibility === 'members'
+                            ? text('Członkowie projektu', 'Project members')
+                            : text('Członkowie koła', 'Association members')}</span
+                      >
                     </div>
                   {/each}
 
@@ -1234,26 +1247,36 @@
                         <div
                           style="border-top: 1px solid var(--line); padding: 12px 0; font-size: 13px; white-space: pre-wrap;"
                         >
+                          {#if comment.authorName}<div class="forum-post-meta">
+                              <strong>{comment.authorName}</strong>{#if comment.createdAt}<time
+                                  datetime={comment.createdAt}
+                                  >{new Date(comment.createdAt).toLocaleString(
+                                    language === 'pl' ? 'pl-PL' : 'en-GB'
+                                  )}</time
+                                >{/if}
+                            </div>{/if}
                           <MarkdownContent value={comment.markdown} {language} />
                         </div>
                       {/each}
                       <div style="margin-top: 16px; display: grid; gap: 8px;">
-                        <label for="reply-md">{text('Odpowiedź', 'Reply')}</label>
-                        <Editor {language} bind:value={markdown} />
+                        {#if !archived}<h3>{text('Odpowiedź', 'Reply')}</h3>
+                          <Editor {language} bind:value={markdown} />{/if}
                         <div class="row" style="gap: 8px;">
+                          {#if !archived}<button
+                              class="btn"
+                              disabled={busy || !markdown.trim()}
+                              onclick={() =>
+                                action(async () => {
+                                  await api(
+                                    `/platform/threads/${selectedThread!.id}/comments`,
+                                    'POST',
+                                    { markdown }
+                                  );
+                                  markdown = '';
+                                })}>{text('Dodaj odpowiedź', 'Reply')}</button
+                            >{/if}
                           <button
-                            class="btn"
-                            disabled={busy}
-                            onclick={() =>
-                              action(() =>
-                                api(`/platform/threads/${selectedThread!.id}/comments`, 'POST', {
-                                  markdown
-                                })
-                              )}
-                          >
-                            {text('Dodaj odpowiedź', 'Reply')}
-                          </button>
-                          <button
+                            class="btn btn-outline"
                             disabled={busy}
                             onclick={() =>
                               action(() =>
@@ -1263,7 +1286,13 @@
                                 })
                               )}
                           >
-                            {text('Archiwizuj / przywróć', 'Archive / restore')}
+                            {#if archived}<RotateCcw size={15} aria-hidden="true" />{text(
+                                'Przywróć wątek',
+                                'Restore thread'
+                              )}{:else}<Archive size={15} aria-hidden="true" />{text(
+                                'Archiwizuj wątek',
+                                'Archive thread'
+                              )}{/if}
                           </button>
                         </div>
                       </div>
