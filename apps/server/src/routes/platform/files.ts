@@ -407,7 +407,8 @@ export const filesRoutes = createElysia({ prefix: '/files' })
           await tx.update(files).set({ state: 'private' }).where(eq(files.id, file!.id));
           await recordFileEvent(tx, member.id, 'files.uploaded', file!.id);
         });
-      } catch {
+      } catch (e) {
+        console.error('Storage Error:', e);
         throw status(503, { code: 'STORAGE_UNAVAILABLE' });
       }
       return {

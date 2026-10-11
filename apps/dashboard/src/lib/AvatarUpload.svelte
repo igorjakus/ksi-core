@@ -31,14 +31,24 @@
       const body = new FormData();
       body.set('file', file);
       const response = await fetch('/api/files', { method: 'POST', body });
-      const result = await response.json();
+      const text = await response.text();
+      let result: any = {};
+      if (text)
+        try {
+          result = JSON.parse(text);
+        } catch {}
       if (!response.ok) throw new Error(result.code ?? 'Upload failed');
       const proposal = await fetch('/api/users/me/avatar-request', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ fileId: result.id })
       });
-      const data = await proposal.json();
+      const textData = await proposal.text();
+      let data: any = {};
+      if (textData)
+        try {
+          data = JSON.parse(textData);
+        } catch {}
       if (!proposal.ok) throw new Error(data.code ?? 'Request failed');
       await onchange();
     } catch (error) {

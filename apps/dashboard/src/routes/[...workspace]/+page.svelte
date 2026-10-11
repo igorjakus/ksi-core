@@ -144,7 +144,15 @@
       headers: body === undefined ? {} : { 'content-type': 'application/json' },
       body: body === undefined ? undefined : JSON.stringify(body)
     });
-    const result = await response.json();
+    const text = await response.text();
+    let result: any = {};
+    if (text) {
+      try {
+        result = JSON.parse(text);
+      } catch (e) {
+        if (!response.ok) throw new Error(`${response.status}`);
+      }
+    }
     if (!response.ok) throw new Error(result.code ?? result.message ?? `${response.status}`);
     return result as T;
   }

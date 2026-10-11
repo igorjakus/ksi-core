@@ -38,7 +38,12 @@
       headers: { 'content-type': 'application/json' },
       body: body === undefined ? undefined : JSON.stringify(body)
     });
-    const result = await response.json();
+    const text = await response.text();
+    let result: any = {};
+    if (text)
+      try {
+        result = JSON.parse(text);
+      } catch {}
     if (!response.ok) {
       const messages: Record<string, string> = {
         INVALID_GITHUB_URL: 'Use a https://github.com/username profile link.',

@@ -33,7 +33,12 @@
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ approved, ...(version ? { version } : {}) })
       });
-      const result = await response.json();
+      const text = await response.text();
+      let result: any = {};
+      if (text)
+        try {
+          result = JSON.parse(text);
+        } catch {}
       if (!response.ok) throw new Error(result.code ?? 'Request failed');
       await refresh();
     } catch (error) {

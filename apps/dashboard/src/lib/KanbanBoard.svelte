@@ -80,8 +80,13 @@
       headers: body === undefined ? {} : { 'content-type': 'application/json' },
       body: body === undefined ? undefined : JSON.stringify(body)
     });
-    const result = await response.json();
-    if (!response.ok) throw new Error(result.code ?? result.message ?? 'Request failed.');
+    const text = await response.text();
+    let result: any = {};
+    if (text)
+      try {
+        result = JSON.parse(text);
+      } catch {}
+    if (!response.ok) throw new Error(result?.code ?? result?.message ?? 'Request failed.');
     return result;
   }
   async function run(work: () => Promise<void>) {
