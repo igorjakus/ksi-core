@@ -407,6 +407,7 @@ msgstr "Research"
 msgid "No matching projects."
 msgstr "No matching projects."
 
+#: src/components/Footer.svelte
 #: src/routes/+page.svelte
 msgid "ZOSIA"
 msgstr "ZOSIA"
@@ -824,6 +825,7 @@ msgstr "You have joined the project."
 msgid "Open project <0/>"
 msgstr "Open project <0/>"
 
+#: src/components/Footer.svelte
 #: src/routes/articles/+page.svelte
 #: src/routes/members/[id]/+page.svelte
 #: src/routes/projects/[slug]/+page.svelte

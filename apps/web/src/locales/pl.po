@@ -407,6 +407,7 @@ msgstr "Badania"
 msgid "No matching projects."
 msgstr "Brak pasujących projektów."
 
+#: src/components/Footer.svelte
 #: src/routes/+page.svelte
 msgid "ZOSIA"
 msgstr "ZOSIA"
@@ -824,6 +825,7 @@ msgstr "Dołączono do projektu."
 msgid "Open project <0/>"
 msgstr "Otwórz projekt <0/>"
 
+#: src/components/Footer.svelte
 #: src/routes/articles/+page.svelte
 #: src/routes/members/[id]/+page.svelte
 #: src/routes/projects/[slug]/+page.svelte

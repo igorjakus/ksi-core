@@ -47,6 +47,10 @@
       <ul class="space-y-3 text-sm">
         <li><a href="/#about" class="hover:text-primary transition-colors">About us</a></li>
         <li><a href="/projects" class="hover:text-primary transition-colors">Projects</a></li>
+        <li><a href="/articles" class="hover:text-primary transition-colors">Articles</a></li>
+        <li>
+          <a href="/projects/zosia" class="hover:text-primary transition-colors">ZOSIA</a>
+        </li>
         <li>
           <a href="mailto:ksi@cs.uni.wroc.pl" class="hover:text-primary transition-colors"
             >Contact</a
