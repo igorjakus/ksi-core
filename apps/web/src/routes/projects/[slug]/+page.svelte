@@ -57,7 +57,7 @@
     {#each project.sections as section}
       {#if section === 'main-article' && project.mainArticle}
         <section class="my-10">
-          <h2 class="mb-6 text-2xl font-semibold">{project.mainArticle.title}</h2>
+          <h2 class="section-heading text-2xl font-semibold">{project.mainArticle.title}</h2>
           <Markdown
             blocks={data.mainArticleBlocks}
             language={locale.current === 'pl' ? 'pl' : 'en'}
@@ -65,12 +65,12 @@
         </section>
       {:else if section === 'articles'}
         <section class="my-10">
-          <h2 class="mb-6 text-2xl font-semibold">Articles</h2>
+          <h2 class="section-heading text-2xl font-semibold">Articles</h2>
           <ArticleList articles={project.articles} />
         </section>
       {:else if section === 'leaders' || section === 'members'}
         <section class="my-10">
-          <h2 class="mb-6 text-2xl font-semibold">
+          <h2 class="section-heading text-2xl font-semibold">
             {section === 'leaders' ? 'Project leaders' : 'Members'}
           </h2>
           <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
@@ -87,7 +87,7 @@
         </section>
       {:else if section === 'links'}
         <section class="my-10">
-          <h2 class="mb-6 text-2xl font-semibold">Links</h2>
+          <h2 class="section-heading text-2xl font-semibold">Links</h2>
           <div class="flex flex-wrap gap-3">
             {#each project.links as link}<a
                 class="btn btn-outline"
@@ -100,3 +100,9 @@
     {/each}
   </div>
 </div>
+
+<style>
+  .section-heading {
+    margin-bottom: 24px;
+  }
+</style>
