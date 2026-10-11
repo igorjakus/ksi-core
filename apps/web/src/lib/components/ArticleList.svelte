@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { markdownImages } from 'shared/markdown-images';
   import MemberPreview from '@ksi-core/ui/platform/MemberPreview.svelte';
   import { ArrowUpRight, CalendarDays } from '@lucide/svelte';
   import { locale } from '$lib/locale.svelte';
@@ -25,10 +26,15 @@
     new Intl.DateTimeFormat(locale.current, { day: 'numeric', month: 'long', year: 'numeric' })
   );
   function preview(markdown: string) {
+    // Remove the complete image token, including its optional width annotation.
+    const images = markdownImages(markdown);
+    for (let index = images.length - 1; index >= 0; index--) {
+      const image = images[index]!;
+      markdown = markdown.slice(0, image.start) + markdown.slice(image.end);
+    }
     const text = markdown
       .replace(/:::gallery[\s\S]*?:::/g, '')
       .replace(/```[\s\S]*?```/g, '')
-      .replace(/!\[[^\]]*\]\([^)]*\)/g, '')
       .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
       .replace(/<[^>]+>/g, '')
       .replace(/^[\s#>*-]+/gm, '')
