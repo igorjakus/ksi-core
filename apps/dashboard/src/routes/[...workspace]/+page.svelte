@@ -51,7 +51,8 @@
     Check,
     Archive,
     Bell,
-    Settings
+    Settings,
+    Laptop
   } from '@lucide/svelte';
   import type { Profile } from 'shared/types';
 
@@ -172,6 +173,16 @@
   let archived = $state(false);
   let showCredit = $state(false);
   let profile = $state(untrack(() => ({ ...data.user })));
+  let activeSessions = $state<
+    {
+      id: string;
+      createdAt: string;
+      expiresAt: string;
+      ipAddress: string | null;
+      userAgent: string | null;
+      isCurrent: boolean;
+    }[]
+  >([]);
 
   function linkForMetadata(key: string, val: unknown, projectSlug: string | null): string | null {
     const str = String(val);
@@ -245,6 +256,22 @@
       if (currentTab === 'profile') {
         const request = await api<AvatarRequest | null>('/users/me/avatar-request');
         const current = await api<{ user: Profile }>('/users/me');
+        try {
+          const sessions =
+            await api<
+              {
+                id: string;
+                createdAt: string;
+                expiresAt: string;
+                ipAddress: string | null;
+                userAgent: string | null;
+                isCurrent: boolean;
+              }[]
+            >('/users/me/sessions');
+          if (generation === loadGeneration) activeSessions = sessions;
+        } catch {
+          /* Sessions list failure must not block profile view */
+        }
         if (generation === loadGeneration) {
           avatarRequest = request;
           profile.image = current.user.image;
@@ -1770,6 +1797,71 @@
                       </section>
                     </div>
                   </form>
+                  <section class="profile-section account-danger" style="margin-top: 16px;">
+                    <details>
+                      <summary
+                        ><Laptop size={17} aria-hidden="true" />{'Active sessions'}<ChevronDown
+                          size={15}
+                          aria-hidden="true"
+                        /></summary
+                      >
+                      <p class="field-help">
+                        {'Devices and browsers currently logged into your KSI account.'}
+                      </p>
+                      {#if activeSessions.length === 0}
+                        <p class="muted" style="margin-top: 12px; font-size: 13px;">
+                          {'No active sessions.'}
+                        </p>
+                      {:else}
+                        <div
+                          style="display: flex; flex-direction: column; gap: 8px; margin-top: 14px;"
+                        >
+                          {#each activeSessions as s (s.id)}
+                            <div
+                              style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 4px; font-size: 13px;"
+                            >
+                              <div>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                  <strong>{s.isCurrent ? 'Current device' : 'Other device'}</strong>
+                                  {#if s.isCurrent}
+                                    <span
+                                      style="font-size: 10px; padding: 2px 6px; background: var(--primary); color: white; border-radius: 3px;"
+                                      >{'Current'}</span
+                                    >
+                                  {/if}
+                                </div>
+                                <div class="muted" style="font-size: 11px; margin-top: 4px;">
+                                  {s.userAgent || 'Unknown browser'}
+                                  {#if s.ipAddress}
+                                    · {s.ipAddress}{/if}
+                                </div>
+                              </div>
+                              {#if !s.isCurrent}
+                                <button
+                                  class="btn btn-outline"
+                                  style="font-size: 12px; padding: 4px 10px;"
+                                  disabled={busy}
+                                  onclick={() =>
+                                    action(async () => {
+                                      await api(
+                                        `/users/me/sessions/${encodeURIComponent(s.id)}`,
+                                        'DELETE'
+                                      );
+                                      activeSessions = activeSessions.filter(
+                                        (item) => item.id !== s.id
+                                      );
+                                    })}
+                                >
+                                  {'Revoke'}
+                                </button>
+                              {/if}
+                            </div>
+                          {/each}
+                        </div>
+                      {/if}
+                    </details>
+                  </section>
+
                   <section class="profile-section account-danger">
                     <details>
                       <summary

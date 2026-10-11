@@ -4,8 +4,16 @@ import { recordEvent } from '../../lib/audit';
 import { getUrls } from 'shared';
 import { validProfileLink } from 'shared/profile-links';
 import { status, t } from 'elysia';
-import { eq, and, or, ilike, asc, count } from 'drizzle-orm';
-import { users, auditEvents, outbox, sessions, verifications, mailJobs } from '../../db';
+import { eq, and, or, ilike, asc, desc, count, gt } from 'drizzle-orm';
+import {
+  users,
+  auditEvents,
+  outbox,
+  sessions,
+  frontendSessions,
+  verifications,
+  mailJobs
+} from '../../db';
 import { createElysia, requirePermission } from '../../lib/createElysia';
 import { manageUser, anonymizeUser } from '../../services/users';
 import { effectivePermissions, type Permission } from '../../domain/permissions';
@@ -108,6 +116,55 @@ export const userRoutes = createElysia({ prefix: '/users', protectedRoute: true 
     if (!user) throw status(401);
     return anonymizeUser(user.id, user.id);
   })
+  .get('/me/sessions', async ({ user, db, request }) => {
+    if (!user) throw status(401);
+    const token = request.headers.get('x-ksi-session');
+    let currentSessionId: string | null = null;
+    if (token) {
+      const [fs] = await db
+        .select({ sessionId: frontendSessions.sessionId })
+        .from(frontendSessions)
+        .where(
+          and(
+            eq(frontendSessions.id, new Bun.CryptoHasher('sha256').update(token).digest('hex')),
+            gt(frontendSessions.expiresAt, new Date())
+          )
+        );
+      currentSessionId = fs?.sessionId ?? null;
+    }
+    const userSessions = await db
+      .select({
+        id: sessions.id,
+        createdAt: sessions.createdAt,
+        expiresAt: sessions.expiresAt,
+        ipAddress: sessions.ipAddress,
+        userAgent: sessions.userAgent
+      })
+      .from(sessions)
+      .where(and(eq(sessions.userId, user.id), gt(sessions.expiresAt, new Date())))
+      .orderBy(desc(sessions.createdAt));
+
+    return userSessions.map((s) => ({
+      ...s,
+      isCurrent: s.id === currentSessionId
+    }));
+  })
+  .delete(
+    '/me/sessions/:id',
+    async ({ user, db, params }) => {
+      if (!user) throw status(401);
+      const [session] = await db
+        .select()
+        .from(sessions)
+        .where(and(eq(sessions.id, params.id), eq(sessions.userId, user.id)));
+      if (!session) throw status(404, { message: 'Session not found' });
+      await db.delete(sessions).where(eq(sessions.id, params.id));
+      return { success: true };
+    },
+    {
+      params: t.Object({ id: t.String() })
+    }
+  )
   .get(
     '/',
     async ({ user, db, query }) => {

@@ -617,6 +617,7 @@ msgstr "Create project"
 #: src/lib/Members.svelte
 #: src/lib/Members.svelte
 #: src/lib/Members.svelte
+#: src/routes/+error.svelte
 msgid "Error"
 msgstr "Error"
 
@@ -1399,3 +1400,35 @@ msgstr "Show in website articles"
 #: src/routes/[...workspace]/+page.svelte
 msgid "These settings apply when the article is published. The main article is displayed separately from the project articles list."
 msgstr "These settings apply when the article is published. The main article is displayed separately from the project articles list."
+
+#: src/routes/[...workspace]/+page.svelte
+msgid "Active sessions"
+msgstr "Active sessions"
+
+#: src/routes/[...workspace]/+page.svelte
+msgid "Devices and browsers currently logged into your KSI account."
+msgstr "Devices and browsers currently logged into your KSI account."
+
+#: src/routes/[...workspace]/+page.svelte
+msgid "No active sessions."
+msgstr "No active sessions."
+
+#: src/routes/[...workspace]/+page.svelte
+msgid "Current device"
+msgstr "Current device"
+
+#: src/routes/[...workspace]/+page.svelte
+msgid "Other device"
+msgstr "Other device"
+
+#: src/routes/[...workspace]/+page.svelte
+msgid "Current"
+msgstr "Current"
+
+#: src/routes/[...workspace]/+page.svelte
+msgid "Unknown browser"
+msgstr "Unknown browser"
+
+#: src/routes/[...workspace]/+page.svelte
+msgid "Revoke"
+msgstr "Revoke"

@@ -46,6 +46,7 @@ msgid "Recover access"
 msgstr "Recover access"
 
 #: src/routes/+page.svelte
+#: src/routes/+page.svelte
 msgid "Welcome to KSI"
 msgstr "Welcome to KSI"
 
@@ -189,3 +190,15 @@ msgstr "Saving…"
 #: src/routes/reset-password/+page.svelte
 msgid "Save password"
 msgstr "Save password"
+
+#: src/routes/+page.svelte
+msgid "You are signed in as"
+msgstr "You are signed in as"
+
+#: src/routes/+page.svelte
+msgid "Go to Dashboard"
+msgstr "Go to Dashboard"
+
+#: src/routes/+page.svelte
+msgid "Sign out"
+msgstr "Sign out"

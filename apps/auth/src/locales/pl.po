@@ -46,6 +46,7 @@ msgid "Recover access"
 msgstr "Odzyskaj dostęp"
 
 #: src/routes/+page.svelte
+#: src/routes/+page.svelte
 msgid "Welcome to KSI"
 msgstr "Witaj w KSI"
 
@@ -189,3 +190,15 @@ msgstr "Zapisywanie…"
 #: src/routes/reset-password/+page.svelte
 msgid "Save password"
 msgstr "Zapisz hasło"
+
+#: src/routes/+page.svelte
+msgid "You are signed in as"
+msgstr "Jesteś zalogowany jako"
+
+#: src/routes/+page.svelte
+msgid "Go to Dashboard"
+msgstr "Przejdź do Panelu"
+
+#: src/routes/+page.svelte
+msgid "Sign out"
+msgstr "Wyloguj się"

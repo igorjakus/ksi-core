@@ -12,7 +12,7 @@
       <span class="dot" style="background: var(--coral);"></span>
       Error {page.status}
     </div>
-    <h1>Authentication Failed</h1>
+    <h1>{page.status === 401 || page.status === 403 ? 'Authentication Failed' : 'Error'}</h1>
     <p>
       {page.error?.message || 'An unexpected error occurred during your request.'}
     </p>
