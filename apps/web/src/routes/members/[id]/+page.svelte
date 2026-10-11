@@ -32,10 +32,12 @@
     {#if data.member.github}<a
         class="btn btn-outline gap-2"
         href={data.member.github}
+        target="_blank"
         rel="noopener noreferrer"><Github size={16} />GitHub</a
       >{/if}{#if data.member.linkedin}<a
         class="btn btn-outline gap-2"
         href={data.member.linkedin}
+        target="_blank"
         rel="noopener noreferrer"><Linkedin size={16} />LinkedIn</a
       >{/if}
   </div>
