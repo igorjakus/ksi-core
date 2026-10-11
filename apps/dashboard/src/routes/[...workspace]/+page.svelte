@@ -18,11 +18,13 @@
   import MarkdownContent from '@ksi-core/ui/platform/MarkdownContent.svelte';
   import Members from '$lib/Members.svelte';
   import Editor from '@ksi-core/ui/platform/Editor.svelte';
+  import UserSelect from '$lib/UserSelect.svelte';
   import Dropdown from '@ksi-core/ui/platform/Dropdown.svelte';
   import {
     Plus,
     X,
     Menu,
+    Pencil,
     ArrowLeft,
     ArrowUpRight,
     ChevronDown,
@@ -105,7 +107,13 @@
     archivedAt?: string | null;
     version: number;
     createdAt?: string;
-    comments?: { id: string; markdown: string; authorName?: string; createdAt?: string }[];
+    comments?: {
+      id: string;
+      markdown: string;
+      authorName?: string;
+      createdAt?: string;
+      authorId?: string;
+    }[];
   };
 
   let projects = $state<Project[]>([]);
@@ -113,7 +121,22 @@
   let items = $state<Item[]>([]);
   let threads = $state<Thread[]>([]);
 
-  let events = $state<{ id: string; action: string; createdAt: string }[]>([]);
+  let events = $state<
+    {
+      event: {
+        id: string;
+        action: string;
+        createdAt: string;
+        metadata?: any;
+        actorId: string | null;
+        targetId: string;
+      };
+      actorName: string | null;
+      firstName: string | null;
+      lastName: string | null;
+      projectSlug: string | null;
+    }[]
+  >([]);
 
   let boardId = $state('');
   let title = $state('');
@@ -122,7 +145,9 @@
   let selectedArticle = $state<Article | null>(null);
   let selectedThread = $state<Thread | null>(null);
   let visibility = $state('association');
-  let leaderIds = $state('');
+  let leaderIdsArray = $state<string[]>([]);
+  let editingCommentId = $state<string | null>(null);
+  let editingCommentMarkdown = $state('');
   let graveyard = $state(untrack(() => data.navigation.graveyard ?? false));
   let statuses = $state<BoardStatus[]>([
     { id: 'todo', name: 'To do' },
@@ -137,6 +162,38 @@
   let archived = $state(false);
   let showCredit = $state(false);
   let profile = $state(untrack(() => ({ ...data.user })));
+
+  function linkForMetadata(key: string, val: unknown, projectSlug: string | null): string | null {
+    const str = String(val);
+    if (!str || typeof val !== 'string') return null;
+    const wp = projectSlug ? 'project' : 'association';
+    const slug = projectSlug ?? '';
+    if (key === 'userId' || key === 'actorId') return `/members/${encodeURIComponent(str)}`;
+    if (key === 'threadId') return `${dashboardPath(wp, slug, 'forum')}/${encodeURIComponent(str)}`;
+    if (key === 'articleId') return dashboardPath(wp, slug, 'articles');
+    if (key === 'projectId')
+      return projectSlug ? `/projects/${encodeURIComponent(projectSlug)}` : null;
+    if (key === 'itemId')
+      return `${dashboardPath(wp, slug, 'board')}?item=${encodeURIComponent(str)}`;
+    if (key === 'boardId') return dashboardPath(wp, slug, 'board');
+    return null;
+  }
+
+  function linkForAction(
+    action: string,
+    targetId: string,
+    projectSlug: string | null
+  ): string | null {
+    const wp = projectSlug ? 'project' : 'association';
+    const slug = projectSlug ?? '';
+    if (action.startsWith('articles.')) return dashboardPath(wp, slug, 'articles');
+    if (action.startsWith('threads.'))
+      return `${dashboardPath(wp, slug, 'forum')}/${encodeURIComponent(targetId)}`;
+    if (action.startsWith('items.')) return dashboardPath(wp, slug, 'board');
+    if (action.startsWith('projects.'))
+      return projectSlug ? `/projects/${encodeURIComponent(projectSlug)}` : null;
+    return null;
+  }
 
   async function api<T>(path: string, method = 'GET', body?: unknown): Promise<T> {
     const response = await fetch(`/api${path}`, {
@@ -287,7 +344,7 @@
     title = '';
     markdown = '';
     slug = '';
-    leaderIds = '';
+    leaderIdsArray = [];
     graveyard = false;
     archived = false;
     showCredit = false;
@@ -403,18 +460,18 @@
   }
 
   async function create() {
-    if (tab === '__create_project__')
-      return api('/platform/projects', 'POST', {
+    if (tab === '__create_project__') {
+      const result = await api<Project>('/platform/projects', 'POST', {
         slug,
         name: title,
         description: markdown,
         tags: [],
         fields: ['engineering'],
-        leaderIds: leaderIds
-          .split(',')
-          .map((s) => s.trim())
-          .filter(Boolean)
+        leaderIds: leaderIdsArray
       });
+      void goto(`/${result.slug || result.id}`);
+      return result;
+    }
     if (tab === 'articles') {
       const result = await api<Article>('/platform/articles', 'POST', {
         slug,
@@ -1113,7 +1170,9 @@
                       {boardId}
                       projectId={scope}
                       {language}
+                      activeItemId={page.url.searchParams.get('item')}
                       canManage={boardLeader}
+                      userId={data.user.id}
                       refresh={() => load()}
                       reportError={(message) => (error = message)}
                     />
@@ -1207,15 +1266,73 @@
                         <div
                           style="border-top: 1px solid var(--line); padding: 12px 0; font-size: 13px; white-space: pre-wrap;"
                         >
-                          {#if comment.authorName}<div class="forum-post-meta">
-                              <strong>{comment.authorName}</strong>{#if comment.createdAt}<time
-                                  datetime={comment.createdAt}
-                                  >{new Date(comment.createdAt).toLocaleString(
-                                    language === 'pl' ? 'pl-PL' : 'en-GB'
-                                  )}</time
-                                >{/if}
-                            </div>{/if}
-                          <MarkdownContent value={comment.markdown} {language} />
+                          <div class="forum-post-meta">
+                            <strong>{comment.authorName || 'Association member'}</strong
+                            >{#if comment.createdAt}<time datetime={comment.createdAt}
+                                >{new Date(comment.createdAt).toLocaleString(
+                                  language === 'pl' ? 'pl-PL' : 'en-GB'
+                                )}</time
+                              >{/if}
+                            {#if !archived && (comment.authorId === data.user.id || boardLeader)}
+                              <Dropdown
+                                label="Actions"
+                                options={[
+                                  { value: 'edit', label: 'Edit' },
+                                  { value: 'delete', label: 'Delete', color: 'var(--red)' }
+                                ]}
+                                onselect={(val) => {
+                                  if (val === 'edit') {
+                                    editingCommentId = comment.id;
+                                    editingCommentMarkdown = comment.markdown;
+                                  } else if (val === 'delete') {
+                                    void action(async () => {
+                                      if (!confirm('Delete comment?')) return;
+                                      await api(`/platform/comments/${comment.id}`, 'DELETE');
+                                      selectedThread!.comments = selectedThread!.comments!.filter(
+                                        (c) => c.id !== comment.id
+                                      );
+                                    });
+                                  }
+                                }}
+                              />
+                            {/if}
+                          </div>
+                          {#if editingCommentId === comment.id}
+                            <form
+                              style="margin-top: 8px; display: grid; gap: 8px;"
+                              onsubmit={(event) => {
+                                event.preventDefault();
+                                action(async () => {
+                                  await api(`/platform/comments/${comment.id}`, 'PATCH', {
+                                    markdown: editingCommentMarkdown
+                                  });
+                                  const c = selectedThread!.comments!.find(
+                                    (c) => c.id === comment.id
+                                  );
+                                  if (c) c.markdown = editingCommentMarkdown;
+                                  editingCommentId = null;
+                                  editingCommentMarkdown = '';
+                                });
+                              }}
+                            >
+                              <Editor {language} bind:value={editingCommentMarkdown} rows={4} />
+                              <div style="display: flex; gap: 8px;">
+                                <button
+                                  class="btn"
+                                  disabled={busy || !editingCommentMarkdown.trim()}>{'Save'}</button
+                                >
+                                <button
+                                  type="button"
+                                  class="btn ghost"
+                                  onclick={() => {
+                                    editingCommentId = null;
+                                  }}>{'Cancel'}</button
+                                >
+                              </div>
+                            </form>
+                          {:else}
+                            <MarkdownContent value={comment.markdown} {language} />
+                          {/if}
                         </div>
                       {/each}
                       <div style="margin-top: 16px; display: grid; gap: 8px;">
@@ -1531,14 +1648,54 @@
                       <h1>{'Activity'}</h1>
                     </div>
                   </div>
-                  {#each events as event (event.id)}
+                  {#each events as event (event.event.id)}
                     <div class="event-item">
-                      <time datetime={event.createdAt}
-                        >{new Date(event.createdAt).toLocaleString(
+                      <div class="event-meta">
+                        <div>
+                          <strong
+                            ><a
+                              href={`/members/${encodeURIComponent(event.event.actorId || '')}`}
+                              onclick={guardNavigation}
+                              >{event.firstName
+                                ? `${event.firstName} ${event.lastName}`
+                                : event.actorName || 'System'}</a
+                            ></strong
+                          >
+                          {#if linkForAction(event.event.action, event.event.targetId, event.projectSlug)}
+                            <a
+                              class="action-link"
+                              href={linkForAction(
+                                event.event.action,
+                                event.event.targetId,
+                                event.projectSlug
+                              )}
+                              onclick={guardNavigation}>{event.event.action}</a
+                            >
+                          {:else}
+                            <span class="muted">{event.event.action}</span>
+                          {/if}
+                        </div>
+                        {#if event.event.metadata && Object.keys(event.event.metadata).length > 0}
+                          <div class="event-metadata">
+                            {#each Object.entries(event.event.metadata) as [key, val]}
+                              {#if linkForMetadata(key, val, event.projectSlug)}
+                                <a
+                                  class="meta-tag meta-link"
+                                  href={linkForMetadata(key, val, event.projectSlug)}
+                                  onclick={guardNavigation}>{key}: {String(val)}</a
+                                >
+                              {:else}
+                                <span class="meta-tag">{key}: {String(val)}</span>
+                              {/if}
+                            {/each}
+                          </div>
+                        {/if}
+                      </div>
+                      <time class="muted" datetime={event.event.createdAt}
+                        >{new Date(event.event.createdAt).toLocaleString(
                           language === 'pl' ? 'pl-PL' : 'en-GB'
                         )}</time
                       >
-                      <span>{event.action}</span>
                     </div>
                   {/each}
                   {#if !events.length}
@@ -1562,8 +1719,8 @@
                     <input id="cp-title" bind:value={title} required />
                     <label for="cp-slug">Slug</label>
                     <input id="cp-slug" bind:value={slug} />
-                    <label for="cp-leaders">{'Leader IDs (comma-separated)'}</label>
-                    <input id="cp-leaders" bind:value={leaderIds} placeholder={data.user.id} />
+                    <label for="cp-leaders">{'Leaders'}</label>
+                    <UserSelect bind:userIds={leaderIdsArray} {api} />
                     <label for="cp-desc">{'Description'}</label>
                     <Editor {language} bind:value={markdown} />
                     <button
@@ -1583,3 +1740,47 @@
     </div>
   </div>
 {/if}
+
+<style>
+  .event-item {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+  .event-meta {
+    display: flex;
+    flex-direction: column;
+    font-size: 13px;
+    gap: 4px;
+  }
+  .event-metadata {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .meta-tag {
+    font-size: 11px;
+    padding: 2px 6px;
+    background: var(--surface-muted);
+    border-radius: 4px;
+    color: var(--muted);
+  }
+  .meta-link {
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .meta-link:hover {
+    text-decoration: underline;
+  }
+  .action-link {
+    color: var(--ink);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .action-link:hover {
+    text-decoration: underline;
+  }
+</style>

@@ -270,6 +270,7 @@ msgid "Appearance"
 msgstr "Wygląd"
 
 #: src/routes/[...workspace]/+page.svelte
+#: src/routes/[...workspace]/+page.svelte
 msgid "System"
 msgstr "Systemowy"
 
@@ -425,6 +426,7 @@ msgstr "Aktywne"
 msgid "Archive"
 msgstr "Archiwum"
 
+#: src/routes/[...workspace]/+page.svelte
 #: src/routes/[...workspace]/+page.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "Leaders"
@@ -593,10 +595,6 @@ msgid "Name"
 msgstr "Nazwa"
 
 #: src/routes/[...workspace]/+page.svelte
-msgid "Leader IDs (comma-separated)"
-msgstr "ID liderów (po przecinku)"
-
-#: src/routes/[...workspace]/+page.svelte
 msgid "Description"
 msgstr "Opis"
 
@@ -654,7 +652,9 @@ msgstr "Status zadania"
 #: src/lib/KanbanBoard.svelte
 #: src/lib/KanbanBoard.svelte
 #: src/lib/KanbanBoard.svelte
+#: src/lib/KanbanBoard.svelte
 #: src/lib/Members.svelte
+#: src/routes/[...workspace]/+page.svelte
 msgid "Cancel"
 msgstr "Anuluj"
 
@@ -690,6 +690,8 @@ msgstr "Usunięty"
 
 #: src/lib/KanbanBoard.svelte
 #: src/lib/KanbanBoard.svelte
+#: src/lib/KanbanBoard.svelte
+#: src/routes/[...workspace]/+page.svelte
 msgid "Save"
 msgstr "Zapisz"
 
@@ -702,6 +704,8 @@ msgid "Close task"
 msgstr "Zamknij zadanie"
 
 #: src/lib/KanbanBoard.svelte
+#: src/lib/KanbanBoard.svelte
+#: src/routes/[...workspace]/+page.svelte
 msgid "Edit"
 msgstr "Edytuj"
 
@@ -735,6 +739,7 @@ msgid "Loading discussion"
 msgstr "Ładowanie dyskusji"
 
 #: src/lib/KanbanBoard.svelte
+#: src/routes/[...workspace]/+page.svelte
 msgid "Association member"
 msgstr "Członek koła"
 
@@ -967,3 +972,22 @@ msgstr "Poprzednia"
 #: src/lib/Members.svelte
 msgid "Next"
 msgstr "Następna"
+
+#: src/lib/KanbanBoard.svelte
+#: src/routes/[...workspace]/+page.svelte
+msgid "Delete comment?"
+msgstr ""
+
+#: src/lib/KanbanBoard.svelte
+#: src/routes/[...workspace]/+page.svelte
+msgid "Actions"
+msgstr ""
+
+#: src/lib/KanbanBoard.svelte
+#: src/routes/[...workspace]/+page.svelte
+msgid "Delete"
+msgstr ""
+
+#: src/lib/UserSelect.svelte
+msgid "Search users..."
+msgstr ""

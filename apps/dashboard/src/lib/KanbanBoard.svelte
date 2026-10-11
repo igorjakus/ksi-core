@@ -15,7 +15,13 @@
     tags: string[];
     deletedAt?: string;
   };
-  type Comment = { id: string; markdown: string; createdAt: string; authorName?: string };
+  type Comment = {
+    id: string;
+    markdown: string;
+    createdAt: string;
+    authorName?: string;
+    authorId?: string;
+  };
   let {
     items,
     statuses,
@@ -23,6 +29,8 @@
     projectId,
     language,
     canManage = false,
+    userId,
+    activeItemId = null,
     refresh,
     reportError
   }: {
@@ -32,6 +40,8 @@
     projectId: string;
     language: 'pl' | 'en';
     canManage?: boolean;
+    userId?: string;
+    activeItemId?: string | null;
     refresh: () => Promise<void>;
     reportError: (error: string) => void;
   } = $props();
@@ -71,6 +81,8 @@
     reply = $state('');
   let comments = $state<Comment[]>([]),
     commentsLoading = $state(false),
+    editingCommentId = $state<string | null>(null),
+    editingCommentMarkdown = $state(''),
     dialog = $state<HTMLDialogElement>();
   let lastTrigger: HTMLElement | null = null,
     detailGeneration = 0;
@@ -230,6 +242,27 @@
     dialog?.showModal();
     void loadComments(item.id);
   }
+
+  let openedItemId = $state<string | null>(null);
+
+  $effect(() => {
+    if (activeItemId && items.length > 0 && !selected && openedItemId !== activeItemId) {
+      const target = items.find((i) => i.id === activeItemId);
+      if (target) {
+        openedItemId = activeItemId;
+        selected = { ...target };
+        editing = false;
+        confirmingDelete = false;
+        reply = '';
+        comments = [];
+        void tick().then(() => {
+          dialog?.showModal();
+          void loadComments(target.id);
+        });
+      }
+    }
+  });
+
   function closeItem() {
     detailGeneration++;
     dialog?.close();
@@ -259,6 +292,22 @@
     await run(async () => {
       await api(`/platform/items/${selected!.id}/comments`, 'POST', { markdown: reply });
       reply = '';
+      await loadComments(selected!.id);
+    });
+  }
+  async function saveCommentEdit(id: string) {
+    if (!selected) return;
+    await run(async () => {
+      await api(`/platform/comments/${id}`, 'PATCH', { markdown: editingCommentMarkdown });
+      editingCommentId = null;
+      editingCommentMarkdown = '';
+      await loadComments(selected!.id);
+    });
+  }
+  async function deleteComment(id: string) {
+    if (!selected || !confirm('Delete comment?')) return;
+    await run(async () => {
+      await api(`/platform/comments/${id}`, 'DELETE');
       await loadComments(selected!.id);
     });
   }
@@ -340,9 +389,9 @@
             <span class="task-title"
               ><strong>{item.title}</strong><GripVertical size={14} aria-hidden="true" /></span
             >
-            {#if item.markdown}<span class="task-excerpt"
-                >{item.markdown.replace(/[#*_`]/g, '').slice(0, 100)}</span
-              >{/if}
+            {#if item.markdown}<div class="kanban-markdown-preview">
+                <MarkdownContent value={item.markdown} {language} />
+              </div>{/if}
             {#if item.tags.length}<span class="task-tags"
                 >{#each item.tags as tag}<span class="tag">{tag}</span>{/each}</span
               >{/if}
@@ -594,8 +643,49 @@
                   language === 'pl' ? 'pl-PL' : 'en-GB'
                 )}</time
               >
+              {#if comment.authorId === userId || canManage}
+                <Dropdown
+                  label="Actions"
+                  options={[
+                    { value: 'edit', label: 'Edit' },
+                    { value: 'delete', label: 'Delete', color: 'var(--red)' }
+                  ]}
+                  onselect={(val) => {
+                    if (val === 'edit') {
+                      editingCommentId = comment.id;
+                      editingCommentMarkdown = comment.markdown;
+                    } else if (val === 'delete') {
+                      deleteComment(comment.id);
+                    }
+                  }}
+                />
+              {/if}
             </div>
-            <MarkdownContent value={comment.markdown} {language} />
+            {#if editingCommentId === comment.id}
+              <form
+                class="issue-reply"
+                onsubmit={(event) => {
+                  event.preventDefault();
+                  void saveCommentEdit(comment.id);
+                }}
+              >
+                <Editor {language} bind:value={editingCommentMarkdown} rows={4} />
+                <div style="display: flex; gap: 8px;">
+                  <button class="btn" disabled={busy || !editingCommentMarkdown.trim()}
+                    >{'Save'}</button
+                  >
+                  <button
+                    type="button"
+                    class="btn ghost"
+                    onclick={() => {
+                      editingCommentId = null;
+                    }}>{'Cancel'}</button
+                  >
+                </div>
+              </form>
+            {:else}
+              <MarkdownContent value={comment.markdown} {language} />
+            {/if}
           </article>{/each}
         {#if !comments.length}<p class="muted">
             {'Start a discussion about this task.'}
@@ -691,10 +781,34 @@
   .task-card:hover .task-title :global(svg) {
     opacity: 1;
   }
-  .task-excerpt {
+  .kanban-markdown-preview {
     font-size: 12px;
     color: var(--muted);
-    line-height: 1.6;
+    line-height: 1.5;
+    max-height: 100px;
+    overflow: hidden;
+    mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+  }
+  .kanban-markdown-preview :global(h1),
+  .kanban-markdown-preview :global(h2),
+  .kanban-markdown-preview :global(h3),
+  .kanban-markdown-preview :global(h4),
+  .kanban-markdown-preview :global(h5),
+  .kanban-markdown-preview :global(h6) {
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    margin: 4px 0 !important;
+    line-height: 1.4 !important;
+  }
+  .kanban-markdown-preview :global(p) {
+    margin: 2px 0 !important;
+  }
+  .kanban-markdown-preview :global(img) {
+    max-height: 60px;
+    width: auto;
+    border-radius: 4px;
+    margin: 4px 0;
   }
   .task-tags {
     display: flex;
