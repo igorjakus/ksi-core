@@ -53,7 +53,7 @@
     {/if}
 
     {#each project.sections as section}
-      {#if section.type === 'main-article' && project.mainArticle}
+      {#if section === 'main-article' && project.mainArticle}
         <section class="my-10">
           <h2 class="mb-6 text-2xl font-semibold">{project.mainArticle.title}</h2>
           <Markdown
@@ -61,7 +61,7 @@
             language={locale.current === 'pl' ? 'pl' : 'en'}
           />
         </section>
-      {:else if section.type === 'articles'}
+      {:else if section === 'articles'}
         <section class="my-10">
           <h2 class="mb-6 text-2xl font-semibold">Articles</h2>
           {#each project.articles as article}<a
@@ -69,13 +69,13 @@
               href={`/articles/${encodeURIComponent(article.slug)}`}>{article.title}</a
             >{/each}
         </section>
-      {:else if section.type === 'leaders' || section.type === 'members'}
+      {:else if section === 'leaders' || section === 'members'}
         <section class="my-10">
           <h2 class="mb-6 text-2xl font-semibold">
-            {section.type === 'leaders' ? 'Project leaders' : 'Members'}
+            {section === 'leaders' ? 'Project leaders' : 'Members'}
           </h2>
           <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
-            {#each section.type === 'leaders' ? project.leaders : project.members as member}<a
+            {#each section === 'leaders' ? project.leaders : project.members as member}<a
                 class="border-base-content/20 hover:border-base-content flex items-center gap-3 rounded border px-4 py-4"
                 href={`/members/${encodeURIComponent(member.id)}`}
                 >{#if member.image}<img
@@ -90,7 +90,7 @@
               >{/each}
           </div>
         </section>
-      {:else if section.type === 'links'}
+      {:else if section === 'links'}
         <section class="my-10">
           <h2 class="mb-6 text-2xl font-semibold">Links</h2>
           <div class="flex flex-wrap gap-3">

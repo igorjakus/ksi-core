@@ -1147,6 +1147,27 @@
                           </p>
                         </div>
                       {/if}
+                      {#if selectedArticle && boardLeader}
+                        <div class="main-article-setting">
+                          {#if workspace === 'project'}
+                            <label
+                              ><input
+                                type="checkbox"
+                                bind:checked={selectedArticle.projectFeed}
+                              />{'Show in project articles'}</label
+                            >
+                          {/if}
+                          <label
+                            ><input
+                              type="checkbox"
+                              bind:checked={selectedArticle.websiteFeed}
+                            />{'Show in website articles'}</label
+                          >
+                          <p class="muted">
+                            {'These settings apply when the article is published. The main article is displayed separately from the project articles list.'}
+                          </p>
+                        </div>
+                      {/if}
                       <div class="row" style="margin-top: 16px; gap: 8px;">
                         {#if selectedArticle}
                           <button
