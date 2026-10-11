@@ -4,7 +4,7 @@ import { createId } from '@paralleldrive/cuid2';
 
 // Run with: bun run apps/server/scripts/import-legacy.ts
 async function run() {
-  console.log("Importing legacy projects...");
+  console.log('Importing legacy projects...');
   // Example legacy data mapping
   const legacyProjects = [
     { slug: 'hoc', name: 'Hour of Code', desc: 'Programming workshops for students' },
@@ -15,15 +15,18 @@ async function run() {
   ];
 
   for (const lp of legacyProjects) {
-    await db.insert(projects).values({
-      id: createId(),
-      slug: lp.slug,
-      name: lp.name,
-      description: lp.desc,
-      tags: ['legacy']
-    }).onConflictDoNothing();
+    await db
+      .insert(projects)
+      .values({
+        id: createId(),
+        slug: lp.slug,
+        name: lp.name,
+        description: lp.desc,
+        tags: ['legacy']
+      })
+      .onConflictDoNothing();
   }
-  console.log("Done.");
+  console.log('Done.');
 }
 
 run().catch(console.error);

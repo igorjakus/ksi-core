@@ -1,5 +1,5 @@
 import type { Handle } from '@sveltejs/kit';
-import {env} from '$lib/server/environment';
+import { env } from '$lib/server/environment';
 import { backendFetch } from 'shared/server';
 export const handle: Handle = async ({ event, resolve }) => {
   event.locals.user = null;

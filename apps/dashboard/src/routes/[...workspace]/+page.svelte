@@ -257,17 +257,16 @@
         const request = await api<AvatarRequest | null>('/users/me/avatar-request');
         const current = await api<{ user: Profile }>('/users/me');
         try {
-          const sessions =
-            await api<
-              {
-                id: string;
-                createdAt: string;
-                expiresAt: string;
-                ipAddress: string | null;
-                userAgent: string | null;
-                isCurrent: boolean;
-              }[]
-            >('/users/me/sessions');
+          const sessions = await api<
+            {
+              id: string;
+              createdAt: string;
+              expiresAt: string;
+              ipAddress: string | null;
+              userAgent: string | null;
+              isCurrent: boolean;
+            }[]
+          >('/users/me/sessions');
           if (generation === loadGeneration) activeSessions = sessions;
         } catch {
           /* Sessions list failure must not block profile view */

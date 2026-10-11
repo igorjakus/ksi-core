@@ -940,7 +940,37 @@ a[aria-disabled='true'] {
   border-radius: 3px;
 }
 
-.sidebar-btn{margin-block:4px;}
-button,[role='button'],summary,.btn,.sidebar-btn,.dropdown-option {user-select:none;}
+.sidebar-btn {
+  margin-block: 4px;
+}
+button,
+[role='button'],
+summary,
+.btn,
+.sidebar-btn,
+.dropdown-option {
+  user-select: none;
+}
 
-.forum-thread-link{padding:18px 20px;text-decoration:none;color:var(--ink);gap:20px;margin-bottom:10px;border:1px solid var(--line);border-radius:4px;background:var(--surface);}.forum-thread-link h3{overflow-wrap:anywhere;}.forum-thread-link .tag{flex-shrink:0;}@media(max-width:600px){.forum-thread-link{flex-wrap:wrap;gap:12px;}}
+.forum-thread-link {
+  padding: 18px 20px;
+  text-decoration: none;
+  color: var(--ink);
+  gap: 20px;
+  margin-bottom: 10px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--surface);
+}
+.forum-thread-link h3 {
+  overflow-wrap: anywhere;
+}
+.forum-thread-link .tag {
+  flex-shrink: 0;
+}
+@media (max-width: 600px) {
+  .forum-thread-link {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+}

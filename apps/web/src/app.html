@@ -5,11 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script>
       (() => {
-        let theme = document.cookie.split(';').map(part => part.trim()).find(part => part.startsWith('ksi-theme='))?.slice(10);
-        if (!['system','light','dark'].includes(theme)) {
-          try { theme = localStorage.getItem('ksi-theme') || localStorage.getItem('ksi-dashboard-theme') || localStorage.getItem('theme'); } catch {}
+        let theme = document.cookie
+          .split(';')
+          .map((part) => part.trim())
+          .find((part) => part.startsWith('ksi-theme='))
+          ?.slice(10);
+        if (!['system', 'light', 'dark'].includes(theme)) {
+          try {
+            theme =
+              localStorage.getItem('ksi-theme') ||
+              localStorage.getItem('ksi-dashboard-theme') ||
+              localStorage.getItem('theme');
+          } catch {}
         }
-        document.documentElement.dataset.theme = theme === 'dark' || (theme !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+        document.documentElement.dataset.theme =
+          theme === 'dark' ||
+          (theme !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches)
+            ? 'dark'
+            : 'light';
       })();
     </script>
     <link rel="icon" href="/favicon.svg" />

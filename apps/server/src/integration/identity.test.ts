@@ -27,24 +27,20 @@ beforeAll(async () => {
     },
     { id: second, name: 'Pending account', email: `${second}@example.test` }
   ]);
-  await db
-    .insert(schema.sessions)
-    .values({
-      id: sessionId,
-      userId: id,
-      token: randomToken(),
-      expiresAt: new Date(Date.now() + 3600000),
-      updatedAt: new Date()
-    });
-  await db
-    .insert(schema.frontendSessions)
-    .values({
-      id: digest(frontend),
-      sessionId,
-      origin: 'http://localhost:5175',
-      environment: 'integration',
-      expiresAt: new Date(Date.now() + 3600000)
-    });
+  await db.insert(schema.sessions).values({
+    id: sessionId,
+    userId: id,
+    token: randomToken(),
+    expiresAt: new Date(Date.now() + 3600000),
+    updatedAt: new Date()
+  });
+  await db.insert(schema.frontendSessions).values({
+    id: digest(frontend),
+    sessionId,
+    origin: 'http://localhost:5175',
+    environment: 'integration',
+    expiresAt: new Date(Date.now() + 3600000)
+  });
 });
 afterAll(async () => {
   if (!safe) return;
@@ -98,17 +94,15 @@ integration('handoff redemption is environment/origin-bound and single-use', asy
     verifier = randomToken(),
     state = randomToken(),
     destination = 'http://localhost:5173/sso/callback';
-  await db
-    .insert(schema.authHandoffs)
-    .values({
-      id: digest(code),
-      sessionId,
-      environment: 'integration',
-      destination,
-      state,
-      challenge: challenge(verifier),
-      expiresAt: new Date(Date.now() + 60000)
-    });
+  await db.insert(schema.authHandoffs).values({
+    id: digest(code),
+    sessionId,
+    environment: 'integration',
+    destination,
+    state,
+    challenge: challenge(verifier),
+    expiresAt: new Date(Date.now() + 60000)
+  });
   const body = { code, verifier, state, destination };
   expect((await request('/sso/redeem', 'POST', body)).status).toBe(403);
   expect(
@@ -131,17 +125,15 @@ integration('expired handoffs cannot authenticate', async () => {
     verifier = randomToken(),
     state = randomToken(),
     destination = 'http://localhost:5173/sso/callback';
-  await db
-    .insert(schema.authHandoffs)
-    .values({
-      id: digest(code),
-      sessionId,
-      environment: 'integration',
-      destination,
-      state,
-      challenge: challenge(verifier),
-      expiresAt: new Date(0)
-    });
+  await db.insert(schema.authHandoffs).values({
+    id: digest(code),
+    sessionId,
+    environment: 'integration',
+    destination,
+    state,
+    challenge: challenge(verifier),
+    expiresAt: new Date(0)
+  });
   expect(
     (
       await request(

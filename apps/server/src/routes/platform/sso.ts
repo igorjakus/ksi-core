@@ -27,17 +27,15 @@ export const ssoRoutes = createElysia({ prefix: '/sso' })
       )
         throw status(403);
       const code = randomToken();
-      await db
-        .insert(authHandoffs)
-        .values({
-          id: digest(code),
-          sessionId: central.session.id,
-          environment: getUrls().environment,
-          destination: body.destination,
-          state: body.state,
-          challenge: body.challenge,
-          expiresAt: new Date(Date.now() + 60000)
-        });
+      await db.insert(authHandoffs).values({
+        id: digest(code),
+        sessionId: central.session.id,
+        environment: getUrls().environment,
+        destination: body.destination,
+        state: body.state,
+        challenge: body.challenge,
+        expiresAt: new Date(Date.now() + 60000)
+      });
       return { code, state: body.state };
     },
     {
@@ -78,15 +76,13 @@ export const ssoRoutes = createElysia({ prefix: '/sso' })
           .where(and(eq(sessions.id, handoff.sessionId), gt(sessions.expiresAt, new Date())));
         if (!central) throw status(401);
         const token = randomToken();
-        await tx
-          .insert(frontendSessions)
-          .values({
-            id: digest(token),
-            sessionId: central.id,
-            environment: getUrls().environment,
-            origin: new URL(body.destination).origin,
-            expiresAt: central.expiresAt
-          });
+        await tx.insert(frontendSessions).values({
+          id: digest(token),
+          sessionId: central.id,
+          environment: getUrls().environment,
+          origin: new URL(body.destination).origin,
+          expiresAt: central.expiresAt
+        });
         return { token, expiresAt: central.expiresAt.toISOString() };
       });
     },

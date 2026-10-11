@@ -1,5 +1,5 @@
 import { error, redirect } from '@sveltejs/kit';
-import {env} from '$lib/server/environment';
+import { env } from '$lib/server/environment';
 import { backendFetch } from 'shared/server';
 import type { RequestHandler } from './$types';
 export const GET: RequestHandler = async (event) => {

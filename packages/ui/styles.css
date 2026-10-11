@@ -178,4 +178,9 @@
   }
 }
 
-button, [role='button'], summary, .btn {user-select:none;}
+button,
+[role='button'],
+summary,
+.btn {
+  user-select: none;
+}

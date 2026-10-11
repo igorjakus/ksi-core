@@ -140,4 +140,10 @@ th,
   outline-offset: 3px;
 }
 
-button,[role='button'],summary,.btn,.dropdown-option{user-select:none;}
+button,
+[role='button'],
+summary,
+.btn,
+.dropdown-option {
+  user-select: none;
+}
