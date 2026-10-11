@@ -1,4 +1,4 @@
-import { clampImageWidth, minimumImageWidth } from 'shared/markdown-images.ts';
+import { clampImageWidth, minimumImageWidth } from 'shared/markdown-images';
 
 type ResizeOptions = {
   blocks?: unknown;

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { resizeMarkdownImage } from 'shared/markdown-images.ts';
+  import { resizeMarkdownImage } from 'shared/markdown-images';
   import MarkdownContent from './MarkdownContent.svelte';
   import { Eye, Pencil, Images, UploadCloud, Paperclip } from '@lucide/svelte';
   let {
