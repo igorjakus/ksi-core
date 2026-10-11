@@ -1,13 +1,21 @@
 <script lang="ts">
-  import { Save } from '@lucide/svelte';
+  import ContentTranslations from './ContentTranslations.svelte';
+  import type { ContentTranslations as TranslationData } from 'shared/content-locales';
+  import { Save, ArrowUpRight, Plus, Trash2 } from '@lucide/svelte';
   import Skeleton from './Skeleton.svelte';
   let {
     project,
     canEdit,
     canManageMembers,
-    onrefresh
+    onrefresh,
+    language,
+    websiteOrigin
   }: {
+    language: 'pl' | 'en';
+    websiteOrigin: string;
     project: {
+      slug: string;
+      translations?: TranslationData;
       id: string;
       name: string;
       description: string;
@@ -103,10 +111,25 @@
       busy = false;
     }
   }
+  let links = $state<{ label: string; url: string; translations?: TranslationData }[]>([]);
+  $effect(() => {
+    const id = project.id;
+    if (canEdit)
+      void api('/links')
+        .then((result) => {
+          if (project.id === id) links = result;
+        })
+        .catch((e) => (error = e.message));
+  });
   let removing = $state<string | null>(null);
 </script>
 
-<h1>{'Project settings'}</h1>
+<div class="workspace-header">
+  <h1>{'Project settings'}</h1>
+  <a class="btn btn-outline" href={`${websiteOrigin}/projects/${encodeURIComponent(project.slug)}`}
+    ><ArrowUpRight size={15} />{'View public project'}</a
+  >
+</div>
 {#if error}<p class="error" role="alert">{error}</p>{/if}{#if notice}<p role="status">
     {notice}
   </p>{/if}
@@ -224,9 +247,79 @@
           </section>
         {/if}
       </div>{/if}
-  </div>{/if}
+  </div>
+  {#if canEdit}<ContentTranslations
+      kind="project"
+      id={project.id}
+      version={project.version}
+      translations={project.translations}
+      baseline={{ name: project.name, description: project.description, tags: project.tags }}
+      {language}
+      onsaved={onrefresh}
+    />{/if}
+  {#if canEdit}
+    <form
+      class="card fields project-links"
+      onsubmit={(e) => {
+        e.preventDefault();
+        void action(() =>
+          api('/links', 'PUT', {
+            links: links.map(({ label, url, translations }) => ({ label, url, translations }))
+          })
+        );
+      }}
+    >
+      <h2>{'Public links'}</h2>
+      <p class="muted">{'English labels are required. Polish labels are optional.'}</p>
+      {#each links as link, index}<div class="link-fields">
+          <label
+            >{'Label · English'}<input bind:value={link.label} required maxlength="200" /></label
+          >
+          <label>{'URL'}<input type="url" bind:value={link.url} required maxlength="2000" /></label>
+          <label
+            >{'Label · Polish'}<input
+              value={link.translations?.pl?.label ?? ''}
+              maxlength="200"
+              oninput={(e) => (link.translations = { pl: { label: e.currentTarget.value } })}
+            /></label
+          >
+          <button
+            class="btn btn-outline"
+            type="button"
+            onclick={() => (links = links.filter((_, i) => i !== index))}
+            ><Trash2 size={15} />{'Remove link'}</button
+          >
+        </div>{/each}
+      <div class="row">
+        <button
+          class="btn btn-outline"
+          type="button"
+          disabled={links.length >= 50}
+          onclick={() => (links = [...links, { label: '', url: '' }])}
+          ><Plus size={15} />{'Add link'}</button
+        ><button class="btn" disabled={busy}><Save size={15} />{'Save links'}</button>
+      </div>
+    </form>
+  {/if}
+{/if}
 
 <style>
+  .project-links {
+    margin-top: 20px;
+  }
+  .link-fields {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: end;
+    gap: 12px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  @media (max-width: 600px) {
+    .link-fields {
+      grid-template-columns: 1fr;
+    }
+  }
   .settings-grid {
     display: grid;
     grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);

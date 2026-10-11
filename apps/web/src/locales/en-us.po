@@ -77,6 +77,7 @@ msgstr "Alerts"
 #: src/components/Footer.svelte
 #: src/components/Navbar.svelte
 #: src/components/Sidebar.svelte
+#: src/routes/members/[id]/+page.svelte
 msgid "Projects"
 msgstr "Projects"
 
@@ -393,14 +394,15 @@ msgstr "Refresh"
 msgid "This cache key contains no URLs."
 msgstr "This cache key contains no URLs."
 
-#: src/routes/projects/+page.svelte
-msgid "Education"
-msgstr "Education"
+#~ msgid "Education"
+#~ msgstr "Education"
 
+#: src/routes/projects/+page.svelte
 #: src/routes/projects/+page.svelte
 msgid "Community"
 msgstr "Community"
 
+#: src/routes/projects/+page.svelte
 #: src/routes/projects/+page.svelte
 msgid "Research"
 msgstr "Research"
@@ -460,7 +462,11 @@ msgid "Gallery thumbnail {0}"
 msgstr "Gallery thumbnail {0}"
 
 #. 0: page.status
+#. 0: data.article.title
+#. 0: data.member.name
 #: src/routes/+error.svelte
+#: src/routes/articles/[slug]/+page.svelte
+#: src/routes/members/[id]/+page.svelte
 msgid "{0} · KSI UWr"
 msgstr "{0} · KSI UWr"
 
@@ -717,7 +723,6 @@ msgid "The reliable route is back to the association — and room 24 at the Inst
 msgstr "The reliable route is back to the association — and room 24 at the Institute of Computer Science is always worth finding."
 
 #: src/components/ui/GithubProjectCard.svelte
-#: src/routes/+page.svelte
 msgid "View on GitHub <0/>"
 msgstr "View on GitHub <0/>"
 
@@ -725,13 +730,11 @@ msgstr "View on GitHub <0/>"
 msgid "More projects coming soon."
 msgstr "More projects coming soon."
 
-#: src/routes/projects/[slug]/+page.svelte
-msgid "About the Project"
-msgstr "About the Project"
+#~ msgid "About the Project"
+#~ msgstr "About the Project"
 
-#: src/routes/projects/[slug]/+page.svelte
-msgid "Full project details and articles will be displayed here."
-msgstr "Full project details and articles will be displayed here."
+#~ msgid "Full project details and articles will be displayed here."
+#~ msgstr "Full project details and articles will be displayed here."
 
 #: src/routes/+page.svelte
 msgid "About KSI"
@@ -787,13 +790,11 @@ msgstr "Toggle mobile menu"
 msgid "Sign in"
 msgstr "Sign in"
 
-#: src/routes/+page.svelte
-msgid "This website. Surrounded by many unfamiliar technologies, passionate members get to develop their engineering senses in a friendly environment."
-msgstr "This website. Surrounded by many unfamiliar technologies, passionate members get to develop their engineering senses in a friendly environment."
+#~ msgid "This website. Surrounded by many unfamiliar technologies, passionate members get to develop their engineering senses in a friendly environment."
+#~ msgstr "This website. Surrounded by many unfamiliar technologies, passionate members get to develop their engineering senses in a friendly environment."
 
-#: src/routes/+page.svelte
-msgid "Chess engine built with Rust and machine learning."
-msgstr "Chess engine built with Rust and machine learning."
+#~ msgid "Chess engine built with Rust and machine learning."
+#~ msgstr "Chess engine built with Rust and machine learning."
 
 #: src/routes/projects/+page.svelte
 msgid "( our work )"
@@ -834,3 +835,52 @@ msgstr "Your join request has been sent."
 #: src/routes/projects/[slug]/+page.svelte
 msgid "You have joined the project."
 msgstr "You have joined the project."
+
+#: src/routes/+page.svelte
+msgid "Open project <0/>"
+msgstr "Open project <0/>"
+
+#: src/routes/articles/+page.svelte
+#: src/routes/projects/[slug]/+page.svelte
+msgid "Articles"
+msgstr "Articles"
+
+#: src/routes/projects/[slug]/+page.svelte
+msgid "Project leaders"
+msgstr "Project leaders"
+
+#: src/routes/projects/[slug]/+page.svelte
+msgid "Members"
+msgstr "Members"
+
+#. 0: data.member.nickname
+#. 0: member.nickname
+#: src/routes/members/[id]/+page.svelte
+#: src/routes/projects/[slug]/+page.svelte
+msgid "aka. {0}"
+msgstr "aka. {0}"
+
+#: src/routes/projects/[slug]/+page.svelte
+msgid "Links"
+msgstr "Links"
+
+#: src/routes/articles/[slug]/+page.svelte
+msgid "All articles"
+msgstr "All articles"
+
+#: src/routes/members/[id]/+page.svelte
+msgid "<0/>GitHub"
+msgstr "<0/>GitHub"
+
+#: src/routes/members/[id]/+page.svelte
+msgid "<0/>LinkedIn"
+msgstr "<0/>LinkedIn"
+
+#: src/routes/articles/+page.svelte
+msgid "No published articles yet."
+msgstr "No published articles yet."
+
+#: src/routes/projects/+page.svelte
+#: src/routes/projects/+page.svelte
+msgid "Engineering"
+msgstr "Engineering"

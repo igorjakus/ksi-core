@@ -185,7 +185,7 @@ export const articles = snakeCase.table('articles', {
   slug: text().notNull().unique(),
   title: text().notNull(),
   markdown: text().notNull().default(''),
-  language: text().notNull().default('pl'),
+  language: text().notNull().default('en'),
   state: text().notNull().default('draft'),
   mainArticle: boolean().notNull().default(false),
   projectFeed: boolean().notNull().default(false),

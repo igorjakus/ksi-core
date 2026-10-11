@@ -5,8 +5,14 @@
   let {
     projectId,
     memberId,
+    websiteOrigin,
     elevated = false
-  }: { projectId?: string; memberId?: string; elevated?: boolean } = $props();
+  }: {
+    projectId?: string;
+    memberId?: string;
+    websiteOrigin: string;
+    elevated?: boolean;
+  } = $props();
   type Member = {
     id: string;
     firstName: string;
@@ -75,6 +81,9 @@
     {#if person.image}<img class="portrait" src={person.image} alt="" />{/if}
     <div>
       <h1>{person.firstName} {person.lastName}</h1>
+      <a class="btn btn-outline" href={`${websiteOrigin}/members/${encodeURIComponent(person.id)}`}
+        >{'View public profile'}</a
+      >
       {#if person.nickname}<p>aka. {person.nickname}</p>{/if}
       <p class="muted">{role(person)}</p>
       <p class="bio">{person.bio}</p>

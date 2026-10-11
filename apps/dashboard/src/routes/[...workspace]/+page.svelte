@@ -1,4 +1,6 @@
 <script lang="ts">
+  import ContentTranslations from '$lib/ContentTranslations.svelte';
+  import type { ContentTranslations as TranslationData } from 'shared/content-locales';
   import { onMount, untrack, tick } from 'svelte';
   import { goto, invalidateAll } from '$app/navigation';
   import { page } from '$app/state';
@@ -88,6 +90,7 @@
     markdown: string;
     version: number;
     state: string;
+    translations?: TranslationData;
     mainArticle: boolean;
     projectId: string | null;
     projectFeed: boolean;
@@ -498,7 +501,7 @@
         title,
         markdown,
         ...(scope ? { projectId: scope } : {}),
-        language
+        language: 'en'
       });
       await goto(`/articles/${encodeURIComponent(result.slug)}`);
       return result;
@@ -987,6 +990,11 @@
                   <div class="workspace-header">
                     <div>
                       <h1>{workspaceName}</h1>
+                      {#if selectedProject}<a
+                          class="btn btn-outline"
+                          href={`${data.websiteOrigin}/projects/${encodeURIComponent(selectedProject.slug)}`}
+                          ><ArrowUpRight size={15} />{'View public project'}</a
+                        >{/if}
                       <p class="workspace-description">
                         {selectedProject?.description ||
                           'Shared tasks, conversations, and publications in one place.'}
@@ -1041,11 +1049,14 @@
                   <WorkspaceMembers
                     projectId={workspace === 'project' ? scope : undefined}
                     memberId={data.navigation.memberId}
+                    websiteOrigin={data.websiteOrigin}
                     elevated={data.user.role !== 'member'}
                   />
                 {:else if tab === 'settings' && selectedProject}
                   <ProjectSettings
                     project={selectedProject}
+                    {language}
+                    websiteOrigin={data.websiteOrigin}
                     canEdit={projectAccess.canEdit}
                     canManageMembers={projectAccess.canManageMembers}
                     onrefresh={() => load()}
@@ -1053,6 +1064,11 @@
                 {:else if tab === 'articles'}
                   <div class="workspace-header">
                     <h1>{selectedArticle ? selectedArticle.title : 'Articles'}</h1>
+                    {#if selectedArticle?.state === 'published'}<a
+                        class="btn btn-outline"
+                        href={`${data.websiteOrigin}/articles/${encodeURIComponent(selectedArticle.slug)}`}
+                        ><ArrowUpRight size={15} />{'View public article'}</a
+                      >{/if}
                     {#if parseDashboardPath(page.url.pathname)?.articleSlug}
                       <a
                         class="btn btn-outline"
@@ -1108,7 +1124,9 @@
                       <input id="a-title" bind:value={title} required />
                       <label for="a-slug">Slug</label>
                       <input id="a-slug" bind:value={slug} readonly={!!selectedArticle} required />
-                      <Editor {language} allowGallery bind:value={markdown} />
+                      <div class="article-editor">
+                        <Editor {language} allowGallery bind:value={markdown} />
+                      </div>
                       {#if selectedArticle && workspace === 'project' && boardLeader}
                         <div class="main-article-setting">
                           <label
@@ -1171,6 +1189,23 @@
                         {/if}
                       </div>
                     </div>
+                  {/if}
+
+                  {#if selectedArticle && boardLeader}
+                    <ContentTranslations
+                      kind="article"
+                      id={selectedArticle.id}
+                      version={selectedArticle.version}
+                      translations={selectedArticle.translations}
+                      baseline={{
+                        title: selectedArticle.title,
+                        markdown: selectedArticle.markdown
+                      }}
+                      {language}
+                      onsaved={async () => {
+                        await load();
+                      }}
+                    />
                   {/if}
 
                   <!-- ── BOARD ─────────────────────────────────────────────────────── -->
@@ -1579,6 +1614,26 @@
                             ></textarea>
                           </div>
                         </div>
+                        <a
+                          class="btn btn-outline"
+                          href={`${data.websiteOrigin}/members/${encodeURIComponent(profile.id)}`}
+                          ><ArrowUpRight size={15} />{'View public profile'}</a
+                        >
+                        <ContentTranslations
+                          kind="profile"
+                          id={profile.id}
+                          translations={profile.translations}
+                          baseline={{
+                            firstName: profile.firstName,
+                            lastName: profile.lastName,
+                            nickname: profile.nickname,
+                            bio: profile.bio
+                          }}
+                          {language}
+                          onsaved={(result) => {
+                            profile.translations = result.translations;
+                          }}
+                        />
                         <AvatarUpload
                           request={avatarRequest}
                           {language}
@@ -1718,6 +1773,7 @@
                     </div>
                   {/if}
                   <Members
+                    websiteOrigin={data.websiteOrigin}
                     {language}
                     administrator={data.user.role === 'administrator'}
                     memberId={data.navigation.memberId}
@@ -1824,6 +1880,10 @@
 {/if}
 
 <style>
+  .article-editor {
+    width: 100%;
+    min-width: min(100%, 36rem);
+  }
   .article-link {
     padding: 18px 20px;
     margin: 10px 0;

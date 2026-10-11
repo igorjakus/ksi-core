@@ -1,0 +1,1 @@
+ALTER TABLE "articles" ALTER COLUMN "language" SET DEFAULT 'en';

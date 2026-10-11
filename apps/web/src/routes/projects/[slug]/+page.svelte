@@ -1,4 +1,6 @@
 <script lang="ts">
+  import Markdown from '@ksi-core/ui/platform/Markdown.svelte';
+  import { locale } from '$lib/locale.svelte';
   import { Shield, Plus } from '@lucide/svelte';
 
   let { data, form } = $props<{
@@ -50,10 +52,56 @@
       </div>
     {/if}
 
-    <div class="mt-8">
-      <h2 class="mb-4 text-2xl font-semibold">About the Project</h2>
-      <!-- Fallback empty state for content -->
-      <p class="text-base-content/60">Full project details and articles will be displayed here.</p>
-    </div>
+    {#each project.sections as section}
+      {#if section.type === 'main-article' && project.mainArticle}
+        <section class="my-10">
+          <h2 class="mb-6 text-2xl font-semibold">{project.mainArticle.title}</h2>
+          <Markdown
+            blocks={data.mainArticleBlocks}
+            language={locale.current === 'pl' ? 'pl' : 'en'}
+          />
+        </section>
+      {:else if section.type === 'articles'}
+        <section class="my-10">
+          <h2 class="mb-6 text-2xl font-semibold">Articles</h2>
+          {#each project.articles as article}<a
+              class="border-base-content/20 hover:border-base-content mb-3 block rounded border px-5 py-4"
+              href={`/articles/${encodeURIComponent(article.slug)}`}>{article.title}</a
+            >{/each}
+        </section>
+      {:else if section.type === 'leaders' || section.type === 'members'}
+        <section class="my-10">
+          <h2 class="mb-6 text-2xl font-semibold">
+            {section.type === 'leaders' ? 'Project leaders' : 'Members'}
+          </h2>
+          <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+            {#each section.type === 'leaders' ? project.leaders : project.members as member}<a
+                class="border-base-content/20 hover:border-base-content flex items-center gap-3 rounded border px-4 py-4"
+                href={`/members/${encodeURIComponent(member.id)}`}
+                >{#if member.image}<img
+                    class="h-10 w-10 rounded-full object-cover"
+                    src={member.image}
+                    alt=""
+                  />{/if}<span
+                  >{member.name}{#if member.nickname}<small class="block"
+                      >aka. {member.nickname}</small
+                    >{/if}</span
+                ></a
+              >{/each}
+          </div>
+        </section>
+      {:else if section.type === 'links'}
+        <section class="my-10">
+          <h2 class="mb-6 text-2xl font-semibold">Links</h2>
+          <div class="flex flex-wrap gap-3">
+            {#each project.links as link}<a
+                class="btn btn-outline"
+                href={link.url}
+                rel="noopener noreferrer">{link.label}</a
+              >{/each}
+          </div>
+        </section>
+      {/if}
+    {/each}
   </div>
 </div>

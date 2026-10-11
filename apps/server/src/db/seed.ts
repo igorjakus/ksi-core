@@ -60,32 +60,48 @@ export async function seed() {
       slug: 'krasnal',
       name: 'Krasnal',
       fields: ['research', 'engineering'],
-      description:
-        'Silnik szachowy oparty na Transformerach — badamy, jak sieci neuronowe uczą się grać.'
+      description: 'A Transformer-based chess engine exploring how neural networks learn to play.',
+      translations: {
+        pl: {
+          description:
+            'Silnik szachowy oparty na Transformerach — badamy, jak sieci neuronowe uczą się grać.'
+        }
+      }
     },
     {
       slug: 'zosia',
       name: 'ZOSIA',
       fields: ['community'],
-      description: 'Zimowy Obóz Studentów Informatyki — rozmowy, wykłady i wspólne odkrywanie.'
+      description:
+        'The Winter Computer Science Student Camp: conversations, talks and shared discovery.',
+      translations: {
+        pl: {
+          description: 'Zimowy Obóz Studentów Informatyki — rozmowy, wykłady i wspólne odkrywanie.'
+        }
+      }
     },
     {
       slug: 'hoc',
       name: 'Hour of Code',
       fields: ['community', 'engineering'],
-      description: 'Wprowadzamy dzieci w świat programowania.'
+      description: 'Introducing children to the world of programming.',
+      translations: { pl: { description: 'Wprowadzamy dzieci w świat programowania.' } }
     },
     {
       slug: 'ket',
       name: 'KET',
       fields: ['research'],
-      description: 'Od kubitów do algorytmów na prawdziwych komputerach kwantowych.'
+      description: 'From qubits to algorithms on real quantum computers.',
+      translations: {
+        pl: { description: 'Od kubitów do algorytmów na prawdziwych komputerach kwantowych.' }
+      }
     },
     {
       slug: 'physarum',
       name: 'Physarum',
       fields: ['research'],
-      description: 'Inspiracje biologiczne dla sieci neuronowych.'
+      description: 'Biological inspirations for neural networks.',
+      translations: { pl: { description: 'Inspiracje biologiczne dla sieci neuronowych.' } }
     }
   ];
   for (const sample of catalog) {
@@ -114,30 +130,34 @@ export async function seed() {
       const [existing] = await tx.select().from(articles).where(eq(articles.slug, articleSlug));
       if (!existing) {
         const id = createId();
-        const markdown = `# ${sample.name}\n\n${sample.description}\n\n## Dołącz do nas\n\nRazem tworzymy, uczymy się i odkrywamy.`;
-        await tx
-          .insert(articles)
-          .values({
-            id,
-            projectId: project!.id,
-            slug: articleSlug,
-            title: sample.name,
-            markdown,
-            state: 'published',
-            mainArticle: true,
-            projectFeed: true,
-            websiteFeed: true,
-            createdBy: identities[0]!
-          });
-        await tx
-          .insert(articleRevisions)
-          .values({
-            articleId: id,
-            version: 1,
-            title: sample.name,
-            markdown,
-            actorId: identities[0]!
-          });
+        const markdown = `# ${sample.name}\n\n${sample.description}\n\n## Join us\n\nWe create, learn and explore together.`;
+        const translations = {
+          pl: {
+            markdown: `# ${sample.name}\n\n${sample.translations.pl.description}\n\n## Dołącz do nas\n\nRazem tworzymy, uczymy się i odkrywamy.`
+          }
+        };
+        await tx.insert(articles).values({
+          id,
+          projectId: project!.id,
+          slug: articleSlug,
+          title: sample.name,
+          markdown,
+          language: 'en',
+          translations,
+          state: 'published',
+          mainArticle: true,
+          projectFeed: true,
+          websiteFeed: true,
+          createdBy: identities[0]!
+        });
+        await tx.insert(articleRevisions).values({
+          articleId: id,
+          version: 1,
+          title: sample.name,
+          markdown,
+          translations,
+          actorId: identities[0]!
+        });
         await tx
           .insert(articleContributors)
           .values({ articleId: id, userId: identities[0]!, publicCredit: true });

@@ -680,7 +680,7 @@ export default createElysia({ prefix: '/platform' })
         slug,
         title: shortText,
         markdown: t.String({ maxLength: 500000 }),
-        language: t.Union([t.Literal('pl'), t.Literal('en')])
+        language: t.Optional(t.Literal('en'))
       })
     }
   )

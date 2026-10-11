@@ -3,6 +3,8 @@
   import { goto } from '$app/navigation';
   import Dropdown from '@ksi-core/ui/platform/Dropdown.svelte';
   import Skeleton from './Skeleton.svelte';
+  import ContentTranslations from './ContentTranslations.svelte';
+  import { ArrowUpRight } from '@lucide/svelte';
   import PermissionFlags from './PermissionFlags.svelte';
   import MemberPreview from './MemberPreview.svelte';
   import { Search, ArrowLeft, Trash2, Save, ChevronLeft, ChevronRight } from '@lucide/svelte';
@@ -10,20 +12,22 @@
   let {
     language,
     administrator,
-    memberId
-  }: { language: 'pl' | 'en'; administrator: boolean; memberId?: string } = $props();
+    memberId,
+    websiteOrigin
+  }: { language: 'pl' | 'en'; administrator: boolean; memberId?: string; websiteOrigin: string } =
+    $props();
 
   const roles = $derived([
     { value: 'member', label: 'Member' },
     { value: 'board', label: 'Board' },
     { value: 'administrator', label: 'Administrator' }
   ]);
-  const statuses = $derived(
-    ['pending', 'active', 'suspended', 'deleted'].map((value, i) => ({
-      value,
-      label: ['Pending', 'Active', 'Suspended', 'Deleted'][i]!
-    }))
-  );
+  const statuses = $derived([
+    { value: 'pending', label: 'Pending' },
+    { value: 'active', label: 'Active' },
+    { value: 'suspended', label: 'Suspended' },
+    { value: 'deleted', label: 'Deleted' }
+  ]);
   let records = $state<Profile[]>([]),
     total = $state(0),
     member = $state<Profile | null>(null),
@@ -269,6 +273,28 @@
         />{/if}
     </form>
   </div>
+  {#if member.membershipStatus === 'active'}<a
+      class="btn btn-outline"
+      href={`${websiteOrigin}/members/${encodeURIComponent(member.id)}`}
+      ><ArrowUpRight size={15} />{'View public profile'}</a
+    >{/if}
+  {#if administrator && member.membershipStatus !== 'deleted'}
+    <ContentTranslations
+      kind="profile"
+      id={member.id}
+      translations={member.translations}
+      baseline={{
+        firstName: member.firstName,
+        lastName: member.lastName,
+        nickname: member.nickname,
+        bio: member.bio
+      }}
+      {language}
+      onsaved={(result) => {
+        if (member) member.translations = result.translations;
+      }}
+    />
+  {/if}
   {#if administrator && member.membershipStatus !== 'deleted'}
     <section class="card account-authentication">
       <h2>{'Authentication'}</h2>
@@ -409,7 +435,9 @@
     </div>
     {#if !records.length}<p>{'No matching members.'}</p>{/if}
     <footer class="directory-footer">
-      <p class="muted">{firstResult}–{lastResult} / {total} <span>{'members'}</span></p>
+      <p class="muted">
+        {firstResult}–{lastResult} / {total} <span>{language === 'pl' ? 'osób' : 'members'}</span>
+      </p>
       <nav class="pagination" aria-label="Member table pagination">
         <button
           type="button"
@@ -587,6 +615,23 @@
   @media (max-width: 540px) {
     .profile-fields {
       grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 600px) {
+    .member-actions {
+      position: static;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      padding: 12px;
+      gap: 8px;
+    }
+    .member-actions > :first-child {
+      grid-column: 1 / -1;
+    }
+    .member-actions button {
+      min-width: 0;
+      padding: 10px 8px;
+      font-size: 12px;
     }
   }
 </style>

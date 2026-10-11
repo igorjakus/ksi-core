@@ -1,3 +1,5 @@
+import { renderMarkdown } from 'shared/markdown';
+import { contentLocale } from 'shared/content-locales';
 import type { PageServerLoad, Actions } from './$types';
 import { backendFetch } from 'shared/server';
 import { getUrls } from 'shared';
@@ -6,10 +8,11 @@ import { env as publicEnvironment } from '$env/dynamic/public';
 import { error, fail } from '@sveltejs/kit';
 const environment = { ...privateEnvironment, ...publicEnvironment };
 export const load: PageServerLoad = async (event) => {
+  event.depends('ksi:localized-content');
   const response = await backendFetch(
     event,
     environment,
-    `/platform/public/projects/${encodeURIComponent(event.params.slug)}`
+    `/platform/public/projects/${encodeURIComponent(event.params.slug)}?locale=${contentLocale(event.cookies.get('locale') ?? 'pl')}`
   );
   if (!response.ok) error(response.status, 'Project not found');
   const project = await response.json();
@@ -22,14 +25,19 @@ export const load: PageServerLoad = async (event) => {
     );
     if (scoped.ok) access = await scoped.json();
   }
-  return { project, access, dashboardOrigin: getUrls(environment).frontend.dashboard };
+  return {
+    project,
+    mainArticleBlocks: project.mainArticle ? renderMarkdown(project.mainArticle.markdown) : [],
+    access,
+    dashboardOrigin: getUrls(environment).frontend.dashboard
+  };
 };
 export const actions: Actions = {
   join: async (event) => {
     const projectResponse = await backendFetch(
       event,
       environment,
-      `/platform/public/projects/${encodeURIComponent(event.params.slug)}`
+      `/platform/public/projects/${encodeURIComponent(event.params.slug)}?locale=${contentLocale(event.cookies.get('locale') ?? 'pl')}`
     );
     if (!projectResponse.ok) return fail(404, { message: 'Project not found' });
     const project = await projectResponse.json();

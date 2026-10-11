@@ -1,25 +1,6 @@
 <script lang="ts">
   import { ArrowRight, Microscope, Presentation, Lightbulb, ArrowUpRight } from '@lucide/svelte';
   let { data } = $props<{ data: import('./$types').PageData }>();
-  const projects = [
-    {
-      // @wc-ignore
-      slug: 'ksiuwr/ksi-core',
-      // @wc-ignore
-      name: 'ksi-core',
-      description:
-        'This website. Surrounded by many unfamiliar technologies, passionate members get to develop their engineering senses in a friendly environment.'
-    },
-    {
-      // @wc-ignore
-      slug: 'KSI-ML-research/krasnal',
-      // @wc-ignore
-      name: 'Krasnal',
-      description: 'Chess engine built with Rust and machine learning.'
-    }
-  ];
-  // Re-assign back to data just in case something else relies on it, though probably not needed if hardcoded.
-  data.projects = projects;
 </script>
 
 <main class="bg-base-100 min-h-[calc(100vh-56px)] w-full">
@@ -120,17 +101,13 @@
       <div class="flex flex-col gap-8">
         {#each data.projects as project (project.slug)}
           <a
-            href={`https://github.com/${project.slug}`}
-            target="_blank"
-            rel="noopener noreferrer"
+            href={`/projects/${encodeURIComponent(project.slug)}`}
             class="card group border-base-content/20 bg-base-100 hover:bg-base-200 grid grid-cols-1 overflow-hidden rounded border p-0 no-underline transition-colors md:grid-cols-2"
           >
-            <div class="border-base-content/20 flex border-b md:border-r md:border-b-0">
-              <img
-                src={`https://opengraph.githubassets.com/1/${project.slug}`}
-                alt=""
-                class="block h-full min-h-50 w-full object-cover"
-              />
+            <div
+              class="border-base-content/20 bg-primary/10 flex min-h-50 items-center justify-center border-b p-8 md:border-r md:border-b-0"
+            >
+              <Lightbulb size={64} aria-hidden="true" />
             </div>
             <div class="bg-neutral flex flex-col justify-center gap-4 p-8 px-6">
               <div class="flex items-center justify-between">
@@ -138,7 +115,7 @@
                   {project.slug}
                 </span>
                 <span class="text-primary flex items-center gap-1 text-[11px]">
-                  View on GitHub <ArrowUpRight size={14} />
+                  Open project <ArrowUpRight size={14} />
                 </span>
               </div>
               <div>

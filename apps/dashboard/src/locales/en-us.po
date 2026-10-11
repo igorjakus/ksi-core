@@ -59,6 +59,7 @@ msgstr "Project not found."
 
 #: src/lib/ApprovalInbox.svelte
 #: src/lib/AvatarUpload.svelte
+#: src/lib/ContentTranslations.svelte
 #: src/lib/KanbanBoard.svelte
 #: src/lib/KanbanBoard.svelte
 #: src/lib/ProjectSettings.svelte
@@ -348,10 +349,17 @@ msgstr "Write publications and propose changes."
 msgid "New article"
 msgstr "New article"
 
+#~ msgid "Enter"
+#~ msgstr "Enter"
+
 #: src/routes/[...workspace]/+page.svelte
 msgid "No articles yet. Create the first article in this workspace."
 msgstr "No articles yet. Create the first article in this workspace."
 
+#~ msgid "Edit article"
+#~ msgstr "Edit article"
+
+#: src/lib/ContentTranslations.svelte
 #: src/lib/KanbanBoard.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "Title"
@@ -415,6 +423,7 @@ msgstr "New thread"
 msgid "Forum view"
 msgstr "Forum view"
 
+#: src/lib/Members.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "Active"
 msgstr "Active"
@@ -494,16 +503,19 @@ msgstr "Save changes"
 msgid "About you"
 msgstr "About you"
 
+#: src/lib/ContentTranslations.svelte
 #: src/lib/Members.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "First name"
 msgstr "First name"
 
+#: src/lib/ContentTranslations.svelte
 #: src/lib/Members.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "Last name"
 msgstr "Last name"
 
+#: src/lib/ContentTranslations.svelte
 #: src/lib/Members.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "Nickname"
@@ -595,12 +607,17 @@ msgstr "No activity yet."
 msgid "Back"
 msgstr "Back"
 
+#: src/lib/ContentTranslations.svelte
 #: src/lib/KanbanBoard.svelte
 #: src/lib/ProjectSettings.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "Name"
 msgstr "Name"
 
+#~ msgid "Leader IDs (comma-separated)"
+#~ msgstr "Leader IDs (comma-separated)"
+
+#: src/lib/ContentTranslations.svelte
 #: src/lib/ProjectSettings.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "Description"
@@ -696,6 +713,7 @@ msgid "Color"
 msgstr "Color"
 
 #: src/lib/KanbanBoard.svelte
+#: src/lib/Members.svelte
 msgid "Deleted"
 msgstr "Deleted"
 
@@ -927,6 +945,9 @@ msgstr "Role"
 msgid "Permission flags (one per line)"
 msgstr "Permission flags (one per line)"
 
+#~ msgid "Save permissions"
+#~ msgstr "Save permissions"
+
 #: src/lib/Members.svelte
 msgid "Delete account? Personal data will be anonymized. Content will remain."
 msgstr "Delete account? Personal data will be anonymized. Content will remain."
@@ -960,6 +981,9 @@ msgstr "Filter role"
 msgid "All roles"
 msgstr "All roles"
 
+#~ msgid "Results"
+#~ msgstr "Results"
+
 #: src/lib/Members.svelte
 #: src/lib/WorkspaceMembers.svelte
 msgid "Person"
@@ -991,6 +1015,9 @@ msgstr "Next"
 msgid "Delete comment?"
 msgstr "Delete comment?"
 
+#~ msgid "Actions"
+#~ msgstr "Actions"
+
 #: src/lib/KanbanBoard.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "Delete"
@@ -1008,6 +1035,9 @@ msgstr "Settings"
 #: src/routes/[...workspace]/+page.svelte
 msgid "Project settings"
 msgstr "Project settings"
+
+#~ msgid "You are a project member"
+#~ msgstr "You are a project member"
 
 #: src/lib/WorkspaceMembers.svelte
 msgid "Project leader"
@@ -1057,6 +1087,7 @@ msgstr "You do not have permission to manage this project."
 msgid "Project details"
 msgstr "Project details"
 
+#: src/lib/ContentTranslations.svelte
 #: src/lib/ProjectSettings.svelte
 msgid "Tags (comma separated)"
 msgstr "Tags (comma separated)"
@@ -1136,6 +1167,9 @@ msgstr "Save access"
 #: src/lib/Members.svelte
 msgid "Personal data will be anonymized. Association content will remain."
 msgstr "Personal data will be anonymized. Association content will remain."
+
+#~ msgid "Wszystkie uprawnienia z tej grupy, również dodane w przyszłości."
+#~ msgstr "Wszystkie uprawnienia z tej grupy, również dodane w przyszłości."
 
 #: src/lib/PermissionFlags.svelte
 msgid "All permissions in this group, including future additions."
@@ -1218,6 +1252,7 @@ msgstr "Published"
 msgid "Draft"
 msgstr "Draft"
 
+#: src/lib/ContentTranslations.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "Article content"
 msgstr "Article content"
@@ -1273,3 +1308,119 @@ msgstr "Reset password"
 #: src/lib/Members.svelte
 msgid "Save email"
 msgstr "Save email"
+
+#: src/lib/ProjectSettings.svelte
+#: src/routes/[...workspace]/+page.svelte
+msgid "View public project"
+msgstr "View public project"
+
+#: src/routes/[...workspace]/+page.svelte
+msgid "View public article"
+msgstr "View public article"
+
+#: src/lib/Members.svelte
+#: src/lib/WorkspaceMembers.svelte
+#: src/routes/[...workspace]/+page.svelte
+msgid "View public profile"
+msgstr "View public profile"
+
+#: src/lib/ContentTranslations.svelte
+msgid "Biography"
+msgstr "Biography"
+
+#: src/lib/ContentTranslations.svelte
+msgid "Polish"
+msgstr "Polish"
+
+#: src/lib/ContentTranslations.svelte
+msgid "Save the English content before adding its translation."
+msgstr "Save the English content before adding its translation."
+
+#: src/lib/ContentTranslations.svelte
+msgid "This content changed. Reload before saving."
+msgstr "This content changed. Reload before saving."
+
+#: src/lib/ContentTranslations.svelte
+msgid "Translate every tag in the same order as the English tags."
+msgstr "Translate every tag in the same order as the English tags."
+
+#: src/lib/ContentTranslations.svelte
+msgid "Translations saved."
+msgstr "Translations saved."
+
+#: src/lib/ContentTranslations.svelte
+msgid "Public translations"
+msgstr "Public translations"
+
+#: src/lib/ContentTranslations.svelte
+msgid "English · required"
+msgstr "English · required"
+
+#: src/lib/ContentTranslations.svelte
+msgid "The main fields above are English. Add an optional translation for public visitors. Empty translated fields fall back to English; protected member names remain unchanged."
+msgstr "The main fields above are English. Add an optional translation for public visitors. Empty translated fields fall back to English; protected member names remain unchanged."
+
+#: src/lib/ContentTranslations.svelte
+msgid "Translation language"
+msgstr "Translation language"
+
+#: src/lib/ContentTranslations.svelte
+msgid "Add translation"
+msgstr "Add translation"
+
+#: src/lib/ContentTranslations.svelte
+msgid "English source"
+msgstr "English source"
+
+#: src/lib/ContentTranslations.svelte
+msgid "No content"
+msgstr "No content"
+
+#: src/lib/ContentTranslations.svelte
+#: src/lib/ContentTranslations.svelte
+msgid "Leave empty to use English"
+msgstr "Leave empty to use English"
+
+#: src/lib/ContentTranslations.svelte
+msgid "Save translation"
+msgstr "Save translation"
+
+#: src/lib/ContentTranslations.svelte
+msgid "Remove translation"
+msgstr "Remove translation"
+
+#: src/lib/ProjectSettings.svelte
+msgid "Public links"
+msgstr "Public links"
+
+#: src/lib/ProjectSettings.svelte
+msgid "English labels are required. Polish labels are optional."
+msgstr "English labels are required. Polish labels are optional."
+
+#: src/lib/ProjectSettings.svelte
+msgid "Label · English"
+msgstr "Label · English"
+
+#: src/lib/ProjectSettings.svelte
+msgid "Label · Polish"
+msgstr "Label · Polish"
+
+#: src/lib/ProjectSettings.svelte
+msgid "Remove link"
+msgstr "Remove link"
+
+#: src/lib/ProjectSettings.svelte
+msgid "Add link"
+msgstr "Add link"
+
+#: src/lib/ProjectSettings.svelte
+msgid "Save links"
+msgstr "Save links"
+
+#: src/lib/Members.svelte
+msgid "Pending"
+msgstr "Pending"
+
+#: src/lib/Members.svelte
+msgid "Suspended"
+msgstr "Suspended"

@@ -4,14 +4,20 @@
 
   let { data } = $props<{ data: import('./$types').PageData }>();
 
+  const fieldLabels = $derived<Record<string, string>>({
+    research: 'Research',
+    community: 'Community',
+    engineering: 'Engineering'
+  });
   // Map backend data to frontend model
   let projects = $derived(
     (data.projects || []).map((p: any, i: number) => ({
       title: p.name,
-      kind: 'research', // default placeholder
-      group: p.tags[0] || 'community',
+      kind: p.fields[0] || 'engineering',
+      group: p.fields[0] || 'community',
+      fields: p.fields || [],
       number: String(i + 1).padStart(2, '0'),
-      category: p.fields[0] || 'Project',
+      category: fieldLabels[p.fields[0]] || 'Project',
       href: `/projects/${p.slug}`,
       summary: p.description,
       tags: p.tags || []
@@ -23,7 +29,7 @@
   const filters = [
     { value: 'all', label: 'All projects' },
     { value: 'community', label: 'Community' },
-    { value: 'education', label: 'Education' },
+    { value: 'engineering', label: 'Engineering' },
     { value: 'research', label: 'Research' }
   ];
   let query = $state('');
@@ -31,7 +37,7 @@
   let filteredProjects = $derived(
     orderedProjects.filter(
       (project) =>
-        (activeFilter === 'all' || project.group === activeFilter) &&
+        (activeFilter === 'all' || project.fields.includes(activeFilter)) &&
         [project.title, project.category, project.summary, ...project.tags]
           .join(' ')
           .toLowerCase()

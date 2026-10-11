@@ -1,3 +1,4 @@
+import { invalidate } from '$app/navigation';
 import { loadLocale } from 'wuchale/load-utils';
 import '../locales/main.loader.svelte.js';
 import { locales } from '../locales/data.js';
@@ -24,7 +25,13 @@ export function setLocale(newLocale: Locale) {
     localStorage.setItem('locale', newLocale);
     document.cookie = `locale=${newLocale}; path=/; max-age=31536000; SameSite=Lax`;
   }
-  void loadLocale(newLocale);
+}
+
+// The layout subscribes to this store, including locale restored from localStorage.
+// Persist before invalidation so server loads use the same locale as the UI.
+export async function refreshLocalizedContent(newLocale: Locale) {
+  document.cookie = `locale=${newLocale}; path=/; max-age=31536000; SameSite=Lax`;
+  await Promise.all([loadLocale(newLocale), invalidate('ksi:localized-content')]);
 }
 
 export function getFlagEmoji(countryCode: string): string {
