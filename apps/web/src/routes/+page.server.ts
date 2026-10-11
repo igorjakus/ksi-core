@@ -13,7 +13,9 @@ export const load: PageServerLoad = async (event) => {
   let projects = [];
   if (projectsReq.ok) {
     const data = await projectsReq.json();
-    projects = (data.projects || data || []).slice(0, 4);
+    projects = (data.projects || data || [])
+      .filter((project: { fields?: string[] }) => project.fields?.includes('engineering'))
+      .slice(0, 4);
   }
 
   return {
