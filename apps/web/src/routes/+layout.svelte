@@ -1,6 +1,6 @@
 <script lang="ts">
   import '../app.css';
-  import { onMount } from 'svelte';
+  import { onMount, untrack } from 'svelte';
   import Navbar from '../components/Navbar.svelte';
   import Sidebar from '../components/Sidebar.svelte';
   import Footer from '../components/Footer.svelte';
@@ -12,7 +12,8 @@
 
   onMount(themeStore.initialize);
   $effect(() => {
-    void refreshLocalizedContent(locale.current);
+    const current = locale.current;
+    untrack(() => void refreshLocalizedContent(current));
   });
 
   const { children, data } = $props();
