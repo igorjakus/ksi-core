@@ -5,7 +5,7 @@ import { uploadEncryptedBackup, retainEncryptedBackups } from './lib/storage';
 import { and, eq, sql } from 'drizzle-orm';
 import { db, auditEvents, outbox, sessions, users } from './db';
 import { auth } from './lib/auth';
-import { effectivePermissions, type MembershipStatus, type Role } from './domain/permissions';
+import { effectivePermissions, type Role } from './domain/permissions';
 import { anonymizeUser, manageUser } from './services/users';
 import { getUrls } from 'shared';
 

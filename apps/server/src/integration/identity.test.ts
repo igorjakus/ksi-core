@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, expect, test } from 'bun:test';
 import { randomUUID } from 'node:crypto';
-import { and, eq, inArray } from 'drizzle-orm';
+import { eq, inArray } from 'drizzle-orm';
 import { digest, challenge, randomToken } from '../domain/sso';
 const safe =
   process.env.KSI_ENVIRONMENT === 'integration' &&

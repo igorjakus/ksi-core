@@ -1,5 +1,4 @@
 import { treaty } from '@elysiajs/eden';
-import { getUrls } from 'shared';
 import type { App } from 'shared/eden';
 
 export const api = treaty<App>('/api', {
