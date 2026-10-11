@@ -145,6 +145,7 @@ export async function seed() {
           language: 'en',
           translations,
           state: 'published',
+          publishedAt: new Date(),
           mainArticle: true,
           projectFeed: true,
           websiteFeed: true,

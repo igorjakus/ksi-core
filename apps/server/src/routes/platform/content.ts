@@ -1,5 +1,6 @@
 import { localizeContent, articleMarkdown } from 'shared/content-locales';
-import { and, eq, inArray, desc, sql } from 'drizzle-orm';
+import { relatedArticles } from '../../domain/related-articles';
+import { and, eq, inArray, desc, sql, or } from 'drizzle-orm';
 import { status, t } from 'elysia';
 import { syncFileReferences } from './files';
 import { createElysia, requirePermission } from '../../lib/createElysia';
@@ -223,12 +224,57 @@ export default createElysia({ prefix: '/platform' })
       .from(articles)
       .where(and(eq(articles.slug, params.slug), eq(articles.state, 'published')));
     if (!article) throw status(404, { code: 'ARTICLE_NOT_FOUND' });
+    const locale = typeof query.locale === 'string' ? query.locale : undefined;
+    const [project] = article.projectId
+      ? await db.select().from(projects).where(eq(projects.id, article.projectId))
+      : [];
+    const candidates = await db
+      .select({
+        id: articles.id,
+        slug: articles.slug,
+        title: articles.title,
+        translations: articles.translations,
+        projectId: articles.projectId,
+        publishedAt: articles.publishedAt,
+        createdAt: articles.createdAt,
+        fields: projects.fields,
+        projectName: projects.name,
+        projectSlug: projects.slug,
+        projectTranslations: projects.translations
+      })
+      .from(articles)
+      .leftJoin(projects, eq(articles.projectId, projects.id))
+      .where(
+        and(
+          eq(articles.state, 'published'),
+          or(eq(articles.websiteFeed, true), eq(articles.projectFeed, true))
+        )
+      );
     return {
-      ...localizeContent(article, typeof query.locale === 'string' ? query.locale : undefined),
-      authors: await articleCredits(
-        db,
-        article.id,
-        typeof query.locale === 'string' ? query.locale : undefined
+      ...localizeContent(article, locale),
+      authors: await articleCredits(db, article.id, locale),
+      project: project
+        ? { id: project.id, slug: project.slug, name: localizeContent(project, locale).name }
+        : null,
+      related: relatedArticles({ ...article, fields: project?.fields ?? [] }, candidates).map(
+        (candidate) => ({
+          id: candidate.id,
+          slug: candidate.slug,
+          title: localizeContent(candidate, locale).title,
+          publishedAt: candidate.publishedAt,
+          project: candidate.projectId
+            ? {
+                slug: candidate.projectSlug,
+                name: localizeContent(
+                  {
+                    name: candidate.projectName,
+                    translations: candidate.projectTranslations ?? {}
+                  },
+                  locale
+                ).name
+              }
+            : null
+        })
       )
     };
   })
@@ -690,7 +736,13 @@ export default createElysia({ prefix: '/platform' })
     if (!found) throw status(404, { code: 'ARTICLE_NOT_FOUND' });
     const { article, scope } = await articleScope(db, found.id);
     if (!canContribute(actor, scope)) throw status(403, { code: 'FORBIDDEN' });
-    return article;
+    const [credit] = await db
+      .select({ publicCredit: articleContributors.publicCredit })
+      .from(articleContributors)
+      .where(
+        and(eq(articleContributors.articleId, article.id), eq(articleContributors.userId, actor.id))
+      );
+    return { ...article, publicCredit: credit?.publicCredit ?? false, canManageCredit: !!credit };
   })
   .get('/articles/:id', async ({ db, user, params }) => {
     const actor = active(user);
@@ -846,6 +898,10 @@ export default createElysia({ prefix: '/platform' })
             title: body.title,
             markdown: body.markdown,
             state: body.state,
+            publishedAt:
+              body.state === 'published'
+                ? sql`coalesce(${articles.publishedAt}, now())`
+                : article.publishedAt,
             mainArticle: body.mainArticle,
             projectFeed: body.projectFeed,
             websiteFeed: body.websiteFeed,

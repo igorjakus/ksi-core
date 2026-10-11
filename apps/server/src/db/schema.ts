@@ -194,6 +194,7 @@ export const articles = snakeCase.table('articles', {
   createdBy: text()
     .notNull()
     .references(() => users.id),
+  publishedAt: timestamp(),
   createdAt: timestamp().notNull().defaultNow(),
   updatedAt: timestamp().notNull().defaultNow()
 });

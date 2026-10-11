@@ -367,6 +367,73 @@ describe.skipIf(!disposable)('Postgres persisted content and collaboration', () 
     expect(publicArticle.authors).toHaveLength(1);
     expect(publicArticle.authors[0].name).toBe('member I.');
     expect(publicArticle.authors[0].email).toBeUndefined();
+    expect(publicArticle.project.slug).toBeTruthy();
+    expect(publicArticle.publishedAt).toBe(published.body.publishedAt);
+    expect(
+      (await content(`/articles/by-slug/${created.body.slug}`, 'member')).body.publicCredit
+    ).toBe(true);
+    expect(
+      (await content(`/articles/by-slug/${created.body.slug}`, 'leader')).body.publicCredit
+    ).toBe(false);
+    const edited = await content(`/articles/${articleId}`, 'leader', 'PUT', {
+      version: 3,
+      title: 'Building Krasnal',
+      markdown: 'Updated content',
+      state: 'published',
+      mainArticle: true,
+      projectFeed: false,
+      websiteFeed: false
+    });
+    expect(edited.status).toBe(200);
+    expect(edited.body.publishedAt).toBe(published.body.publishedAt);
+    const recommendation = await db
+      .insert(articles)
+      .values({
+        projectId,
+        createdBy: ids.leader,
+        slug: `recommended-${suffix}`,
+        title: 'Recommended',
+        state: 'published',
+        projectFeed: true,
+        publishedAt: new Date(),
+        translations: { pl: { title: 'Polecany' } }
+      })
+      .returning();
+    await db.insert(articles).values([
+      {
+        projectId,
+        createdBy: ids.leader,
+        slug: `hidden-${suffix}`,
+        title: 'Unlisted',
+        state: 'published',
+        websiteFeed: false,
+        projectFeed: false
+      },
+      {
+        projectId,
+        createdBy: ids.leader,
+        slug: `draft-${suffix}`,
+        title: 'Draft',
+        state: 'draft',
+        websiteFeed: true
+      }
+    ]);
+    const recommendations = (await (
+      await contentRoutes.handle(
+        new Request(`http://localhost/platform/public/articles/${created.body.slug}?locale=pl`)
+      )
+    ).json()) as any;
+    expect(
+      recommendations.related.some(
+        (a: any) => a.id === recommendation[0]!.id && a.title === 'Polecany'
+      )
+    ).toBe(true);
+    expect(
+      recommendations.related.some(
+        (a: any) =>
+          a.slug === `hidden-${suffix}` || a.slug === `draft-${suffix}` || a.id === articleId
+      )
+    ).toBe(false);
   });
   test('board tags, task movement, tombstones and leader-only restoration', async () => {
     const board = await collaboration('/boards', 'leader', 'POST', { projectId });

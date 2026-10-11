@@ -95,6 +95,8 @@
     projectId: string | null;
     projectFeed: boolean;
     websiteFeed: boolean;
+    publicCredit?: boolean;
+    canManageCredit?: boolean;
   };
   type Item = {
     id: string;
@@ -260,6 +262,7 @@
         projectSlug = project?.slug ?? '';
         currentScope = scope = article.projectId ?? '';
         selectedArticle = article;
+        showCredit = article.publicCredit ?? false;
         title = article.title;
         slug = article.slug;
         markdown = article.markdown;
@@ -535,7 +538,11 @@
       projectFeed: selectedArticle.projectFeed,
       websiteFeed: selectedArticle.websiteFeed
     });
-    selectedArticle = result;
+    selectedArticle = {
+      ...result,
+      publicCredit: showCredit,
+      canManageCredit: selectedArticle.canManageCredit
+    };
   }
 
   async function propose() {
@@ -1163,21 +1170,23 @@
                           >
                             {'Propose edit'}
                           </button>
-                          <label
-                            style="display: flex; align-items: center; gap: 6px; font-size: 12px; text-transform: none; letter-spacing: 0; color: var(--muted); cursor: pointer;"
-                          >
-                            <input
-                              type="checkbox"
-                              bind:checked={showCredit}
-                              onchange={() =>
-                                action(() =>
-                                  api(`/platform/articles/${selectedArticle!.id}/credit`, 'PUT', {
-                                    publicCredit: showCredit
-                                  })
-                                )}
-                            />
-                            {'Show my author credit'}
-                          </label>
+                          {#if selectedArticle.canManageCredit}
+                            <label
+                              style="display: flex; align-items: center; gap: 6px; font-size: 12px; text-transform: none; letter-spacing: 0; color: var(--muted); cursor: pointer;"
+                            >
+                              <input
+                                type="checkbox"
+                                bind:checked={showCredit}
+                                onchange={() =>
+                                  action(() =>
+                                    api(`/platform/articles/${selectedArticle!.id}/credit`, 'PUT', {
+                                      publicCredit: showCredit
+                                    })
+                                  )}
+                              />
+                              {'Show my author credit'}
+                            </label>
+                          {/if}
                         {:else}
                           <button
                             class="btn"
