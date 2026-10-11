@@ -136,7 +136,28 @@ export default createElysia({ prefix: '/platform' })
       .from(users)
       .where(and(eq(users.id, params.id), eq(users.membershipStatus, 'active')));
     if (!member) throw status(404, { code: 'MEMBER_NOT_FOUND' });
-    return publicProfile(member, typeof query.locale === 'string' ? query.locale : undefined);
+    const locale = typeof query.locale === 'string' ? query.locale : undefined;
+    const authored = await db
+      .select({ article: articles })
+      .from(articleContributors)
+      .innerJoin(articles, eq(articleContributors.articleId, articles.id))
+      .where(
+        and(
+          eq(articleContributors.userId, member.id),
+          eq(articleContributors.publicCredit, true),
+          eq(articles.state, 'published')
+        )
+      )
+      .orderBy(desc(articles.publishedAt), desc(articles.createdAt));
+    return {
+      ...publicProfile(member, locale),
+      articles: await Promise.all(
+        authored.map(async ({ article }) => ({
+          ...localizeContent(article, locale),
+          authors: await articleCredits(db, article.id, locale)
+        }))
+      )
+    };
   })
   .get('/public/projects', async ({ db, query }) =>
     (await db.select().from(projects).orderBy(desc(projects.createdAt))).map((project) =>
