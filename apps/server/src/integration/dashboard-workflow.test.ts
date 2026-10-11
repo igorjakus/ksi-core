@@ -325,6 +325,8 @@ describe.skipIf(!safe)('persistent dashboard workflows', () => {
     signupId = created?.id;
     expect(signup.status).toBe(200);
     expect(created?.membershipStatus).toBe('pending');
+    expect(created?.firstName).toBe('New');
+    expect(created?.lastName).toBe('workflow member');
     expect(created?.image).toBeNull();
     expect(
       (await request('admin', '/users/inbox')).body.memberships.some(

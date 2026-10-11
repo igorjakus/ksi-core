@@ -1,3 +1,4 @@
+import { splitProfileName } from '../domain/profile-name';
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { db } from '@ksi-core/server/db';
@@ -41,7 +42,9 @@ export const auth = betterAuth({
   databaseHooks: {
     user: {
       create: {
-        before: async (user) => ({ data: { ...user, image: null } }),
+        before: async (user) => ({
+          data: { ...user, ...splitProfileName(user.name), image: null }
+        }),
         after: async (user) => {
           await db.transaction(async (tx) => {
             await recordEvent(tx, {
