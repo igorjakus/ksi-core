@@ -1,4 +1,5 @@
 <script lang="ts">
+  import MemberPreview from '@ksi-core/ui/platform/MemberPreview.svelte';
   import Markdown from '@ksi-core/ui/platform/Markdown.svelte';
   import { locale } from '$lib/locale.svelte';
   import { Shield, Plus } from '@lucide/svelte';
@@ -75,19 +76,15 @@
             {section === 'leaders' ? 'Project leaders' : 'Members'}
           </h2>
           <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
-            {#each section === 'leaders' ? project.leaders : project.members as member}<a
-                class="border-base-content/20 hover:border-base-content flex items-center gap-3 rounded border px-4 py-4"
-                href={`/members/${encodeURIComponent(member.id)}`}
-                >{#if member.image}<img
-                    class="h-10 w-10 rounded-full object-cover"
-                    src={member.image}
-                    alt=""
-                  />{/if}<span
-                  >{member.name}{#if member.nickname}<small class="block"
-                      >aka. {member.nickname}</small
-                    >{/if}</span
-                ></a
-              >{/each}
+            {#each section === 'leaders' ? project.leaders : project.members as member}
+              <div class="border-base-content/20 rounded border px-4 py-4">
+                <MemberPreview
+                  {member}
+                  href={`/members/${encodeURIComponent(member.id)}`}
+                  language={locale.current === 'pl' ? 'pl' : 'en'}
+                />
+              </div>
+            {/each}
           </div>
         </section>
       {:else if section === 'links'}
