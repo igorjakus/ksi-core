@@ -154,6 +154,59 @@ describe.skipIf(!safe)('persistent dashboard workflows', () => {
       )
     ).toBe(true);
   });
+  test('workspace rosters protect account data and expose scoped project settings', async () => {
+    expect((await request('pending', '/platform/members')).status).toBe(403);
+    const roster = await request('member', `/platform/projects/${projectId}/members`);
+    expect(roster.status).toBe(200);
+    expect(roster.body.find((m: any) => m.id === ids.member).leader).toBe(true);
+    for (const path of ['/platform/members', `/platform/members/${ids.member}`]) {
+      const result = await request('outsider', path);
+      expect(result.status).toBe(200);
+      for (const member of Array.isArray(result.body) ? result.body : [result.body]) {
+        expect(member.email).toBeUndefined();
+        expect(member.flags).toBeUndefined();
+      }
+    }
+    expect((await request('member', `/platform/members/${ids.pending}`)).status).toBe(404);
+    const leader = await request('member', `/platform/projects/${projectId}`);
+    expect(leader.body.isMember).toBe(true);
+    expect(leader.body.canEdit).toBe(true);
+    expect(leader.body.canManageMembers).toBe(true);
+    expect((await request('admin', `/platform/projects/${projectId}`)).body.canEdit).toBe(true);
+    expect((await request('outsider', `/platform/projects/${projectId}`)).body.canEdit).toBe(false);
+    expect(
+      (
+        await request('outsider', `/platform/projects/${projectId}`, 'PATCH', {
+          version: leader.body.version,
+          name: 'Unauthorized'
+        })
+      ).status
+    ).toBe(403);
+    expect(
+      (
+        await request('member', `/platform/projects/${projectId}`, 'PATCH', {
+          version: leader.body.version,
+          name: 'Leader-managed project'
+        })
+      ).status
+    ).toBe(200);
+    await db
+      .update(users)
+      .set({ flags: ['-projects.catalog.edit', '-projects.membership.manage'] })
+      .where(eq(users.id, ids.member));
+    const denied = await request('member', `/platform/projects/${projectId}`);
+    expect(denied.body.canEdit).toBe(false);
+    expect(denied.body.canManageMembers).toBe(false);
+    expect(
+      (
+        await request('member', `/platform/projects/${projectId}`, 'PATCH', {
+          version: denied.body.version,
+          name: 'Denied'
+        })
+      ).status
+    ).toBe(403);
+    await db.update(users).set({ flags: [] }).where(eq(users.id, ids.member));
+  });
   test('internal collaboration rejects article gallery directives', async () => {
     const gallery = ':::gallery preview=1\nfile:abcdefgh\n:::';
     for (const [path, method, body] of [

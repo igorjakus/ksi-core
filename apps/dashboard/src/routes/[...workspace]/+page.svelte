@@ -17,6 +17,8 @@
   import { fly } from 'svelte/transition';
   import MarkdownContent from '@ksi-core/ui/platform/MarkdownContent.svelte';
   import Members from '$lib/Members.svelte';
+  import WorkspaceMembers from '$lib/WorkspaceMembers.svelte';
+  import ProjectSettings from '$lib/ProjectSettings.svelte';
   import Editor from '@ksi-core/ui/platform/Editor.svelte';
   import UserSelect from '$lib/UserSelect.svelte';
   import Dropdown from '@ksi-core/ui/platform/Dropdown.svelte';
@@ -46,7 +48,8 @@
     Linkedin,
     Check,
     Archive,
-    Bell
+    Bell,
+    Settings
   } from '@lucide/svelte';
   import type { Profile } from 'shared/types';
 
@@ -155,6 +158,7 @@
     { id: 'done', name: 'Done' }
   ]);
   let boardLeader = $state(false);
+  let projectAccess = $state({ isMember: false, canEdit: false, canManageMembers: false });
   let inbox = $state<InboxData>({ memberships: [], avatars: [] });
   let avatarRequest = $state<AvatarRequest | null>(null);
   const inboxCount = $derived(inbox.memberships.length + inbox.avatars.length);
@@ -247,6 +251,12 @@
           return;
         }
         scope = currentScope = project.id;
+        const access = await api<typeof projectAccess>(`/platform/projects/${project.id}`);
+        if (generation !== loadGeneration) return;
+        projectAccess = access;
+        boardLeader = access.canEdit;
+      } else {
+        boardLeader = data.user.role !== 'member';
       }
       const query = currentScope ? `?projectId=${encodeURIComponent(currentScope)}` : '';
       if (currentTab === 'articles') {
@@ -273,15 +283,6 @@
             { id: 'done', name: 'Done' }
           ];
           items = result;
-          const roster = currentScope
-            ? await api<{ id: string; leader: boolean }[]>(
-                `/platform/projects/${currentScope}/members`
-              )
-            : [];
-          if (generation === loadGeneration)
-            boardLeader =
-              data.user.role !== 'member' ||
-              roster.some((member) => member.id === data.user.id && member.leader);
         }
       }
       if (currentTab === 'forum') {
@@ -372,6 +373,8 @@
     projectSlug = location.projectSlug;
     tab = location.tab;
     scope = '';
+    projectAccess = { isMember: false, canEdit: false, canManageMembers: false };
+    boardLeader = false;
 
     resetView();
     graveyard = location.graveyard ?? false;
@@ -469,7 +472,7 @@
         fields: ['engineering'],
         leaderIds: leaderIdsArray
       });
-      void goto(`/${result.slug || result.id}`);
+      void goto(`/projects/${encodeURIComponent(result.slug || result.id)}`);
       return result;
     }
     if (tab === 'articles') {
@@ -542,7 +545,11 @@
     ['board', 'Kanban'],
     ['forum', 'Forum'],
     ['articles', 'Articles'],
-    ['events', 'Activity']
+    ['events', 'Activity'],
+    ['roster', 'Members'],
+    ...(workspace === 'project' && (projectAccess.canEdit || projectAccess.canManageMembers)
+      ? [['settings', 'Settings']]
+      : [])
   ] as [string, string][]);
   const selectedProject = $derived(projects.find((project) => project.slug === projectSlug));
   const workspaceName = $derived(
@@ -557,11 +564,13 @@
           ? 'Projects'
           : tab === 'profile'
             ? 'My profile'
-            : tab === 'users'
-              ? 'Members'
-              : tab === '__create_project__'
-                ? 'New project'
-                : (tabs.find(([key]) => key === tab)?.[1] ?? '')
+            : tab === 'person'
+              ? 'Member profile'
+              : tab === 'users'
+                ? 'Members'
+                : tab === '__create_project__'
+                  ? 'New project'
+                  : (tabs.find(([key]) => key === tab)?.[1] ?? '')
   );
 
   const navigationIcons: Record<string, typeof LayoutDashboard> = {
@@ -569,7 +578,9 @@
     board: Columns3,
     forum: MessagesSquare,
     articles: FileText,
-    events: Activity
+    events: Activity,
+    roster: Users,
+    settings: Settings
   };
   const pickerOptions = $derived([
     { value: 'directory', label: 'All projects', href: '/projects' },
@@ -580,7 +591,7 @@
       href: dashboardPath(
         'project',
         project.slug,
-        ['board', 'forum', 'articles', 'events'].includes(tab) ? tab : 'overview'
+        ['board', 'forum', 'articles', 'events', 'roster'].includes(tab) ? tab : 'overview'
       )
     }))
   ]);
@@ -965,13 +976,26 @@
                       </p>
                     </div>
                     {#if selectedProject}
-                      <button
-                        class="btn btn-outline"
-                        disabled={busy}
-                        onclick={() =>
-                          action(() => api(`/platform/projects/${scope}/join`, 'POST'))}
-                        >{'Join project'}</button
-                      >
+                      <div class="row">
+                        {#if projectAccess.canEdit || projectAccess.canManageMembers}
+                          <a
+                            class="btn btn-outline"
+                            href={dashboardPath(workspace, projectSlug, 'settings')}
+                            onclick={guardNavigation}><Pencil size={15} />{'Project settings'}</a
+                          >
+                        {/if}
+                        {#if projectAccess.isMember}
+                          <span class="muted">{'You are a project member'}</span>
+                        {:else}
+                          <button
+                            class="btn btn-outline"
+                            disabled={busy}
+                            onclick={() =>
+                              action(() => api(`/platform/projects/${scope}/join`, 'POST'))}
+                            >{'Join project'}</button
+                          >
+                        {/if}
+                      </div>
                     {/if}
                   </div>
                   <div class="workspace-shortcuts">
@@ -989,6 +1013,19 @@
                   </div>
 
                   <!-- ── ARTICLES ──────────────────────────────────────────────────── -->
+                {:else if tab === 'roster' || tab === 'person'}
+                  <WorkspaceMembers
+                    projectId={workspace === 'project' ? scope : undefined}
+                    memberId={data.navigation.memberId}
+                    elevated={data.user.role !== 'member'}
+                  />
+                {:else if tab === 'settings' && selectedProject}
+                  <ProjectSettings
+                    project={selectedProject}
+                    canEdit={projectAccess.canEdit}
+                    canManageMembers={projectAccess.canManageMembers}
+                    onrefresh={() => load()}
+                  />
                 {:else if tab === 'articles'}
                   <div class="workspace-header">
                     <div>

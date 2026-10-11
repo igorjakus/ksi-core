@@ -3,7 +3,7 @@ import { describe, expect, test } from 'bun:test';
 import { dashboardPath, parseDashboardPath } from './navigation';
 describe('dashboard routes', () => {
   test('project tools keep the same project after a refresh', () => {
-    for (const tab of ['overview', 'board', 'forum', 'articles', 'events']) {
+    for (const tab of ['overview', 'board', 'forum', 'articles', 'events', 'roster', 'settings']) {
       const path = dashboardPath('project', 'roboty ksi', tab);
       expect(parseDashboardPath(path)).toEqual({
         workspace: 'project',
@@ -71,4 +71,26 @@ test('member detail URLs preserve the selected person', () => {
   });
 });
 
-test('forum threads have persistent project and association paths',()=>{expect(parseDashboardPath('/projects/roboty/forum/abc')).toEqual({workspace:'project',projectSlug:'roboty',tab:'forum',threadId:'abc'});expect(parseDashboardPath('/association/forum/abc')).toEqual({workspace:'association',projectSlug:'',tab:'forum',threadId:'abc'});expect(parseDashboardPath('/projects/roboty/forum/abc/extra')).toBeNull();});
+test('forum threads have persistent project and association paths', () => {
+  expect(parseDashboardPath('/projects/roboty/forum/abc')).toEqual({
+    workspace: 'project',
+    projectSlug: 'roboty',
+    tab: 'forum',
+    threadId: 'abc'
+  });
+  expect(parseDashboardPath('/association/forum/abc')).toEqual({
+    workspace: 'association',
+    projectSlug: '',
+    tab: 'forum',
+    threadId: 'abc'
+  });
+  expect(parseDashboardPath('/projects/roboty/forum/abc/extra')).toBeNull();
+});
+
+test('workspace member and project settings paths are persistent', () => {
+  expect(parseDashboardPath('/association/members')?.tab).toBe('roster');
+  expect(parseDashboardPath('/projects/roboty/members')?.tab).toBe('roster');
+  expect(parseDashboardPath('/projects/roboty/settings')?.tab).toBe('settings');
+  expect(parseDashboardPath('/association/settings')).toBeNull();
+  expect(parseDashboardPath('/people/abc')?.memberId).toBe('abc');
+});

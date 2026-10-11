@@ -61,6 +61,7 @@ msgstr "Project not found."
 #: src/lib/AvatarUpload.svelte
 #: src/lib/KanbanBoard.svelte
 #: src/lib/KanbanBoard.svelte
+#: src/lib/ProjectSettings.svelte
 #: src/routes/[...workspace]/+page.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "Request failed"
@@ -142,6 +143,9 @@ msgstr "Projects"
 msgid "My profile"
 msgstr "My profile"
 
+#: src/lib/WorkspaceMembers.svelte
+#: src/lib/WorkspaceMembers.svelte
+#: src/routes/[...workspace]/+page.svelte
 #: src/routes/[...workspace]/+page.svelte
 #: src/routes/[...workspace]/+page.svelte
 #: src/routes/[...workspace]/+page.svelte
@@ -528,7 +532,11 @@ msgstr "Interests, projects, and things you enjoy…"
 msgid "Public profile"
 msgstr "Public profile"
 
+#. 0: person.nickname
+#. 0: member.nickname
 #. 0: profile.nickname
+#: src/lib/WorkspaceMembers.svelte
+#: src/lib/WorkspaceMembers.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "aka. {0}"
 msgstr "aka. {0}"
@@ -537,11 +545,13 @@ msgstr "aka. {0}"
 msgid "Your public profile on the KSI website."
 msgstr "Your public profile on the KSI website."
 
+#: src/lib/WorkspaceMembers.svelte
 #: src/routes/[...workspace]/+page.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "<0/>GitHub"
 msgstr "<0/>GitHub"
 
+#: src/lib/WorkspaceMembers.svelte
 #: src/routes/[...workspace]/+page.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "<0/>LinkedIn"
@@ -590,6 +600,7 @@ msgid "Back"
 msgstr "Back"
 
 #: src/lib/KanbanBoard.svelte
+#: src/lib/ProjectSettings.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "Name"
 msgstr "Name"
@@ -597,6 +608,7 @@ msgstr "Name"
 #~ msgid "Leader IDs (comma-separated)"
 #~ msgstr "Leader IDs (comma-separated)"
 
+#: src/lib/ProjectSettings.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "Description"
 msgstr "Description"
@@ -657,6 +669,7 @@ msgstr "Task status"
 #: src/lib/KanbanBoard.svelte
 #: src/lib/KanbanBoard.svelte
 #: src/lib/Members.svelte
+#: src/lib/ProjectSettings.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "Cancel"
 msgstr "Cancel"
@@ -730,6 +743,7 @@ msgid "The task will move to the graveyard. A leader can restore it."
 msgstr "The task will move to the graveyard. A leader can restore it."
 
 #: src/lib/KanbanBoard.svelte
+#: src/lib/ProjectSettings.svelte
 msgid "Confirm removal"
 msgstr "Confirm removal"
 
@@ -764,6 +778,7 @@ msgstr "Activate"
 
 #: src/lib/ApprovalInbox.svelte
 #: src/lib/ApprovalInbox.svelte
+#: src/lib/ProjectSettings.svelte
 msgid "Decline"
 msgstr "Decline"
 
@@ -841,6 +856,7 @@ msgid "Every new picture requires administrator approval."
 msgstr "Every new picture requires administrator approval."
 
 #: src/lib/Members.svelte
+#: src/lib/WorkspaceMembers.svelte
 msgid "Member"
 msgstr "Member"
 
@@ -849,6 +865,7 @@ msgid "Board"
 msgstr "Board"
 
 #: src/lib/Members.svelte
+#: src/lib/WorkspaceMembers.svelte
 msgid "Administrator"
 msgstr "Administrator"
 
@@ -865,10 +882,12 @@ msgid "The final active administrator must retain access."
 msgstr "The final active administrator must retain access."
 
 #: src/lib/Members.svelte
+#: src/lib/ProjectSettings.svelte
 msgid "Changes saved."
 msgstr "Changes saved."
 
 #: src/lib/Members.svelte
+#: src/lib/WorkspaceMembers.svelte
 msgid "Loading members"
 msgstr "Loading members"
 
@@ -905,6 +924,7 @@ msgstr "Account status"
 #: src/lib/Members.svelte
 #: src/lib/Members.svelte
 #: src/lib/Members.svelte
+#: src/lib/WorkspaceMembers.svelte
 msgid "Role"
 msgstr "Role"
 
@@ -921,6 +941,7 @@ msgid "Delete account? Personal data will be anonymized. Content will remain."
 msgstr "Delete account? Personal data will be anonymized. Content will remain."
 
 #: src/lib/Members.svelte
+#: src/lib/WorkspaceMembers.svelte
 msgid "Search members"
 msgstr "Search members"
 
@@ -953,6 +974,7 @@ msgid "Results"
 msgstr "Results"
 
 #: src/lib/Members.svelte
+#: src/lib/WorkspaceMembers.svelte
 msgid "Person"
 msgstr "Person"
 
@@ -965,6 +987,7 @@ msgid "Status"
 msgstr "Status"
 
 #: src/lib/Members.svelte
+#: src/lib/WorkspaceMembers.svelte
 msgid "No matching members."
 msgstr "No matching members."
 
@@ -992,3 +1015,132 @@ msgstr "Delete"
 #: src/lib/UserSelect.svelte
 msgid "Search users..."
 msgstr "Search users..."
+
+#: src/routes/[...workspace]/+page.svelte
+msgid "Settings"
+msgstr "Settings"
+
+#: src/lib/ProjectSettings.svelte
+#: src/routes/[...workspace]/+page.svelte
+msgid "Project settings"
+msgstr "Project settings"
+
+#: src/routes/[...workspace]/+page.svelte
+msgid "You are a project member"
+msgstr "You are a project member"
+
+#: src/lib/WorkspaceMembers.svelte
+msgid "Project leader"
+msgstr "Project leader"
+
+#: src/lib/WorkspaceMembers.svelte
+msgid "Board member"
+msgstr "Board member"
+
+#: src/lib/WorkspaceMembers.svelte
+msgid "Manage account"
+msgstr "Manage account"
+
+#: src/lib/WorkspaceMembers.svelte
+msgid "Name or nickname…"
+msgstr "Name or nickname…"
+
+#: src/lib/WorkspaceMembers.svelte
+msgid "About"
+msgstr "About"
+
+#: src/lib/WorkspaceMembers.svelte
+msgid "No biography yet."
+msgstr "No biography yet."
+
+#: src/lib/WorkspaceMembers.svelte
+msgid "View profile"
+msgstr "View profile"
+
+#: src/lib/ProjectSettings.svelte
+msgid "This project changed. Reload before saving."
+msgstr "This project changed. Reload before saving."
+
+#: src/lib/ProjectSettings.svelte
+msgid "Select at least one active leader."
+msgstr "Select at least one active leader."
+
+#: src/lib/ProjectSettings.svelte
+msgid "Assign another leader before removing this member."
+msgstr "Assign another leader before removing this member."
+
+#: src/lib/ProjectSettings.svelte
+msgid "You do not have permission to manage this project."
+msgstr "You do not have permission to manage this project."
+
+#: src/lib/ProjectSettings.svelte
+msgid "Project details"
+msgstr "Project details"
+
+#: src/lib/ProjectSettings.svelte
+msgid "Tags (comma separated)"
+msgstr "Tags (comma separated)"
+
+#: src/lib/ProjectSettings.svelte
+msgid "Fields"
+msgstr "Fields"
+
+#: src/lib/ProjectSettings.svelte
+msgid "Research"
+msgstr "Research"
+
+#: src/lib/ProjectSettings.svelte
+msgid "Community"
+msgstr "Community"
+
+#: src/lib/ProjectSettings.svelte
+msgid "Engineering"
+msgstr "Engineering"
+
+#: src/lib/ProjectSettings.svelte
+msgid "Require approval to join"
+msgstr "Require approval to join"
+
+#: src/lib/ProjectSettings.svelte
+msgid "Save project"
+msgstr "Save project"
+
+#: src/lib/ProjectSettings.svelte
+msgid "Loading project members"
+msgstr "Loading project members"
+
+#: src/lib/ProjectSettings.svelte
+msgid "Project leaders"
+msgstr "Project leaders"
+
+#: src/lib/ProjectSettings.svelte
+msgid "Select at least one leader from the project members."
+msgstr "Select at least one leader from the project members."
+
+#: src/lib/ProjectSettings.svelte
+msgid "Save leaders"
+msgstr "Save leaders"
+
+#: src/lib/ProjectSettings.svelte
+msgid "Join requests"
+msgstr "Join requests"
+
+#: src/lib/ProjectSettings.svelte
+msgid "Accept"
+msgstr "Accept"
+
+#: src/lib/ProjectSettings.svelte
+msgid "No pending requests."
+msgstr "No pending requests."
+
+#: src/lib/ProjectSettings.svelte
+msgid "Membership"
+msgstr "Membership"
+
+#: src/lib/ProjectSettings.svelte
+msgid "Remove from project"
+msgstr "Remove from project"
+
+#: src/routes/[...workspace]/+page.svelte
+msgid "Member profile"
+msgstr "Member profile"

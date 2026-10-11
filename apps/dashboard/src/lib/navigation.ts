@@ -3,7 +3,9 @@ const viewPaths: Record<string, string> = {
   board: 'kanban',
   forum: 'forum',
   articles: 'articles',
-  events: 'activity'
+  events: 'activity',
+  roster: 'members',
+  settings: 'settings'
 };
 export function parseDashboardPath(pathname: string): {
   workspace: Workspace;
@@ -11,7 +13,7 @@ export function parseDashboardPath(pathname: string): {
   tab: string;
   graveyard?: boolean;
   memberId?: string;
-  threadId?:string;
+  threadId?: string;
 } | null {
   let segments: string[];
   try {
@@ -21,10 +23,18 @@ export function parseDashboardPath(pathname: string): {
   }
   const [root, slug, view] = segments;
   const removed = root === 'association' ? segments[2] : segments[3];
-  if (removed && !((removed === 'graveyard' && (root === 'association' ? slug : view) === 'kanban') || (root === 'association' ? slug : view) === 'forum'))
+  if (
+    removed &&
+    !(
+      (removed === 'graveyard' && (root === 'association' ? slug : view) === 'kanban') ||
+      (root === 'association' ? slug : view) === 'forum'
+    )
+  )
     return null;
   if (segments.some((part) => part.includes('/') || part.includes('\\')) || segments.length > 4)
     return null;
+  if (root === 'people' && slug && segments.length === 2)
+    return { workspace: 'directory', projectSlug: '', tab: 'person', memberId: slug };
   if (root === 'members' && slug && segments.length === 2)
     return { workspace: 'directory', projectSlug: '', tab: 'users', memberId: slug };
   if ((root === 'profile' || root === 'members' || root === 'inbox') && segments.length === 1)
@@ -43,6 +53,7 @@ export function parseDashboardPath(pathname: string): {
     : 'overview';
   if (
     !tab ||
+    (root === 'association' && tab === 'settings') ||
     (root === 'association' && segments.length > 3) ||
     (root !== 'association' && (root !== 'projects' || !slug || slug === 'new'))
   )
@@ -52,7 +63,7 @@ export function parseDashboardPath(pathname: string): {
     projectSlug: root === 'association' ? '' : slug,
     tab,
     ...(removed && section === 'kanban' ? { graveyard: true } : {}),
-    ...(removed && section === 'forum' ? {threadId:removed}: {})
+    ...(removed && section === 'forum' ? { threadId: removed } : {})
   };
 }
 export function dashboardPath(workspace: Workspace, projectSlug: string, tab: string): string {

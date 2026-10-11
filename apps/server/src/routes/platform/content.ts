@@ -107,6 +107,19 @@ async function articleScope(executor: Executor, articleId: string) {
   return { article, scope: await scopeFor(executor, article.projectId) };
 }
 
+// Protected roster views deliberately omit email, flags and authentication data.
+const memberFields = {
+  id: users.id,
+  firstName: users.firstName,
+  lastName: users.lastName,
+  nickname: users.nickname,
+  bio: users.bio,
+  image: users.image,
+  role: users.role,
+  github: users.github,
+  linkedin: users.linkedin
+};
+
 export default createElysia({ prefix: '/platform' })
   .get('/public/members', async ({ db }) =>
     (await db.select().from(users).where(eq(users.membershipStatus, 'active'))).map(publicProfile)
@@ -179,19 +192,35 @@ export default createElysia({ prefix: '/platform' })
     if (!article) throw status(404, { code: 'ARTICLE_NOT_FOUND' });
     return { ...article, authors: await articleCredits(db, article.id) };
   })
+  .get('/members', async ({ db, user }) => {
+    active(user);
+    return db.select(memberFields).from(users).where(eq(users.membershipStatus, 'active'));
+  })
+  .get('/members/:id', async ({ db, user, params }) => {
+    active(user);
+    const [member] = await db
+      .select(memberFields)
+      .from(users)
+      .where(and(eq(users.id, params.id), eq(users.membershipStatus, 'active')));
+    if (!member) throw status(404, { code: 'MEMBER_NOT_FOUND' });
+    return member;
+  })
+  .get('/projects/:id', async ({ db, user, params }) => {
+    const actor = active(user);
+    const scope = await scopeFor(db, params.id);
+    const [project] = await db.select().from(projects).where(eq(projects.id, params.id));
+    return {
+      ...project,
+      isMember: scope.memberIds.includes(actor.id),
+      canEdit: hasScopedLeadership(actor, scope, 'projects.catalog.edit'),
+      canManageMembers: hasScopedLeadership(actor, scope, 'projects.membership.manage')
+    };
+  })
   .get('/projects/:id/members', async ({ db, user, params }) => {
     active(user);
     await scopeFor(db, params.id);
     return db
-      .select({
-        id: users.id,
-        firstName: users.firstName,
-        lastName: users.lastName,
-        nickname: users.nickname,
-        bio: users.bio,
-        image: users.image,
-        leader: projectMembers.leader
-      })
+      .select({ ...memberFields, leader: projectMembers.leader })
       .from(projectMembers)
       .innerJoin(users, eq(projectMembers.userId, users.id))
       .where(and(eq(projectMembers.projectId, params.id), eq(users.membershipStatus, 'active')));
