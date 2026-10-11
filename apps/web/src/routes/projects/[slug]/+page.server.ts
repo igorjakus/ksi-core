@@ -14,7 +14,14 @@ export const load: PageServerLoad = async (event) => {
     environment,
     `/platform/public/projects/${encodeURIComponent(event.params.slug)}?locale=${contentLocale(event.cookies.get('locale') ?? 'pl')}`
   );
-  if (!response.ok) error(response.status, 'Project not found');
+  if (!response.ok) {
+    error(
+      response.status,
+      response.status === 404
+        ? 'Project not found'
+        : 'Unable to load the project. Please try again.'
+    );
+  }
   const project = await response.json();
   let access = { isMember: false, canEdit: false, canManageMembers: false };
   if (event.locals.user?.membershipStatus === 'active') {
@@ -39,7 +46,14 @@ export const actions: Actions = {
       environment,
       `/platform/public/projects/${encodeURIComponent(event.params.slug)}?locale=${contentLocale(event.cookies.get('locale') ?? 'pl')}`
     );
-    if (!projectResponse.ok) return fail(404, { message: 'Project not found' });
+    if (!projectResponse.ok) {
+      return fail(projectResponse.status, {
+        message:
+          projectResponse.status === 404
+            ? 'Project not found'
+            : 'Unable to load the project. Please try again.'
+      });
+    }
     const project = await projectResponse.json();
     const response = await backendFetch(
       event,
