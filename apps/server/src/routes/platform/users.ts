@@ -7,6 +7,34 @@ import { manageUser, anonymizeUser } from '../../services/users';
 import { effectivePermissions, type Permission } from '../../domain/permissions';
 export const userRoutes = createElysia({ prefix: '/users', protectedRoute: true })
   .get('/me', ({ user }) => ({ user, permissions: user ? [...effectivePermissions(user)] : [] }))
+  .get(
+    '/search',
+    async ({ query: { q }, db }) => {
+      const parts = q.split(' ').map((p) => `%${p}%`);
+      const limit = 10;
+      if (!q) return [];
+
+      const searchPattern = `%${q.replace(/_/g, ' ')}%`;
+      return db
+        .select({
+          id: users.id,
+          name: users.name,
+          nickname: users.nickname,
+          image: users.image
+        })
+        .from(users)
+        .where(
+          or(
+            ilike(users.name, searchPattern),
+            ilike(users.nickname, searchPattern),
+            ilike(users.firstName, searchPattern),
+            ilike(users.lastName, searchPattern)
+          )
+        )
+        .limit(limit);
+    },
+    { query: t.Object({ q: t.String() }) }
+  )
   .patch(
     '/me',
     async ({ user, body, db }) => {

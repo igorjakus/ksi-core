@@ -34,6 +34,90 @@
       if (input) input.value = '';
     }
   }
+
+  type User = { id: string; name: string; nickname: string | null; image: string | null };
+  let textarea: HTMLTextAreaElement | undefined = $state();
+  let showAutocomplete = $state(false);
+  let autocompleteQuery = $state('');
+  let autocompleteResults = $state<User[]>([]);
+  let autocompleteIndex = $state(0);
+  let mentionStart = $state(0);
+
+  async function searchUsers(q: string) {
+    if (!q) {
+      autocompleteResults = [];
+      return;
+    }
+    try {
+      const response = await fetch(`/api/users/search?q=${encodeURIComponent(q)}`);
+      if (response.ok) autocompleteResults = await response.json();
+      else autocompleteResults = [];
+    } catch {
+      autocompleteResults = [];
+    }
+  }
+
+  function handleInput(e: Event) {
+    if (!textarea) return;
+    const val = textarea.value;
+    const pos = textarea.selectionStart;
+    const textBeforeCursor = val.slice(0, pos);
+    const match = textBeforeCursor.match(/(?:\s|^)@([a-zA-Z0-9_]*)$/);
+    if (match) {
+      showAutocomplete = true;
+      autocompleteQuery = match[1];
+      mentionStart = pos - match[1].length - 1;
+      void searchUsers(autocompleteQuery);
+    } else {
+      showAutocomplete = false;
+    }
+  }
+
+  // @wc-ignore
+  const KEYS = {
+    ARROW_DOWN: 'ArrowDown',
+    ARROW_UP: 'ArrowUp',
+    ENTER: 'Enter',
+    ESCAPE: 'Escape',
+    TAB: 'Tab'
+  };
+
+  function handleKeyDown(e: KeyboardEvent) {
+    if (!showAutocomplete) return;
+    if (e.key === KEYS.ARROW_DOWN) {
+      e.preventDefault();
+      autocompleteIndex = (autocompleteIndex + 1) % autocompleteResults.length;
+    } else if (e.key === KEYS.ARROW_UP) {
+      e.preventDefault();
+      autocompleteIndex =
+        (autocompleteIndex - 1 + autocompleteResults.length) % autocompleteResults.length;
+    } else if (e.key === KEYS.ENTER || e.key === KEYS.TAB) {
+      e.preventDefault();
+      if (autocompleteResults.length > 0) {
+        insertMention(autocompleteResults[autocompleteIndex]);
+      }
+    } else if (e.key === KEYS.ESCAPE) {
+      showAutocomplete = false;
+    }
+  }
+
+  function insertMention(user: User) {
+    if (!textarea) return;
+    const val = textarea.value;
+    const pos = textarea.selectionStart;
+    const before = val.slice(0, mentionStart);
+    const after = val.slice(pos);
+    const displayName = user.nickname ? `@${user.nickname}` : `@${user.name}`;
+    const mention = `[${displayName}](/members/${user.id})`;
+    value = before + mention + ' ' + after;
+    showAutocomplete = false;
+    setTimeout(() => {
+      if (textarea) {
+        textarea.selectionStart = textarea.selectionEnd = mentionStart + mention.length + 1;
+        textarea.focus();
+      }
+    }, 0);
+  }
 </script>
 
 <div class="editor">
@@ -62,12 +146,41 @@
       >{/if}
   </div>
   {#if preview}<div class="editor-preview"><MarkdownContent {value} {language} /></div>
-  {:else}<label for={uid} class="sr-only">Markdown</label><textarea
-      id={uid}
-      bind:value
-      {rows}
-      placeholder={'Write a Markdown description…'}
-    ></textarea>{/if}
+  {:else}<div class="textarea-wrapper">
+      <label for={uid} class="sr-only">Markdown</label><textarea
+        id={uid}
+        bind:this={textarea}
+        bind:value
+        {rows}
+        placeholder={'Write a Markdown description…'}
+        oninput={handleInput}
+        onkeydown={handleKeyDown}
+        onclick={() => (showAutocomplete = false)}
+      ></textarea>
+      {#if showAutocomplete && autocompleteResults.length > 0}
+        <div class="autocomplete-dropdown">
+          {#each autocompleteResults as user, i}
+            <button
+              type="button"
+              class="autocomplete-item"
+              class:selected={i === autocompleteIndex}
+              onclick={() => insertMention(user)}
+              onmouseenter={() => (autocompleteIndex = i)}
+            >
+              {#if user.image}
+                <img src={user.image} alt={user.name} class="avatar" />
+              {/if}
+              <div class="user-info">
+                <span class="name">{user.name}</span>
+                {#if user.nickname}
+                  <span class="nickname">@{user.nickname}</span>
+                {/if}
+              </div>
+            </button>
+          {/each}
+        </div>
+      {/if}
+    </div>{/if}
   <input
     bind:this={input}
     class="file-input"
@@ -180,5 +293,63 @@
     height: 1px;
     overflow: hidden;
     clip-path: inset(50%);
+  }
+  .textarea-wrapper {
+    position: relative;
+    width: 100%;
+  }
+  .autocomplete-dropdown {
+    position: absolute;
+    bottom: calc(100% + 4px);
+    left: 0;
+    max-height: 200px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    overflow-y: auto;
+    z-index: 50;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    width: 250px;
+  }
+  .autocomplete-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    text-align: left;
+    width: 100%;
+    border-bottom: 1px solid var(--line);
+  }
+  .autocomplete-item:last-child {
+    border-bottom: none;
+  }
+  .autocomplete-item.selected,
+  .autocomplete-item:hover {
+    background: var(--surface-muted);
+  }
+  .autocomplete-item .avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  .autocomplete-item .user-info {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    gap: 6px;
+  }
+  .autocomplete-item .name {
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .autocomplete-item .nickname {
+    font-size: 11px;
+    color: var(--muted);
   }
 </style>

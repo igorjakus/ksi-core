@@ -3,7 +3,7 @@ import { status, t } from 'elysia';
 import { syncFileReferences } from './files';
 import { createElysia, requirePermission } from '../../lib/createElysia';
 import { recordEvent, type Executor, type Transaction } from '../../lib/audit';
-import { boards, kanbanItems, threads, comments, users, auditEvents } from '../../db';
+import { boards, kanbanItems, threads, comments, users, auditEvents, projects } from '../../db';
 import { canContribute, canReadThread } from '../../domain/permissions';
 import { validBoardStatuses, statusExists, type BoardStatus } from '../../domain/board-statuses';
 import { validTags } from '../../domain/content-policy';
@@ -439,7 +439,8 @@ export default createElysia({ prefix: '/platform' })
         id: comments.id,
         markdown: comments.markdown,
         createdAt: comments.createdAt,
-        authorName: users.name
+        authorName: users.name,
+        authorId: comments.authorId
       })
       .from(comments)
       .leftJoin(users, eq(comments.authorId, users.id))
@@ -565,7 +566,8 @@ export default createElysia({ prefix: '/platform' })
         id: comments.id,
         markdown: comments.markdown,
         createdAt: comments.createdAt,
-        authorName: users.name
+        authorName: users.name,
+        authorId: comments.authorId
       })
       .from(comments)
       .leftJoin(users, eq(comments.authorId, users.id))
@@ -684,6 +686,50 @@ export default createElysia({ prefix: '/platform' })
     },
     { body: t.Object({ markdown }) }
   )
+  .patch(
+    '/comments/:id',
+    async ({ db, user, params, body }) => {
+      const actor = requirePermission(user, 'collaboration.items.contribute');
+      return db.transaction(async (tx) => {
+        const [comment] = await tx
+          .select()
+          .from(comments)
+          .where(eq(comments.id, params.id))
+          .for('update');
+        if (!comment || comment.deletedAt) throw status(404, { code: 'COMMENT_NOT_FOUND' });
+
+        let projectId: string | null = null;
+        if (comment.threadId) {
+          const { thread, scope } = await threadScope(tx, comment.threadId);
+          assertThreadRead(actor, thread, scope);
+          if (comment.authorId !== actor.id)
+            requireLeader(actor, scope, 'collaboration.items.restore');
+          else assertContribute(actor, scope);
+          projectId = thread.projectId;
+        } else if (comment.itemId) {
+          const { board, scope } = await itemScope(tx, comment.itemId);
+          if (comment.authorId !== actor.id)
+            requireLeader(actor, scope, 'collaboration.items.restore');
+          else assertContribute(actor, scope);
+          projectId = board.projectId;
+        } else throw status(409, { code: 'INVALID_COMMENT' });
+
+        await tx
+          .update(comments)
+          .set({ markdown: body.markdown })
+          .where(eq(comments.id, comment.id));
+        await syncFileReferences(tx, 'comment', comment.id, body.markdown, actor);
+
+        await recordEvent(tx, {
+          actorId: actor.id,
+          projectId,
+          action: 'comments.edited',
+          targetId: comment.id
+        });
+      });
+    },
+    { body: t.Object({ markdown }) }
+  )
   .delete('/comments/:id', async ({ db, user, params }) => {
     const actor = requirePermission(user, 'collaboration.items.contribute');
     return db.transaction(async (tx) => {
@@ -733,10 +779,12 @@ export default createElysia({ prefix: '/platform' })
           event: auditEvents,
           actorName: users.name,
           firstName: users.firstName,
-          lastName: users.lastName
+          lastName: users.lastName,
+          projectSlug: projects.slug
         })
         .from(auditEvents)
         .leftJoin(users, eq(auditEvents.actorId, users.id))
+        .leftJoin(projects, eq(auditEvents.projectId, projects.id))
         .where(
           query.projectId
             ? eq(auditEvents.projectId, query.projectId)
