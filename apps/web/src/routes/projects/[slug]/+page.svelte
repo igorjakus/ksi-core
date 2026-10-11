@@ -1,4 +1,5 @@
 <script lang="ts">
+  import ArticleList from '$lib/components/ArticleList.svelte';
   import MemberPreview from '@ksi-core/ui/platform/MemberPreview.svelte';
   import Markdown from '@ksi-core/ui/platform/Markdown.svelte';
   import { locale } from '$lib/locale.svelte';
@@ -65,10 +66,7 @@
       {:else if section === 'articles'}
         <section class="my-10">
           <h2 class="mb-6 text-2xl font-semibold">Articles</h2>
-          {#each project.articles as article}<a
-              class="border-base-content/20 hover:border-base-content mb-3 block rounded border px-5 py-4"
-              href={`/articles/${encodeURIComponent(article.slug)}`}>{article.title}</a
-            >{/each}
+          <ArticleList articles={project.articles} />
         </section>
       {:else if section === 'leaders' || section === 'members'}
         <section class="my-10">

@@ -185,7 +185,18 @@ export default createElysia({ prefix: '/platform' })
       localizeContent(article, typeof query.locale === 'string' ? query.locale : undefined)
     );
     const mainArticle = publishedLocalized.find((a) => a.mainArticle) ?? null;
-    const feed = publishedLocalized.filter((a) => a.projectFeed && !a.mainArticle);
+    const feed = await Promise.all(
+      publishedLocalized
+        .filter((a) => a.projectFeed && !a.mainArticle)
+        .map(async (article) => ({
+          ...article,
+          authors: await articleCredits(
+            db,
+            article.id,
+            typeof query.locale === 'string' ? query.locale : undefined
+          )
+        }))
+    );
     const leaderIds = roster.filter((r) => r.leader).map((r) => r.user.id);
     const layout = project.layout.length ? project.layout : defaultLayout;
     const showLeaders = layout.some((s) => s.type === 'leaders' && !s.hidden);
