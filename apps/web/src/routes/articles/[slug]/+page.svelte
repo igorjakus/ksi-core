@@ -5,7 +5,7 @@
 </script>
 
 <svelte:head><title>{data.article.title} · KSI UWr</title></svelte:head>
-<main class="page-gutter mx-auto max-w-4xl py-12">
+<main class="article-page page-gutter mx-auto max-w-4xl py-12">
   <a class="btn btn-outline mb-6" href="/articles">All articles</a>
   <h1 class="mb-6 text-4xl font-bold">{data.article.title}</h1>
   {#if data.article.authors.length}<div class="mb-8 flex flex-wrap gap-4">
@@ -16,3 +16,10 @@
     </div>{/if}
   <Markdown blocks={data.blocks} language={locale.current === 'pl' ? 'pl' : 'en'} />
 </main>
+
+<style>
+  .article-page {
+    width: 100%;
+    min-inline-size: min(100%, 36rem);
+  }
+</style>
