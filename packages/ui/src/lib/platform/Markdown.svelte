@@ -1,8 +1,17 @@
 <script lang="ts">
+  import { imageResize } from './image-resize';
   import { tick } from 'svelte';
   import { X, ChevronLeft, ChevronRight } from '@lucide/svelte';
   import type { MarkdownBlock } from 'shared/markdown';
-  let { blocks, language = 'pl' }: { blocks: MarkdownBlock[]; language?: 'pl' | 'en' } = $props();
+  let {
+    blocks,
+    language = 'pl',
+    onresize
+  }: {
+    blocks: MarkdownBlock[];
+    language?: 'pl' | 'en';
+    onresize?: (index: number, width: number) => void;
+  } = $props();
 
   let dialog = $state<HTMLDialogElement>();
   function close() {
@@ -19,7 +28,7 @@
   let active = $state<{ ids: string[]; index: number } | null>(null);
 </script>
 
-<div class="markdown">
+<div class="markdown" use:imageResize={{ language, onresize, blocks }}>
   {#each blocks as block}{#if block.type === 'html'}{@html block.html}{:else}<div class="gallery">
         {#each block.ids.slice(0, block.preview) as id, index}<button
             type="button"
@@ -80,6 +89,34 @@
   .markdown :global(img) {
     max-width: 100%;
     height: auto;
+  }
+  .markdown :global(.markdown-image-frame) {
+    display: inline-block;
+    max-width: 100%;
+  }
+  .markdown :global(.image-resize-frame) {
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
+    line-height: 0;
+    outline: 1px solid var(--line, #acbdb4);
+  }
+  .markdown :global(.image-resize-handle) {
+    position: absolute;
+    right: -5px;
+    bottom: -5px;
+    width: 16px;
+    height: 16px;
+    padding: 0;
+    border: 2px solid var(--surface, white);
+    border-radius: 3px;
+    background: var(--ink, #272638);
+    cursor: ew-resize;
+    touch-action: none;
+  }
+  .markdown :global(.image-resize-handle:focus-visible) {
+    outline: 2px solid var(--ink, #272638);
+    outline-offset: 3px;
   }
   .gallery {
     display: grid;

@@ -1,3 +1,4 @@
+import { prepareMarkdownImages, clampImageWidth } from './markdown-images';
 import { marked } from 'marked';
 import sanitizeHtml from 'sanitize-html';
 export type MarkdownBlock =
@@ -5,6 +6,7 @@ export type MarkdownBlock =
   | { type: 'gallery'; ids: string[]; preview: number };
 export function renderMarkdown(source: string): MarkdownBlock[] {
   const blocks: MarkdownBlock[] = [];
+  source = prepareMarkdownImages(source);
   const gallery = /:::gallery(?:\s+preview=(\d+))?\s*\n([\s\S]*?)\n:::/g;
   const html = (value: string) =>
     sanitizeHtml(
@@ -15,13 +17,24 @@ export function renderMarkdown(source: string): MarkdownBlock[] {
         allowedTags: [...sanitizeHtml.defaults.allowedTags, 'img'],
         allowedAttributes: {
           a: ['href', 'title', 'rel'],
-          img: ['src', 'alt', 'title'],
-          code: ['class']
+          img: ['src', 'alt', 'title', 'width', 'data-ksi-image'],
+          code: ['class'],
+          span: ['class']
         },
+        allowedClasses: { span: ['markdown-image-frame'] },
         allowedSchemes: ['https', 'http', 'mailto'],
         allowedSchemesByTag: { img: ['https', 'http'] },
         allowProtocolRelative: false,
-        transformTags: { a: sanitizeHtml.simpleTransform('a', { rel: 'noopener noreferrer' }) }
+        transformTags: {
+          a: sanitizeHtml.simpleTransform('a', { rel: 'noopener noreferrer' }),
+          img: (tagName, attribs) => {
+            if (attribs.width && /^\d+$/.test(attribs.width))
+              attribs.width = String(clampImageWidth(Number(attribs.width)));
+            else delete attribs.width;
+            if (!/^\d+$/.test(attribs['data-ksi-image'] ?? '')) delete attribs['data-ksi-image'];
+            return { tagName, attribs };
+          }
+        }
       }
     );
   let start = 0;

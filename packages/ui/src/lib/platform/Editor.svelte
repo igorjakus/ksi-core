@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { resizeMarkdownImage } from 'shared/markdown-images.ts';
   import MarkdownContent from './MarkdownContent.svelte';
   import { Eye, Pencil, Images, UploadCloud, Paperclip } from '@lucide/svelte';
   let {
@@ -8,6 +9,23 @@
     allowGallery = false
   }: { value?: string; language?: 'pl' | 'en'; rows?: number; allowGallery?: boolean } = $props();
   const uid = $props.id();
+  const labels = $derived(
+    language === 'pl'
+      ? {
+          write: 'Edytuj',
+          preview: 'Podgląd',
+          gallery: 'Galeria',
+          placeholder: 'Napisz treść w Markdown…',
+          attachments: 'Przeciągnij pliki tutaj lub wybierz załączniki'
+        }
+      : {
+          write: 'Write',
+          preview: 'Preview',
+          gallery: 'Gallery',
+          placeholder: 'Write a Markdown description…',
+          attachments: 'Drop files here or choose attachments'
+        }
+  );
 
   let message = $state(''),
     preview = $state(false),
@@ -127,13 +145,15 @@
         type="button"
         class:active={!preview}
         aria-pressed={!preview}
-        onclick={() => (preview = false)}><Pencil size={14} aria-hidden="true" />{'Write'}</button
+        onclick={() => (preview = false)}
+        ><Pencil size={14} aria-hidden="true" />{labels.write}</button
       >
       <button
         type="button"
         class:active={preview}
         aria-pressed={preview}
-        onclick={() => (preview = true)}><Eye size={14} aria-hidden="true" />{'Preview'}</button
+        onclick={() => (preview = true)}
+        ><Eye size={14} aria-hidden="true" />{labels.preview}</button
       >
     </div>
     {#if allowGallery}<button
@@ -142,17 +162,23 @@
         onclick={() => {
           value += '\n:::gallery preview=3\nfile:IMAGE_ID\n:::\n';
           preview = false;
-        }}><Images size={14} aria-hidden="true" />{'Gallery'}</button
+        }}><Images size={14} aria-hidden="true" />{labels.gallery}</button
       >{/if}
   </div>
-  {#if preview}<div class="editor-preview"><MarkdownContent {value} {language} /></div>
+  {#if preview}<div class="editor-preview">
+      <MarkdownContent
+        {value}
+        {language}
+        onresize={(index, width) => (value = resizeMarkdownImage(value, index, width))}
+      />
+    </div>
   {:else}<div class="textarea-wrapper">
       <label for={uid} class="sr-only">Markdown</label><textarea
         id={uid}
         bind:this={textarea}
         bind:value
         {rows}
-        placeholder={'Write a Markdown description…'}
+        placeholder={labels.placeholder}
         oninput={handleInput}
         onkeydown={handleKeyDown}
         onclick={() => (showAutocomplete = false)}
@@ -211,7 +237,7 @@
     {#if busy}<UploadCloud size={18} aria-hidden="true" />{'Uploading…'}{:else}<Paperclip
         size={17}
         aria-hidden="true"
-      /><span>{'Drop files here or choose attachments'}</span>{/if}
+      /><span>{labels.attachments}</span>{/if}
   </button>
   {#if message}<p role="alert" class="error">{message}</p>{/if}
 </div>

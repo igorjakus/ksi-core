@@ -167,6 +167,7 @@
       "version": "0.0.1",
       "dependencies": {
         "@lucide/svelte": "0.548.0",
+        "shared": "workspace:*",
       },
       "devDependencies": {
         "@sveltejs/adapter-auto": "^7.0.1",

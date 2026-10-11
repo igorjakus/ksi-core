@@ -1,7 +1,15 @@
 <script lang="ts">
   import Markdown from './Markdown.svelte';
   import type { MarkdownBlock } from 'shared/markdown';
-  let { value, language = 'pl' }: { value: string; language?: 'pl' | 'en' } = $props();
+  let {
+    value,
+    language = 'pl',
+    onresize
+  }: {
+    value: string;
+    language?: 'pl' | 'en';
+    onresize?: (index: number, width: number) => void;
+  } = $props();
   let blocks = $state<MarkdownBlock[]>([]);
   let loading = $state(true);
   let failed = $state(false);
@@ -31,7 +39,7 @@
   });
 </script>
 
-{#if loading}<div
+{#if loading && blocks.length === 0}<div
     class="markdown-skeleton"
     aria-label={language === 'pl' ? 'Ładowanie podglądu' : 'Loading preview'}
   >
@@ -43,7 +51,7 @@
       : 'Preview unavailable. Please try again.'}
   </p>
 {:else if !value.trim()}<p class="muted">{language === 'pl' ? 'Brak opisu.' : 'No description.'}</p>
-{:else}<Markdown {blocks} {language} />{/if}
+{:else}<Markdown {blocks} {language} {onresize} />{/if}
 
 <style>
   .markdown-skeleton {

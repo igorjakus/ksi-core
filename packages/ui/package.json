@@ -29,10 +29,10 @@
     ],
     "./styles.css": "./styles.css",
     "./dark.css": "./dark.css",
-    "./platform/preferences":"./src/lib/platform/preferences.svelte.ts",
+    "./platform/preferences": "./src/lib/platform/preferences.svelte.ts",
     "./platform/*": "./src/lib/platform/*",
     "./platform.css": "./platform.css",
-    "./platform-theme.css":"./platform-theme.css"
+    "./platform-theme.css": "./platform-theme.css"
   },
   "scripts": {
     "dev": "vite dev",
@@ -44,7 +44,8 @@
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
   },
   "dependencies": {
-    "@lucide/svelte": "0.548.0"
+    "@lucide/svelte": "0.548.0",
+    "shared": "workspace:*"
   },
   "devDependencies": {
     "@sveltejs/adapter-auto": "^7.0.1",
