@@ -119,7 +119,7 @@
 
 <svelte:window
   onkeydown={(event) => {
-    if (event.key === Keys.Escape && openMenu) {
+    if (event.key === keys.Escape && openMenu) {
       const trigger = header.querySelector<HTMLButtonElement>(
         `[aria-controls="navbar-menu"][aria-expanded="true"]`
       );

@@ -726,14 +726,6 @@ msgid "More projects coming soon."
 msgstr "Więcej projektów wkrótce."
 
 #: src/routes/projects/[slug]/+page.svelte
-msgid "<0/> Join Project"
-msgstr "<0/> Dołącz do projektu"
-
-#: src/routes/projects/[slug]/+page.svelte
-msgid "<0/> Manage"
-msgstr "<0/> Zarządzaj"
-
-#: src/routes/projects/[slug]/+page.svelte
 msgid "About the Project"
 msgstr "O projekcie"
 
@@ -822,3 +814,23 @@ msgstr "<0/> Wyczyść filtry"
 #: src/routes/projects/+page.svelte
 msgid "( what's next? )"
 msgstr "( co dalej? )"
+
+#: src/routes/projects/[slug]/+page.svelte
+msgid "<0/> Project settings"
+msgstr "<0/> Ustawienia projektu"
+
+#: src/routes/projects/[slug]/+page.svelte
+msgid "<0/> Join project"
+msgstr "<0/> Dołącz do projektu"
+
+#: src/routes/projects/[slug]/+page.svelte
+msgid "Open project workspace"
+msgstr "Otwórz przestrzeń projektu"
+
+#: src/routes/projects/[slug]/+page.svelte
+msgid "Your join request has been sent."
+msgstr "Prośba o dołączenie została wysłana."
+
+#: src/routes/projects/[slug]/+page.svelte
+msgid "You have joined the project."
+msgstr "Dołączono do projektu."
