@@ -288,6 +288,11 @@ describe.skipIf(!disposable)('Postgres persisted content and collaboration', () 
     });
     expect(created.status).toBe(200);
     articleId = created.body.id;
+    expect((await content(`/articles/by-slug/${created.body.slug}`, 'leader')).body.id).toBe(
+      articleId
+    );
+    expect((await content(`/articles/by-slug/${created.body.slug}`, 'outsider')).status).toBe(403);
+    expect((await content(`/articles/by-slug/${created.body.slug}`, 'pending')).status).toBe(403);
     const hidden = await contentRoutes.handle(
       new Request(`http://localhost/platform/public/articles/${created.body.slug}`)
     );

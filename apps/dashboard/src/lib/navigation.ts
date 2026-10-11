@@ -14,6 +14,7 @@ export function parseDashboardPath(pathname: string): {
   graveyard?: boolean;
   memberId?: string;
   threadId?: string;
+  articleSlug?: string;
 } | null {
   let segments: string[];
   try {
@@ -22,6 +23,14 @@ export function parseDashboardPath(pathname: string): {
     return null;
   }
   const [root, slug, view] = segments;
+  if (
+    root === 'articles' &&
+    slug &&
+    segments.length === 2 &&
+    !slug.includes('/') &&
+    !slug.includes('\\')
+  )
+    return { workspace: 'directory', projectSlug: '', tab: 'articles', articleSlug: slug };
   const removed = root === 'association' ? segments[2] : segments[3];
   if (
     removed &&

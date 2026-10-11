@@ -154,6 +154,75 @@ describe.skipIf(!safe)('persistent dashboard workflows', () => {
       )
     ).toBe(true);
   });
+  test('administrator email changes revoke access and require verification; recovery stays private', async () => {
+    const id = createId(),
+      email = `${id}@example.test`,
+      nextEmail = `next-${id}@example.test`;
+    await db.insert(users).values({
+      id,
+      name: 'Recovery test',
+      email,
+      emailVerified: true,
+      membershipStatus: 'active'
+    });
+    const sessionId = createId();
+    await db.insert(sessions).values({
+      id: sessionId,
+      token: createId(),
+      userId: id,
+      expiresAt: new Date(Date.now() + 3600000),
+      updatedAt: new Date()
+    });
+    await db.insert(verifications).values({
+      identifier: `reset-password:old-${id}`,
+      value: id,
+      expiresAt: new Date(Date.now() + 3600000)
+    });
+    try {
+      expect(
+        (await request('member', `/users/${id}/email`, 'PATCH', { email: nextEmail })).status
+      ).toBe(403);
+      expect((await request('member', `/users/${id}/password-reset`, 'POST')).status).toBe(403);
+      expect(
+        (
+          await request('admin', `/users/${id}/email`, 'PATCH', {
+            email: `${ids.admin}@example.test`
+          })
+        ).status
+      ).toBe(409);
+      const changed = await request('admin', `/users/${id}/email`, 'PATCH', {
+        email: nextEmail.toUpperCase()
+      });
+      expect(changed.status).toBe(200);
+      expect(changed.body.email).toBe(nextEmail);
+      expect(changed.body.emailVerified).toBe(false);
+      expect(await db.select().from(sessions).where(eq(sessions.userId, id))).toHaveLength(0);
+      expect(await db.select().from(verifications).where(eq(verifications.value, id))).toHaveLength(
+        0
+      );
+      const recovery = await request('admin', `/users/${id}/password-reset`, 'POST');
+      expect(recovery.status).toBe(200);
+      expect(recovery.body).toEqual({ queued: true });
+      expect(await db.select().from(mailJobs).where(eq(mailJobs.to, nextEmail))).toHaveLength(2);
+      const [event] = await db.select().from(auditEvents).where(eq(auditEvents.targetId, id));
+      expect(JSON.stringify(event!.metadata)).not.toContain(nextEmail);
+      await db.update(users).set({ membershipStatus: 'deleted' }).where(eq(users.id, id));
+      expect((await request('admin', `/users/${id}/password-reset`, 'POST')).status).toBe(409);
+    } finally {
+      const events = await db.select().from(auditEvents).where(eq(auditEvents.targetId, id));
+      if (events.length)
+        await db.delete(outbox).where(
+          inArray(
+            outbox.eventId,
+            events.map((e) => e.id)
+          )
+        );
+      await db.delete(auditEvents).where(eq(auditEvents.targetId, id));
+      await db.delete(mailJobs).where(inArray(mailJobs.to, [email, nextEmail]));
+      await db.delete(verifications).where(eq(verifications.value, id));
+      await db.delete(users).where(eq(users.id, id));
+    }
+  });
   test('workspace rosters protect account data and expose scoped project settings', async () => {
     expect((await request('pending', '/platform/members')).status).toBe(403);
     const roster = await request('member', `/platform/projects/${projectId}/members`);

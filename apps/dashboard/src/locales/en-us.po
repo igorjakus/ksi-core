@@ -349,16 +349,8 @@ msgid "New article"
 msgstr "New article"
 
 #: src/routes/[...workspace]/+page.svelte
-msgid "Enter"
-msgstr "Enter"
-
-#: src/routes/[...workspace]/+page.svelte
 msgid "No articles yet. Create the first article in this workspace."
 msgstr "No articles yet. Create the first article in this workspace."
-
-#: src/routes/[...workspace]/+page.svelte
-msgid "Edit article"
-msgstr "Edit article"
 
 #: src/lib/KanbanBoard.svelte
 #: src/routes/[...workspace]/+page.svelte
@@ -621,6 +613,7 @@ msgstr "Create project"
 #: src/lib/KanbanBoard.svelte
 #: src/lib/Members.svelte
 #: src/lib/Members.svelte
+#: src/lib/Members.svelte
 msgid "Error"
 msgstr "Error"
 
@@ -669,6 +662,7 @@ msgstr "Task status"
 #: src/lib/KanbanBoard.svelte
 #: src/lib/KanbanBoard.svelte
 #: src/lib/KanbanBoard.svelte
+#: src/lib/Members.svelte
 #: src/lib/Members.svelte
 #: src/lib/ProjectSettings.svelte
 #: src/routes/[...workspace]/+page.svelte
@@ -1015,10 +1009,6 @@ msgstr "Settings"
 msgid "Project settings"
 msgstr "Project settings"
 
-#: src/routes/[...workspace]/+page.svelte
-msgid "You are a project member"
-msgstr "You are a project member"
-
 #: src/lib/WorkspaceMembers.svelte
 msgid "Project leader"
 msgstr "Project leader"
@@ -1202,3 +1192,84 @@ msgstr "Previous page"
 #: src/lib/Members.svelte
 msgid "Next page"
 msgstr "Next page"
+
+#: src/routes/[...workspace]/+page.svelte
+msgid "To choose the article displayed on the public project home page, open an article, enable “Main project article”, and publish it."
+msgstr "To choose the article displayed on the public project home page, open an article, enable “Main project article”, and publish it."
+
+#: src/routes/[...workspace]/+page.svelte
+msgid "Manage articles"
+msgstr "Manage articles"
+
+#: src/routes/[...workspace]/+page.svelte
+msgid "All articles"
+msgstr "All articles"
+
+#: src/routes/[...workspace]/+page.svelte
+#: src/routes/[...workspace]/+page.svelte
+msgid "Main project article"
+msgstr "Main project article"
+
+#: src/routes/[...workspace]/+page.svelte
+msgid "Published"
+msgstr "Published"
+
+#: src/routes/[...workspace]/+page.svelte
+msgid "Draft"
+msgstr "Draft"
+
+#: src/routes/[...workspace]/+page.svelte
+msgid "Article content"
+msgstr "Article content"
+
+#: src/routes/[...workspace]/+page.svelte
+msgid "When published, this article appears on the public project home page. It replaces the previous main article. Save or publish to apply this setting."
+msgstr "When published, this article appears on the public project home page. It replaces the previous main article. Save or publish to apply this setting."
+
+#: src/lib/Members.svelte
+msgid "Password recovery email queued."
+msgstr "Password recovery email queued."
+
+#: src/lib/Members.svelte
+msgid "This email address is already used by another account."
+msgstr "This email address is already used by another account."
+
+#: src/lib/Members.svelte
+msgid "Deleted accounts cannot be changed."
+msgstr "Deleted accounts cannot be changed."
+
+#: src/lib/Members.svelte
+msgid "Email updated. Sessions revoked and verification email queued."
+msgstr "Email updated. Sessions revoked and verification email queued."
+
+#: src/lib/Members.svelte
+msgid "Authentication"
+msgstr "Authentication"
+
+#: src/lib/Members.svelte
+msgid "Email address"
+msgstr "Email address"
+
+#: src/lib/Members.svelte
+msgid "Changing the email revokes sessions and sends a verification link to the new address."
+msgstr "Changing the email revokes sessions and sends a verification link to the new address."
+
+#: src/lib/Members.svelte
+msgid "Send a recovery link to the saved email address. Passwords are never displayed here."
+msgstr "Send a recovery link to the saved email address. Passwords are never displayed here."
+
+#: src/lib/Members.svelte
+msgid "Send a password recovery email to this member?"
+msgstr "Send a password recovery email to this member?"
+
+#: src/lib/Members.svelte
+msgid "Send recovery link"
+msgstr "Send recovery link"
+
+#: src/lib/Members.svelte
+msgid "Reset password"
+msgstr "Reset password"
+
+#: src/lib/Members.svelte
+msgid "Save email"
+msgstr "Save email"

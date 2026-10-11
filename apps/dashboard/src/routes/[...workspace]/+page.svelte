@@ -89,6 +89,7 @@
     version: number;
     state: string;
     mainArticle: boolean;
+    projectId: string | null;
     projectFeed: boolean;
     websiteFeed: boolean;
   };
@@ -243,6 +244,22 @@
           avatarRequest = request;
           profile.image = current.user.image;
         }
+      }
+      const articleSlug = parseDashboardPath(page.url.pathname)?.articleSlug;
+      if (currentTab === 'articles' && articleSlug) {
+        const article = await api<Article>(
+          `/platform/articles/by-slug/${encodeURIComponent(articleSlug)}`
+        );
+        if (generation !== loadGeneration) return;
+        const project = projectList.find((project) => project.id === article.projectId);
+        if (article.projectId && !project) throw new Error('Project not found.');
+        workspace = article.projectId ? 'project' : 'association';
+        projectSlug = project?.slug ?? '';
+        currentScope = scope = article.projectId ?? '';
+        selectedArticle = article;
+        title = article.title;
+        slug = article.slug;
+        markdown = article.markdown;
       }
       if (workspace === 'project') {
         const project = projectList.find((project) => project.slug === projectSlug);
@@ -483,7 +500,7 @@
         ...(scope ? { projectId: scope } : {}),
         language
       });
-      selectedArticle = result;
+      await goto(`/articles/${encodeURIComponent(result.slug)}`);
       return result;
     }
     if (tab === 'forum') {
@@ -984,9 +1001,7 @@
                             onclick={guardNavigation}><Pencil size={15} />{'Project settings'}</a
                           >
                         {/if}
-                        {#if projectAccess.isMember}
-                          <span class="muted">{'You are a project member'}</span>
-                        {:else}
+                        {#if !projectAccess.isMember}
                           <button
                             class="btn btn-outline"
                             disabled={busy}
@@ -998,6 +1013,15 @@
                       </div>
                     {/if}
                   </div>
+                  {#if workspace === 'project' && projectAccess.canEdit}
+                    <p class="muted project-article-help">
+                      {'To choose the article displayed on the public project home page, open an article, enable “Main project article”, and publish it.'}
+                      <a
+                        href={dashboardPath(workspace, projectSlug, 'articles')}
+                        onclick={guardNavigation}>{'Manage articles'}</a
+                      >
+                    </p>
+                  {/if}
                   <div class="workspace-shortcuts">
                     {#each [['board', 'Kanban', 'Plan and track shared tasks.'], ['forum', 'Forum', 'Discuss, ask questions, and share ideas.'], ['articles', 'Articles', 'Write publications and propose changes.']] as [key, label, description]}
                       <a
@@ -1028,67 +1052,76 @@
                   />
                 {:else if tab === 'articles'}
                   <div class="workspace-header">
-                    <div>
-                      <h1>{'Articles'}</h1>
-                    </div>
-                    <button
-                      class="btn"
-                      disabled={busy}
-                      onclick={() => {
-                        selectedArticle = null;
-                        newArticle = true;
-                        title = '';
-                        markdown = '';
-                        slug = '';
-                      }}
-                    >
-                      <Plus size={16} aria-hidden="true" />{'New article'}
-                    </button>
-                  </div>
-
-                  {#each articles as article (article.id)}
-                    <div
-                      class="list-strip"
-                      role="button"
-                      tabindex="0"
-                      onclick={() => {
-                        selectedArticle = article;
-                        slug = article.slug;
-                        title = article.title;
-                        markdown = article.markdown;
-                      }}
-                      onkeydown={(e) =>
-                        e.key === 'Enter' &&
-                        (() => {
-                          selectedArticle = article;
-                          slug = article.slug;
-                          title = article.title;
-                          markdown = article.markdown;
-                        })()}
-                    >
-                      <div class="list-strip-info">
-                        <h3>{article.title}</h3>
-                        <div class="list-strip-meta">{article.state} · {article.slug}</div>
-                      </div>
-                      <span class="tag {article.state === 'published' ? 'tag-mint' : ''}"
-                        >{article.state}</span
+                    <h1>{selectedArticle ? selectedArticle.title : 'Articles'}</h1>
+                    {#if parseDashboardPath(page.url.pathname)?.articleSlug}
+                      <a
+                        class="btn btn-outline"
+                        href={dashboardPath(workspace, projectSlug, 'articles')}
+                        onclick={guardNavigation}><ArrowLeft size={16} />{'All articles'}</a
                       >
-                    </div>
-                  {/each}
-
-                  {#if !loading && !articles.length && !newArticle}<p class="muted">
-                      {'No articles yet. Create the first article in this workspace.'}
-                    </p>{/if}
+                    {:else}
+                      <button
+                        class="btn"
+                        disabled={busy}
+                        onclick={() => {
+                          selectedArticle = null;
+                          newArticle = true;
+                          title = '';
+                          markdown = '';
+                          slug = '';
+                        }}><Plus size={16} aria-hidden="true" />{'New article'}</button
+                      >
+                    {/if}
+                  </div>
+                  {#if !parseDashboardPath(page.url.pathname)?.articleSlug}
+                    {#each articles as article (article.id)}
+                      <a
+                        class="list-strip article-link"
+                        href={`/articles/${encodeURIComponent(article.slug)}`}
+                        onclick={guardNavigation}
+                      >
+                        <div class="list-strip-info">
+                          <h3>{article.title}</h3>
+                          <div class="list-strip-meta">{article.slug}</div>
+                        </div>
+                        <div class="row">
+                          {#if article.mainArticle}<span class="tag tag-mint"
+                              >{'Main project article'}</span
+                            >{/if}
+                          <span class="tag"
+                            >{article.state === 'published' ? 'Published' : 'Draft'}</span
+                          >
+                          <ArrowUpRight size={16} aria-hidden="true" />
+                        </div>
+                      </a>
+                    {/each}
+                    {#if !loading && !articles.length && !newArticle && !error}<p class="muted">
+                        {'No articles yet. Create the first article in this workspace.'}
+                      </p>{/if}
+                  {/if}
                   {#if selectedArticle || newArticle}
                     <div class="card" style="margin-top: 20px;">
                       <h2 style="font-size: 1.1rem; margin-bottom: 16px;">
-                        {selectedArticle ? 'Edit article' : 'New article'}
+                        {selectedArticle ? 'Article content' : 'New article'}
                       </h2>
                       <label for="a-title">{'Title'}</label>
                       <input id="a-title" bind:value={title} required />
                       <label for="a-slug">Slug</label>
-                      <input id="a-slug" bind:value={slug} />
+                      <input id="a-slug" bind:value={slug} readonly={!!selectedArticle} required />
                       <Editor {language} allowGallery bind:value={markdown} />
+                      {#if selectedArticle && workspace === 'project' && boardLeader}
+                        <div class="main-article-setting">
+                          <label
+                            ><input
+                              type="checkbox"
+                              bind:checked={selectedArticle.mainArticle}
+                            />{'Main project article'}</label
+                          >
+                          <p class="muted">
+                            {'When published, this article appears on the public project home page. It replaces the previous main article. Save or publish to apply this setting.'}
+                          </p>
+                        </div>
+                      {/if}
                       <div class="row" style="margin-top: 16px; gap: 8px;">
                         {#if selectedArticle}
                           <button
@@ -1105,7 +1138,11 @@
                           >
                             {'Publish'}
                           </button>
-                          <button disabled={busy} onclick={() => action(propose)}>
+                          <button
+                            class="btn btn-outline"
+                            disabled={busy}
+                            onclick={() => action(propose)}
+                          >
                             {'Propose edit'}
                           </button>
                           <label
@@ -1126,7 +1163,7 @@
                         {:else}
                           <button
                             class="btn"
-                            disabled={busy || !title.trim()}
+                            disabled={busy || !title.trim() || !slug.trim()}
                             onclick={() => action(create)}
                           >
                             {'Create'}
@@ -1787,6 +1824,42 @@
 {/if}
 
 <style>
+  .article-link {
+    padding: 18px 20px;
+    margin: 10px 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    text-decoration: none;
+    color: inherit;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .article-link:hover {
+    border-color: var(--muted);
+  }
+  .project-article-help {
+    margin-bottom: 20px;
+    max-width: 80ch;
+  }
+  .project-article-help a {
+    margin-left: 6px;
+    text-decoration: underline;
+  }
+  .main-article-setting {
+    margin-top: 20px;
+    padding: 16px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .main-article-setting label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .main-article-setting p {
+    margin: 8px 0 0;
+  }
+
   .event-item {
     padding: 12px 16px;
     border-bottom: 1px solid var(--line);

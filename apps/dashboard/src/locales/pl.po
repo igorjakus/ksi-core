@@ -349,16 +349,8 @@ msgid "New article"
 msgstr "Nowy artykuł"
 
 #: src/routes/[...workspace]/+page.svelte
-msgid "Enter"
-msgstr "Enter"
-
-#: src/routes/[...workspace]/+page.svelte
 msgid "No articles yet. Create the first article in this workspace."
 msgstr "Brak artykułów. Utwórz pierwszy artykuł w tym obszarze roboczym."
-
-#: src/routes/[...workspace]/+page.svelte
-msgid "Edit article"
-msgstr "Edytuj artykuł"
 
 #: src/lib/KanbanBoard.svelte
 #: src/routes/[...workspace]/+page.svelte
@@ -621,6 +613,7 @@ msgstr "Utwórz projekt"
 #: src/lib/KanbanBoard.svelte
 #: src/lib/Members.svelte
 #: src/lib/Members.svelte
+#: src/lib/Members.svelte
 msgid "Error"
 msgstr "Błąd"
 
@@ -669,6 +662,7 @@ msgstr "Status zadania"
 #: src/lib/KanbanBoard.svelte
 #: src/lib/KanbanBoard.svelte
 #: src/lib/KanbanBoard.svelte
+#: src/lib/Members.svelte
 #: src/lib/Members.svelte
 #: src/lib/ProjectSettings.svelte
 #: src/routes/[...workspace]/+page.svelte
@@ -1015,10 +1009,6 @@ msgstr "Ustawienia"
 msgid "Project settings"
 msgstr "Ustawienia projektu"
 
-#: src/routes/[...workspace]/+page.svelte
-msgid "You are a project member"
-msgstr "Należysz do projektu"
-
 #: src/lib/WorkspaceMembers.svelte
 msgid "Project leader"
 msgstr "Lider projektu"
@@ -1202,3 +1192,84 @@ msgstr "Poprzednia strona"
 #: src/lib/Members.svelte
 msgid "Next page"
 msgstr "Następna strona"
+
+#: src/routes/[...workspace]/+page.svelte
+msgid "To choose the article displayed on the public project home page, open an article, enable “Main project article”, and publish it."
+msgstr "Aby wybrać artykuł wyświetlany na publicznej stronie projektu, otwórz artykuł, zaznacz „Główny artykuł projektu” i opublikuj go."
+
+#: src/routes/[...workspace]/+page.svelte
+msgid "Manage articles"
+msgstr "Zarządzaj artykułami"
+
+#: src/routes/[...workspace]/+page.svelte
+msgid "All articles"
+msgstr "Wszystkie artykuły"
+
+#: src/routes/[...workspace]/+page.svelte
+#: src/routes/[...workspace]/+page.svelte
+msgid "Main project article"
+msgstr "Główny artykuł projektu"
+
+#: src/routes/[...workspace]/+page.svelte
+msgid "Published"
+msgstr "Opublikowany"
+
+#: src/routes/[...workspace]/+page.svelte
+msgid "Draft"
+msgstr "Szkic"
+
+#: src/routes/[...workspace]/+page.svelte
+msgid "Article content"
+msgstr "Treść artykułu"
+
+#: src/routes/[...workspace]/+page.svelte
+msgid "When published, this article appears on the public project home page. It replaces the previous main article. Save or publish to apply this setting."
+msgstr "Po opublikowaniu ten artykuł pojawi się na publicznej stronie projektu i zastąpi poprzedni główny artykuł. Zapisz lub opublikuj, aby zastosować ustawienie."
+
+#: src/lib/Members.svelte
+msgid "Password recovery email queued."
+msgstr "Wiadomość z linkiem do odzyskania hasła została zakolejkowana."
+
+#: src/lib/Members.svelte
+msgid "This email address is already used by another account."
+msgstr "Ten adres e-mail jest już używany przez inne konto."
+
+#: src/lib/Members.svelte
+msgid "Deleted accounts cannot be changed."
+msgstr "Nie można zmieniać usuniętych kont."
+
+#: src/lib/Members.svelte
+msgid "Email updated. Sessions revoked and verification email queued."
+msgstr "Adres e-mail zmieniony. Sesje unieważniono i zakolejkowano wiadomość weryfikacyjną."
+
+#: src/lib/Members.svelte
+msgid "Authentication"
+msgstr "Uwierzytelnianie"
+
+#: src/lib/Members.svelte
+msgid "Email address"
+msgstr "Adres e-mail"
+
+#: src/lib/Members.svelte
+msgid "Changing the email revokes sessions and sends a verification link to the new address."
+msgstr "Zmiana adresu e-mail unieważnia sesje i wysyła link weryfikacyjny na nowy adres."
+
+#: src/lib/Members.svelte
+msgid "Send a recovery link to the saved email address. Passwords are never displayed here."
+msgstr "Wyślij link do odzyskania hasła na zapisany adres e-mail. Hasła nie są tutaj wyświetlane."
+
+#: src/lib/Members.svelte
+msgid "Send a password recovery email to this member?"
+msgstr "Wysłać temu członkowi wiadomość do odzyskania hasła?"
+
+#: src/lib/Members.svelte
+msgid "Send recovery link"
+msgstr "Wyślij link do odzyskania hasła"
+
+#: src/lib/Members.svelte
+msgid "Reset password"
+msgstr "Resetuj hasło"
+
+#: src/lib/Members.svelte
+msgid "Save email"
+msgstr "Zapisz e-mail"

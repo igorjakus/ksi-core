@@ -94,3 +94,14 @@ test('workspace member and project settings paths are persistent', () => {
   expect(parseDashboardPath('/association/settings')).toBeNull();
   expect(parseDashboardPath('/people/abc')?.memberId).toBe('abc');
 });
+
+test('article slugs persist in standalone routes and reject malformed segments', () => {
+  expect(parseDashboardPath('/articles/project-introduction')).toEqual({
+    workspace: 'directory',
+    projectSlug: '',
+    tab: 'articles',
+    articleSlug: 'project-introduction'
+  });
+  expect(parseDashboardPath('/articles/a%2Fb')).toBeNull();
+  expect(parseDashboardPath('/articles/a/extra')).toBeNull();
+});

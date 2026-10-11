@@ -1,7 +1,11 @@
+import { createEmailVerificationToken } from 'better-auth/api';
+import { auth } from '../../lib/auth';
+import { recordEvent } from '../../lib/audit';
+import { getUrls } from 'shared';
 import { validProfileLink } from 'shared/profile-links';
 import { status, t } from 'elysia';
 import { eq, and, or, ilike, asc, count } from 'drizzle-orm';
-import { users, auditEvents, outbox } from '../../db';
+import { users, auditEvents, outbox, sessions, verifications, mailJobs } from '../../db';
 import { createElysia, requirePermission } from '../../lib/createElysia';
 import { manageUser, anonymizeUser } from '../../services/users';
 import { effectivePermissions, type Permission } from '../../domain/permissions';
@@ -214,6 +218,104 @@ export const userRoutes = createElysia({ prefix: '/users', protectedRoute: true 
     }
   )
 
+  .patch(
+    '/:id/email',
+    async ({ user, db, params, body }) => {
+      const actor = requirePermission(user, 'users.accounts.edit-email');
+      if (actor.role !== 'administrator') throw status(403, { code: 'FORBIDDEN' });
+      const email = body.email.trim().toLowerCase();
+      const urls = getUrls();
+      const context = await auth.$context;
+      try {
+        return await db.transaction(async (tx) => {
+          const [currentActor] = await tx
+            .select()
+            .from(users)
+            .where(eq(users.id, actor.id))
+            .for('share');
+          requirePermission(currentActor ?? null, 'users.accounts.edit-email');
+          if (currentActor?.role !== 'administrator') throw status(403, { code: 'FORBIDDEN' });
+          const [member] = await tx
+            .select()
+            .from(users)
+            .where(eq(users.id, params.id))
+            .for('update');
+          if (!member) throw status(404, { code: 'USER_NOT_FOUND' });
+          if (member.membershipStatus === 'deleted') throw status(409, { code: 'ACCOUNT_DELETED' });
+          if (member.email.toLowerCase() === email) return member;
+          const [taken] = await tx
+            .select({ id: users.id })
+            .from(users)
+            .where(eq(users.email, email));
+          if (taken) throw status(409, { code: 'EMAIL_IN_USE' });
+          const [updated] = await tx
+            .update(users)
+            .set({ email, emailVerified: false })
+            .where(eq(users.id, params.id))
+            .returning();
+          await tx.delete(sessions).where(eq(sessions.userId, params.id));
+          await tx
+            .delete(verifications)
+            .where(
+              and(
+                eq(verifications.value, params.id),
+                ilike(verifications.identifier, 'reset-password:%')
+              )
+            );
+          const token = await createEmailVerificationToken(context.secret, email);
+          const url = `${urls.frontend.auth}/api/auth/verify-email?token=${encodeURIComponent(token)}&callbackURL=${encodeURIComponent(urls.frontend.auth)}`;
+          await tx
+            .insert(mailJobs)
+            .values({ to: email, subject: 'KSI — potwierdź adres / verify email', body: url });
+          await recordEvent(tx, {
+            actorId: actor.id,
+            action: 'users.email.changed',
+            targetId: params.id
+          });
+          return updated!;
+        });
+      } catch (error) {
+        // A concurrent claim of the address must also produce a useful conflict response.
+        if (
+          (error as { code?: string }).code === '23505' ||
+          (error as { cause?: { code?: string } }).cause?.code === '23505'
+        )
+          throw status(409, { code: 'EMAIL_IN_USE' });
+        throw error;
+      }
+    },
+    {
+      body: t.Object(
+        { email: t.String({ format: 'email', maxLength: 254 }) },
+        { additionalProperties: false }
+      )
+    }
+  )
+  .post('/:id/password-reset', async ({ user, db, params }) => {
+    const actor = requirePermission(user, 'users.accounts.reset-password');
+    if (actor.role !== 'administrator') throw status(403, { code: 'FORBIDDEN' });
+    await db.transaction(async (tx) => {
+      const [currentActor] = await tx
+        .select()
+        .from(users)
+        .where(eq(users.id, actor.id))
+        .for('share');
+      requirePermission(currentActor ?? null, 'users.accounts.reset-password');
+      if (currentActor?.role !== 'administrator') throw status(403, { code: 'FORBIDDEN' });
+      const [member] = await tx.select().from(users).where(eq(users.id, params.id)).for('update');
+      if (!member) throw status(404, { code: 'USER_NOT_FOUND' });
+      if (member.membershipStatus === 'deleted') throw status(409, { code: 'ACCOUNT_DELETED' });
+      await auth.api.requestPasswordReset({
+        body: { email: member.email, redirectTo: `${getUrls().frontend.auth}/reset-password` }
+      });
+      await recordEvent(tx, {
+        actorId: actor.id,
+        action: 'users.password-reset.queued',
+        targetId: params.id
+      });
+    });
+    return { queued: true };
+  })
   .patch(
     '/:id/access',
     async ({ user, params, body }) => {

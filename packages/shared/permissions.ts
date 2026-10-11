@@ -12,6 +12,10 @@ export const permissions = {
   'users.membership.suspend': 'Suspend member accounts.',
   'users.roles.assign': 'Assign member, board and administrator roles.',
   'users.permissions.assign': 'Assign explicit permission grants and denials.',
+  'users.accounts.edit-email':
+    'Change another member’s email and require verification as an administrator.',
+  'users.accounts.reset-password':
+    'Send a password recovery link to another member as an administrator.',
   'users.accounts.anonymize': 'Anonymize accounts while preserving association content.',
   'users.members.manage-profile': 'Edit another member’s profile as an administrator.',
   'projects.catalog.create': 'Create projects and assign their initial leaders.',
@@ -50,6 +54,10 @@ export const polishPermissionDescriptions: Record<Permission, string> = {
   'users.membership.suspend': 'Zawieszaj konta członków.',
   'users.roles.assign': 'Przypisuj role członka, zarządu i administratora.',
   'users.permissions.assign': 'Przypisuj jawne nadania i odmowy uprawnień.',
+  'users.accounts.edit-email':
+    'Zmień adres e-mail innego członka i wymagaj weryfikacji jako administrator.',
+  'users.accounts.reset-password':
+    'Wyślij link do odzyskania hasła innemu członkowi jako administrator.',
   'users.accounts.anonymize': 'Anonimizuj konta z zachowaniem treści koła.',
   'users.members.manage-profile': 'Edytuj profil innego członka jako administrator.',
   'projects.catalog.create': 'Twórz projekty i przypisuj ich początkowych liderów.',

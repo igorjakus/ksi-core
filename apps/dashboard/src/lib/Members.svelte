@@ -33,6 +33,23 @@
     notice = $state(''),
     confirmDelete = $state(false),
     search = $state('');
+  let emailDraft = $state('');
+  let resetConfirmation = $state(false);
+  async function resetPassword() {
+    if (!member) return;
+    busy = true;
+    error = '';
+    notice = '';
+    try {
+      await api(`/${member.id}/password-reset`, 'POST');
+      notice = 'Password recovery email queued.';
+      resetConfirmation = false;
+    } catch (e) {
+      error = e instanceof Error ? e.message : 'Error';
+    } finally {
+      busy = false;
+    }
+  }
   let accessRole = $state<Profile['role']>('member');
   let accessStatus = $state<Profile['membershipStatus']>('pending');
   let accessFlags = $state<string[]>([]);
@@ -68,6 +85,8 @@
       const messages: Record<string, string> = {
         INVALID_GITHUB_URL: 'Use a https://github.com/username profile link.',
         INVALID_LINKEDIN_URL: 'Use a https://linkedin.com/in/username profile link.',
+        EMAIL_IN_USE: 'This email address is already used by another account.',
+        ACCOUNT_DELETED: 'Deleted accounts cannot be changed.',
         LAST_ADMINISTRATOR: 'The final active administrator must retain access.'
       };
       throw new Error(messages[result.code] ?? result.code ?? result.message);
@@ -88,6 +107,8 @@
       if (current !== generation) return;
       if (id) {
         member = result;
+        emailDraft = result.email;
+        resetConfirmation = false;
         accessRole = result.role;
         accessStatus = result.membershipStatus;
         accessFlags = [...result.flags];
@@ -134,8 +155,13 @@
           accessRole = updated.role;
           accessStatus = updated.membershipStatus;
           accessFlags = [...updated.flags];
+        } else if (path.endsWith('/email') && member) {
+          member = { ...member, email: updated.email };
+          emailDraft = updated.email;
         } else member = updated;
-        notice = 'Changes saved.';
+        notice = path.endsWith('/email')
+          ? 'Email updated. Sessions revoked and verification email queued.'
+          : 'Changes saved.';
       }
     } catch (e) {
       error = e instanceof Error ? e.message : 'Error';
@@ -243,10 +269,58 @@
         />{/if}
     </form>
   </div>
+  {#if administrator && member.membershipStatus !== 'deleted'}
+    <section class="card account-authentication">
+      <h2>{'Authentication'}</h2>
+      <form
+        id="member-email"
+        onsubmit={(event) => {
+          event.preventDefault();
+          void mutate(`/${member!.id}/email`, 'PATCH', { email: emailDraft.trim() });
+        }}
+      >
+        <label
+          >{'Email address'}<input
+            type="email"
+            bind:value={emailDraft}
+            required
+            maxlength="254"
+          /></label
+        >
+        <p class="muted">
+          {'Changing the email revokes sessions and sends a verification link to the new address.'}
+        </p>
+      </form>
+      <p class="muted">
+        {'Send a recovery link to the saved email address. Passwords are never displayed here.'}
+      </p>
+      {#if resetConfirmation}
+        <p>{'Send a password recovery email to this member?'}</p>
+        <div class="row">
+          <button class="btn" disabled={busy} onclick={resetPassword}>{'Send recovery link'}</button
+          ><button
+            class="btn btn-outline"
+            disabled={busy}
+            onclick={() => (resetConfirmation = false)}>{'Cancel'}</button
+          >
+        </div>
+      {:else}
+        <button class="btn btn-outline" disabled={busy} onclick={() => (resetConfirmation = true)}
+          >{'Reset password'}</button
+        >
+      {/if}
+    </section>
+  {/if}
   {#if member.membershipStatus !== 'deleted'}
     <div class="member-actions">
       {#if administrator}<button class="btn" form="member-profile" disabled={busy}
           ><Save size={15} aria-hidden="true" />{'Save profile'}</button
+        >{/if}
+      {#if administrator}<button
+          class="btn btn-outline"
+          form="member-email"
+          disabled={busy || emailDraft.trim().toLowerCase() === member.email.toLowerCase()}
+          ><Save size={15} aria-hidden="true" />{'Save email'}</button
         >{/if}
       {#if canSaveAccess}<button class="btn btn-outline" form="member-access" disabled={busy}
           ><Save size={15} aria-hidden="true" />{'Save access'}</button
@@ -360,6 +434,16 @@
 {/if}
 
 <style>
+  .account-authentication {
+    margin-top: 20px;
+  }
+  .account-authentication form {
+    max-width: 560px;
+    margin-top: 16px;
+  }
+  .account-authentication p {
+    margin: 12px 0;
+  }
   .member-directory {
     border: 1px solid var(--line);
     border-radius: 4px;

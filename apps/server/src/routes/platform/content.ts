@@ -616,6 +616,14 @@ export default createElysia({ prefix: '/platform' })
       })
     }
   )
+  .get('/articles/by-slug/:slug', async ({ db, user, params }) => {
+    const actor = active(user);
+    const [found] = await db.select().from(articles).where(eq(articles.slug, params.slug));
+    if (!found) throw status(404, { code: 'ARTICLE_NOT_FOUND' });
+    const { article, scope } = await articleScope(db, found.id);
+    if (!canContribute(actor, scope)) throw status(403, { code: 'FORBIDDEN' });
+    return article;
+  })
   .get('/articles/:id', async ({ db, user, params }) => {
     const actor = active(user);
     const { article, scope } = await articleScope(db, params.id);
