@@ -71,6 +71,7 @@ msgstr "Żądanie nie powiodło się"
 msgid "Tab"
 msgstr "Tab"
 
+#: src/lib/MemberPreview.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "Escape"
 msgstr "Escape"
@@ -532,10 +533,12 @@ msgstr "Zainteresowania, projekty, rzeczy, które lubisz…"
 msgid "Public profile"
 msgstr "Profil publiczny"
 
-#. 0: person.nickname
 #. 0: member.nickname
+#. 0: member.nickname
+#. 0: person.nickname
 #. 0: profile.nickname
-#: src/lib/WorkspaceMembers.svelte
+#: src/lib/MemberPreview.svelte
+#: src/lib/MemberPreview.svelte
 #: src/lib/WorkspaceMembers.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "aka. {0}"
@@ -579,6 +582,7 @@ msgid "Use a https://linkedin.com/in/username link."
 msgstr "Użyj linku https://linkedin.com/in/username."
 
 #: src/lib/Members.svelte
+#: src/lib/Members.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "Delete account"
 msgstr "Usuń konto"
@@ -604,9 +608,6 @@ msgstr "Wróć"
 #: src/routes/[...workspace]/+page.svelte
 msgid "Name"
 msgstr "Nazwa"
-
-#~ msgid "Leader IDs (comma-separated)"
-#~ msgstr "ID liderów (po przecinku)"
 
 #: src/lib/ProjectSettings.svelte
 #: src/routes/[...workspace]/+page.svelte
@@ -928,13 +929,9 @@ msgstr "Status konta"
 msgid "Role"
 msgstr "Rola"
 
-#: src/lib/Members.svelte
+#: src/lib/PermissionFlags.svelte
 msgid "Permission flags (one per line)"
 msgstr "Wyjątki uprawnień (jeden na linię)"
-
-#: src/lib/Members.svelte
-msgid "Save permissions"
-msgstr "Zapisz uprawnienia"
 
 #: src/lib/Members.svelte
 msgid "Delete account? Personal data will be anonymized. Content will remain."
@@ -970,10 +967,6 @@ msgid "All roles"
 msgstr "Wszystkie role"
 
 #: src/lib/Members.svelte
-msgid "Results"
-msgstr "Wyniki"
-
-#: src/lib/Members.svelte
 #: src/lib/WorkspaceMembers.svelte
 msgid "Person"
 msgstr "Osoba"
@@ -1003,9 +996,6 @@ msgstr "Następna"
 #: src/routes/[...workspace]/+page.svelte
 msgid "Delete comment?"
 msgstr ""
-
-#~ msgid "Actions"
-#~ msgstr ""
 
 #: src/lib/KanbanBoard.svelte
 #: src/routes/[...workspace]/+page.svelte
@@ -1049,11 +1039,11 @@ msgstr "Imię, nazwisko lub pseudonim…"
 msgid "About"
 msgstr "O osobie"
 
-#: src/lib/WorkspaceMembers.svelte
+#: src/lib/MemberPreview.svelte
 msgid "No biography yet."
 msgstr "Brak opisu."
 
-#: src/lib/WorkspaceMembers.svelte
+#: src/lib/MemberPreview.svelte
 msgid "View profile"
 msgstr "Zobacz profil"
 
@@ -1144,3 +1134,71 @@ msgstr "Usuń z projektu"
 #: src/routes/[...workspace]/+page.svelte
 msgid "Member profile"
 msgstr "Profil członka"
+
+#: src/lib/Members.svelte
+msgid "Access changes take effect when you save them."
+msgstr "Zmiany dostępu zaczną obowiązywać po zapisaniu."
+
+#: src/lib/Members.svelte
+msgid "Save access"
+msgstr "Zapisz dostęp"
+
+#: src/lib/Members.svelte
+msgid "Personal data will be anonymized. Association content will remain."
+msgstr "Dane osobowe zostaną zanonimizowane. Treści koła pozostaną."
+
+#: src/lib/PermissionFlags.svelte
+msgid "All permissions in this group, including future additions."
+msgstr "Wszystkie uprawnienia z tej grupy, również dodane w przyszłości."
+
+#: src/lib/PermissionFlags.svelte
+msgid "Permission action"
+msgstr "Działanie uprawnienia"
+
+#: src/lib/PermissionFlags.svelte
+msgid "Grant (+)"
+msgstr "Nadaj (+)"
+
+#: src/lib/PermissionFlags.svelte
+msgid "Deny (−)"
+msgstr "Odmów (−)"
+
+#: src/lib/PermissionFlags.svelte
+msgid "Find a permission"
+msgstr "Znajdź uprawnienie"
+
+#: src/lib/PermissionFlags.svelte
+msgid "Add a permission…"
+msgstr "Dodaj uprawnienie…"
+
+#: src/lib/PermissionFlags.svelte
+msgid "Search names or descriptions…"
+msgstr "Szukaj nazw lub opisów…"
+
+#: src/lib/PermissionFlags.svelte
+msgid "No matching permissions"
+msgstr "Brak pasujących uprawnień"
+
+#: src/lib/PermissionFlags.svelte
+msgid "Search to see every permission and its description. Grants add access; denials take precedence. Status and workspace boundaries still apply."
+msgstr "Wyszukaj uprawnienia i ich opisy. Nadania dodają dostęp; odmowy mają pierwszeństwo. Nadal obowiązują ograniczenia statusu konta i przestrzeni."
+
+#: src/lib/PermissionFlags.svelte
+msgid "You can also enter a pattern, such as -users.profile.edit*. It denies every matching permission, including future ones."
+msgstr "Możesz też wpisać wzorzec, np. -users.profile.edit*. Odmawia on wszystkich pasujących uprawnień, również przyszłych."
+
+#: src/lib/Members.svelte
+msgid "Member directory"
+msgstr "Lista członków"
+
+#: src/lib/Members.svelte
+msgid "Member table pagination"
+msgstr "Strony listy członków"
+
+#: src/lib/Members.svelte
+msgid "Previous page"
+msgstr "Poprzednia strona"
+
+#: src/lib/Members.svelte
+msgid "Next page"
+msgstr "Następna strona"

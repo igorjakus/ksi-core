@@ -65,7 +65,10 @@
     if (!trigger || !panel) return;
     const rect = trigger.getBoundingClientRect();
     const width = Math.min(
-      Math.max(rect.width, variant === 'workspace' ? 290 : 220),
+      Math.max(
+        rect.width,
+        variant === 'workspace' ? 290 : options.some((option) => option.description) ? 320 : 220
+      ),
       window.innerWidth - 24
     );
     const below = window.innerHeight - rect.bottom - 16;

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Github, Linkedin, ArrowLeft, Search } from '@lucide/svelte';
   import Skeleton from './Skeleton.svelte';
+  import MemberPreview from './MemberPreview.svelte';
   let {
     projectId,
     memberId,
@@ -112,24 +113,11 @@
       ><tbody>
         {#each filtered as member}<tr
             ><td
-              ><div class="identity">
-                <a class="person-link" href={`/people/${encodeURIComponent(member.id)}`}>
-                  {#if member.image}<img src={member.image} alt="" />{:else}<span class="initials"
-                      >{member.firstName?.[0]}{member.lastName?.[0]}</span
-                    >{/if}
-                  <span
-                    >{member.firstName}
-                    {member.lastName}{#if member.nickname}<small>aka. {member.nickname}</small
-                      >{/if}</span
-                  ></a
-                >
-                <div class="hover-card">
-                  <strong>{member.firstName} {member.lastName}</strong>
-                  <p>{role(member)}</p>
-                  <p class="bio">{member.bio || 'No biography yet.'}</p>
-                  <a href={`/people/${encodeURIComponent(member.id)}`}>{'View profile'}</a>
-                </div>
-              </div></td
+              ><MemberPreview
+                {member}
+                href={`/people/${encodeURIComponent(member.id)}`}
+                role={role(member)}
+              /></td
             ><td>{role(member)}</td><td class="bio-cell">{member.bio}</td></tr
           >{/each}
       </tbody>
@@ -147,54 +135,6 @@
   }
   .search input {
     margin: 0;
-  }
-  .person-link {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    color: var(--ink);
-    text-decoration: none;
-    width: fit-content;
-  }
-  .person-link img,
-  .initials {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    object-fit: cover;
-    flex-shrink: 0;
-  }
-  .initials {
-    display: grid;
-    place-items: center;
-    background: var(--surface-muted);
-  }
-  small {
-    display: block;
-    color: var(--muted);
-    margin-top: 4px;
-  }
-  .identity {
-    position: relative;
-  }
-  .hover-card {
-    display: none;
-    position: absolute;
-    z-index: 20;
-    left: 0;
-    top: 100%;
-    width: 280px;
-    padding: 20px;
-    background: var(--surface);
-    border: 1px solid var(--line);
-    box-shadow: 0 8px 24px #0002;
-  }
-  .identity:hover .hover-card,
-  .identity:focus-within .hover-card {
-    display: block;
-  }
-  .table-wrap {
-    overflow: visible;
   }
   .bio-cell {
     max-width: 360px;
@@ -226,9 +166,6 @@
     }
     .person {
       grid-template-columns: 1fr;
-    }
-    .hover-card {
-      max-width: calc(100vw - 80px);
     }
   }
 </style>

@@ -3,7 +3,9 @@
   import { goto } from '$app/navigation';
   import Dropdown from '@ksi-core/ui/platform/Dropdown.svelte';
   import Skeleton from './Skeleton.svelte';
-  import { Search, ArrowLeft, Trash2, Save } from '@lucide/svelte';
+  import PermissionFlags from './PermissionFlags.svelte';
+  import MemberPreview from './MemberPreview.svelte';
+  import { Search, ArrowLeft, Trash2, Save, ChevronLeft, ChevronRight } from '@lucide/svelte';
   import type { Profile } from 'shared/types';
   let {
     language,
@@ -31,6 +33,24 @@
     notice = $state(''),
     confirmDelete = $state(false),
     search = $state('');
+  let accessRole = $state<Profile['role']>('member');
+  let accessStatus = $state<Profile['membershipStatus']>('pending');
+  let accessFlags = $state<string[]>([]);
+  const canSaveAccess = $derived(
+    member &&
+      member.membershipStatus !== 'deleted' &&
+      (administrator || (member.role === 'member' && member.membershipStatus === 'pending'))
+  );
+  const currentPage = $derived(
+    Math.max(0, Math.floor(Number(page.url.searchParams.get('page')) || 0))
+  );
+  const firstResult = $derived(records.length ? currentPage * 50 + 1 : 0);
+  const lastResult = $derived(records.length ? currentPage * 50 + records.length : 0);
+  function paginate(direction: number) {
+    const url = new URL(page.url);
+    url.searchParams.set('page', String(Math.max(0, currentPage + direction)));
+    void goto(url.pathname + url.search);
+  }
   let generation = 0;
   async function api(path: string, method = 'GET', body?: unknown) {
     const response = await fetch(`/api/users${path}`, {
@@ -60,12 +80,18 @@
     error = '';
     notice = '';
     member = null;
+    records = [];
+    total = 0;
     confirmDelete = false;
     try {
       const result = await api(id ? `/${encodeURIComponent(id)}` : `?${query}`);
       if (current !== generation) return;
-      if (id) member = result;
-      else {
+      if (id) {
+        member = result;
+        accessRole = result.role;
+        accessStatus = result.membershipStatus;
+        accessFlags = [...result.flags];
+      } else {
         records = result.users;
         total = result.total;
         member = null;
@@ -96,7 +122,19 @@
       const result = await api(path, method, body);
       if (method === 'DELETE') await goto('/members');
       else {
-        member = result.user ?? result;
+        const updated = result.user ?? result;
+        if (path.endsWith('/access') && member) {
+          // Saving access must not discard unsaved profile edits.
+          member = {
+            ...member,
+            role: updated.role,
+            membershipStatus: updated.membershipStatus,
+            flags: updated.flags
+          };
+          accessRole = updated.role;
+          accessStatus = updated.membershipStatus;
+          accessFlags = [...updated.flags];
+        } else member = updated;
         notice = 'Changes saved.';
       }
     } catch (e) {
@@ -118,7 +156,9 @@
       <h1>{member.firstName || member.name} {member.lastName}</h1>
       <p class="muted">{member.email}</p>
       {#if member.image}<img class="member-avatar" src={member.image} alt="" />{/if}
-      {#if administrator && member.membershipStatus !== 'deleted'}<form
+      {#if administrator && member.membershipStatus !== 'deleted'}
+        <form
+          id="member-profile"
           class="profile-fields"
           onsubmit={(event) => {
             event.preventDefault();
@@ -134,9 +174,10 @@
         >
           <label
             >{'First name'}<input bind:value={member.firstName} required maxlength="100" /></label
-          ><label>{'Last name'}<input bind:value={member.lastName} maxlength="100" /></label>
-          <label>{'Nickname'}<input bind:value={member.nickname} maxlength="100" /></label><label
-            class="wide"
+          >
+          <label>{'Last name'}<input bind:value={member.lastName} maxlength="100" /></label>
+          <label>{'Nickname'}<input bind:value={member.nickname} maxlength="100" /></label>
+          <label class="wide"
             >Bio<textarea bind:value={member.bio} rows="5" maxlength="5000"></textarea></label
           >
           <label
@@ -145,81 +186,101 @@
               bind:value={member.github}
               placeholder="https://github.com/username"
             /></label
-          ><label
+          >
+          <label
             >LinkedIn<input
               type="url"
               bind:value={member.linkedin}
               placeholder="https://linkedin.com/in/username"
             /></label
           >
-          <button class="btn" disabled={busy}
-            ><Save size={15} aria-hidden="true" />{'Save profile'}</button
-          >
-        </form>{:else}<p>{member.bio}</p>{/if}
+        </form>
+      {:else}<p>{member.bio}</p>{/if}
     </section>
-    <section class="card access">
+    <form
+      id="member-access"
+      class="card access"
+      onsubmit={(event) => {
+        event.preventDefault();
+        if (!canSaveAccess) return;
+        void mutate(
+          `/${member!.id}/access`,
+          'PATCH',
+          administrator
+            ? { role: accessRole, membershipStatus: accessStatus, flags: accessFlags }
+            : { membershipStatus: accessStatus }
+        );
+      }}
+    >
       <h2>{'Access'}</h2>
-      <label for="member-status">{'Account status'}</label><Dropdown
+      <label for="member-status">{'Account status'}</label>
+      <Dropdown
         id="member-status"
         label={'Account status'}
-        value={member.membershipStatus}
+        value={accessStatus}
         options={statuses.filter(
           (s) =>
             s.value !== 'deleted' &&
             (administrator || s.value === 'active' || s.value === 'pending')
         )}
-        disabled={busy ||
-          member.membershipStatus === 'deleted' ||
-          (!administrator && member.membershipStatus !== 'pending')}
-        onselect={(value) => mutate(`/${member!.id}/access`, 'PATCH', { membershipStatus: value })}
+        disabled={busy || !canSaveAccess}
+        onselect={(value) => (accessStatus = value as Profile['membershipStatus'])}
       />
-      <label for="member-role">{'Role'}</label><Dropdown
+      <label for="member-role">{'Role'}</label>
+      <Dropdown
         id="member-role"
         label={'Role'}
-        value={member.role}
+        value={accessRole}
         options={roles}
         disabled={busy || !administrator || member.membershipStatus === 'deleted'}
-        onselect={(value) => mutate(`/${member!.id}/access`, 'PATCH', { role: value })}
+        onselect={(value) => (accessRole = value as Profile['role'])}
       />
-      {#if administrator && member.membershipStatus !== 'deleted'}<form
-          onsubmit={(event) => {
-            event.preventDefault();
-            void mutate(`/${member!.id}/access`, 'PATCH', { flags: member!.flags });
-          }}
-        >
-          <label for="member-flags">{'Permission flags (one per line)'}</label><textarea
-            id="member-flags"
-            rows="4"
-            value={member.flags.join('\n')}
-            oninput={(event) => {
-              member!.flags = event.currentTarget.value
-                .split('\n')
-                .map((s) => s.trim())
-                .filter(Boolean);
-            }}
-          ></textarea><button class="btn btn-outline" disabled={busy}>{'Save permissions'}</button>
-        </form>
-        {#if confirmDelete}<div role="alert">
-            <p>
-              {'Delete account? Personal data will be anonymized. Content will remain.'}
-            </p>
-            <div class="row">
-              <button
-                class="btn danger-button"
-                disabled={busy}
-                onclick={() => mutate(`/${member!.id}`, 'DELETE')}>{'Confirm deletion'}</button
-              ><button class="btn btn-outline" onclick={() => (confirmDelete = false)}
-                >{'Cancel'}</button
-              >
-            </div>
-          </div>{:else}<button
-            class="btn btn-outline danger-button"
-            onclick={() => (confirmDelete = true)}
-            ><Trash2 size={15} aria-hidden="true" />{'Delete account'}</button
-          >{/if}
-      {/if}
-    </section>
+      <p class="muted access-help">{'Access changes take effect when you save them.'}</p>
+      {#if administrator && member.membershipStatus !== 'deleted'}<PermissionFlags
+          bind:flags={accessFlags}
+          {language}
+          disabled={busy}
+        />{/if}
+    </form>
   </div>
+  {#if member.membershipStatus !== 'deleted'}
+    <div class="member-actions">
+      {#if administrator}<button class="btn" form="member-profile" disabled={busy}
+          ><Save size={15} aria-hidden="true" />{'Save profile'}</button
+        >{/if}
+      {#if canSaveAccess}<button class="btn btn-outline" form="member-access" disabled={busy}
+          ><Save size={15} aria-hidden="true" />{'Save access'}</button
+        >{/if}
+    </div>
+    {#if administrator}<section class="card account-danger">
+        <details>
+          <summary><Trash2 size={15} aria-hidden="true" />{'Delete account'}</summary>
+          <p>{'Personal data will be anonymized. Association content will remain.'}</p>
+          {#if confirmDelete}<div role="alert">
+              <p>{'Delete account? Personal data will be anonymized. Content will remain.'}</p>
+              <div class="row">
+                <button
+                  type="button"
+                  class="btn danger-button"
+                  disabled={busy}
+                  onclick={() => mutate(`/${member!.id}`, 'DELETE')}>{'Confirm deletion'}</button
+                >
+                <button
+                  type="button"
+                  class="btn btn-outline"
+                  disabled={busy}
+                  onclick={() => (confirmDelete = false)}>{'Cancel'}</button
+                >
+              </div>
+            </div>{:else}<button
+              type="button"
+              class="btn btn-outline danger-button"
+              disabled={busy}
+              onclick={() => (confirmDelete = true)}>{'Delete account'}</button
+            >{/if}
+        </details>
+      </section>{/if}
+  {/if}
 {:else if memberId}
   <a class="btn btn-outline" href="/members">{'All members'}</a>
 {:else}
@@ -253,46 +314,104 @@
       onselect={(v) => filter('role', v)}
     />
   </form>
-  <p class="muted">{'Results'}: {total}</p>
-  <div class="table-wrap">
-    <table>
-      <thead><tr><th>{'Person'}</th><th>Email</th><th>Status</th><th>{'Role'}</th></tr></thead
-      ><tbody
-        >{#each records as record}<tr
-            ><td
-              ><a href={`/members/${encodeURIComponent(record.id)}`}
-                >{record.firstName || record.name} {record.lastName}</a
-              >{#if record.nickname}<small> · {record.nickname}</small>{/if}</td
-            ><td>{record.email}</td><td
-              >{statuses.find((s) => s.value === record.membershipStatus)?.label}</td
-            ><td>{roles.find((r) => r.value === record.role)?.label}</td></tr
-          >{/each}</tbody
-      >
-    </table>
-  </div>
-  {#if !records.length}<p>{'No matching members.'}</p>{/if}
-  <div class="row">
-    <button
-      class="btn btn-outline"
-      disabled={Number(page.url.searchParams.get('page') ?? 0) === 0}
-      onclick={() => {
-        const u = new URL(page.url);
-        u.searchParams.set('page', String(Number(u.searchParams.get('page') ?? 0) - 1));
-        void goto(u.pathname + u.search);
-      }}>{'Previous'}</button
-    ><button
-      class="btn btn-outline"
-      disabled={(Number(page.url.searchParams.get('page') ?? 0) + 1) * 50 >= total}
-      onclick={() => {
-        const u = new URL(page.url);
-        u.searchParams.set('page', String(Number(u.searchParams.get('page') ?? 0) + 1));
-        void goto(u.pathname + u.search);
-      }}>{'Next'}</button
-    >
-  </div>
+  <section class="member-directory" aria-label="Member directory">
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>{'Person'}</th><th>Email</th><th>Status</th><th>{'Role'}</th></tr></thead
+        ><tbody
+          >{#each records as record}<tr
+              ><td
+                ><MemberPreview
+                  member={record}
+                  href={`/members/${encodeURIComponent(record.id)}`}
+                  role={roles.find((role) => role.value === record.role)?.label ?? record.role}
+                /></td
+              ><td>{record.email}</td><td
+                >{statuses.find((s) => s.value === record.membershipStatus)?.label}</td
+              ><td>{roles.find((r) => r.value === record.role)?.label}</td></tr
+            >{/each}</tbody
+        >
+      </table>
+    </div>
+    {#if !records.length}<p>{'No matching members.'}</p>{/if}
+    <footer class="directory-footer">
+      <p class="muted">{firstResult}–{lastResult} / {total} <span>{'members'}</span></p>
+      <nav class="pagination" aria-label="Member table pagination">
+        <button
+          type="button"
+          class="btn btn-outline page-button"
+          disabled={currentPage === 0 || loading}
+          onclick={() => paginate(-1)}
+          aria-label="Previous page"
+          ><ChevronLeft size={16} aria-hidden="true" /><span>{'Previous'}</span></button
+        >
+        <span class="page-number">{currentPage + 1} / {Math.max(1, Math.ceil(total / 50))}</span>
+        <button
+          type="button"
+          class="btn btn-outline page-button"
+          disabled={(currentPage + 1) * 50 >= total || loading}
+          onclick={() => paginate(1)}
+          aria-label="Next page"
+          ><span>{'Next'}</span><ChevronRight size={16} aria-hidden="true" /></button
+        >
+      </nav>
+    </footer>
+  </section>
 {/if}
 
 <style>
+  .member-directory {
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    background: var(--surface);
+  }
+  .member-directory :global(td) {
+    vertical-align: middle;
+  }
+  .directory-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 16px 20px;
+    border-top: 1px solid var(--line);
+  }
+  .directory-footer p {
+    margin: 0;
+    font-size: 12px;
+  }
+  .pagination {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .page-number {
+    min-width: 44px;
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .page-button {
+    min-height: 36px;
+    padding: 8px 12px;
+    font-size: 12px;
+    gap: 6px;
+  }
+  @media (max-width: 540px) {
+    .directory-footer {
+      padding: 14px 12px;
+      gap: 8px;
+    }
+    .page-button span {
+      display: none;
+    }
+    .pagination {
+      gap: 8px;
+    }
+    .directory-footer p span {
+      display: none;
+    }
+  }
   .member-layout {
     display: grid;
     grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
@@ -320,6 +439,33 @@
     display: grid;
     gap: 14px;
     align-content: start;
+    min-width: 0;
+  }
+  .member-actions {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 24px 0;
+    padding: 18px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    position: sticky;
+    bottom: 12px;
+    z-index: 10;
+  }
+  .account-danger summary {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+  }
+  .account-danger p {
+    margin: 18px 0;
+  }
+  .access-help {
+    font-size: 12px;
+    margin: 0;
   }
   .member-avatar {
     width: 80px;
