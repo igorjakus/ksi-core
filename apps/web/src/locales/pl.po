@@ -77,7 +77,6 @@ msgstr "Alerty"
 #: src/components/Footer.svelte
 #: src/components/Navbar.svelte
 #: src/components/Sidebar.svelte
-#: src/routes/members/[id]/+page.svelte
 msgid "Projects"
 msgstr "Projekty"
 
@@ -393,9 +392,6 @@ msgstr "Odśwież"
 #: src/routes/dashboard/s3cache/+page.svelte
 msgid "This cache key contains no URLs."
 msgstr "Ten klucz pamięci podręcznej nie zawiera żadnych adresów URL."
-
-#~ msgid "Education"
-#~ msgstr "Edukacja"
 
 #: src/routes/projects/+page.svelte
 #: src/routes/projects/+page.svelte
@@ -730,12 +726,6 @@ msgstr "Zobacz na GitHubie <0/>"
 msgid "More projects coming soon."
 msgstr "Więcej projektów wkrótce."
 
-#~ msgid "About the Project"
-#~ msgstr "O projekcie"
-
-#~ msgid "Full project details and articles will be displayed here."
-#~ msgstr "Pełne szczegóły projektu i artykuły będą wyświetlane tutaj."
-
 #: src/routes/+page.svelte
 msgid "About KSI"
 msgstr "O KSI"
@@ -790,12 +780,6 @@ msgstr "Przełącz menu mobilne"
 msgid "Sign in"
 msgstr "Zaloguj się"
 
-#~ msgid "This website. Surrounded by many unfamiliar technologies, passionate members get to develop their engineering senses in a friendly environment."
-#~ msgstr "Ta strona. Otoczeni wieloma nowymi technologiami, pełni pasji członkowie mają okazję rozwijać swoje inżynierskie zmysły w przyjaznym środowisku."
-
-#~ msgid "Chess engine built with Rust and machine learning."
-#~ msgstr "Silnik szachowy zbudowany w języku Rust z wykorzystaniem uczenia maszynowego."
-
 #: src/routes/projects/+page.svelte
 msgid "( our work )"
 msgstr "( nasze działania )"
@@ -841,6 +825,7 @@ msgid "Open project <0/>"
 msgstr "Otwórz projekt <0/>"
 
 #: src/routes/articles/+page.svelte
+#: src/routes/members/[id]/+page.svelte
 #: src/routes/projects/[slug]/+page.svelte
 msgid "Articles"
 msgstr "Artykuły"
@@ -854,18 +839,13 @@ msgid "Members"
 msgstr "Członkowie"
 
 #. 0: data.member.nickname
-#. 0: member.nickname
 #: src/routes/members/[id]/+page.svelte
-#: src/routes/projects/[slug]/+page.svelte
 msgid "aka. {0}"
 msgstr "aka. {0}"
 
 #: src/routes/projects/[slug]/+page.svelte
 msgid "Links"
 msgstr "Linki"
-
-#~ msgid "All articles"
-#~ msgstr "Wszystkie artykuły"
 
 #: src/routes/members/[id]/+page.svelte
 msgid "<0/>GitHub"
@@ -875,15 +855,16 @@ msgstr "<0/>GitHub"
 msgid "<0/>LinkedIn"
 msgstr "<0/>LinkedIn"
 
-#: src/routes/articles/+page.svelte
+#: src/lib/components/ArticleList.svelte
 msgid "No published articles yet."
 msgstr "Nie ma jeszcze opublikowanych artykułów."
 
 #: src/routes/projects/+page.svelte
 #: src/routes/projects/+page.svelte
 msgid "Engineering"
-msgstr ""
+msgstr "Inżynieria"
 
+#: src/lib/components/ArticleList.svelte
 #: src/routes/articles/[slug]/+page.svelte
 msgid "Authors"
 msgstr "Autorzy"

@@ -348,15 +348,9 @@ msgstr "Write publications and propose changes."
 msgid "New article"
 msgstr "New article"
 
-#~ msgid "Enter"
-#~ msgstr "Enter"
-
 #: src/routes/[...workspace]/+page.svelte
 msgid "No articles yet. Create the first article in this workspace."
 msgstr "No articles yet. Create the first article in this workspace."
-
-#~ msgid "Edit article"
-#~ msgstr "Edit article"
 
 #: src/lib/ContentTranslations.svelte
 #: src/lib/KanbanBoard.svelte
@@ -608,9 +602,6 @@ msgstr "Back"
 #: src/routes/[...workspace]/+page.svelte
 msgid "Name"
 msgstr "Name"
-
-#~ msgid "Leader IDs (comma-separated)"
-#~ msgstr "Leader IDs (comma-separated)"
 
 #: src/lib/ContentTranslations.svelte
 #: src/lib/ProjectSettings.svelte
@@ -940,9 +931,6 @@ msgstr "Role"
 msgid "Permission flags (one per line)"
 msgstr "Permission flags (one per line)"
 
-#~ msgid "Save permissions"
-#~ msgstr "Save permissions"
-
 #: src/lib/Members.svelte
 msgid "Delete account? Personal data will be anonymized. Content will remain."
 msgstr "Delete account? Personal data will be anonymized. Content will remain."
@@ -976,9 +964,6 @@ msgstr "Filter role"
 msgid "All roles"
 msgstr "All roles"
 
-#~ msgid "Results"
-#~ msgstr "Results"
-
 #: src/lib/Members.svelte
 #: src/lib/WorkspaceMembers.svelte
 msgid "Person"
@@ -1010,9 +995,6 @@ msgstr "Next"
 msgid "Delete comment?"
 msgstr "Delete comment?"
 
-#~ msgid "Actions"
-#~ msgstr "Actions"
-
 #: src/lib/KanbanBoard.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "Delete"
@@ -1030,9 +1012,6 @@ msgstr "Settings"
 #: src/routes/[...workspace]/+page.svelte
 msgid "Project settings"
 msgstr "Project settings"
-
-#~ msgid "You are a project member"
-#~ msgstr "You are a project member"
 
 #: src/lib/WorkspaceMembers.svelte
 msgid "Project leader"
@@ -1053,12 +1032,6 @@ msgstr "Name or nickname…"
 #: src/lib/WorkspaceMembers.svelte
 msgid "About"
 msgstr "About"
-
-#~ msgid "No biography yet."
-#~ msgstr "No biography yet."
-
-#~ msgid "View profile"
-#~ msgstr "View profile"
 
 #: src/lib/ProjectSettings.svelte
 msgid "This project changed. Reload before saving."
@@ -1160,9 +1133,6 @@ msgstr "Save access"
 #: src/lib/Members.svelte
 msgid "Personal data will be anonymized. Association content will remain."
 msgstr "Personal data will be anonymized. Association content will remain."
-
-#~ msgid "Wszystkie uprawnienia z tej grupy, również dodane w przyszłości."
-#~ msgstr "Wszystkie uprawnienia z tej grupy, również dodane w przyszłości."
 
 #: src/lib/PermissionFlags.svelte
 msgid "All permissions in this group, including future additions."
@@ -1417,3 +1387,15 @@ msgstr "Pending"
 #: src/lib/Members.svelte
 msgid "Suspended"
 msgstr "Suspended"
+
+#: src/routes/[...workspace]/+page.svelte
+msgid "Show in project articles"
+msgstr "Show in project articles"
+
+#: src/routes/[...workspace]/+page.svelte
+msgid "Show in website articles"
+msgstr "Show in website articles"
+
+#: src/routes/[...workspace]/+page.svelte
+msgid "These settings apply when the article is published. The main article is displayed separately from the project articles list."
+msgstr "These settings apply when the article is published. The main article is displayed separately from the project articles list."

@@ -77,7 +77,6 @@ msgstr "Alerts"
 #: src/components/Footer.svelte
 #: src/components/Navbar.svelte
 #: src/components/Sidebar.svelte
-#: src/routes/members/[id]/+page.svelte
 msgid "Projects"
 msgstr "Projects"
 
@@ -393,9 +392,6 @@ msgstr "Refresh"
 #: src/routes/dashboard/s3cache/+page.svelte
 msgid "This cache key contains no URLs."
 msgstr "This cache key contains no URLs."
-
-#~ msgid "Education"
-#~ msgstr "Education"
 
 #: src/routes/projects/+page.svelte
 #: src/routes/projects/+page.svelte
@@ -730,12 +726,6 @@ msgstr "View on GitHub <0/>"
 msgid "More projects coming soon."
 msgstr "More projects coming soon."
 
-#~ msgid "About the Project"
-#~ msgstr "About the Project"
-
-#~ msgid "Full project details and articles will be displayed here."
-#~ msgstr "Full project details and articles will be displayed here."
-
 #: src/routes/+page.svelte
 msgid "About KSI"
 msgstr "About KSI"
@@ -790,12 +780,6 @@ msgstr "Toggle mobile menu"
 msgid "Sign in"
 msgstr "Sign in"
 
-#~ msgid "This website. Surrounded by many unfamiliar technologies, passionate members get to develop their engineering senses in a friendly environment."
-#~ msgstr "This website. Surrounded by many unfamiliar technologies, passionate members get to develop their engineering senses in a friendly environment."
-
-#~ msgid "Chess engine built with Rust and machine learning."
-#~ msgstr "Chess engine built with Rust and machine learning."
-
 #: src/routes/projects/+page.svelte
 msgid "( our work )"
 msgstr "( our work )"
@@ -841,6 +825,7 @@ msgid "Open project <0/>"
 msgstr "Open project <0/>"
 
 #: src/routes/articles/+page.svelte
+#: src/routes/members/[id]/+page.svelte
 #: src/routes/projects/[slug]/+page.svelte
 msgid "Articles"
 msgstr "Articles"
@@ -854,18 +839,13 @@ msgid "Members"
 msgstr "Members"
 
 #. 0: data.member.nickname
-#. 0: member.nickname
 #: src/routes/members/[id]/+page.svelte
-#: src/routes/projects/[slug]/+page.svelte
 msgid "aka. {0}"
 msgstr "aka. {0}"
 
 #: src/routes/projects/[slug]/+page.svelte
 msgid "Links"
 msgstr "Links"
-
-#~ msgid "All articles"
-#~ msgstr "All articles"
 
 #: src/routes/members/[id]/+page.svelte
 msgid "<0/>GitHub"
@@ -875,7 +855,7 @@ msgstr "<0/>GitHub"
 msgid "<0/>LinkedIn"
 msgstr "<0/>LinkedIn"
 
-#: src/routes/articles/+page.svelte
+#: src/lib/components/ArticleList.svelte
 msgid "No published articles yet."
 msgstr "No published articles yet."
 
@@ -884,6 +864,7 @@ msgstr "No published articles yet."
 msgid "Engineering"
 msgstr "Engineering"
 
+#: src/lib/components/ArticleList.svelte
 #: src/routes/articles/[slug]/+page.svelte
 msgid "Authors"
 msgstr "Authors"
