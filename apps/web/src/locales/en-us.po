@@ -864,9 +864,8 @@ msgstr "aka. {0}"
 msgid "Links"
 msgstr "Links"
 
-#: src/routes/articles/[slug]/+page.svelte
-msgid "All articles"
-msgstr "All articles"
+#~ msgid "All articles"
+#~ msgstr "All articles"
 
 #: src/routes/members/[id]/+page.svelte
 msgid "<0/>GitHub"
@@ -884,3 +883,23 @@ msgstr "No published articles yet."
 #: src/routes/projects/+page.svelte
 msgid "Engineering"
 msgstr "Engineering"
+
+#: src/routes/articles/[slug]/+page.svelte
+msgid "Authors"
+msgstr "Authors"
+
+#: src/routes/articles/[slug]/+page.svelte
+msgid "Published"
+msgstr "Published"
+
+#: src/routes/articles/[slug]/+page.svelte
+msgid "Keep reading"
+msgstr "Keep reading"
+
+#: src/routes/articles/[slug]/+page.svelte
+msgid "All articles<0/>"
+msgstr "All articles<0/>"
+
+#: src/routes/articles/[slug]/+page.svelte
+msgid "<0/>All articles"
+msgstr "<0/>All articles"

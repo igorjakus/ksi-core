@@ -72,7 +72,6 @@ msgstr "Request failed"
 msgid "Tab"
 msgstr "Tab"
 
-#: src/lib/MemberPreview.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "Escape"
 msgstr "Escape"
@@ -537,12 +536,8 @@ msgstr "Interests, projects, and things you enjoy…"
 msgid "Public profile"
 msgstr "Public profile"
 
-#. 0: member.nickname
-#. 0: member.nickname
 #. 0: person.nickname
 #. 0: profile.nickname
-#: src/lib/MemberPreview.svelte
-#: src/lib/MemberPreview.svelte
 #: src/lib/WorkspaceMembers.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "aka. {0}"
@@ -1059,13 +1054,11 @@ msgstr "Name or nickname…"
 msgid "About"
 msgstr "About"
 
-#: src/lib/MemberPreview.svelte
-msgid "No biography yet."
-msgstr "No biography yet."
+#~ msgid "No biography yet."
+#~ msgstr "No biography yet."
 
-#: src/lib/MemberPreview.svelte
-msgid "View profile"
-msgstr "View profile"
+#~ msgid "View profile"
+#~ msgstr "View profile"
 
 #: src/lib/ProjectSettings.svelte
 msgid "This project changed. Reload before saving."
