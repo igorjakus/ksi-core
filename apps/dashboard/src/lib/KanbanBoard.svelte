@@ -644,21 +644,27 @@
                 )}</time
               >
               {#if comment.authorId === userId || canManage}
-                <Dropdown
-                  label="Actions"
-                  options={[
-                    { value: 'edit', label: 'Edit' },
-                    { value: 'delete', label: 'Delete', color: 'var(--red)' }
-                  ]}
-                  onselect={(val) => {
-                    if (val === 'edit') {
+                <div class="comment-actions">
+                  <button
+                    type="button"
+                    class="icon-action-btn"
+                    title="Edit"
+                    onclick={() => {
                       editingCommentId = comment.id;
                       editingCommentMarkdown = comment.markdown;
-                    } else if (val === 'delete') {
-                      deleteComment(comment.id);
-                    }
-                  }}
-                />
+                    }}
+                  >
+                    <Pencil size={13} aria-hidden="true" />
+                  </button>
+                  <button
+                    type="button"
+                    class="icon-action-btn danger"
+                    title="Delete"
+                    onclick={() => deleteComment(comment.id)}
+                  >
+                    <Trash2 size={13} aria-hidden="true" />
+                  </button>
+                </div>
               {/if}
             </div>
             {#if editingCommentId === comment.id}
@@ -935,5 +941,29 @@
     .post-meta {
       flex-wrap: wrap;
     }
+  }
+  .comment-actions {
+    display: flex;
+    gap: 4px;
+    margin-left: auto;
+  }
+  .icon-action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border: none;
+    background: transparent;
+    border-radius: 4px;
+    color: var(--muted);
+    cursor: pointer;
+  }
+  .icon-action-btn:hover {
+    background: var(--surface-muted);
+    color: var(--ink);
+  }
+  .icon-action-btn.danger:hover {
+    color: var(--red);
   }
 </style>

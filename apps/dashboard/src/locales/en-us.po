@@ -594,6 +594,9 @@ msgstr "Back"
 msgid "Name"
 msgstr "Name"
 
+#~ msgid "Leader IDs (comma-separated)"
+#~ msgstr "Leader IDs (comma-separated)"
+
 #: src/routes/[...workspace]/+page.svelte
 msgid "Description"
 msgstr "Description"
@@ -978,10 +981,8 @@ msgstr "Next"
 msgid "Delete comment?"
 msgstr "Delete comment?"
 
-#: src/lib/KanbanBoard.svelte
-#: src/routes/[...workspace]/+page.svelte
-msgid "Actions"
-msgstr "Actions"
+#~ msgid "Actions"
+#~ msgstr "Actions"
 
 #: src/lib/KanbanBoard.svelte
 #: src/routes/[...workspace]/+page.svelte
