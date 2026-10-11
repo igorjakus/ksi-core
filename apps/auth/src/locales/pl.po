@@ -10,182 +10,182 @@ msgstr ""
 #: src/routes/+page.svelte
 #: src/routes/+page.svelte
 msgid "Login failed."
-msgstr ""
+msgstr "Nie udało się zalogować."
 
 #: src/routes/+page.svelte
 msgid "Check your email inbox."
-msgstr ""
+msgstr "Sprawdź skrzynkę e-mail."
 
 #: src/routes/+page.svelte
 #: src/routes/+page.svelte
 #: src/routes/reset-password/+page.svelte
 msgid "Server unavailable."
-msgstr ""
+msgstr "Nie można połączyć się z serwerem."
 
 #: src/routes/+page.svelte
 #: src/routes/+page.svelte
 msgid "Create account"
-msgstr ""
+msgstr "Nowe konto"
 
 #: src/routes/+page.svelte
 msgid "Send recovery link"
-msgstr ""
+msgstr "Wyślij link"
 
 #: src/routes/+page.svelte
 #: src/routes/+page.svelte
 #: src/routes/+page.svelte
 msgid "Sign in"
-msgstr ""
+msgstr "Logowanie"
 
 #: src/routes/+page.svelte
 msgid "Join KSI"
-msgstr ""
+msgstr "Dołącz do KSI"
 
 #: src/routes/+page.svelte
 msgid "Recover access"
-msgstr ""
+msgstr "Odzyskaj dostęp"
 
 #: src/routes/+page.svelte
 msgid "Welcome to KSI"
-msgstr ""
+msgstr "Witaj w KSI"
 
 #. 0: 'Sign in'
 #. 0: 'New password'
 #: src/routes/+page.svelte
 #: src/routes/reset-password/+page.svelte
 msgid "{0} — KSI"
-msgstr ""
+msgstr "{0} — KSI"
 
 #: src/routes/+page.svelte
 #: src/routes/reset-password/+page.svelte
 msgid "Change language"
-msgstr ""
+msgstr "Zmień język"
 
 #: src/routes/+page.svelte
 #: src/routes/reset-password/+page.svelte
 msgid "KSI<0>/ core</0>"
-msgstr ""
+msgstr "KSI<0>/ core</0>"
 
 #: src/routes/+page.svelte
 msgid "One account. Every KSI project and conversation."
-msgstr ""
+msgstr "Jedno konto. Wszystkie projekty i rozmowy KSI."
 
 #: src/routes/+page.svelte
 msgid "Account options"
-msgstr ""
+msgstr "Opcje konta"
 
 #: src/routes/+page.svelte
 msgid "Remembered accounts"
-msgstr ""
+msgstr "Zapamiętane konta"
 
 #: src/routes/+page.svelte
 msgid "Forget account"
-msgstr ""
+msgstr "Zapomnij konto"
 
 #: src/routes/+page.svelte
 msgid "Forget"
-msgstr ""
+msgstr "Zapomnij"
 
 #: src/routes/+page.svelte
 msgid "Continue with GitHub"
-msgstr ""
+msgstr "Kontynuuj z GitHub"
 
 #: src/routes/+page.svelte
 msgid "Continue with Google"
-msgstr ""
+msgstr "Kontynuuj z Google"
 
 #: src/routes/+page.svelte
 msgid "G"
-msgstr ""
+msgstr "G"
 
 #: src/routes/+page.svelte
 msgid "Full name"
-msgstr ""
+msgstr "Pełne imię i nazwisko"
 
 #: src/routes/+page.svelte
 msgid "Anna Kowalska"
-msgstr ""
+msgstr "Anna Kowalska"
 
 #: src/routes/+page.svelte
 msgid "E-mail"
-msgstr ""
+msgstr "E-mail"
 
 #: src/routes/+page.svelte
 #: src/routes/reset-password/+page.svelte
 msgid "Password"
-msgstr ""
+msgstr "Hasło"
 
 #: src/routes/+page.svelte
 msgid "Forgot password"
-msgstr ""
+msgstr "Nie pamiętam hasła"
 
 #: src/routes/+page.svelte
 msgid "Remember account on this device"
-msgstr ""
+msgstr "Zapamiętaj konto na tym urządzeniu"
 
 #: src/routes/+page.svelte
 msgid "Please wait…"
-msgstr ""
+msgstr "Proszę czekać…"
 
 #: src/routes/+page.svelte
 #: src/routes/reset-password/+page.svelte
 msgid "Back to sign in"
-msgstr ""
+msgstr "Wróć do logowania"
 
 #: src/routes/+page.svelte
 msgid "New accounts require activation by the KSI board."
-msgstr ""
+msgstr "Nowe konta wymagają aktywacji przez zarząd KSI."
 
 #: src/routes/+page.svelte
 #: src/routes/reset-password/+page.svelte
 msgid "Back to KSI"
-msgstr ""
+msgstr "Wróć na stronę KSI"
 
 #: src/routes/+page.svelte
 #: src/routes/reset-password/+page.svelte
 msgid "University of Wrocław"
-msgstr ""
+msgstr "Uniwersytet Wrocławski"
 
 #: src/routes/+page.svelte
 #: src/routes/reset-password/+page.svelte
 msgid "Source"
-msgstr ""
+msgstr "Kod źródłowy"
 
 #. 0: 'University of Wrocław'
 #. 0: 'University of Wrocław'
 #: src/routes/+page.svelte
 #: src/routes/reset-password/+page.svelte
 msgid "KSI · {0}"
-msgstr ""
+msgstr "KSI · {0}"
 
 #. 0: import.meta.env.PUBLIC_APP_VERSION
 #. 0: import.meta.env.PUBLIC_APP_VERSION
 #: src/routes/+page.svelte
 #: src/routes/reset-password/+page.svelte
 msgid "v{0}"
-msgstr ""
+msgstr "v{0}"
 
 #: src/routes/reset-password/+page.svelte
 msgid "Password changed. You can sign in now."
-msgstr ""
+msgstr "Hasło zmienione. Możesz się zalogować."
 
 #: src/routes/reset-password/+page.svelte
 #: src/routes/reset-password/+page.svelte
 msgid "New password"
-msgstr ""
+msgstr "Nowe hasło"
 
 #: src/routes/reset-password/+page.svelte
 msgid "Choose a new password for your KSI account."
-msgstr ""
+msgstr "Wybierz nowe hasło dla swojego konta KSI."
 
 #: src/routes/reset-password/+page.svelte
 msgid "Recovery link missing. Request a new link on the sign-in page."
-msgstr ""
+msgstr "Brak linku odzyskiwania. Poproś o nowy link na stronie logowania."
 
 #: src/routes/reset-password/+page.svelte
 msgid "Saving…"
-msgstr ""
+msgstr "Zapisywanie…"
 
 #: src/routes/reset-password/+page.svelte
 msgid "Save password"
-msgstr ""
+msgstr "Zapisz hasło"

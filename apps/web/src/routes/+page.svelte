@@ -3,13 +3,17 @@
   let { data } = $props<{ data: import('./$types').PageData }>();
   const projects = [
     {
+      // @wc-ignore
       slug: 'ksiuwr/ksi-core',
+      // @wc-ignore
       name: 'ksi-core',
       description:
         'This website. Surrounded by many unfamiliar technologies, passionate members get to develop their engineering senses in a friendly environment.'
     },
     {
+      // @wc-ignore
       slug: 'KSI-ML-research/krasnal',
+      // @wc-ignore
       name: 'Krasnal',
       description: 'Chess engine built with Rust and machine learning.'
     }

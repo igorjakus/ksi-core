@@ -6,3 +6,9 @@ node_modules
 # SvelteKit
 .svelte-kit/
 build/
+
+# Wuchale localization
+.wuchale/
+**/src/locales/data.js
+**/src/locales/*.loader.svelte.js
+**/src/locales/*.loader.js

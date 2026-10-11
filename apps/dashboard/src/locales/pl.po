@@ -10,24 +10,24 @@ msgstr ""
 #. 0: page.status
 #: src/routes/+error.svelte
 msgid "{0} · KSI Dashboard"
-msgstr ""
+msgstr "{0} · Panel KSI"
 
 #: src/routes/+error.svelte
 msgid "An unexpected error occurred during your request."
-msgstr ""
+msgstr "Wystąpił nieoczekiwany błąd podczas żądania."
 
 #. 0: page.status
 #: src/routes/+error.svelte
 msgid "<0/> Error {0}"
-msgstr ""
+msgstr "<0/> Błąd {0}"
 
 #: src/routes/+error.svelte
 msgid "Authentication Failed"
-msgstr ""
+msgstr "Błąd uwierzytelniania"
 
 #: src/routes/+error.svelte
 msgid "Return to Dashboard"
-msgstr ""
+msgstr "Wróć do Panelu"
 
 #: src/lib/KanbanBoard.svelte
 #: src/lib/KanbanBoard.svelte
@@ -35,7 +35,7 @@ msgstr ""
 #: src/routes/[...workspace]/+page.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "To do"
-msgstr ""
+msgstr "Do zrobienia"
 
 #: src/lib/KanbanBoard.svelte
 #: src/lib/KanbanBoard.svelte
@@ -43,7 +43,7 @@ msgstr ""
 #: src/routes/[...workspace]/+page.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "In progress"
-msgstr ""
+msgstr "W trakcie"
 
 #: src/lib/KanbanBoard.svelte
 #: src/lib/KanbanBoard.svelte
@@ -51,11 +51,11 @@ msgstr ""
 #: src/routes/[...workspace]/+page.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "Done"
-msgstr ""
+msgstr "Gotowe"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Project not found."
-msgstr ""
+msgstr "Nie znaleziono projektu."
 
 #: src/lib/ApprovalInbox.svelte
 #: src/lib/AvatarUpload.svelte
@@ -64,590 +64,590 @@ msgstr ""
 #: src/routes/[...workspace]/+page.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "Request failed"
-msgstr ""
+msgstr "Żądanie nie powiodło się"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Tab"
-msgstr ""
+msgstr "Tab"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Escape"
-msgstr ""
+msgstr "Escape"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Enter a https://github.com/username profile link."
-msgstr ""
+msgstr "Wprowadź link do profilu https://github.com/username."
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Enter a https://linkedin.com/in/username profile link."
-msgstr ""
+msgstr "Wprowadź link do profilu https://linkedin.com/in/username."
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Overview"
-msgstr ""
+msgstr "Przegląd"
 
 #: src/routes/[...workspace]/+page.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "Kanban"
-msgstr ""
+msgstr "Kanban"
 
 #: src/routes/[...workspace]/+page.svelte
 #: src/routes/[...workspace]/+page.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "Forum"
-msgstr ""
+msgstr "Forum"
 
 #: src/routes/[...workspace]/+page.svelte
 #: src/routes/[...workspace]/+page.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "Articles"
-msgstr ""
+msgstr "Artykuły"
 
 #: src/routes/[...workspace]/+page.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "Activity"
-msgstr ""
+msgstr "Aktywność"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Project"
-msgstr ""
+msgstr "Projekt"
 
 #: src/routes/[...workspace]/+page.svelte
 #: src/routes/[...workspace]/+page.svelte
 #: src/routes/[...workspace]/+page.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "Association"
-msgstr ""
+msgstr "Całe koło"
 
 #: src/routes/[...workspace]/+page.svelte
 #: src/routes/[...workspace]/+page.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "Removed tasks"
-msgstr ""
+msgstr "Usunięte zadania"
 
 #: src/lib/ApprovalInbox.svelte
 #: src/routes/[...workspace]/+page.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "Approval inbox"
-msgstr ""
+msgstr "Skrzynka akceptacji"
 
 #: src/routes/[...workspace]/+page.svelte
 #: src/routes/[...workspace]/+page.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "Projects"
-msgstr ""
+msgstr "Projekty"
 
 #: src/routes/[...workspace]/+page.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "My profile"
-msgstr ""
+msgstr "Mój profil"
 
 #: src/routes/[...workspace]/+page.svelte
 #: src/routes/[...workspace]/+page.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "Members"
-msgstr ""
+msgstr "Członkowie"
 
 #: src/routes/[...workspace]/+page.svelte
 #: src/routes/[...workspace]/+page.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "New project"
-msgstr ""
+msgstr "Nowy projekt"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "All projects"
-msgstr ""
+msgstr "Wszystkie projekty"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Full name"
-msgstr ""
+msgstr "Pełne imię i nazwisko"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "First name + last initial"
-msgstr ""
+msgstr "Imię i inicjał nazwiska"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Initials only"
-msgstr ""
+msgstr "Tylko inicjały"
 
 #. 0: viewName
 #: src/routes/[...workspace]/+page.svelte
 msgid "{0} — KSI"
-msgstr ""
+msgstr "{0} — KSI"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Account activation required"
-msgstr ""
+msgstr "Konto wymaga aktywacji"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Your account first needs to be activated by an administrator. Ask directly:"
-msgstr ""
+msgstr "Twoje konto musi najpierw zostać aktywowane przez administratora. Zapytaj bezpośrednio:"
 
 #: src/routes/[...workspace]/+page.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "Sign out"
-msgstr ""
+msgstr "Wyloguj się"
 
 #: src/routes/[...workspace]/+page.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "Close navigation"
-msgstr ""
+msgstr "Zamknij nawigację"
 
 #: src/routes/[...workspace]/+page.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "Navigation"
-msgstr ""
+msgstr "Nawigacja"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "KSI<0>/ core</0>"
-msgstr ""
+msgstr "KSI<0>/ core</0>"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Choose workspace"
-msgstr ""
+msgstr "Wybierz przestrzeń"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Search projects…"
-msgstr ""
+msgstr "Szukaj projektu…"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "No projects found."
-msgstr ""
+msgstr "Nie znaleziono projektu."
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Choose a project to open its board, forum, and articles."
-msgstr ""
+msgstr "Wybierz projekt, aby otworzyć jego tablicę, forum i artykuły."
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Association management"
-msgstr ""
+msgstr "Administracja koła"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "KSI website ↗"
-msgstr ""
+msgstr "Strona KSI ↗"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "University of Wrocław"
-msgstr ""
+msgstr "Uniwersytet Wrocławski"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Source"
-msgstr ""
+msgstr "Kod źródłowy"
 
 #. 0: 'University of Wrocław'; 0.0: import.meta.env.PUBLIC_APP_VERSION
 #: src/routes/[...workspace]/+page.svelte
 msgid "KSI · {0} <0>v{0} · <0/></0>"
-msgstr ""
+msgstr "KSI · {0} <0>v{0} · <0/></0>"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Current workspace"
-msgstr ""
+msgstr "Bieżąca przestrzeń"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Language and appearance"
-msgstr ""
+msgstr "Język i wygląd"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Preferences"
-msgstr ""
+msgstr "Preferencje"
 
 #: src/routes/[...workspace]/+page.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "Language"
-msgstr ""
+msgstr "Język"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Polski"
-msgstr ""
+msgstr "Polski"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "English"
-msgstr ""
+msgstr "English"
 
 #: src/routes/[...workspace]/+page.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "Appearance"
-msgstr ""
+msgstr "Wygląd"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "System"
-msgstr ""
+msgstr "Systemowy"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Light"
-msgstr ""
+msgstr "Jasny"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Dark"
-msgstr ""
+msgstr "Ciemny"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "My account"
-msgstr ""
+msgstr "Moje konto"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Account settings"
-msgstr ""
+msgstr "Ustawienia konta"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Loading workspace"
-msgstr ""
+msgstr "Ładowanie przestrzeni"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Choose a project and start collaborating."
-msgstr ""
+msgstr "Wybierz projekt i rozpocznij współpracę."
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Locked"
-msgstr ""
+msgstr "Zamknięty"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "No description."
-msgstr ""
+msgstr "Brak opisu."
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Open project"
-msgstr ""
+msgstr "Otwórz projekt"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "No projects yet"
-msgstr ""
+msgstr "Jeszcze nie ma projektów"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "New projects will appear here."
-msgstr ""
+msgstr "Nowe projekty pojawią się tutaj."
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Shared tasks, conversations, and publications in one place."
-msgstr ""
+msgstr "Wspólne zadania, konwersacje i publikacje w jednym miejscu."
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Join project"
-msgstr ""
+msgstr "Dołącz do projektu"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Plan and track shared tasks."
-msgstr ""
+msgstr "Zaplanuj i śledź wspólne zadania."
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Discuss, ask questions, and share ideas."
-msgstr ""
+msgstr "Dyskutuj, zadawaj pytania i dziel się pomysłami."
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Write publications and propose changes."
-msgstr ""
+msgstr "Pisz publikacje i proponuj zmiany."
 
 #: src/routes/[...workspace]/+page.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "New article"
-msgstr ""
+msgstr "Nowy artykuł"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Enter"
-msgstr ""
+msgstr "Enter"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "No articles yet. Create the first article in this workspace."
-msgstr ""
+msgstr "Brak artykułów. Utwórz pierwszy artykuł w tym obszarze roboczym."
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Edit article"
-msgstr ""
+msgstr "Edytuj artykuł"
 
 #: src/lib/KanbanBoard.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "Title"
-msgstr ""
+msgstr "Tytuł"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Save draft"
-msgstr ""
+msgstr "Zapisz szkic"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Publish"
-msgstr ""
+msgstr "Opublikuj"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Propose edit"
-msgstr ""
+msgstr "Zaproponuj zmianę"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Show my author credit"
-msgstr ""
+msgstr "Pokaż mnie jako autora"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Create"
-msgstr ""
+msgstr "Utwórz"
 
 #: src/routes/[...workspace]/+page.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "Slug"
-msgstr ""
+msgstr "Slug"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Task board"
-msgstr ""
+msgstr "Tablica zadań"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Back to board"
-msgstr ""
+msgstr "Wróć do tablicy"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Removed tasks are kept here. Leaders can restore them to their previous column."
-msgstr ""
+msgstr "Usunięte zadania są tu przechowywane. Liderzy mogą je przywrócić do poprzedniej kolumny."
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Restore"
-msgstr ""
+msgstr "Przywróć"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "No removed tasks"
-msgstr ""
+msgstr "Brak usuniętych zadań"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Tasks removed from the board will appear here."
-msgstr ""
+msgstr "Zadania usunięte z tablicy pojawią się tutaj."
 
 #: src/routes/[...workspace]/+page.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "New thread"
-msgstr ""
+msgstr "Nowy wątek"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Forum view"
-msgstr ""
+msgstr "Widok forum"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Active"
-msgstr ""
+msgstr "Aktywne"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Archive"
-msgstr ""
+msgstr "Archiwum"
 
 #: src/routes/[...workspace]/+page.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "Leaders"
-msgstr ""
+msgstr "Liderzy"
 
 #: src/routes/[...workspace]/+page.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "Project members"
-msgstr ""
+msgstr "Członkowie projektu"
 
 #: src/routes/[...workspace]/+page.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "Association members"
-msgstr ""
+msgstr "Członkowie koła"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "All threads"
-msgstr ""
+msgstr "Wszystkie wątki"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "This thread is archived."
-msgstr ""
+msgstr "Ten wątek jest zarchiwizowany."
 
 #: src/lib/KanbanBoard.svelte
 #: src/routes/[...workspace]/+page.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "Reply"
-msgstr ""
+msgstr "Dodaj odpowiedź"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Restore thread"
-msgstr ""
+msgstr "Przywróć wątek"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Archive thread"
-msgstr ""
+msgstr "Zarchiwizuj wątek"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Subject"
-msgstr ""
+msgstr "Temat"
 
 #: src/routes/[...workspace]/+page.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "Visibility"
-msgstr ""
+msgstr "Widoczność"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Create thread"
-msgstr ""
+msgstr "Utwórz wątek"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Profile"
-msgstr ""
+msgstr "Profil"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Introduce yourself to the association and choose what to share publicly."
-msgstr ""
+msgstr "Przedstaw się kołu i wybierz, czym chcesz się podzielić publicznie."
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Saved"
-msgstr ""
+msgstr "Zapisano"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Save changes"
-msgstr ""
+msgstr "Zapisz zmiany"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "About you"
-msgstr ""
+msgstr "O Tobie"
 
 #: src/lib/Members.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "First name"
-msgstr ""
+msgstr "Imię"
 
 #: src/lib/Members.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "Last name"
-msgstr ""
+msgstr "Nazwisko"
 
 #: src/lib/Members.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "Nickname"
-msgstr ""
+msgstr "Pseudonim"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "What should we call you?"
-msgstr ""
+msgstr "Jak mamy się do ciebie zwracać?"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "A little about you"
-msgstr ""
+msgstr "Kilka słów o sobie"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Interests, projects, and things you enjoy…"
-msgstr ""
+msgstr "Zainteresowania, projekty, rzeczy, które lubisz…"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Public profile"
-msgstr ""
+msgstr "Profil publiczny"
 
 #. 0: profile.nickname
 #: src/routes/[...workspace]/+page.svelte
 msgid "aka. {0}"
-msgstr ""
+msgstr "znany jako {0}"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Your public profile on the KSI website."
-msgstr ""
+msgstr "Twój publiczny profil na stronie KSI."
 
 #: src/routes/[...workspace]/+page.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "<0/>GitHub"
-msgstr ""
+msgstr "<0/>GitHub"
 
 #: src/routes/[...workspace]/+page.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "<0/>LinkedIn"
-msgstr ""
+msgstr "<0/>LinkedIn"
 
 #: src/routes/[...workspace]/+page.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "Name visibility"
-msgstr ""
+msgstr "Widoczność imienia i nazwiska"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Applies to the public website. Members see your full name in the dashboard."
-msgstr ""
+msgstr "Dotyczy publicznej strony internetowej. Członkowie widzą twoje imię i nazwisko w panelu."
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Find me online"
-msgstr ""
+msgstr "Znajdź mnie w sieci"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Use a https://github.com/username link."
-msgstr ""
+msgstr "Użyj linku https://github.com/username."
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Use a https://linkedin.com/in/username link."
-msgstr ""
+msgstr "Użyj linku https://linkedin.com/in/username."
 
 #: src/lib/Members.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "Delete account"
-msgstr ""
+msgstr "Usuń konto"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Your profile will be anonymized. Association content remains."
-msgstr ""
+msgstr "Twój profil zostanie zanonimizowany. Treści koła pozostaną."
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Confirm account deletion"
-msgstr ""
+msgstr "Potwierdzam usunięcie konta"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "No activity yet."
-msgstr ""
+msgstr "Brak aktywności."
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Back"
-msgstr ""
+msgstr "Wróć"
 
 #: src/lib/KanbanBoard.svelte
 #: src/routes/[...workspace]/+page.svelte
 msgid "Name"
-msgstr ""
+msgstr "Nazwa"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Leader IDs (comma-separated)"
-msgstr ""
+msgstr "ID liderów (po przecinku)"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Description"
-msgstr ""
+msgstr "Opis"
 
 #: src/routes/[...workspace]/+page.svelte
 msgid "Create project"
-msgstr ""
+msgstr "Utwórz projekt"
 
 #: src/lib/KanbanBoard.svelte
 #: src/lib/Members.svelte
 #: src/lib/Members.svelte
 msgid "Error"
-msgstr ""
+msgstr "Błąd"
 
 #: src/lib/KanbanBoard.svelte
 msgid "Move or remove all live tasks from this status first."
-msgstr ""
+msgstr "Przenieś lub usuń najpierw wszystkie aktywne zadania z tego statusu."
 
 #: src/lib/KanbanBoard.svelte
 msgid "A board must have between 1 and 20 active statuses."
-msgstr ""
+msgstr "Tablica musi mieć od 1 do 20 aktywnych statusów."
 
 #: src/lib/KanbanBoard.svelte
 #: src/lib/KanbanBoard.svelte
 msgid "Edit status"
-msgstr ""
+msgstr "Edytuj status"
 
 #: src/lib/KanbanBoard.svelte
 msgid "Add task to"
-msgstr ""
+msgstr "Dodaj zadanie do"
 
 #: src/lib/KanbanBoard.svelte
 #: src/lib/KanbanBoard.svelte
 msgid "Add task"
-msgstr ""
+msgstr "Dodaj zadanie"
 
 #: src/lib/KanbanBoard.svelte
 msgid "New task"
-msgstr ""
+msgstr "Nowe zadanie"
 
 #: src/lib/KanbanBoard.svelte
 msgid "Task title"
-msgstr ""
+msgstr "Tytuł zadania"
 
 #: src/lib/KanbanBoard.svelte
 msgid "What needs to be done?"
-msgstr ""
+msgstr "Co trzeba zrobić?"
 
 #: src/lib/KanbanBoard.svelte
 #: src/lib/KanbanBoard.svelte
 msgid "Task status"
-msgstr ""
+msgstr "Status zadania"
 
 #: src/lib/KanbanBoard.svelte
 #: src/lib/KanbanBoard.svelte
@@ -656,314 +656,314 @@ msgstr ""
 #: src/lib/KanbanBoard.svelte
 #: src/lib/Members.svelte
 msgid "Cancel"
-msgstr ""
+msgstr "Anuluj"
 
 #: src/lib/KanbanBoard.svelte
 #: src/lib/KanbanBoard.svelte
 msgid "Status name"
-msgstr ""
+msgstr "Nazwa statusu"
 
 #: src/lib/KanbanBoard.svelte
 msgid "Status color"
-msgstr ""
+msgstr "Kolor statusu"
 
 #: src/lib/KanbanBoard.svelte
 #: src/lib/KanbanBoard.svelte
 msgid "Add status"
-msgstr ""
+msgstr "Dodaj status"
 
 #: src/lib/KanbanBoard.svelte
 msgid "Deleted statuses"
-msgstr ""
+msgstr "Usunięte statusy"
 
 #: src/lib/KanbanBoard.svelte
 msgid "Close"
-msgstr ""
+msgstr "Zamknij"
 
 #: src/lib/KanbanBoard.svelte
 msgid "Color"
-msgstr ""
+msgstr "Kolor"
 
 #: src/lib/KanbanBoard.svelte
 msgid "Deleted"
-msgstr ""
+msgstr "Usunięty"
 
 #: src/lib/KanbanBoard.svelte
 #: src/lib/KanbanBoard.svelte
 msgid "Save"
-msgstr ""
+msgstr "Zapisz"
 
 #: src/lib/KanbanBoard.svelte
 msgid "Delete status"
-msgstr ""
+msgstr "Usuń status"
 
 #: src/lib/KanbanBoard.svelte
 msgid "Close task"
-msgstr ""
+msgstr "Zamknij zadanie"
 
 #: src/lib/KanbanBoard.svelte
 msgid "Edit"
-msgstr ""
+msgstr "Edytuj"
 
 #: src/lib/KanbanBoard.svelte
 msgid "Remove"
-msgstr ""
+msgstr "Usuń"
 
 #: src/lib/KanbanBoard.svelte
 #: src/lib/Members.svelte
 msgid "Confirm deletion"
-msgstr ""
+msgstr "Potwierdź usunięcie"
 
 #: src/lib/KanbanBoard.svelte
 msgid "Remove this task?"
-msgstr ""
+msgstr "Usunąć to zadanie?"
 
 #: src/lib/KanbanBoard.svelte
 msgid "The task will move to the graveyard. A leader can restore it."
-msgstr ""
+msgstr "Zadanie zostanie przeniesione na cmentarzysko. Lider może je przywrócić."
 
 #: src/lib/KanbanBoard.svelte
 msgid "Confirm removal"
-msgstr ""
+msgstr "Potwierdź usunięcie"
 
 #: src/lib/KanbanBoard.svelte
 msgid "Discussion"
-msgstr ""
+msgstr "Dyskusja"
 
 #: src/lib/KanbanBoard.svelte
 msgid "Loading discussion"
-msgstr ""
+msgstr "Ładowanie dyskusji"
 
 #: src/lib/KanbanBoard.svelte
 msgid "Association member"
-msgstr ""
+msgstr "Członek koła"
 
 #: src/lib/KanbanBoard.svelte
 msgid "Start a discussion about this task."
-msgstr ""
+msgstr "Rozpocznij dyskusję o tym zadaniu."
 
 #: src/lib/ApprovalInbox.svelte
 msgid "New accounts and profile pictures awaiting a decision."
-msgstr ""
+msgstr "Nowe konta i zdjęcia profilowe oczekujące na decyzję."
 
 #: src/lib/ApprovalInbox.svelte
 msgid "New accounts"
-msgstr ""
+msgstr "Nowe konta"
 
 #: src/lib/ApprovalInbox.svelte
 msgid "Activate"
-msgstr ""
+msgstr "Aktywuj"
 
 #: src/lib/ApprovalInbox.svelte
 #: src/lib/ApprovalInbox.svelte
 msgid "Decline"
-msgstr ""
+msgstr "Odrzuć"
 
 #: src/lib/ApprovalInbox.svelte
 msgid "Profile pictures"
-msgstr ""
+msgstr "Zdjęcia profilowe"
 
 #. 0: avatar.name
 #: src/lib/ApprovalInbox.svelte
 msgid "Proposed avatar: {0}"
-msgstr ""
+msgstr "Zaproponowany awatar: {0}"
 
 #: src/lib/ApprovalInbox.svelte
 msgid "The new picture becomes public after approval."
-msgstr ""
+msgstr "Nowe zdjęcie staje się publiczne po zatwierdzeniu."
 
 #: src/lib/ApprovalInbox.svelte
 msgid "Approve"
-msgstr ""
+msgstr "Zatwierdź"
 
 #: src/lib/ApprovalInbox.svelte
 msgid "All caught up"
-msgstr ""
+msgstr "Wszystko sprawdzone"
 
 #: src/lib/ApprovalInbox.svelte
 msgid "New requests will appear here automatically."
-msgstr ""
+msgstr "Nowe prośby pojawią się tu automatycznie."
 
 #: src/lib/AvatarUpload.svelte
 msgid "Choose a JPEG, PNG, WebP, AVIF or GIF image up to 5 MiB."
-msgstr ""
+msgstr "Wybierz obraz JPEG, PNG, WebP, AVIF lub GIF do 5 MiB."
 
 #: src/lib/AvatarUpload.svelte
 msgid "Upload failed"
-msgstr ""
+msgstr "Przesyłanie nie powiodło się"
 
 #: src/lib/AvatarUpload.svelte
 msgid "Profile picture"
-msgstr ""
+msgstr "Zdjęcie profilowe"
 
 #: src/lib/AvatarUpload.svelte
 msgid "Picture awaiting approval"
-msgstr ""
+msgstr "Zdjęcie oczekujące na akceptację"
 
 #: src/lib/AvatarUpload.svelte
 msgid "Awaiting approval"
-msgstr ""
+msgstr "Oczekuje na akceptację"
 
 #: src/lib/AvatarUpload.svelte
 msgid "Your current picture remains visible until an administrator decides."
-msgstr ""
+msgstr "Twoje obecne zdjęcie pozostaje widoczne, dopóki administrator nie podejmie decyzji."
 
 #: src/lib/AvatarUpload.svelte
 msgid "Withdraw request"
-msgstr ""
+msgstr "Wycofaj prośbę"
 
 #: src/lib/AvatarUpload.svelte
 msgid "The picture was declined. You can submit another."
-msgstr ""
+msgstr "Zdjęcie zostało odrzucone. Możesz przesłać inne."
 
 #: src/lib/AvatarUpload.svelte
 msgid "Uploading…"
-msgstr ""
+msgstr "Przesyłanie…"
 
 #: src/lib/AvatarUpload.svelte
 msgid "Drop a picture or choose a file"
-msgstr ""
+msgstr "Przeciągnij zdjęcie lub wybierz plik"
 
 #: src/lib/AvatarUpload.svelte
 msgid "JPEG · PNG · WebP · AVIF · GIF · 5 MiB"
-msgstr ""
+msgstr "JPEG · PNG · WebP · AVIF · GIF · 5 MiB"
 
 #: src/lib/AvatarUpload.svelte
 msgid "Every new picture requires administrator approval."
-msgstr ""
+msgstr "Każde nowe zdjęcie wymaga zatwierdzenia przez administratora."
 
 #: src/lib/Members.svelte
 msgid "Member"
-msgstr ""
+msgstr "Członek"
 
 #: src/lib/Members.svelte
 msgid "Board"
-msgstr ""
+msgstr "Zarząd"
 
 #: src/lib/Members.svelte
 msgid "Administrator"
-msgstr ""
+msgstr "Administrator"
 
 #: src/lib/Members.svelte
 msgid "Use a https://github.com/username profile link."
-msgstr ""
+msgstr "Użyj linku profilu https://github.com/username."
 
 #: src/lib/Members.svelte
 msgid "Use a https://linkedin.com/in/username profile link."
-msgstr ""
+msgstr "Użyj linku profilu https://linkedin.com/in/username."
 
 #: src/lib/Members.svelte
 msgid "The final active administrator must retain access."
-msgstr ""
+msgstr "Ostatni aktywny administrator musi zachować dostęp."
 
 #: src/lib/Members.svelte
 msgid "Changes saved."
-msgstr ""
+msgstr "Zmiany zapisane."
 
 #: src/lib/Members.svelte
 msgid "Loading members"
-msgstr ""
+msgstr "Ładowanie członków"
 
 #: src/lib/Members.svelte
 #: src/lib/Members.svelte
 msgid "All members"
-msgstr ""
+msgstr "Wszyscy członkowie"
 
 #: src/lib/Members.svelte
 msgid "Save profile"
-msgstr ""
+msgstr "Zapisz profil"
 
 #: src/lib/Members.svelte
 msgid "Bio<0/>"
-msgstr ""
+msgstr "Biogram<0/>"
 
 #: src/lib/Members.svelte
 msgid "GitHub<0/>"
-msgstr ""
+msgstr "GitHub<0/>"
 
 #: src/lib/Members.svelte
 msgid "LinkedIn<0/>"
-msgstr ""
+msgstr "LinkedIn<0/>"
 
 #: src/lib/Members.svelte
 msgid "Access"
-msgstr ""
+msgstr "Dostęp"
 
 #: src/lib/Members.svelte
 #: src/lib/Members.svelte
 msgid "Account status"
-msgstr ""
+msgstr "Status konta"
 
 #: src/lib/Members.svelte
 #: src/lib/Members.svelte
 #: src/lib/Members.svelte
 msgid "Role"
-msgstr ""
+msgstr "Rola"
 
 #: src/lib/Members.svelte
 msgid "Permission flags (one per line)"
-msgstr ""
+msgstr "Wyjątki uprawnień (jeden na linię)"
 
 #: src/lib/Members.svelte
 msgid "Save permissions"
-msgstr ""
+msgstr "Zapisz uprawnienia"
 
 #: src/lib/Members.svelte
 msgid "Delete account? Personal data will be anonymized. Content will remain."
-msgstr ""
+msgstr "Usunąć konto? Dane osobowe zostaną zanonimizowane. Treści pozostaną."
 
 #: src/lib/Members.svelte
 msgid "Search members"
-msgstr ""
+msgstr "Szukaj członków"
 
 #: src/lib/Members.svelte
 msgid "Name, nickname or email…"
-msgstr ""
+msgstr "Imię, pseudonim lub email…"
 
 #: src/lib/Members.svelte
 msgid "Search"
-msgstr ""
+msgstr "Szukaj"
 
 #: src/lib/Members.svelte
 msgid "Filter status"
-msgstr ""
+msgstr "Filtr statusu"
 
 #: src/lib/Members.svelte
 msgid "All statuses"
-msgstr ""
+msgstr "Wszystkie statusy"
 
 #: src/lib/Members.svelte
 msgid "Filter role"
-msgstr ""
+msgstr "Filtr roli"
 
 #: src/lib/Members.svelte
 msgid "All roles"
-msgstr ""
+msgstr "Wszystkie role"
 
 #: src/lib/Members.svelte
 msgid "Results"
-msgstr ""
+msgstr "Wyniki"
 
 #: src/lib/Members.svelte
 msgid "Person"
-msgstr ""
+msgstr "Osoba"
 
 #: src/lib/Members.svelte
 msgid "Email"
-msgstr ""
+msgstr "Email"
 
 #: src/lib/Members.svelte
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #: src/lib/Members.svelte
 msgid "No matching members."
-msgstr ""
+msgstr "Brak pasujących osób."
 
 #: src/lib/Members.svelte
 msgid "Previous"
-msgstr ""
+msgstr "Poprzednia"
 
 #: src/lib/Members.svelte
 msgid "Next"
-msgstr ""
+msgstr "Następna"

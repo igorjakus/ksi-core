@@ -35,6 +35,12 @@
 
   const { alert, user, session }: Props = $props();
 
+  // @wc-ignore
+  const keys = {
+    Escape: 'Escape',
+    ArrowDown: 'ArrowDown'
+  };
+
   let openMenu = $state<'projects' | 'groups' | 'mobile' | null>(null);
 
   let displayedMenu = $state<'projects' | 'groups' | 'mobile'>('projects');
@@ -48,7 +54,7 @@
   }
 
   async function handleTriggerKey(event: KeyboardEvent, menu: 'projects' | 'groups' | 'mobile') {
-    if (event.key !== 'ArrowDown') return;
+    if (event.key !== keys.ArrowDown) return;
     event.preventDefault();
     displayedMenu = menu;
     openMenu = menu;
@@ -113,7 +119,7 @@
 
 <svelte:window
   onkeydown={(event) => {
-    if (event.key === 'Escape' && openMenu) {
+    if (event.key === Keys.Escape && openMenu) {
       const trigger = header.querySelector<HTMLButtonElement>(
         `[aria-controls="navbar-menu"][aria-expanded="true"]`
       );

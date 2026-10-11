@@ -3,14 +3,13 @@
   import '@ksi-core/ui/platform-theme.css';
   import '$lib/auth.css';
   import { onMount } from 'svelte';
-  import { initializePreferences } from '@ksi-core/ui/platform/preferences';
+  import { initializePreferences, preferences } from '@ksi-core/ui/platform/preferences';
   import { loadLocale } from 'wuchale/load-utils';
   import '../locales/main.loader.svelte.js';
-  import { locale } from '$lib/locale.svelte';
 
   onMount(initializePreferences);
   $effect(() => {
-    loadLocale(locale.current);
+    loadLocale(preferences.language === 'en' ? 'en-us' : 'pl');
   });
   let { children } = $props();
 </script>
