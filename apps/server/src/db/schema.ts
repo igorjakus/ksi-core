@@ -1,3 +1,4 @@
+import type { ContentTranslations } from 'shared/content-locales';
 import { defaultBoardStatuses, type BoardStatus } from '../domain/board-statuses';
 import { createId } from '@paralleldrive/cuid2';
 import {
@@ -22,6 +23,7 @@ export const memberRoleEnum = pgEnum('member_role', ['member', 'board', 'adminis
 export const privacyEnum = pgEnum('public_privacy', ['full-name', 'last-initial', 'initials']);
 
 export const users = snakeCase.table('users', {
+  translations: jsonb().$type<ContentTranslations>().notNull().default({}),
   id: text().primaryKey().$defaultFn(createId),
   name: text().notNull(),
   firstName: text().notNull().default(''),
@@ -119,6 +121,7 @@ export const alerts = snakeCase.table('alerts', {
 });
 
 export const projects = snakeCase.table('projects', {
+  translations: jsonb().$type<ContentTranslations>().notNull().default({}),
   id: text().primaryKey().$defaultFn(createId),
   slug: text().notNull().unique(),
   name: text().notNull(),
@@ -166,6 +169,7 @@ export const joinRequests = snakeCase.table(
   (t) => [uniqueIndex('join_request_unique').on(t.projectId, t.userId)]
 );
 export const projectLinks = snakeCase.table('project_links', {
+  translations: jsonb().$type<ContentTranslations>().notNull().default({}),
   id: text().primaryKey().$defaultFn(createId),
   projectId: text()
     .notNull()
@@ -175,6 +179,7 @@ export const projectLinks = snakeCase.table('project_links', {
   position: integer().notNull().default(0)
 });
 export const articles = snakeCase.table('articles', {
+  translations: jsonb().$type<ContentTranslations>().notNull().default({}),
   id: text().primaryKey().$defaultFn(createId),
   projectId: text().references(() => projects.id),
   slug: text().notNull().unique(),
@@ -195,6 +200,7 @@ export const articles = snakeCase.table('articles', {
 export const articleRevisions = snakeCase.table(
   'article_revisions',
   {
+    translations: jsonb().$type<ContentTranslations>().notNull().default({}),
     id: text().primaryKey().$defaultFn(createId),
     articleId: text()
       .notNull()

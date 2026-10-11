@@ -1,3 +1,4 @@
+import { articleMarkdown } from 'shared/content-locales';
 import { and, eq, inArray, isNull } from 'drizzle-orm';
 import { status, t } from 'elysia';
 import {
@@ -248,11 +249,8 @@ async function referenceContainsFile(
     content = proposal?.state === 'pending' && proposal.fileId ? `file:${proposal.fileId}` : '';
   }
   if (type === 'article') {
-    const [owner] = await database
-      .select({ content: articles.markdown })
-      .from(articles)
-      .where(eq(articles.id, ownerId));
-    content = owner?.content;
+    const [owner] = await database.select().from(articles).where(eq(articles.id, ownerId));
+    content = owner ? articleMarkdown(owner) : undefined;
   }
   if (type === 'profile') {
     const [owner] = await database
@@ -263,10 +261,10 @@ async function referenceContainsFile(
   }
   if (type === 'revision') {
     const [owner] = await database
-      .select({ content: articleRevisions.markdown })
+      .select()
       .from(articleRevisions)
       .where(eq(articleRevisions.id, ownerId));
-    content = owner?.content;
+    content = owner ? articleMarkdown(owner) : undefined;
   }
   if (type === 'proposal') {
     const [owner] = await database

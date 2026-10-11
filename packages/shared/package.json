@@ -1,5 +1,6 @@
 {
   "name": "shared",
+  "type": "module",
   "main": "./index.ts",
   "types": "./index.ts",
   "dependencies": {

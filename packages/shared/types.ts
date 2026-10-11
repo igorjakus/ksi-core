@@ -1,4 +1,6 @@
+import type { ContentTranslations } from './content-locales';
 export interface Profile {
+  translations?: ContentTranslations;
   id: string;
   name: string;
   firstName: string;

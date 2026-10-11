@@ -1,3 +1,4 @@
+import { localizeContent, articleMarkdown } from 'shared/content-locales';
 import { and, eq, inArray, desc, sql } from 'drizzle-orm';
 import { status, t } from 'elysia';
 import { syncFileReferences } from './files';
@@ -78,20 +79,22 @@ export async function scopeFor(
 export function requireLeader(user: Principal, scope: ResourceScope, permission: Permission) {
   if (!hasScopedLeadership(user, scope, permission)) throw status(403, { code: 'FORBIDDEN' });
 }
-export function publicProfile(user: typeof users.$inferSelect) {
+export function publicProfile(user: typeof users.$inferSelect, locale?: string) {
+  const localized = user.membershipStatus === 'deleted' ? user : localizeContent(user, locale);
   return {
     id: user.id,
     name:
       user.membershipStatus === 'deleted'
         ? user.name
-        : displayName(user) || user.nickname || 'Member',
+        : displayName(localized) || localized.nickname || 'Member',
     image: user.image,
-    bio: user.bio,
+    bio: localized.bio,
+    nickname: user.membershipStatus === 'deleted' ? null : localized.nickname,
     github: user.github,
     linkedin: user.linkedin
   };
 }
-async function articleCredits(executor: Executor, articleId: string) {
+async function articleCredits(executor: Executor, articleId: string, locale?: string) {
   const records = await executor
     .select({ user: users })
     .from(articleContributors)
@@ -99,7 +102,7 @@ async function articleCredits(executor: Executor, articleId: string) {
     .where(
       and(eq(articleContributors.articleId, articleId), eq(articleContributors.publicCredit, true))
     );
-  return records.map((r) => publicProfile(r.user));
+  return records.map((r) => publicProfile(r.user, locale));
 }
 async function articleScope(executor: Executor, articleId: string) {
   const [article] = await executor.select().from(articles).where(eq(articles.id, articleId));
@@ -121,13 +124,25 @@ const memberFields = {
 };
 
 export default createElysia({ prefix: '/platform' })
-  .get('/public/members', async ({ db }) =>
-    (await db.select().from(users).where(eq(users.membershipStatus, 'active'))).map(publicProfile)
+  .get('/public/members', async ({ db, query }) =>
+    (await db.select().from(users).where(eq(users.membershipStatus, 'active'))).map((user) =>
+      publicProfile(user, typeof query.locale === 'string' ? query.locale : undefined)
+    )
   )
-  .get('/public/projects', async ({ db }) =>
-    db.select().from(projects).orderBy(desc(projects.createdAt))
+  .get('/public/members/:id', async ({ db, params, query }) => {
+    const [member] = await db
+      .select()
+      .from(users)
+      .where(and(eq(users.id, params.id), eq(users.membershipStatus, 'active')));
+    if (!member) throw status(404, { code: 'MEMBER_NOT_FOUND' });
+    return publicProfile(member, typeof query.locale === 'string' ? query.locale : undefined);
+  })
+  .get('/public/projects', async ({ db, query }) =>
+    (await db.select().from(projects).orderBy(desc(projects.createdAt))).map((project) =>
+      localizeContent(project, typeof query.locale === 'string' ? query.locale : undefined)
+    )
   )
-  .get('/public/projects/:slug', async ({ db, params }) => {
+  .get('/public/projects/:slug', async ({ db, params, query }) => {
     const [project] = await db.select().from(projects).where(eq(projects.slug, params.slug));
     if (!project) throw status(404, { code: 'PROJECT_NOT_FOUND' });
     const roster = await db
@@ -144,8 +159,11 @@ export default createElysia({ prefix: '/platform' })
       .from(projectLinks)
       .where(eq(projectLinks.projectId, project.id))
       .orderBy(projectLinks.position);
-    const mainArticle = published.find((a) => a.mainArticle) ?? null;
-    const feed = published.filter((a) => a.projectFeed && !a.mainArticle);
+    const publishedLocalized = published.map((article) =>
+      localizeContent(article, typeof query.locale === 'string' ? query.locale : undefined)
+    );
+    const mainArticle = publishedLocalized.find((a) => a.mainArticle) ?? null;
+    const feed = publishedLocalized.filter((a) => a.projectFeed && !a.mainArticle);
     const leaderIds = roster.filter((r) => r.leader).map((r) => r.user.id);
     const layout = project.layout.length ? project.layout : defaultLayout;
     const showLeaders = layout.some((s) => s.type === 'leaders' && !s.hidden);
@@ -154,15 +172,23 @@ export default createElysia({ prefix: '/platform' })
       leaderIds,
       showLeaders
     );
-    const leaders = roster.filter((r) => r.leader).map((r) => publicProfile(r.user));
+    const leaders = roster
+      .filter((r) => r.leader)
+      .map((r) =>
+        publicProfile(r.user, typeof query.locale === 'string' ? query.locale : undefined)
+      );
     const members = roster
       .filter((r) => memberIds.includes(r.user.id))
-      .map((r) => publicProfile(r.user));
+      .map((r) =>
+        publicProfile(r.user, typeof query.locale === 'string' ? query.locale : undefined)
+      );
     return {
-      ...project,
+      ...localizeContent(project, typeof query.locale === 'string' ? query.locale : undefined),
       leaders,
       members,
-      links,
+      links: links.map((link) =>
+        localizeContent(link, typeof query.locale === 'string' ? query.locale : undefined)
+      ),
       mainArticle,
       articles: feed,
       sections: visibleSections(layout, {
@@ -174,23 +200,37 @@ export default createElysia({ prefix: '/platform' })
       })
     };
   })
-  .get('/public/articles', async ({ db }) => {
+  .get('/public/articles', async ({ db, query }) => {
     const records = await db
       .select()
       .from(articles)
       .where(and(eq(articles.state, 'published'), eq(articles.websiteFeed, true)))
       .orderBy(desc(articles.updatedAt));
     return Promise.all(
-      records.map(async (a) => ({ ...a, authors: await articleCredits(db, a.id) }))
+      records.map(async (a) => ({
+        ...localizeContent(a, typeof query.locale === 'string' ? query.locale : undefined),
+        authors: await articleCredits(
+          db,
+          a.id,
+          typeof query.locale === 'string' ? query.locale : undefined
+        )
+      }))
     );
   })
-  .get('/public/articles/:slug', async ({ db, params }) => {
+  .get('/public/articles/:slug', async ({ db, params, query }) => {
     const [article] = await db
       .select()
       .from(articles)
       .where(and(eq(articles.slug, params.slug), eq(articles.state, 'published')));
     if (!article) throw status(404, { code: 'ARTICLE_NOT_FOUND' });
-    return { ...article, authors: await articleCredits(db, article.id) };
+    return {
+      ...localizeContent(article, typeof query.locale === 'string' ? query.locale : undefined),
+      authors: await articleCredits(
+        db,
+        article.id,
+        typeof query.locale === 'string' ? query.locale : undefined
+      )
+    };
   })
   .get('/members', async ({ db, user }) => {
     active(user);
@@ -336,6 +376,15 @@ export default createElysia({ prefix: '/platform' })
     },
     { body: t.Object({ version: t.Integer({ minimum: 1 }), layout: layoutType }) }
   )
+  .get('/projects/:id/links', async ({ db, user, params }) => {
+    const actor = active(user);
+    requireLeader(actor, await scopeFor(db, params.id), 'projects.catalog.edit');
+    return db
+      .select()
+      .from(projectLinks)
+      .where(eq(projectLinks.projectId, params.id))
+      .orderBy(projectLinks.position);
+  })
   .put(
     '/projects/:id/links',
     async ({ db, user, params, body }) => {
@@ -368,9 +417,28 @@ export default createElysia({ prefix: '/platform' })
     },
     {
       body: t.Object({
-        links: t.Array(t.Object({ label: shortText, url: t.String({ maxLength: 2000 }) }), {
-          maxItems: 50
-        })
+        links: t.Array(
+          t.Object({
+            label: shortText,
+            url: t.String({ maxLength: 2000 }),
+            translations: t.Optional(
+              t.Object(
+                {
+                  pl: t.Optional(
+                    t.Object(
+                      { label: t.Optional(t.String({ maxLength: 200 })) },
+                      { additionalProperties: false }
+                    )
+                  )
+                },
+                { additionalProperties: false }
+              )
+            )
+          }),
+          {
+            maxItems: 50
+          }
+        )
       })
     }
   )
@@ -595,7 +663,7 @@ export default createElysia({ prefix: '/platform' })
           .returning();
         await syncFileReferences(tx, 'article', article.id, article.markdown, actor);
         if (revision)
-          await syncFileReferences(tx, 'revision', revision.id, revision.markdown, actor);
+          await syncFileReferences(tx, 'revision', revision.id, articleMarkdown(revision), actor);
         await recordEvent(tx, {
           actorId: actor.id,
           projectId: article.projectId,
@@ -722,12 +790,13 @@ export default createElysia({ prefix: '/platform' })
               version: updated.version,
               title: updated.title,
               markdown: updated.markdown,
+              translations: updated.translations,
               actorId: actor.id
             })
             .returning();
-          await syncFileReferences(tx, 'article', updated.id, updated.markdown, actor);
+          await syncFileReferences(tx, 'article', updated.id, articleMarkdown(updated), actor);
           if (revision)
-            await syncFileReferences(tx, 'revision', revision.id, revision.markdown, actor);
+            await syncFileReferences(tx, 'revision', revision.id, articleMarkdown(revision), actor);
         }
         await tx
           .update(articleProposals)
@@ -793,12 +862,13 @@ export default createElysia({ prefix: '/platform' })
             version: updated.version,
             title: updated.title,
             markdown: updated.markdown,
+            translations: updated.translations,
             actorId: actor.id
           })
           .returning();
-        await syncFileReferences(tx, 'article', updated.id, updated.markdown, actor);
+        await syncFileReferences(tx, 'article', updated.id, articleMarkdown(updated), actor);
         if (revision)
-          await syncFileReferences(tx, 'revision', revision.id, revision.markdown, actor);
+          await syncFileReferences(tx, 'revision', revision.id, articleMarkdown(revision), actor);
         await recordEvent(tx, {
           actorId: actor.id,
           projectId: article.projectId,

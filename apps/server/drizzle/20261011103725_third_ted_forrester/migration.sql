@@ -1,0 +1,1 @@
+ALTER TABLE "project_links" ADD COLUMN "translations" jsonb DEFAULT '{}' NOT NULL;

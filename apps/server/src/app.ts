@@ -1,3 +1,4 @@
+import { translationRoutes } from './routes/platform/translations';
 import { Elysia, status, t } from 'elysia';
 import { renderMarkdown } from 'shared/markdown';
 import { auth } from './lib/auth';
@@ -51,6 +52,7 @@ export const app = new Elysia()
   .use(approvalRoutes)
   .use(userRoutes)
   .use(content)
+  .use(translationRoutes)
   .use(collaboration)
   .use(filesRoutes)
   .use(realtimeRoutes)

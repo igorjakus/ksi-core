@@ -192,6 +192,7 @@ export async function anonymizeUser(actorId: string, userId: string) {
         emailVerified: false,
         image: null,
         bio: null,
+        translations: {},
         github: null,
         linkedin: null,
         flags: [],
