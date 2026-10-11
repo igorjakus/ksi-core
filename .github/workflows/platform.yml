@@ -36,6 +36,7 @@ jobs:
       - run: bun run format:check
       - run: bun run lint
       - run: bun run test
+      - run: bun run db:migrate
       - run: bun run test:integration
       - run: python3 -m unittest discover -s scripts/deployment -p 'test_*.py'
       - run: bun run --cwd apps/server check
