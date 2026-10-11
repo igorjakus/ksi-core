@@ -99,19 +99,19 @@
     {
       title: 'Social',
       description: 'Community events, camps, and meetups that bring students together.',
-      href: '/#social',
+      href: '/projects?field=community#project-directory',
       icon: Share2
     },
     {
       title: 'Technical',
       description: 'Hands-on engineering — building tools, products, and side projects.',
-      href: '/#technical',
+      href: '/projects?field=engineering#project-directory',
       icon: CodeXml
     },
     {
       title: 'Scientific research',
       description: 'Reading groups and early-stage research, mentored by faculty.',
-      href: '/#scientific',
+      href: '/projects?field=research#project-directory',
       icon: FlaskConical
     }
   ];

@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { page } from '$app/state';
+  import { goto } from '$app/navigation';
   import { ArrowDown, ArrowUpRight, Search, X } from '@lucide/svelte';
   import ProjectPreview from '../../components/ui/ProjectPreview.svelte';
 
@@ -33,7 +35,17 @@
     { value: 'research', label: 'Research' }
   ];
   let query = $state('');
-  let activeFilter = $state('all');
+  const activeFilter = $derived(
+    ['community', 'engineering', 'research'].includes(page.url.searchParams.get('field') ?? '')
+      ? page.url.searchParams.get('field')!
+      : 'all'
+  );
+  function setFilter(field: string) {
+    const url = new URL(page.url);
+    if (field === 'all') url.searchParams.delete('field');
+    else url.searchParams.set('field', field);
+    return goto(url, { noScroll: true, keepFocus: true });
+  }
   let filteredProjects = $derived(
     orderedProjects.filter(
       (project) =>
@@ -103,7 +115,8 @@
           {#each filters as filter (filter.label)}
             <button
               type="button"
-              onclick={() => (activeFilter = filter.value)}
+              aria-pressed={activeFilter === filter.value}
+              onclick={() => void setFilter(filter.value)}
               class="rounded border border-transparent px-4 py-2 text-[13px] transition-colors {activeFilter ===
               filter.value
                 ? 'bg-primary text-primary-content'
@@ -199,7 +212,7 @@
               type="button"
               onclick={() => {
                 query = '';
-                activeFilter = 'all';
+                void setFilter('all');
               }}
             >
               <X class="size-4" /> Clear filters
