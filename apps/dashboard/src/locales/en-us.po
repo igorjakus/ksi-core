@@ -1432,3 +1432,8 @@ msgstr "Unknown browser"
 #: src/routes/[...workspace]/+page.svelte
 msgid "Revoke"
 msgstr "Revoke"
+
+#. 0: firstResult; 1: lastResult; 2: total
+#: src/lib/Members.svelte
+msgid "{0} to {1} / {2} <0>members</0>"
+msgstr "{0} to {1} / {2} <0>members</0>"

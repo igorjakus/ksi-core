@@ -437,8 +437,8 @@
     <footer class="directory-footer">
       <p class="muted">
         {firstResult}
-        {language === 'pl' ? 'do' : 'to'}
-        {lastResult} / {total} <span>{language === 'pl' ? 'osób' : 'members'}</span>
+        to
+        {lastResult} / {total} <span>members</span>
       </p>
       <nav class="pagination" aria-label="Member table pagination">
         <button
