@@ -436,7 +436,7 @@
     {#if !records.length}<p>{'No matching members.'}</p>{/if}
     <footer class="directory-footer">
       <p class="muted">
-        {firstResult}–{lastResult} / {total} <span>{language === 'pl' ? 'osób' : 'members'}</span>
+        {firstResult}-{lastResult} / {total} <span>{language === 'pl' ? 'osób' : 'members'}</span>
       </p>
       <nav class="pagination" aria-label="Member table pagination">
         <button

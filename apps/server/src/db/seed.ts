@@ -64,7 +64,7 @@ export async function seed() {
       translations: {
         pl: {
           description:
-            'Silnik szachowy oparty na Transformerach — badamy, jak sieci neuronowe uczą się grać.'
+            'Silnik szachowy oparty na Transformerach - badamy, jak sieci neuronowe uczą się grać.'
         }
       }
     },
@@ -72,11 +72,10 @@ export async function seed() {
       slug: 'zosia',
       name: 'ZOSIA',
       fields: ['community'],
-      description:
-        'The Winter Computer Science Student Camp: conversations, talks and shared discovery.',
+      description: 'The Winter Computer Science Student Camp: talks and time together.',
       translations: {
         pl: {
-          description: 'Zimowy Obóz Studentów Informatyki — rozmowy, wykłady i wspólne odkrywanie.'
+          description: 'Zimowy Obóz Studentów Informatyki - wykłady i wspólne spędzanie czasu.'
         }
       }
     },

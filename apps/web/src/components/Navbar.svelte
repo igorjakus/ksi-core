@@ -81,14 +81,14 @@
     },
     {
       title: 'LEOSIA',
-      description: "ZOSIA's summer counterpart — in the works.",
+      description: "A summer version of ZOSIA. We're working on it.",
       href: '/projects',
       icon: Mountain,
       badge: 'Soon'
     },
     {
       title: 'ksi-core',
-      description: 'This very website — open source and built by our members.',
+      description: 'Our website, built by KSI members. The code is on GitHub.',
       href: 'https://github.com/ksiuwr/ksi-core',
       icon: Github,
       external: true
@@ -104,7 +104,7 @@
     },
     {
       title: 'Technical',
-      description: 'Hands-on engineering — building tools, products, and side projects.',
+      description: 'We build software and tools in member-led projects.',
       href: '/projects?field=engineering#project-directory',
       icon: CodeXml
     },

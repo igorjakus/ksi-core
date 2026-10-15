@@ -14,8 +14,8 @@
           Hello, World!<br />We're KSI.
         </h1>
         <p class="text-base-content/70 mb-8 max-w-[600px] text-[18px] leading-relaxed">
-          A student community exploring computer science through research, education, and events at
-          the University of Wrocław.
+          We're the Computer Science Student Association at the University of Wrocław. We run
+          projects, workshops, and events.
         </p>
         <div class="flex flex-wrap gap-3">
           <a href="#projects" class="btn">See what we do <ArrowRight size={16} /></a>
@@ -34,7 +34,7 @@
     <!-- Socially -->
     <section id="about" class="mb-20">
       <div class="text-base-content/70 mb-5 font-mono text-[11px] tracking-wider uppercase">
-        ( socially ) Connecting the community
+        ( socially ) Events and workshops
       </div>
       <div class="mb-6 grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4">
         <div class="card border-base-content/20 bg-base-100 rounded border p-6">
@@ -63,10 +63,8 @@
           <div class="flex flex-1 flex-col items-start p-6">
             <h3 class="font-anybody text-base-content m-0 mb-3 text-[18px]">ZOSIA</h3>
             <p class="text-base-content/70 mb-5 flex-1 text-[13px] leading-relaxed">
-              Our experienced team has been organizing the well-recognized conference in the
-              mountainous regions of Lower Silesia in southwestern Poland. While our speakers give
-              various talks, sharing their knowledge, scientific research, hobbies and so on, we
-              love to spend some time together in the free time.
+              ZOSIA is our winter camp in the mountains of Lower Silesia. We give talks about
+              research and hobbies, then spend time together between sessions.
             </p>
             <a href="/projects/zosia" class="btn btn-outline">Read more</a>
           </div>
@@ -83,9 +81,8 @@
           <div class="flex flex-1 flex-col items-start p-6">
             <h3 class="font-anybody text-base-content m-0 mb-3 text-[18px]">Hour of Code</h3>
             <p class="text-base-content/70 mb-5 flex-1 text-[13px] leading-relaxed">
-              Hour of Code is a global movement focused on bringing Computer Science and coding to
-              students, in fun activities held within one hour. Multiple brilliant volunteers, one
-              goal – share the passion for Computer Science with the youngest.
+              As part of Hour of Code, our volunteers teach children the basics of programming in
+              hour-long workshops.
             </p>
             <a href="/projects/hoc" class="btn btn-outline">Read more</a>
           </div>
@@ -96,7 +93,7 @@
     <!-- Technically -->
     <section id="projects" class="mb-20">
       <div class="text-base-content/70 mb-5 font-mono text-[11px] tracking-wider uppercase">
-        ( technically ) Engineering is our passion
+        ( technically ) Our projects
       </div>
       <div class="flex flex-col gap-8">
         {#each data.projects as project (project.slug)}
@@ -137,11 +134,11 @@
 
     <section id="scientific" class="mb-15">
       <div class="text-base-content/70 mb-5 font-mono text-[11px] tracking-wider uppercase">
-        ( scientifically ) Curiosity, kept rigorous
+        ( scientifically ) Research
       </div>
       <p class="text-base-content mb-8 max-w-[600px] text-[15px] leading-relaxed">
-        We're still early in our research journey — no published papers to point to yet — but the
-        habits that lead there are already part of how we work together.
+        We haven't published any papers yet. We read and discuss research, host seminars, and work
+        on research problems with faculty.
       </p>
       <div class="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4">
         <div class="card border-base-content/20 bg-base-100 flex flex-col gap-4 rounded border p-6">
@@ -149,7 +146,7 @@
           <div>
             <h3 class="font-anybody text-base-content m-0 mb-2 text-[16px]">Reading groups</h3>
             <p class="text-base-content/70 m-0 text-[13px] leading-normal">
-              We pick apart papers and ideas together, well outside the lecture hall.
+              We meet to read and discuss research papers.
             </p>
           </div>
         </div>
@@ -169,8 +166,7 @@
               Early-stage research
             </h3>
             <p class="text-base-content/70 m-0 text-[13px] leading-normal">
-              Members pair with faculty to explore open problems, long before any of it becomes a
-              paper.
+              Members work with faculty on open research problems.
             </p>
           </div>
         </div>
