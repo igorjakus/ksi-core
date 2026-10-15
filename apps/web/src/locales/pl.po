@@ -551,8 +551,8 @@ msgid "Groups <0/>"
 msgstr "Grupy <0/>"
 
 #: src/routes/+page.svelte
-msgid "We're the Computer Science Student Association at the University of Wrocław. We run projects, workshops, and events."
-msgstr "Jesteśmy Kołem Studentów Informatyki na Uniwersytecie Wrocławskim. Prowadzimy projekty, warsztaty i wydarzenia."
+msgid "We're computer science students at the University of Wrocław. We build software and organize workshops and events."
+msgstr "Jesteśmy studentami informatyki na Uniwersytecie Wrocławskim. Tworzymy oprogramowanie, prowadzimy warsztaty i organizujemy wydarzenia."
 
 #: src/routes/+page.svelte
 msgid "See what we do <0/>"
@@ -579,12 +579,8 @@ msgid "( socially )"
 msgstr "( społecznie )"
 
 #: src/routes/+page.svelte
-msgid "We haven't published any papers yet. We read and discuss research, host seminars, and work on research problems with faculty."
-msgstr "Nie mamy jeszcze publikacji naukowych. Czytamy i omawiamy prace, organizujemy seminaria i pracujemy nad problemami badawczymi z pracownikami naukowymi."
-
-#: src/routes/+page.svelte
 msgid "Reading groups"
-msgstr "Grupy czytelnicze"
+msgstr "Dyskusje o pracach naukowych"
 
 #: src/routes/+page.svelte
 msgid "We meet to read and discuss research papers."
@@ -595,16 +591,16 @@ msgid "Guest seminars"
 msgstr "Seminaria gościnne"
 
 #: src/routes/+page.svelte
-msgid "Researchers and alumni drop by to share what they're currently working on."
-msgstr "Badacze i absolwenci wpadają, by podzielić się tym, nad czym aktualnie pracują."
+msgid "Researchers and alumni talk about their work."
+msgstr "Badacze i absolwenci opowiadają o swojej pracy."
 
 #: src/routes/+page.svelte
-msgid "Early-stage research"
-msgstr "Badania na wczesnym etapie"
+msgid "Research projects"
+msgstr "Projekty badawcze"
 
 #: src/routes/+page.svelte
-msgid "Members work with faculty on open research problems."
-msgstr "Członkowie koła pracują z pracownikami naukowymi nad otwartymi problemami badawczymi."
+msgid "We work on research problems with faculty."
+msgstr "Pracujemy nad problemami badawczymi z pracownikami naukowymi."
 
 #: src/components/Goal.svelte
 msgid "( scientifically )"
@@ -615,16 +611,16 @@ msgid "Our winter camp for computer science students in Lower Silesia."
 msgstr "Nasz zimowy obóz dla studentów informatyki na Dolnym Śląsku."
 
 #: src/components/Navbar.svelte
-msgid "A summer version of ZOSIA. We're working on it."
-msgstr "Letnia wersja ZOSI. Pracujemy nad nią."
+msgid "A summer version of ZOSIA, in preparation."
+msgstr "Letnia wersja ZOSI. W przygotowaniu."
 
 #: src/components/Navbar.svelte
 msgid "Soon"
 msgstr "Wkrótce"
 
 #: src/components/Navbar.svelte
-msgid "Our website, built by KSI members. The code is on GitHub."
-msgstr "Nasza strona, tworzona przez członków KSI. Kod jest na GitHubie."
+msgid "The code behind this website."
+msgstr "Kod tej strony."
 
 #: src/components/Navbar.svelte
 #: src/components/Sidebar.svelte
@@ -632,8 +628,8 @@ msgid "Social"
 msgstr "Społeczność"
 
 #: src/components/Navbar.svelte
-msgid "Community events, camps, and meetups that bring students together."
-msgstr "Wydarzenia społecznościowe, obozy i spotkania, które integrują studentów."
+msgid "Camps, events, and meetups."
+msgstr "Obozy, wydarzenia i spotkania."
 
 #: src/components/Navbar.svelte
 #: src/components/Sidebar.svelte
@@ -641,8 +637,8 @@ msgid "Technical"
 msgstr "Technika"
 
 #: src/components/Navbar.svelte
-msgid "We build software and tools in member-led projects."
-msgstr "Tworzymy oprogramowanie i narzędzia w projektach prowadzonych przez członków koła."
+msgid "Software and tools built by our members."
+msgstr "Oprogramowanie i narzędzia tworzone przez członków koła."
 
 #: src/components/Navbar.svelte
 #: src/components/Sidebar.svelte
@@ -650,8 +646,8 @@ msgid "Scientific research"
 msgstr "Badania naukowe"
 
 #: src/components/Navbar.svelte
-msgid "Reading groups and early-stage research, mentored by faculty."
-msgstr "Grupy czytelnicze i wczesne etapy badań pod opieką kadry naukowej."
+msgid "Paper discussions and research with faculty."
+msgstr "Dyskusje o pracach naukowych i badania z pracownikami naukowymi."
 
 #: src/components/Navbar.svelte
 msgid "See more projects"
@@ -671,20 +667,20 @@ msgid "All projects"
 msgstr "Wszystkie projekty"
 
 #: src/routes/projects/+page.svelte
-msgid "Discover the projects built by KSI members, from student conferences and programming workshops to machine learning and quantum computing."
-msgstr "Poznaj projekty członków KSI: konferencje studenckie, warsztaty programowania, uczenie maszynowe i obliczenia kwantowe."
+msgid "KSI projects: conferences, programming workshops, machine learning, and quantum computing."
+msgstr "Projekty KSI: konferencje, warsztaty programowania, uczenie maszynowe i obliczenia kwantowe."
 
 #: src/routes/projects/+page.svelte
 msgid "Projects · KSI UWr"
 msgstr "Projekty · KSI UWr"
 
 #: src/routes/projects/+page.svelte
-msgid "Software.<0/>Research.<1/><2>Student events.</2>"
-msgstr "Oprogramowanie.<0/>Badania.<1/><2>Wydarzenia studenckie.</2>"
+msgid "Projects at KSI"
+msgstr "Projekty w KSI"
 
 #: src/routes/projects/+page.svelte
-msgid "We write software, organize camps, and work on research projects. Browse our projects to see what we're doing."
-msgstr "Piszemy oprogramowanie, organizujemy obozy i prowadzimy projekty badawcze. Sprawdź, nad czym pracujemy."
+msgid "Software, research, and events organized by KSI members."
+msgstr "Oprogramowanie, badania i wydarzenia tworzone przez członków KSI."
 
 #: src/routes/projects/+page.svelte
 msgid "Find a project to join."
@@ -732,12 +728,12 @@ msgid "About KSI"
 msgstr "O KSI"
 
 #: src/routes/+page.svelte
-msgid "Hello, World!<0/>We're KSI."
-msgstr "Hello, World!<0/>Jesteśmy KSI."
+msgid "We're KSI."
+msgstr "Jesteśmy KSI."
 
 #: src/routes/+page.svelte
-msgid "ZOSIA is our winter camp in the mountains of Lower Silesia. We give talks about research and hobbies, then spend time together between sessions."
-msgstr "ZOSIA to nasz zimowy obóz w górach na Dolnym Śląsku. Opowiadamy o badaniach i zainteresowaniach, a między wykładami spędzamy razem czas."
+msgid "Our winter camp in the mountains of Lower Silesia, with talks on research and hobbies, and time to hang out."
+msgstr "Nasz zimowy obóz w górach na Dolnym Śląsku. Są wykłady o badaniach i zainteresowaniach oraz czas, żeby pobyć razem."
 
 #: src/routes/+page.svelte
 #: src/routes/+page.svelte
@@ -745,20 +741,20 @@ msgid "Read more"
 msgstr "Czytaj dalej"
 
 #: src/routes/+page.svelte
-msgid "As part of Hour of Code, our volunteers teach children the basics of programming in hour-long workshops."
-msgstr "W ramach Godziny Kodowania nasi wolontariusze uczą dzieci podstaw programowania na godzinnych warsztatach."
+msgid "We teach children programming in one-hour workshops."
+msgstr "Uczymy dzieci programowania na godzinnych warsztatach."
 
 #: src/routes/+page.svelte
-msgid "( socially ) Events and workshops"
-msgstr "( społecznie ) Wydarzenia i warsztaty"
+msgid "Events and workshops"
+msgstr "Wydarzenia i warsztaty"
 
 #: src/routes/+page.svelte
-msgid "( technically ) Our projects"
-msgstr "( technicznie ) Nasze projekty"
+msgid "Our projects"
+msgstr "Nasze projekty"
 
 #: src/routes/+page.svelte
-msgid "( scientifically ) Research"
-msgstr "( naukowo ) Badania"
+msgid "Research at KSI"
+msgstr "Badania w KSI"
 
 #: src/routes/projects/+page.svelte
 msgid "Project"

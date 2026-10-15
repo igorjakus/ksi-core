@@ -11,11 +11,11 @@
         <h1
           class="font-anybody text-base-content mb-5 text-[clamp(40px,8vw,64px)] leading-[1.1] font-bold tracking-tight"
         >
-          Hello, World!<br />We're KSI.
+          We're KSI.
         </h1>
         <p class="text-base-content/70 mb-8 max-w-[600px] text-[18px] leading-relaxed">
-          We're the Computer Science Student Association at the University of Wrocław. We run
-          projects, workshops, and events.
+          We're computer science students at the University of Wrocław. We build software and
+          organize workshops and events.
         </p>
         <div class="flex flex-wrap gap-3">
           <a href="#projects" class="btn">See what we do <ArrowRight size={16} /></a>
@@ -34,7 +34,7 @@
     <!-- Socially -->
     <section id="about" class="mb-20">
       <div class="text-base-content/70 mb-5 font-mono text-[11px] tracking-wider uppercase">
-        ( socially ) Events and workshops
+        Events and workshops
       </div>
       <div class="mb-6 grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4">
         <div class="card border-base-content/20 bg-base-100 rounded border p-6">
@@ -63,8 +63,8 @@
           <div class="flex flex-1 flex-col items-start p-6">
             <h3 class="font-anybody text-base-content m-0 mb-3 text-[18px]">ZOSIA</h3>
             <p class="text-base-content/70 mb-5 flex-1 text-[13px] leading-relaxed">
-              ZOSIA is our winter camp in the mountains of Lower Silesia. We give talks about
-              research and hobbies, then spend time together between sessions.
+              Our winter camp in the mountains of Lower Silesia, with talks on research and hobbies,
+              and time to hang out.
             </p>
             <a href="/projects/zosia" class="btn btn-outline">Read more</a>
           </div>
@@ -81,8 +81,7 @@
           <div class="flex flex-1 flex-col items-start p-6">
             <h3 class="font-anybody text-base-content m-0 mb-3 text-[18px]">Hour of Code</h3>
             <p class="text-base-content/70 mb-5 flex-1 text-[13px] leading-relaxed">
-              As part of Hour of Code, our volunteers teach children the basics of programming in
-              hour-long workshops.
+              We teach children programming in one-hour workshops.
             </p>
             <a href="/projects/hoc" class="btn btn-outline">Read more</a>
           </div>
@@ -93,7 +92,7 @@
     <!-- Technically -->
     <section id="projects" class="mb-20">
       <div class="text-base-content/70 mb-5 font-mono text-[11px] tracking-wider uppercase">
-        ( technically ) Our projects
+        Our projects
       </div>
       <div class="flex flex-col gap-8">
         {#each data.projects as project (project.slug)}
@@ -134,12 +133,8 @@
 
     <section id="scientific" class="mb-15">
       <div class="text-base-content/70 mb-5 font-mono text-[11px] tracking-wider uppercase">
-        ( scientifically ) Research
+        Research at KSI
       </div>
-      <p class="text-base-content mb-8 max-w-[600px] text-[15px] leading-relaxed">
-        We haven't published any papers yet. We read and discuss research, host seminars, and work
-        on research problems with faculty.
-      </p>
       <div class="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4">
         <div class="card border-base-content/20 bg-base-100 flex flex-col gap-4 rounded border p-6">
           <Microscope size={28} class="text-primary" />
@@ -155,18 +150,16 @@
           <div>
             <h3 class="font-anybody text-base-content m-0 mb-2 text-[16px]">Guest seminars</h3>
             <p class="text-base-content/70 m-0 text-[13px] leading-normal">
-              Researchers and alumni drop by to share what they're currently working on.
+              Researchers and alumni talk about their work.
             </p>
           </div>
         </div>
         <div class="card border-base-content/20 bg-base-100 flex flex-col gap-4 rounded border p-6">
           <Lightbulb size={28} class="text-primary" />
           <div>
-            <h3 class="font-anybody text-base-content m-0 mb-2 text-[16px]">
-              Early-stage research
-            </h3>
+            <h3 class="font-anybody text-base-content m-0 mb-2 text-[16px]">Research projects</h3>
             <p class="text-base-content/70 m-0 text-[13px] leading-normal">
-              Members work with faculty on open research problems.
+              We work on research problems with faculty.
             </p>
           </div>
         </div>

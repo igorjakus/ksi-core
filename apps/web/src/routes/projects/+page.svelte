@@ -62,7 +62,7 @@
   <title>Projects · KSI UWr</title>
   <meta
     name="description"
-    content="Discover the projects built by KSI members, from student conferences and programming workshops to machine learning and quantum computing."
+    content="KSI projects: conferences, programming workshops, machine learning, and quantum computing."
   />
 </svelte:head>
 
@@ -76,13 +76,10 @@
       <h1
         class="font-anybody text-base-content mb-5 text-[clamp(40px,8vw,64px)] leading-[1.1] font-bold tracking-tight"
       >
-        Software.<br />Research.<br /><span class="bg-primary text-primary-content rounded-sm px-3"
-          >Student events.</span
-        >
+        Projects at KSI
       </h1>
       <p class="text-base-content/70 mb-8 max-w-[600px] text-[18px] leading-relaxed">
-        We write software, organize camps, and work on research projects. Browse our projects to see
-        what we're doing.
+        Software, research, and events organized by KSI members.
       </p>
       <div class="flex flex-wrap gap-3">
         <a href="#project-directory" class="btn gap-2">
