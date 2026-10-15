@@ -886,3 +886,8 @@ msgstr "Wszystkie artykuły<0/>"
 #: src/routes/articles/[slug]/+page.svelte
 msgid "<0/>All articles"
 msgstr "<0/>Wszystkie artykuły"
+
+#. 0: formatLocalDate(alert.startDate); 1: formatLocalDate(alert.endDate)
+#: src/routes/dashboard/alerts/+page.svelte
+msgid "From {0} to {1}"
+msgstr "Od {0} do {1}"
